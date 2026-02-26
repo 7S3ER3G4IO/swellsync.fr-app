@@ -47,8 +47,45 @@
                 <h2>60+ spots sur <em>la côte Atlantique</em></h2>
                 <p>De la Bretagne au Pays Basque, chaque spot avec ses prévisions et conditions en temps réel.</p>
             </div>
+            <div class="region-tabs" id="regionTabs">
+                <div class="region-tab active" data-region="tous">🌊 Tous</div>
+                <div class="region-tab" data-region="Bretagne">🏴 Bretagne</div>
+                <div class="region-tab" data-region="Vendée">⚓ Vendée</div>
+                <div class="region-tab" data-region="Gironde">🍷 Gironde</div>
+                <div class="region-tab" data-region="Landes">🌲 Landes</div>
+                <div class="region-tab" data-region="Pays Basque">🏔️ Pays Basque</div>
+            </div>
+            <div style="text-align:center;margin-bottom:20px;font-size:13px;color:var(--text3)">
+                <span id="spotCount">0</span> spots trouvés
+            </div>
             <div class="spots-scroll" id="spotsGrid">
                 <div style="text-align:center;padding:40px;color:var(--text3)">Chargement des spots...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ RÉGIONS STATS ═══ -->
+    <section class="stats">
+        <div class="container">
+            <div class="stat animate">
+                <div class="stat-num">🏴</div>
+                <div class="stat-label">Bretagne</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">⚓</div>
+                <div class="stat-label">Vendée</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">🍷</div>
+                <div class="stat-label">Gironde</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">🌲</div>
+                <div class="stat-label">Landes</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">🏔️</div>
+                <div class="stat-label">Pays Basque</div>
             </div>
         </div>
     </section>
@@ -76,9 +113,29 @@
     </footer>
 
     <script>
+        let allSpots = [];
         fetch('/api/spots').then(r => r.json()).then(spots => {
+            allSpots = spots;
+            renderSpots(spots);
+            
+            // Region tab click
+            document.querySelectorAll('.region-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const region = tab.dataset.region;
+                    const filtered = region === 'tous' ? allSpots : allSpots.filter(s => s.location.includes(region));
+                    renderSpots(filtered);
+                });
+            });
+        }).catch(() => {
+            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots.</p>';
+        });
+
+        function renderSpots(spots) {
             const grid = document.getElementById('spotsGrid');
             const diffEmoji = { 'Débutant': '🟢', 'Intermédiaire': '🟡', 'Avancé': '🔴', 'Expert': '⚫' };
+            document.getElementById('spotCount').textContent = spots.length;
             grid.innerHTML = spots.map(s => `
                 <div class="spot-chip">
                     <span class="emoji">${diffEmoji[s.difficulty] || '🏄'}</span>
@@ -88,9 +145,7 @@
                     </div>
                 </div>
             `).join('');
-        }).catch(() => {
-            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots.</p>';
-        });
+        }
     </script>
 </body>
 
