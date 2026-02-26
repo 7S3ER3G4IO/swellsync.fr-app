@@ -69,7 +69,7 @@ async function requireLogin(redirectBack = location.href) {
         return me;
     } catch {
         sessionStorage.setItem('after_login', redirectBack);
-        location.href = '../index.html';
+        location.href = 'home.html';
         return null;
     }
 }
