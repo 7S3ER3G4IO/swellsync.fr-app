@@ -25,3 +25,6 @@ npm-debug.log*
 .gemini/
 electron/node_modules/
 electron/dist/
+android/
+ios/
+www/
