@@ -117,7 +117,7 @@
         fetch('/api/spots').then(r => r.json()).then(spots => {
             allSpots = spots;
             renderSpots(spots);
-            
+
             // Region tab click
             document.querySelectorAll('.region-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
@@ -147,6 +147,7 @@
             `).join('');
         }
     </script>
+    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
 </body>
 
 </html>
