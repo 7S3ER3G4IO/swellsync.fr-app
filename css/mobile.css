@@ -1,0 +1,403 @@
+/**
+ * SwellSync — Mobile & Responsive CSS
+ * Fichier dédié au responsive : mobile-first, tablette, desktop
+ * Chargé APRES styles.css et light-mode.css
+ */
+
+/* ─── Reset de base ──────────────────────────────────────────── */
+* {
+    box-sizing: border-box;
+}
+
+img,
+video,
+canvas {
+    max-width: 100%;
+}
+
+/* ─── GLOBAL MOBILE (< 768px) ────────────────────────────────── */
+@media (max-width: 767px) {
+
+    /* Corps */
+    body {
+        overflow-x: hidden;
+        font-size: 15px;
+    }
+
+    /* Navbar */
+    #main-nav nav {
+        padding: 10px 16px !important;
+        gap: 8px !important;
+    }
+
+    #main-nav .logo-text {
+        font-size: 14px !important;
+    }
+
+    #theme-toggle-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    /* Hero sections */
+    section h1 {
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+    }
+
+    section h2 {
+        font-size: 1.4rem !important;
+    }
+
+    /* Sections padding */
+    section,
+    main>div {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    /* Grilles : forcer 1 colonne */
+    .grid-cols-2,
+    .grid-cols-3,
+    .grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .lg\:grid-cols-2,
+    .lg\:grid-cols-3,
+    .md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Cards AI Labs */
+    .ai-card {
+        border-radius: 18px !important;
+        padding: 20px !important;
+    }
+
+    /* Tables : scroll horizontal */
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table thead,
+    table tbody,
+    table tr {
+        min-width: 500px;
+    }
+
+    /* Modaux */
+    #global-search-container {
+        border-radius: 0 0 24px 24px !important;
+        margin: 0 !important;
+        max-width: 100vw !important;
+        width: 100vw !important;
+    }
+
+    #global-search-backdrop {
+        padding: 0 !important;
+        align-items: flex-start !important;
+    }
+
+    /* Pop-ups feature */
+    #feature-popup-container {
+        right: 8px !important;
+        left: 8px !important;
+        top: 72px !important;
+    }
+
+    #feature-popup-window {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Chatbot */
+    #swell-chat-container {
+        width: calc(100vw - 24px) !important;
+        max-width: 380px !important;
+        bottom: 80px !important;
+        right: 12px !important;
+        left: 12px !important;
+    }
+
+    #swell-chat-btn {
+        bottom: 16px !important;
+        right: 16px !important;
+        width: 52px !important;
+        height: 52px !important;
+    }
+
+    /* Stat pills wrapping */
+    .stat-pill {
+        font-size: 10px !important;
+        padding: 6px 12px !important;
+    }
+
+    /* Boutons pleine largeur */
+    .btn-mobile-full {
+        width: 100% !important;
+    }
+
+    /* Espacement container */
+    .max-w-7xl,
+    .max-w-6xl,
+    .max-w-5xl {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    /* Stat cards horizontales → verticales */
+    .flex-row.gap-4 {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    /* Auth modal */
+    #auth-modal-inner,
+    .modal-inner {
+        margin: 16px !important;
+        padding: 24px 20px !important;
+        border-radius: 20px !important;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* ─── DASHBOARD MOBILE — Tab bar en bas ────────────────────────── */
+@media (max-width: 767px) {
+
+    /* Onglets dashboard → barre en bas */
+    .dashboard-tabs {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        background: rgba(7, 15, 16, 0.98) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 8px 0 env(safe-area-inset-bottom, 8px) !important;
+        z-index: 50 !important;
+        gap: 0 !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .dashboard-tabs .tab-btn {
+        flex: 1 !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+        font-size: 9px !important;
+        padding: 6px 4px !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .tab-btn .tab-icon {
+        font-size: 20px !important;
+        margin: 0 !important;
+    }
+
+    /* Contenu dashboard : padding bas pour la tab bar */
+    #dashboard-content main {
+        padding-bottom: 80px !important;
+    }
+}
+
+/* ─── COTES.HTML MOBILE ─────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+    /* La carte prend tout l'écran */
+    #map-container,
+    #main-map {
+        height: 55vh !important;
+        min-height: 300px;
+    }
+
+    /* Tableau spots : glissant depuis le bas (drawer) */
+    #spots-table-wrapper,
+    .spots-table-container {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        max-height: 50vh !important;
+        overflow-y: auto !important;
+        background: rgba(7, 15, 16, 0.97) !important;
+        border-radius: 24px 24px 0 0 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        z-index: 400 !important;
+        padding: 16px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Handle drawer */
+    #spots-table-wrapper::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        margin: 0 auto 12px;
+    }
+
+    /* Filtre carte */
+    .map-filters {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        padding-bottom: 8px;
+    }
+
+    .map-filters::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* ─── SPOT DETAIL MOBILE ────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+    /* Tableau prévisions : scroll horizontal */
+    .forecast-table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin: 0 -16px !important;
+        padding: 0 16px !important;
+    }
+
+    .forecast-table-wrapper table {
+        min-width: 560px;
+    }
+
+    /* Hero spot compact */
+    .spot-hero-title {
+        font-size: 1.6rem !important;
+    }
+
+    /* Widgets stats : 2 colonnes */
+    .spot-stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Webcam : pleine largeur */
+    .webcam-container {
+        margin: 0 -16px !important;
+        border-radius: 0 !important;
+    }
+}
+
+/* ─── AI LABS MOBILE ────────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+    /* 3 cards en 1 colonne */
+    #ai-agents-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Hero titre plus petit */
+    .ai-gradient-text {
+        font-size: 2rem !important;
+    }
+
+    /* Canvas neural network moins prenant */
+    #ai-bg-canvas {
+        opacity: 0.4 !important;
+    }
+}
+
+/* ─── PRO.HTML MOBILE — Three.js désactivé ──────────────────────── */
+@media (max-width: 767px) {
+
+    /* Masquer le container WebGL */
+    #bathymetry-3d-container canvas {
+        display: none !important;
+    }
+
+    /* Afficher placeholder image à la place */
+    #bathymetry-mobile-placeholder {
+        display: block !important;
+    }
+
+    /* Rendre le container plus petit */
+    #bathymetry-3d-container {
+        min-height: 200px !important;
+        max-height: 200px !important;
+        background: linear-gradient(135deg, #0d2a2f 0%, #0f3840 50%, #0a1f22 100%) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+/* ─── TABLETTE (768px – 1024px) ─────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+    section h1 {
+        font-size: 2.8rem !important;
+    }
+
+    .lg\:grid-cols-3 {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .ai-card {
+        padding: 24px !important;
+    }
+
+    #bathymetry-3d-container {
+        min-height: 280px !important;
+    }
+
+    /* Dashboard tabs sur tablette : restent en haut */
+    .dashboard-tabs {
+        flex-direction: row !important;
+        position: static !important;
+    }
+}
+
+/* ─── SAFE AREA (iPhone avec notch) ────────────────────────────── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #swell-chat-btn {
+        bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    }
+
+    .dashboard-tabs {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+    }
+}
+
+/* ─── Touch : agrandir zones cliquables ─────────────────────────── */
+@media (pointer: coarse) {
+
+    button,
+    a,
+    .tab-btn,
+    .nav-link,
+    .rating-star {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .rating-star {
+        font-size: 24px !important;
+    }
+}
+
+/* ─── Scrollbar custom mobile ────────────────────────────────────── */
+@media (max-width: 767px) {
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 186, 214, 0.3);
+        border-radius: 2px;
+    }
+}

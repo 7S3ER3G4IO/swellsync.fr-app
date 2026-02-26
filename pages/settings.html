@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SwellSync — Paramètres</title>
+    <meta name="description"
+        content="SwellSync Paramètres — Personnalisez votre expérience, notifications et préférences.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #080f1a;
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .12);
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #64748b;
+            padding: 14px 16px 6px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            cursor: pointer;
+            transition: background .15s;
+            background: transparent;
+        }
+
+        .setting-row:hover {
+            background: rgba(0, 186, 214, .03);
+        }
+
+        .icon-box {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        .slide-in {
+            animation: slideIn .25s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp .2s ease both;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            background: #1e3148;
+            border: 1px solid rgba(0, 186, 214, .2);
+            cursor: pointer;
+            transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.on {
+            background: #00bad6;
+            border-color: #00bad6;
+            box-shadow: 0 0 12px rgba(0, 186, 214, 0.3);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+        }
+
+        .toggle-switch.on::after {
+            transform: translateX(20px);
+        }
+
+        .search-box {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .2);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 16px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #f1f5f9;
+            font-size: 13px;
+            flex: 1;
+        }
+    </style>
+    <script src="js/theme.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="min-h-screen pb-10">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        <a href="javascript:history.back()"
+            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        </a>
+        <h1 class="font-black text-base flex-1">Paramètres</h1>
+        <div
+            class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
+            <span class="material-symbols-outlined text-[#00bad6] text-[18px]">settings</span>
+        </div>
+    </header>
+
+    <!-- Search settings -->
+    <div class="search-box">
+        <span class="material-symbols-outlined text-slate-500 text-[18px]">search</span>
+        <input type="search" placeholder="Rechercher dans les paramètres…" oninput="filterSettings(this.value)" />
+    </div>
+
+    <!-- Profile info -->
+    <div class="flex items-center gap-3 px-4 py-3 card mx-4 mb-2 rounded-2xl">
+        <div
+            class="w-14 h-14 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black text-[#00bad6] text-2xl border-2 border-[#00bad6]/30 active:scale-95 transition-transform">
+            S</div>
+        <div class="flex-1">
+            <p class="font-black text-base" id="settingsName">Mon Profil</p>
+            <p class="text-[11px] text-slate-400">Voir mon profil SwellSync</p>
+        </div>
+        <a href="profile.html" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+        </a>
+    </div>
+
+    <div id="settingsList">
+        <!-- COMPTE -->
+        <div data-section="compte">
+            <div class="section-label">👤 Compte</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="go('edit-profile.html')">
+                    <div class="icon-box" style="background:rgba(0,186,214,.15)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">person</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Modifier le profil</p>
+                        <p class="text-[10px] text-slate-500">Nom, bio, photo de profil</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="go('badges.html')">
+                    <div class="icon-box" style="background:rgba(168,85,247,.15)"><span
+                            class="material-symbols-outlined text-purple-400 text-[18px]">badge</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Badges & Cosmétiques</p>
+                        <p class="text-[10px] text-slate-500">Acheter des badges de région, styles</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="go('abonnement.html')">
+                    <div class="icon-box" style="background:rgba(245,158,11,.15)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">star</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">SwellSync Pro</p>
+                        <p class="text-[10px] text-slate-500">Gérer votre abonnement</p>
+                    </div>
+                    <span class="text-[10px] text-amber-400 font-bold mr-1">Voir →</span>
+                </div>
+                <div class="setting-row" onclick="checkProThenGo('alerts.html')">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">notifications</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Mes Alertes de Houle</p>
+                        <p class="text-[10px] text-slate-500">Gérer les alertes vagues</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIDENTIALITÉ -->
+        <div data-section="confidentialite">
+            <div class="section-label">🔒 Confidentialité & Sécurité</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="togglePrivacy(this)">
+                    <div class="icon-box" style="background:rgba(16,185,129,.15)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">lock</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Compte privé</p>
+                        <p class="text-[10px] text-slate-500">Seuls tes abonnés voient tes posts</p>
+                    </div>
+                    <div class="toggle-switch" id="toggle-private"></div>
+                </div>
+                <div class="setting-row" onclick="toggleActivity(this)">
+                    <div class="icon-box" style="background:rgba(16,185,129,.1)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">visibility</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Afficher mon activité</p>
+                        <p class="text-[10px] text-slate-500">Visible dans le feed communauté</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-activity"></div>
+                </div>
+                <div class="setting-row" onclick="openBlockedAccounts()">
+                    <div class="icon-box" style="background:rgba(244,63,94,.1)"><span
+                            class="material-symbols-outlined text-red-400 text-[18px]">block</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Comptes bloqués</p>
+                        <p class="text-[10px] text-slate-500">Gérer les comptes bloqués</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="open2FAModal()">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">security</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Authentification à 2 facteurs</p>
+                        <p class="text-[10px] text-slate-500">Renforcer la sécurité du compte</p>
+                    </div>
+                    <span id="2faStatus" class="text-[10px] font-bold text-slate-500 mr-1">Vérification...</span>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="openChangePassword()">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">key</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Changer le mot de passe</p>
+                        <p class="text-[10px] text-slate-500">Modifier vos identifiants</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div data-section="notifications">
+            <div class="section-label">🔔 Notifications</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="toggleRow(this,'Nouveaux abonnés')">
+                    <div class="icon-box" style="background:rgba(0,186,214,.15)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">person_add</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Nouvel abonné</p>
+                        <p class="text-[10px] text-slate-500">Quand quelqu'un te suit</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-followers-notif"></div>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Likes')">
+                    <div class="icon-box" style="background:rgba(244,63,94,.15)"><span
+                            class="material-symbols-outlined text-red-400 text-[18px]">favorite</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Likes sur tes posts</p>
+                        <p class="text-[10px] text-slate-500">Notifs quand tu obtiens un ❤️</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-likes-notif"></div>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Commentaires')">
+                    <div class="icon-box" style="background:rgba(168,85,247,.15)"><span
+                            class="material-symbols-outlined text-purple-400 text-[18px]">chat_bubble</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Commentaires & Réponses</p>
+                        <p class="text-[10px] text-slate-500">Notifs quand on te répond</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-comments-notif"></div>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Alertes vagues')">
+                    <div class="icon-box" style="background:rgba(16,185,129,.15)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">water</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Alertes de Houle Pro</p>
+                        <p class="text-[10px] text-slate-500">Conditions parfaites sur tes spots</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-waves-notif"></div>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Push marketing')">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">campaign</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Notifications SwellSync</p>
+                        <p class="text-[10px] text-slate-500">Actualités, offres, nouveautés</p>
+                    </div>
+                    <div class="toggle-switch" id="toggle-push-notif"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVITÉ & ARCHIVES -->
+        <div data-section="activite archives">
+            <div class="section-label">📁 Activité & Archives</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="openArchivesProGate()">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">archive</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Archive des Posts</p>
+                        <p class="text-[10px] text-slate-500">Posts archivés, stories sauvegardées</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row"
+                    onclick="openProGateOrPage('','Tes enregistrements de posts et de sessions sont accessibles uniquement avec SwellSync Pro ⭐')">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">bookmark</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Enregistrements</p>
+                        <p class="text-[10px] text-slate-500">Posts et sessions sauvegardés</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="go('history.html')">
+                    <div class="icon-box" style="background:rgba(168,85,247,.1)"><span
+                            class="material-symbols-outlined text-purple-400 text-[18px]">history</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Historique d'activité</p>
+                        <p class="text-[10px] text-slate-500">Likes, commentaires, vus récents</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="requestDataExport()">
+                    <div class="icon-box" style="background:rgba(16,185,129,.1)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">download</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Télécharger mes données</p>
+                        <p class="text-[10px] text-slate-500">Exporter l'historique de votre compte</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCÈS & AUTORISATIONS -->
+        <div data-section="acces autorisations localisation">
+            <div class="section-label">📍 Accès & Autorisations</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="requestLocation(this)">
+                    <div class="icon-box" style="background:rgba(0,186,214,.15)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">location_on</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Localisation</p>
+                        <p class="text-[10px] text-slate-500">Détection auto du spot le plus proche</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-location"></div>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Caméra')">
+                    <div class="icon-box" style="background:rgba(168,85,247,.1)"><span
+                            class="material-symbols-outlined text-purple-400 text-[18px]">camera_alt</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Caméra</p>
+                        <p class="text-[10px] text-slate-500">Pour les photos de profil et posts</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-camera"></div>
+                </div>
+                <div class="setting-row" onclick="requestPushNotif(this)">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">notifications_active</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Notifications Push</p>
+                        <p class="text-[10px] text-slate-500">Alertes en temps réel</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-push-access"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRÉFÉRENCES -->
+        <div data-section="preferences langue theme">
+            <div class="section-label">🎨 Préférences</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="openLangSheet()">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">language</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Langue</p>
+                        <p class="text-[10px] text-slate-500">Français</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Mode sombre')">
+                    <div class="icon-box" style="background:rgba(100,116,139,.2)"><span
+                            class="material-symbols-outlined text-slate-400 text-[18px]">dark_mode</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Mode sombre</p>
+                        <p class="text-[10px] text-slate-500" id="darkmodeLabel">Interface sombre (activé)</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-darkmode"></div>
+                </div>
+                <div class="setting-row" onclick="openTextSizeSheet()">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">format_size</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Taille du texte</p>
+                        <p class="text-[10px] text-slate-500">Normal</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="openAccessibilitySheet()">
+                    <div class="icon-box" style="background:rgba(16,185,129,.1)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">accessibility</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Accessibilité</p>
+                        <p class="text-[10px] text-slate-500">Contraste, animations, lecteur d'écran</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPOTS & SURF -->
+        <div data-section="spots surf region preferences">
+            <div class="section-label">🌊 Spots & Surf</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="go('map.html')">
+                    <div class="icon-box" style="background:rgba(0,186,214,.15)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">travel_explore</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Mes Spots Favoris</p>
+                        <p class="text-[10px] text-slate-500">Gérer les spots sauvegardés</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="openDefaultSpotSheet()">
+                    <div class="icon-box" style="background:rgba(16,185,129,.15)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">place</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Spot par défaut</p>
+                        <p class="text-[10px] text-slate-500">Hossegor — La Gravière</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="openUnitsSheet()">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">waves</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Unités de mesure</p>
+                        <p class="text-[10px] text-slate-500">Mètres / Pieds, km/h / Nœuds</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="openLevelSheet()">
+                    <div class="icon-box" style="background:rgba(168,85,247,.1)"><span
+                            class="material-symbols-outlined text-purple-400 text-[18px]">surfing</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Niveau de surf</p>
+                        <p class="text-[10px] text-slate-500">Intermédiaire</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABONNEMENTS & SUIVIS -->
+        <div data-section="abonnements suivi followers following">
+            <div class="section-label">👥 Abonnements & Communauté</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="go('following.html')">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">group</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Mes abonnements</p>
+                        <p class="text-[10px] text-slate-500" id="followingCount">0 surfeurs suivis</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="go('community.html')">
+                    <div class="icon-box" style="background:rgba(168,85,247,.1)"><span
+                            class="material-symbols-outlined text-purple-400 text-[18px]">groups</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Feed Communauté</p>
+                        <p class="text-[10px] text-slate-500">Voir les posts des surfeurs suivis</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="toggleRow(this,'Partage abonnements')">
+                    <div class="icon-box" style="background:rgba(16,185,129,.1)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">share</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Partager mon profil</p>
+                        <p class="text-[10px] text-slate-500">Afficher dans les résultats de recherche</p>
+                    </div>
+                    <div class="toggle-switch on" id="toggle-share-profile"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AIDE & SUPPORT -->
+        <div data-section="aide support contact">
+            <div class="section-label">💬 Aide & Support</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="go('support.html')">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">help</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Centre d'aide</p>
+                        <p class="text-[10px] text-slate-500">FAQ, guides, tutoriels</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="go('support.html')">
+                    <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
+                            class="material-symbols-outlined text-amber-400 text-[18px]">bug_report</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Signaler un problème</p>
+                        <p class="text-[10px] text-slate-500">Bug, contenu inapproprié</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="rateApp()">
+                    <div class="icon-box" style="background:rgba(16,185,129,.1)"><span
+                            class="material-symbols-outlined text-emerald-400 text-[18px]">rate_review</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Évaluer l'application</p>
+                        <p class="text-[10px] text-slate-500">Laisser un avis sur l'App Store</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- À PROPOS -->
+        <div data-section="a propos version">
+            <div class="section-label">ℹ️ À propos</div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="showAbout()">
+                    <div class="icon-box" style="background:rgba(0,186,214,.1)"><span
+                            class="material-symbols-outlined text-[#00bad6] text-[18px]">info</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">À propos de SwellSync</p>
+                        <p class="text-[10px] text-slate-500">Version 2.1.0</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="window.open('../cgv.html','_self')">
+                    <div class="icon-box" style="background:rgba(100,116,139,.2)"><span
+                            class="material-symbols-outlined text-slate-400 text-[18px]">policy</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Conditions d'utilisation</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="window.open('../privacy.html','_self')">
+                    <div class="icon-box" style="background:rgba(100,116,139,.2)"><span
+                            class="material-symbols-outlined text-slate-400 text-[18px]">privacy_tip</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Politique de confidentialité</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+                <div class="setting-row" onclick="window.open('../legal.html','_self')">
+                    <div class="icon-box" style="background:rgba(100,116,139,.2)"><span
+                            class="material-symbols-outlined text-slate-400 text-[18px]">gavel</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm">Mentions légales</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DÉCONNEXION -->
+        <div data-section="deconnexion">
+            <div class="section-label"></div>
+            <div class="card mx-4 rounded-2xl overflow-hidden">
+                <div class="setting-row" onclick="showLogout()">
+                    <div class="icon-box" style="background:rgba(244,63,94,.15)"><span
+                            class="material-symbols-outlined text-red-400 text-[18px]">logout</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm text-red-400">Se déconnecter</p>
+                    </div>
+                </div>
+                <div class="setting-row" onclick="confirmDeleteAccount()">
+                    <div class="icon-box" style="background:rgba(244,63,94,.1)"><span
+                            class="material-symbols-outlined text-red-600 text-[18px]">delete_forever</span></div>
+                    <div class="flex-1">
+                        <p class="font-semibold text-sm text-red-600">Supprimer le compte</p>
+                        <p class="text-[10px] text-slate-500">Action irréversible</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-center text-[10px] text-slate-700 py-6">SwellSync v2.1.0 · Fait avec ❤️ pour les surfeurs</p>
+    </div><!-- /settingsList -->
+
+    <!-- Archive sheet -->
+    <div id="infoSheet" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="infoSheetTitle" class="font-black text-base"></h3>
+                <button onclick="closeSheet('infoSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <p id="infoSheetBody" class="text-slate-400 text-sm leading-relaxed py-2 whitespace-pre-line"></p>
+            <button onclick="closeSheet('infoSheet')"
+                class="w-full mt-4 py-3 rounded-2xl bg-[#00bad6]/15 text-[#00bad6] font-bold text-sm active:scale-95 transition-transform">OK</button>
+        </div>
+    </div>
+
+    <!-- Archive sheet -->
+    <div id="archiveSheet" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">📁 Archive</h3>
+                <button onclick="closeSheet('archiveSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <p class="text-slate-400 text-sm text-center py-8">Tes posts archivés apparaîtront ici.<br />Fonctionnalité
+                disponible avec SwellSync Pro ⭐</p>
+            <a href="abonnement.html"
+                class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-black text-sm text-black"
+                style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+                ⭐ Passer Pro
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Password Change Sheet -->
+    <div id="pwdSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">🔑 Changer le mot de passe</h3>
+                <button onclick="closeSheet('pwdSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form id="pwdForm" onsubmit="event.preventDefault();submitChangePassword()" class="space-y-3">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Mot de passe
+                        actuel</label>
+                    <input id="pwdCurrent" type="password" placeholder="Ton mot de passe actuel"
+                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
+                        required />
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Nouveau mot de
+                        passe</label>
+                    <input id="pwdNew" type="password" placeholder="8 caractères minimum"
+                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
+                        required minlength="8" />
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Confirmer le nouveau
+                        MDP</label>
+                    <input id="pwdConfirm" type="password" placeholder="Répète le nouveau mot de passe"
+                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
+                        required />
+                </div>
+                <p id="pwdError" class="text-red-400 text-xs min-h-[16px]"></p>
+                <button id="pwdSubmitBtn" type="submit"
+                    class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">✅
+                    Confirmer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Blocked Accounts Sheet -->
+    <div id="blockedSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-red-500/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">🚫 Comptes bloqués</h3>
+                <button onclick="closeSheet('blockedSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="blockedList" class="max-h-64 overflow-y-auto rounded-xl bg-[#080f1a]"></div>
+            <p class="text-[10px] text-slate-600 text-center mt-3">Pour bloquer un utilisateur, allez sur son profil
+                dans la Communauté.</p>
+        </div>
+    </div>
+
+    <!-- Language Sheet -->
+    <div id="langSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">🌐 Langue / Language</h3>
+                <button onclick="closeSheet('langSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-2 mb-4">
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer">
+                    <input type="radio" id="langFR" name="lang" value="fr" class="accent-[#00bad6]" checked />
+                    <span class="font-bold text-sm">🇫🇷 Français</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer">
+                    <input type="radio" id="langEN" name="lang" value="en" class="accent-[#00bad6]" />
+                    <span class="font-bold text-sm">🇬🇧 English</span>
+                </label>
+            </div>
+            <button onclick="applyLanguage()"
+                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Appliquer</button>
+        </div>
+    </div>
+
+    <!-- Units Sheet -->
+    <div id="unitsSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">📏 Unités de mesure</h3>
+                <button onclick="closeSheet('unitsSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Hauteur des vagues</p>
+            <div class="flex gap-2 mb-4">
+                <label
+                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    <input type="radio" id="unitWaveM" name="unitWave" value="m" checked class="sr-only" />🌊 Mètres (m)
+                </label>
+                <label
+                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    <input type="radio" id="unitWaveFt" name="unitWave" value="ft" class="sr-only" />📐 Pieds (ft)
+                </label>
+            </div>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Vitesse du vent</p>
+            <div class="flex gap-2 mb-4">
+                <label
+                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    <input type="radio" id="unitWindKmh" name="unitWind" value="kmh" checked class="sr-only" />💨 km/h
+                </label>
+                <label
+                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    <input type="radio" id="unitWindKts" name="unitWind" value="kts" class="sr-only" />⚓ Nœuds (kts)
+                </label>
+            </div>
+            <button onclick="applyUnits()"
+                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">✅
+                Appliquer</button>
+        </div>
+    </div>
+
+    <!-- Level Sheet -->
+    <div id="levelSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">🏄 Niveau de surf</h3>
+                <button onclick="closeSheet('levelSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-2 mb-4">
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                        name="surfLevel" value="debutant" class="accent-[#00bad6]" /> �� Débutant</label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                        name="surfLevel" value="intermediaire" checked class="accent-[#00bad6]" /> 🏄
+                    Intermédiaire</label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                        name="surfLevel" value="avance" class="accent-[#00bad6]" /> ⚡ Avancé</label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                        name="surfLevel" value="expert" class="accent-[#00bad6]" /> 🔥 Expert</label>
+            </div>
+            <button onclick="applyLevel()"
+                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">✅
+                Confirmer</button>
+        </div>
+    </div>
+
+    <!-- Default Spot Sheet -->
+    <div id="defaultSpotSheet"
+        class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-emerald-500/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">📍 Spot par défaut</h3>
+                <button onclick="closeSheet('defaultSpotSheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <div id="defaultSpotList" class="max-h-64 overflow-y-auto rounded-xl bg-[#080f1a] mb-4"></div>
+            <button onclick="applyDefaultSpot()"
+                class="w-full py-3 rounded-2xl bg-emerald-500 font-black text-sm text-white">✅ Confirmer</button>
+        </div>
+    </div>
+
+    <!-- Logout confirm -->
+    <div id="logoutSheet" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-red-500/20 p-5 text-center">
+            <h3 class="font-black text-base text-red-400 mb-2">Se déconnecter ?</h3>
+            <p class="text-slate-400 text-sm mb-5">Tu devras te reconnecter avec tes identifiants SwellSync.</p>
+            <button onclick="window.location.href='../index.html'"
+                class="w-full py-3 rounded-2xl font-black text-sm text-white mb-2" style="background:#ef4444">Oui, me
+                déconnecter</button>
+            <button onclick="closeSheet('logoutSheet')" class="w-full py-3 text-slate-400 text-sm">Annuler</button>
+        </div>
+    </div>
+
+    <!-- 2FA Modal -->
+    <div id="twoFASheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-amber-500/20 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-base">🔐 Authentification à 2 facteurs</h3>
+                <button onclick="closeSheet('twoFASheet')" class="text-slate-400"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <!-- Step 1: Info + Send code -->
+            <div id="twoFA_step1">
+                <p class="text-sm text-slate-400 mb-4">Un code de vérification à 6 chiffres sera envoyé à ton adresse
+                    email pour activer ou désactiver le 2FA.</p>
+                <div id="twoFA_currentStatus" class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] mb-4">
+                    <span class="material-symbols-outlined text-amber-400">shield</span>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm" id="twoFA_statusText">Statut : Chargement...</p>
+                        <p class="text-[10px] text-slate-500" id="twoFA_statusDesc">Vérification en cours</p>
+                    </div>
+                </div>
+                <button id="twoFA_sendBtn" onclick="send2FACode()"
+                    class="w-full py-3 rounded-2xl bg-amber-500 font-black text-sm text-[#080f1a] flex items-center justify-center gap-2 hover:bg-amber-400 transition-colors">
+                    <span class="material-symbols-outlined text-sm">mail</span> Envoyer le code de vérification
+                </button>
+            </div>
+            <!-- Step 2: Enter code -->
+            <div id="twoFA_step2" class="hidden">
+                <p class="text-sm text-slate-400 mb-3">Entre le code à 6 chiffres envoyé à ton email :</p>
+                <div class="flex gap-2 mb-4 justify-center">
+                    <input id="twoFA_code" type="text" maxlength="6" inputmode="numeric" pattern="[0-9]*"
+                        class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#0f2438] border border-white/10 rounded-xl text-white focus:outline-none focus:border-amber-500/50"
+                        placeholder="000000" />
+                </div>
+                <p id="twoFA_debugCode" class="text-[10px] text-emerald-400 text-center mb-3 hidden"></p>
+                <p id="twoFA_error" class="text-[10px] text-red-400 text-center mb-3 hidden"></p>
+                <button id="twoFA_verifyBtn" onclick="verify2FACode()"
+                    class="w-full py-3 rounded-2xl bg-amber-500 font-black text-sm text-[#080f1a] flex items-center justify-center gap-2 hover:bg-amber-400 transition-colors">
+                    <span class="material-symbols-outlined text-sm">verified</span> Vérifier et appliquer
+                </button>
+                <button onclick="reset2FAModal()"
+                    class="w-full py-2 mt-2 text-slate-400 text-sm hover:text-white transition-colors">← Retour</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function go(url) { if (url !== '#') window.location.href = url; }
+
+        function showInfo(title, body) {
+            document.getElementById('infoSheetTitle').textContent = title;
+            document.getElementById('infoSheetBody').textContent = body;
+            document.getElementById('infoSheet').classList.replace('hidden', 'flex');
+        }
+
+        function rateApp() {
+            const overlay = document.createElement('div');
+            overlay.className = 'sw-confirm-overlay';
+            overlay.innerHTML = `
+                <div class="sw-confirm-box" style="text-align:center">
+                    <img src="/assets/images/swellsync_logo.png" alt="SwellSync" style="width:64px;height:64px;border-radius:16px;margin:0 auto 12px">
+                    <div class="sw-confirm-title">Évaluer SwellSync</div>
+                    <div class="sw-confirm-msg">Merci de ta confiance ! 🏄<br>Chaque avis compte pour une app indépendante.</div>
+                    <div style="display:flex;gap:8px;justify-content:center;font-size:32px;margin-bottom:16px;cursor:pointer" id="rateStars">
+                        ${'★'.repeat(5).split('').map((s, i) => `<span data-v="${i + 1}" onmouseover="rateHover(${i + 1})" onclick="rateSelect(${i + 1})" style="color:#334155;transition:color .2s">${s}</span>`).join('')}
+                    </div>
+                    <div class="sw-confirm-btns">
+                        <button class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Plus tard</button>
+                        <button class="sw-confirm-ok" onclick="showToast('Merci pour ton avis ! ⭐','success');this.closest('.sw-confirm-overlay').remove()">Envoyer</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(overlay);
+            requestAnimationFrame(() => overlay.classList.add('show'));
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        }
+        window.rateHover = function (n) {
+            document.querySelectorAll('#rateStars span').forEach((s, i) => s.style.color = i < n ? '#f59e0b' : '#334155');
+        };
+        window.rateSelect = function (n) {
+            document.querySelectorAll('#rateStars span').forEach((s, i) => { s.style.color = i < n ? '#f59e0b' : '#334155'; });
+        };
+
+        function showAbout() {
+            const overlay = document.createElement('div');
+            overlay.className = 'sw-confirm-overlay';
+            overlay.innerHTML = `
+                <div class="sw-confirm-box" style="text-align:center">
+                    <img src="/assets/images/swellsync_logo.png" alt="SwellSync" style="width:72px;height:72px;border-radius:18px;margin:0 auto 12px;box-shadow:0 4px 20px rgba(0,186,214,0.3)">
+                    <div class="sw-confirm-title">SwellSync</div>
+                    <div style="display:inline-block;background:rgba(0,186,214,0.15);color:#00bad6;font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;margin-bottom:12px">v2.1.0</div>
+                    <div class="sw-confirm-msg">
+                        Application de prévisions surf en temps réel.<br>
+                        Développée avec ❤️ pour les surfeurs.<br><br>
+                        <span style="font-size:11px;color:#475569">© 2026 SwellSync — Tous droits réservés</span>
+                    </div>
+                    <div class="sw-confirm-btns">
+                        <button class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Fermer</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(overlay);
+            requestAnimationFrame(() => overlay.classList.add('show'));
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+        }
+
+        function toggleRow(row, name) {
+            const toggle = row.querySelector('.toggle-switch');
+            if (!toggle) return;
+            toggle.classList.toggle('on');
+            const isOn = toggle.classList.contains('on');
+            // Visual feedback
+            row.style.background = 'rgba(0,186,214,.06)';
+            setTimeout(() => row.style.background = '', 400);
+            // Dark mode specific
+            if (name === 'Mode sombre') {
+                if (typeof swToggleTheme === 'function') swToggleTheme();
+                const label = document.getElementById('darkmodeLabel');
+                if (label) label.textContent = isOn ? 'Interface sombre (activé)' : 'Interface claire (activé)';
+            }
+        }
+
+        function openArchives() { document.getElementById('archiveSheet').classList.replace('hidden', 'flex'); }
+        function showLogout() { document.getElementById('logoutSheet').classList.replace('hidden', 'flex'); }
+        function closeSheet(id) { document.getElementById(id).classList.replace('flex', 'hidden'); }
+
+        function filterSettings(q) {
+            const nq = q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            document.querySelectorAll('[data-section]').forEach(sec => {
+                const txt = sec.querySelector('[data-section]')?.dataset?.section || sec.dataset.section || '';
+                const rows = sec.querySelectorAll('.setting-row');
+                let visible = 0;
+                rows.forEach(row => {
+                    const rowText = row.textContent.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                    const show = !nq || rowText.includes(nq) || txt.includes(nq);
+                    row.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                sec.style.display = (!nq || visible > 0) ? '' : 'none';
+            });
+        }
+
+        // Load follow count
+        const followed = JSON.parse(localStorage.getItem('sw_followed') || '[]');
+        document.getElementById('followingCount').textContent = `${followed.length} surfeurs suivis`;
+
+        // Load username if stored
+        const storedName = localStorage.getItem('sw_username');
+        if (storedName) document.getElementById('settingsName').textContent = storedName;
+
+        // ── Pro-gate check ──
+        let memberPlan = 'free';
+        fetch('/api/auth/me', { credentials: 'include' })
+            .then(r => r.json())
+            .then(m => {
+                const data = m.member || m;
+                memberPlan = data?.is_pro === 1 || data?.is_pro === true ? 'pro' : 'free';
+            })
+            .catch(() => { });
+
+        function checkProThenGo(url) {
+            if (memberPlan === 'pro') { window.location.href = url; }
+            else { openProGateOrPage(url, 'Cette fonctionnalité est réservée aux membres SwellSync Pro ⭐'); }
+        }
+
+        function openProGateOrPage(url, msg) {
+            // Modale élégante au lieu de confirm()
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
+            modal.innerHTML = `
+                <div class="bg-[#0f2438] rounded-3xl border border-amber-500/20 p-6 max-w-sm mx-4 text-center shadow-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-2xl text-white" style="font-variation-settings:'FILL' 1">workspace_premium</span>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">SwellSync Pro ⭐</h3>
+                    <p class="text-sm text-slate-400 mb-5">${msg}</p>
+                    <button onclick="window.location.href='abonnement.html'" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 font-black text-sm text-[#080f1a] mb-2 active:scale-95 transition-transform">Passer à Pro</button>
+                    <button onclick="this.closest('.fixed').remove()" class="w-full py-2 text-slate-400 text-sm">Plus tard</button>
+                </div>`;
+            document.body.appendChild(modal);
+            modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+        }
+
+        // ── Archive pro gate ──
+        function openArchivesProGate() {
+            if (memberPlan === 'pro') {
+                document.getElementById('archiveSheet').classList.replace('hidden', 'flex');
+            } else {
+                openProGateOrPage('', 'L\'archive de tes posts est disponible avec SwellSync Pro. Retrouve tes posts supprimés et archivés facilement.');
+            }
+        }
+
+        // ── Toggle compte privé (API réelle) ──
+        function togglePrivacy(row) {
+            const toggle = row.querySelector('.toggle-switch');
+            if (!toggle) return;
+            toggle.classList.toggle('on');
+            const isPrivate = toggle.classList.contains('on');
+            fetch('/api/auth/profile', {
+                method: 'PATCH', credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_private: isPrivate })
+            }).catch(() => { });
+            showToasty(isPrivate ? '🔒 Compte mis en privé' : '🔓 Compte mis en public');
+        }
+
+        // ── Toggle afficher activité (API réelle) ──
+        function toggleActivity(row) {
+            const toggle = row.querySelector('.toggle-switch');
+            if (!toggle) return;
+            toggle.classList.toggle('on');
+            const show = toggle.classList.contains('on');
+            fetch('/api/auth/profile', {
+                method: 'PATCH', credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ show_activity: show })
+            }).catch(() => { });
+            showToasty(show ? '✅ Activité visible' : '🙈 Activité masquée');
+        }
+
+        // ── Notification toggles (DB) ──
+        const NOTIF_KEYS = {
+            'toggle-followers-notif': 'notif_followers',
+            'toggle-likes-notif': 'notif_likes',
+            'toggle-comments-notif': 'notif_comments',
+            'toggle-waves-notif': 'notif_waves',
+            'toggle-push-notif': 'notif_marketing',
+        };
+
+        // Load notification prefs from API
+        fetch('/api/members/notifications-prefs', { credentials: 'include' })
+            .then(r => r.ok ? r.json() : null)
+            .then(prefs => {
+                if (!prefs) return;
+                const map = {
+                    notif_followers: 'toggle-followers-notif',
+                    notif_likes: 'toggle-likes-notif',
+                    notif_comments: 'toggle-comments-notif',
+                    notif_waves: 'toggle-waves-notif',
+                    notif_marketing: 'toggle-push-notif',
+                };
+                Object.entries(map).forEach(([key, id]) => {
+                    const el = document.getElementById(id);
+                    if (el) { if (prefs[key]) el.classList.add('on'); else el.classList.remove('on'); }
+                });
+            }).catch(() => { });
+
+        // Save notif prefs debounced
+        let notifSaveTimeout = null;
+        function saveNotifPrefs() {
+            clearTimeout(notifSaveTimeout);
+            notifSaveTimeout = setTimeout(() => {
+                const prefs = {};
+                Object.entries(NOTIF_KEYS).forEach(([id, key]) => {
+                    const el = document.getElementById(id);
+                    if (el) prefs[key] = el.classList.contains('on');
+                });
+                fetch('/api/members/notifications-prefs', {
+                    method: 'PUT', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(prefs)
+                }).catch(() => { });
+            }, 800);
+        }
+
+        // Override toggleRow for notif toggles
+        const origToggleRow = toggleRow;
+        function toggleRow(row, name) {
+            origToggleRow(row, name);
+            const toggle = row.querySelector('.toggle-switch');
+            if (toggle && Object.keys(NOTIF_KEYS).includes(toggle.id)) {
+                saveNotifPrefs();
+            }
+        }
+
+        // ── Language modal ──
+        function openLanguage() {
+            const current = localStorage.getItem('sw_lang') || 'fr';
+            document.getElementById('langFR').checked = current === 'fr';
+            document.getElementById('langEN').checked = current === 'en';
+            document.getElementById('langSheet').classList.replace('hidden', 'flex');
+        }
+        function applyLanguage() {
+            const lang = document.getElementById('langEN').checked ? 'en' : 'fr';
+            localStorage.setItem('sw_lang', lang);
+            document.getElementById('langSheet').classList.replace('flex', 'hidden');
+            showToasty(lang === 'en' ? '🌐 Language set to English — reload pages to apply' : '🌐 Langue française activée — rechargez les pages');
+        }
+
+        // ── Change password modal ──
+        function openChangePassword() {
+            document.getElementById('pwdForm').reset();
+            document.getElementById('pwdError').textContent = '';
+            document.getElementById('pwdSheet').classList.replace('hidden', 'flex');
+        }
+        async function submitChangePassword() {
+            const curr = document.getElementById('pwdCurrent').value;
+            const newP = document.getElementById('pwdNew').value;
+            const conf = document.getElementById('pwdConfirm').value;
+            const errEl = document.getElementById('pwdError');
+            errEl.textContent = '';
+            if (newP.length < 8) { errEl.textContent = '❌ Le nouveau MDP doit faire au moins 8 caractères.'; return; }
+            if (newP !== conf) { errEl.textContent = '❌ Les mots de passe ne correspondent pas.'; return; }
+            const btn = document.getElementById('pwdSubmitBtn');
+            btn.textContent = '⏳ Modification…'; btn.disabled = true;
+            try {
+                const r = await fetch('/api/auth/password', {
+                    method: 'PUT', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ currentPassword: curr, newPassword: newP })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.error || 'Erreur serveur');
+                closeSheet('pwdSheet');
+                showToasty('✅ Mot de passe mis à jour !');
+            } catch (e) {
+                errEl.textContent = '❌ ' + e.message;
+            } finally {
+                btn.textContent = '✅ Confirmer'; btn.disabled = false;
+            }
+        }
+
+        // ── Blocked accounts modal ──
+        async function openBlockedAccounts() {
+            document.getElementById('blockedSheet').classList.replace('hidden', 'flex');
+            const list = document.getElementById('blockedList');
+            list.innerHTML = '<p class="text-slate-500 text-sm text-center py-4">Chargement…</p>';
+            try {
+                const r = await fetch('/api/members/blocked', { credentials: 'include' });
+                const data = await r.json();
+                if (!Array.isArray(data) || data.length === 0) {
+                    list.innerHTML = '<p class="text-slate-500 text-xs text-center py-6">✅ Aucun compte bloqué</p>';
+                } else {
+                    list.innerHTML = data.map(u => `
+                        <div class="flex items-center gap-3 p-3 border-b border-white/5">
+                            <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 text-sm">${(u.name || '?')[0].toUpperCase()}</div>
+                            <div class="flex-1"><p class="font-bold text-sm">${u.name || u.email || 'Utilisateur'}</p></div>
+                            <button onclick="unblockUser(${u.blocked_id}, this)" class="text-[11px] text-emerald-400 border border-emerald-400/30 px-3 py-1.5 rounded-xl font-bold">Débloquer</button>
+                        </div>`).join('');
+                }
+            } catch { list.innerHTML = '<p class="text-red-400 text-xs text-center py-4">Erreur de chargement</p>'; }
+        }
+        async function unblockUser(id, btn) {
+            btn.textContent = '⏳';
+            try {
+                await fetch('/api/members/blocked/' + id, { method: 'DELETE', credentials: 'include' });
+                btn.closest('div.flex').remove();
+                showToasty('✅ Compte débloqué');
+            } catch { btn.textContent = 'Débloquer'; }
+        }
+
+        // ── Export data ──
+        function requestDataExport() {
+            showToasty('📧 Un email d\'export vous sera envoyé sous 48h (RGPD)');
+        }
+
+        // ── Delete account confirm ──
+        function confirmDeleteAccount() {
+            showConfirmModal(
+                '⚠️ Supprimer mon compte',
+                'Cette action est <strong>IRRÉVERSIBLE</strong>.<br>Toutes tes données seront effacées dans les 30 jours.<br><br>Es-tu sûr de vouloir continuer ?',
+                () => {
+                    showConfirmModal(
+                        '🚨 Dernière confirmation',
+                        'Ton compte SwellSync et toutes tes données seront définitivement supprimés. Cette action ne peut pas être annulée.',
+                        () => {
+                            showToast('🗑️ Demande de suppression envoyée. Tu recevras un email de confirmation.', 'info', 5000);
+                        },
+                        { danger: true, confirmText: 'Supprimer définitivement' }
+                    );
+                },
+                { danger: true, confirmText: 'Oui, supprimer' }
+            );
+        }
+
+        // ── Authorizations ──
+        function requestLocation(row) {
+            const toggle = row.querySelector('.toggle-switch');
+            if (!toggle) return origToggleRow(row, 'Localisation');
+            const isOn = !toggle.classList.contains('on');
+            if (isOn) {
+                navigator.geolocation.getCurrentPosition(
+                    () => { toggle.classList.add('on'); localStorage.setItem('sw_perm_geo', '1'); showToasty('📍 Localisation autorisée'); },
+                    () => { toggle.classList.remove('on'); showToasty('❌ Permission refusée — activez-la dans les réglages du téléphone'); }
+                );
+            } else {
+                toggle.classList.remove('on');
+                localStorage.setItem('sw_perm_geo', '0');
+                showToasty('📍 Localisation désactivée');
+            }
+        }
+
+        async function requestPushNotif(row) {
+            const toggle = row.querySelector('.toggle-switch');
+            if (!toggle) return origToggleRow(row, 'Notifications Push');
+            const isOn = !toggle.classList.contains('on');
+            if (isOn) {
+                const perm = await Notification.requestPermission();
+                if (perm === 'granted') { toggle.classList.add('on'); localStorage.setItem('sw_perm_notif', '1'); showToasty('🔔 Notifications activées'); }
+                else { toggle.classList.remove('on'); showToasty('❌ Permission refusée dans les réglages'); }
+            } else {
+                toggle.classList.remove('on');
+                localStorage.setItem('sw_perm_notif', '0');
+                showToasty('🔕 Notifications désactivées');
+            }
+        }
+
+        // ── Lang sheet ──
+        function openLangSheet() {
+            document.getElementById('langSheet').classList.replace('hidden', 'flex');
+        }
+
+        // ── Text size sheet ──
+        function openTextSizeSheet() {
+            const sheet = document.createElement('div');
+            sheet.className = 'fixed inset-0 z-[300] flex items-end justify-center bg-black/70 backdrop-blur-sm';
+            sheet.id = 'textSizeSheet';
+            const current = localStorage.getItem('sw_text_size') || 'normal';
+            sheet.innerHTML = `
+                <div class="w-full max-w-md bg-[#0f2438] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-black text-base">🔤 Taille du texte</h3>
+                        <button onclick="closeSheet('textSizeSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
+                    </div>
+                    <div class="space-y-2">
+                        ${['small|Petit|text-xs', 'normal|Normal|text-sm', 'large|Grand|text-base'].map(s => {
+                const [val, label, cls] = s.split('|');
+                return `<label class="flex items-center gap-3 p-3 rounded-xl bg-[#080f1a] border border-[#00bad6]/10 cursor-pointer hover:bg-[#0b1a2e]">
+                                <input type="radio" name="textSize" value="${val}" class="accent-[#00bad6]" ${current === val ? 'checked' : ''} onchange="setTextSize('${val}')" />
+                                <span class="${cls} font-semibold">${label}</span>
+                            </label>`;
+            }).join('')}
+                    </div>
+                </div>`;
+            document.body.appendChild(sheet);
+            sheet.addEventListener('click', e => { if (e.target === sheet) sheet.remove(); });
+        }
+        function setTextSize(size) {
+            localStorage.setItem('sw_text_size', size);
+            const html = document.documentElement;
+            html.classList.remove('text-size-small', 'text-size-normal', 'text-size-large');
+            html.classList.add('text-size-' + size);
+            showToasty('✅ Taille du texte mise à jour');
+            setTimeout(() => document.getElementById('textSizeSheet')?.remove(), 400);
+        }
+
+        // ── Accessibility sheet ──
+        function openAccessibilitySheet() {
+            const sheet = document.createElement('div');
+            sheet.className = 'fixed inset-0 z-[300] flex items-end justify-center bg-black/70 backdrop-blur-sm';
+            sheet.id = 'accessSheet';
+            const contrast = localStorage.getItem('sw_high_contrast') === '1';
+            const reducedMotion = localStorage.getItem('sw_reduced_motion') === '1';
+            sheet.innerHTML = `
+                <div class="w-full max-w-md bg-[#0f2438] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-black text-base">♿ Accessibilité</h3>
+                        <button onclick="closeSheet('accessSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#080f1a] border border-[#00bad6]/10">
+                            <div>
+                                <p class="font-semibold text-sm">Contraste élevé</p>
+                                <p class="text-[10px] text-slate-500">Améliore la lisibilité</p>
+                            </div>
+                            <div class="toggle-switch ${contrast ? 'on' : ''}" onclick="toggleAccessibility(this, 'sw_high_contrast')"></div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#080f1a] border border-[#00bad6]/10">
+                            <div>
+                                <p class="font-semibold text-sm">Réduire les animations</p>
+                                <p class="text-[10px] text-slate-500">Moins de transitions et effets</p>
+                            </div>
+                            <div class="toggle-switch ${reducedMotion ? 'on' : ''}" onclick="toggleAccessibility(this, 'sw_reduced_motion')"></div>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(sheet);
+            sheet.addEventListener('click', e => { if (e.target === sheet) sheet.remove(); });
+        }
+        function toggleAccessibility(el, key) {
+            const isOn = el.classList.toggle('on');
+            localStorage.setItem(key, isOn ? '1' : '0');
+            showToasty(isOn ? '✅ Activé' : '❌ Désactivé');
+        }
+
+        // ── Units sheet ──
+        function openUnitsSheet() {
+            const curr = localStorage.getItem('sw_units_wave') || 'm';
+            const currWind = localStorage.getItem('sw_units_wind') || 'kmh';
+            document.getElementById('unitWaveM').checked = curr === 'm';
+            document.getElementById('unitWaveFt').checked = curr === 'ft';
+            document.getElementById('unitWindKmh').checked = currWind === 'kmh';
+            document.getElementById('unitWindKts').checked = currWind === 'kts';
+            document.getElementById('unitsSheet').classList.replace('hidden', 'flex');
+        }
+        function applyUnits() {
+            localStorage.setItem('sw_units_wave', document.getElementById('unitWaveFt').checked ? 'ft' : 'm');
+            localStorage.setItem('sw_units_wind', document.getElementById('unitWindKts').checked ? 'kts' : 'kmh');
+            closeSheet('unitsSheet');
+            showToasty('✅ Unités mises à jour');
+        }
+
+        // ── Level sheet ──
+        function openLevelSheet() {
+            const curr = localStorage.getItem('sw_surf_level') || 'intermediaire';
+            document.querySelectorAll('[name="surfLevel"]').forEach(r => { r.checked = r.value === curr; });
+            document.getElementById('levelSheet').classList.replace('hidden', 'flex');
+        }
+        function applyLevel() {
+            const sel = document.querySelector('[name="surfLevel"]:checked');
+            if (sel) {
+                localStorage.setItem('sw_surf_level', sel.value);
+                fetch('/api/auth/profile', {
+                    method: 'PATCH', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ level: sel.value })
+                }).catch(() => { });
+            }
+            closeSheet('levelSheet');
+            showToasty('✅ Niveau mis à jour');
+        }
+
+        // ── Default spot sheet ──
+        function openDefaultSpotSheet() {
+            const list = document.getElementById('defaultSpotList');
+            list.innerHTML = '<p class="text-slate-500 text-sm text-center py-3">Chargement des favoris…</p>';
+            document.getElementById('defaultSpotSheet').classList.replace('hidden', 'flex');
+            fetch('/api/members/favorites', { credentials: 'include' })
+                .then(r => r.ok ? r.json() : [])
+                .then(spots => {
+                    if (!spots.length) { list.innerHTML = '<p class="text-slate-400 text-xs text-center py-4">Aucun spot favori. Ajoutes-en depuis la carte !</p>'; return; }
+                    const curr = localStorage.getItem('sw_default_spot') || '';
+                    list.innerHTML = spots.map(s => `
+                        <label class="flex items-center gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/3">
+                            <input type="radio" name="defaultSpot" value="${s.spot_id}" ${s.name === curr ? 'checked' : ''} class="accent-[#00bad6]"/>
+                            <div><p class="font-bold text-sm">${s.name}</p><p class="text-[11px] text-slate-500">${s.location || ''}</p></div>
+                        </label>`).join('');
+                }).catch(() => { list.innerHTML = '<p class="text-red-400 text-xs text-center py-4">Erreur</p>'; });
+        }
+        function applyDefaultSpot() {
+            const sel = document.querySelector('[name="defaultSpot"]:checked');
+            if (sel) localStorage.setItem('sw_default_spot', sel.value);
+            closeSheet('defaultSpotSheet');
+            showToasty('✅ Spot par défaut mis à jour');
+        }
+
+        // ── Toast notification ──
+        function showToasty(msg) {
+            let t = document.getElementById('settingsToast');
+            if (!t) {
+                t = document.createElement('div');
+                t.id = 'settingsToast';
+                t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:#f1f5f9;border:1px solid rgba(0,186,214,.3);border-radius:16px;padding:10px 18px;font-size:12px;font-weight:700;z-index:9999;transition:opacity .3s;white-space:nowrap;';
+                document.body.appendChild(t);
+            }
+            t.textContent = msg; t.style.opacity = '1';
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3000);
+        }
+
+        // ═══════════════════════════════════════════
+        // 2FA FUNCTIONS
+        // ═══════════════════════════════════════════
+        let is2FAEnabled = false;
+
+        async function check2FAStatus() {
+            try {
+                const r = await fetch('/api/auth/2fa-status', { credentials: 'include' }).then(x => x.json());
+                is2FAEnabled = r.is_2fa_enabled;
+                update2FADisplay();
+            } catch {
+                document.getElementById('2faStatus').textContent = 'Non dispo';
+            }
+        }
+
+        function update2FADisplay() {
+            const statusEl = document.getElementById('2faStatus');
+            if (is2FAEnabled) {
+                statusEl.textContent = '✅ Activé';
+                statusEl.className = 'text-[10px] font-bold text-emerald-400 mr-1';
+            } else {
+                statusEl.textContent = '❌ Désactivé';
+                statusEl.className = 'text-[10px] font-bold text-red-400 mr-1';
+            }
+            // Also update modal
+            const txt = document.getElementById('twoFA_statusText');
+            const desc = document.getElementById('twoFA_statusDesc');
+            const btn = document.getElementById('twoFA_sendBtn');
+            if (txt) {
+                if (is2FAEnabled) {
+                    txt.textContent = 'Statut : ✅ Activé';
+                    desc.textContent = 'Le 2FA protège ton compte. Tu peux le désactiver ci-dessous.';
+                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">mail</span> Désactiver le 2FA';
+                    btn.className = btn.className.replace('bg-amber-500', 'bg-red-500').replace('hover:bg-amber-400', 'hover:bg-red-400');
+                } else {
+                    txt.textContent = 'Statut : ❌ Désactivé';
+                    desc.textContent = 'Active le 2FA pour renforcer la sécurité de ton compte.';
+                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">mail</span> Envoyer le code de vérification';
+                    btn.className = btn.className.replace('bg-red-500', 'bg-amber-500').replace('hover:bg-red-400', 'hover:bg-amber-400');
+                }
+            }
+        }
+
+        function open2FAModal() {
+            reset2FAModal();
+            document.getElementById('twoFASheet').classList.replace('hidden', 'flex');
+            check2FAStatus();
+        }
+
+        function reset2FAModal() {
+            document.getElementById('twoFA_step1').classList.remove('hidden');
+            document.getElementById('twoFA_step2').classList.add('hidden');
+            document.getElementById('twoFA_code').value = '';
+            document.getElementById('twoFA_error').classList.add('hidden');
+            document.getElementById('twoFA_debugCode').classList.add('hidden');
+        }
+
+        async function send2FACode() {
+            const btn = document.getElementById('twoFA_sendBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Envoi en cours...';
+            try {
+                const r = await fetch('/api/auth/2fa-send-code', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(x => x.json());
+                if (r.success) {
+                    document.getElementById('twoFA_step1').classList.add('hidden');
+                    document.getElementById('twoFA_step2').classList.remove('hidden');
+                    // Show debug code in dev mode
+                    if (r.debug_code) {
+                        const dbg = document.getElementById('twoFA_debugCode');
+                        dbg.textContent = `🔑 Code (dev) : ${r.debug_code}`;
+                        dbg.classList.remove('hidden');
+                    }
+                    document.getElementById('twoFA_code').focus();
+                }
+            } catch (e) {
+                showToasty('❌ Erreur lors de l\'envoi du code');
+            }
+            btn.disabled = false;
+            update2FADisplay();
+        }
+
+        async function verify2FACode() {
+            const code = document.getElementById('twoFA_code').value.trim();
+            if (code.length !== 6) {
+                document.getElementById('twoFA_error').textContent = 'Le code doit contenir 6 chiffres';
+                document.getElementById('twoFA_error').classList.remove('hidden');
+                return;
+            }
+            const btn = document.getElementById('twoFA_verifyBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Vérification...';
+            try {
+                const action = is2FAEnabled ? 'disable' : 'enable';
+                const r = await fetch('/api/auth/2fa-verify', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, action })
+                }).then(x => x.json());
+                if (r.success) {
+                    is2FAEnabled = r.is_2fa_enabled;
+                    update2FADisplay();
+                    closeSheet('twoFASheet');
+                    showToasty(is2FAEnabled ? '🔐 2FA activé avec succès !' : '🔓 2FA désactivé');
+                } else {
+                    document.getElementById('twoFA_error').textContent = r.error || 'Code incorrect';
+                    document.getElementById('twoFA_error').classList.remove('hidden');
+                }
+            } catch {
+                document.getElementById('twoFA_error').textContent = 'Erreur serveur';
+                document.getElementById('twoFA_error').classList.remove('hidden');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm">verified</span> Vérifier et appliquer';
+        }
+
+        // Init 2FA status on page load
+        check2FAStatus();
+    </script>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person</span><span
+                class="text-[10px] font-bold">Profil</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+    </nav>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+    <script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

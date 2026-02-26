@@ -1,0 +1,542 @@
+[
+    {
+        "name": "Blanc Sablons",
+        "location": "Le Conquet, Bretagne",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Longue plage de sable, parfaite pour débutants.",
+        "lat": 48.3644,
+        "lng": -4.7628
+    },
+    {
+        "name": "La Palue",
+        "location": "Crozon, Bretagne",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Baie sauvage et exposée.",
+        "lat": 48.2255,
+        "lng": -4.5557
+    },
+    {
+        "name": "Goulien",
+        "location": "Crozon, Bretagne",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Spot très accessible.",
+        "lat": 48.2435,
+        "lng": -4.5428
+    },
+    {
+        "name": "Baie des Trépassés",
+        "location": "Cap Sizun, Bretagne",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Houle puissante entre deux pointes.",
+        "lat": 48.0465,
+        "lng": -4.7075
+    },
+    {
+        "name": "Pors Ar Vag",
+        "location": "Plomodiern, Bretagne",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Petite baie protégée.",
+        "lat": 48.113,
+        "lng": -4.269
+    },
+    {
+        "name": "La Torche",
+        "location": "Plomeur, Bretagne",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Spot majeur de Bretagne, régulier et venté.",
+        "lat": 47.8383,
+        "lng": -4.3524
+    },
+    {
+        "name": "Tronoën",
+        "location": "Saint-Jean-Trolimon, Bretagne",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Longue plage très sauvage.",
+        "lat": 47.854,
+        "lng": -4.351
+    },
+    {
+        "name": "Pors Carn",
+        "location": "Penmarc'h, Bretagne",
+        "difficulty": "Débutant/Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Excellente zone de repli.",
+        "lat": 47.828,
+        "lng": -4.3485
+    },
+    {
+        "name": "Guidel Plages",
+        "location": "Guidel, Bretagne",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Plusieurs pics très accessibles.",
+        "lat": 47.76,
+        "lng": -3.518
+    },
+    {
+        "name": "Plouharnel - Sainte Barbe",
+        "location": "Plouharnel, Bretagne",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Idéal pour l'apprentissage et les longboards.",
+        "lat": 47.6052,
+        "lng": -3.1385
+    },
+    {
+        "name": "Port Blanc",
+        "location": "Quiberon, Bretagne",
+        "difficulty": "Avancé",
+        "wave_type": "Point Break",
+        "description": "Spot de Côte sauvage très puissant.",
+        "lat": 47.525,
+        "lng": -3.1519
+    },
+    {
+        "name": "Les Sables d'Olonne",
+        "location": "Vendée",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Baie emblématique des Sables.",
+        "lat": 46.4913,
+        "lng": -1.7891
+    },
+    {
+        "name": "Sauveterre",
+        "location": "Olonne, Vendée",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Accès forêt et vagues parfois creuses.",
+        "lat": 46.541,
+        "lng": -1.8214
+    },
+    {
+        "name": "La Sauzaie",
+        "location": "Bretignolles, Vendée",
+        "difficulty": "Expert",
+        "wave_type": "Reef Break",
+        "description": "Fameuse vague sur un plateau rocheux.",
+        "lat": 46.6432,
+        "lng": -1.8847
+    },
+    {
+        "name": "Bud Bud",
+        "location": "Longeville, Vendée",
+        "difficulty": "Expert",
+        "wave_type": "Beach Break",
+        "description": "Hauts fonds qui créent de gros tubes rapides.",
+        "lat": 46.4085,
+        "lng": -1.5457
+    },
+    {
+        "name": "La Tranche-sur-Mer",
+        "location": "Vendée",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Zones abritées populaires en été.",
+        "lat": 46.345,
+        "lng": -1.4503
+    },
+    {
+        "name": "Les Grenettes",
+        "location": "Ile de Ré",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Reef/Beach",
+        "description": "Vague amusante sous les pins.",
+        "lat": 46.1554,
+        "lng": -1.334
+    },
+    {
+        "name": "Le Petit Bec",
+        "location": "Ile de Ré",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Pic exposé, souvent solide.",
+        "lat": 46.2238,
+        "lng": -1.5303
+    },
+    {
+        "name": "Vert-Bois",
+        "location": "Ile d'Oléron",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Vagues consistantes et longues.",
+        "lat": 45.925,
+        "lng": -1.2675
+    },
+    {
+        "name": "Grand-Village",
+        "location": "Ile d'Oléron",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Spot majestueux très naturel.",
+        "lat": 45.858,
+        "lng": -1.2335
+    },
+    {
+        "name": "Pontaillac",
+        "location": "Royan",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Excellente baie de repli par forte mer.",
+        "lat": 45.6265,
+        "lng": -1.0425
+    },
+    {
+        "name": "La Côte Sauvage",
+        "location": "La Tremblade",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Lignes de vagues très solides dans une zone vierge.",
+        "lat": 45.72,
+        "lng": -1.23
+    },
+    {
+        "name": "Soulac-sur-Mer",
+        "location": "Gironde",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Spot aquitain très ouvert au vent.",
+        "lat": 45.515,
+        "lng": -1.135
+    },
+    {
+        "name": "Montalivet",
+        "location": "Gironde",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Vastes plages de sable blond dorées.",
+        "lat": 45.378,
+        "lng": -1.155
+    },
+    {
+        "name": "Hourtin Plage",
+        "location": "Gironde",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Beach break volumineux.",
+        "lat": 45.216,
+        "lng": -1.168
+    },
+    {
+        "name": "Carcans Plage",
+        "location": "Gironde",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Bancs de sable très variables.",
+        "lat": 45.083,
+        "lng": -1.189
+    },
+    {
+        "name": "Lacanau - Nord",
+        "location": "Gironde",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Spot historique acceuillant de nombreux championnats.",
+        "lat": 44.998,
+        "lng": -1.205
+    },
+    {
+        "name": "Lacanau - Centrale",
+        "location": "Gironde",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Le classique indémodable du surf français.",
+        "lat": 44.994,
+        "lng": -1.203
+    },
+    {
+        "name": "Lacanau - Sud",
+        "location": "Gironde",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Formation de baïnes et houle croisée.",
+        "lat": 44.985,
+        "lng": -1.201
+    },
+    {
+        "name": "Le Porge",
+        "location": "Gironde",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Nature vierge perdue au bord des pinèdes.",
+        "lat": 44.871,
+        "lng": -1.213
+    },
+    {
+        "name": "Le Truc Vert",
+        "location": "Cap Ferret",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Tubes aquitains de pure perfection.",
+        "lat": 44.717,
+        "lng": -1.24
+    },
+    {
+        "name": "Grand Crohot",
+        "location": "Cap Ferret",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Série de pics splendides selon l'emplacement des baïnes.",
+        "lat": 44.802,
+        "lng": -1.23
+    },
+    {
+        "name": "Biscarrosse",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "La frontière magique entre la Gironde et les Landes.",
+        "lat": 44.445,
+        "lng": -1.252
+    },
+    {
+        "name": "Mimizan Plage",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Très belles vagues d'été et courant marin.",
+        "lat": 44.205,
+        "lng": -1.294
+    },
+    {
+        "name": "Contis Plage",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Ambiance chill et vagues magnifiques près du phare.",
+        "lat": 44.091,
+        "lng": -1.319
+    },
+    {
+        "name": "Cap de l'Homy",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Spot de dune préservé et peu fréquenté.",
+        "lat": 44.032,
+        "lng": -1.335
+    },
+    {
+        "name": "Saint-Girons",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Longues plages formidables, eau translucide l'été.",
+        "lat": 43.951,
+        "lng": -1.365
+    },
+    {
+        "name": "Moliets Plage",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Vagues parfaites modelées par l'embouchure du courant.",
+        "lat": 43.854,
+        "lng": -1.396
+    },
+    {
+        "name": "Messanges",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Des bancs de sable d'une qualité rare.",
+        "lat": 43.818,
+        "lng": -1.405
+    },
+    {
+        "name": "Vieux-Boucau",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "De l'écume blanche puissante près de l'estuaire.",
+        "lat": 43.784,
+        "lng": -1.411
+    },
+    {
+        "name": "Seignosse - Le Penon",
+        "location": "Landes",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Spot mondialement reconnu pour sa constante qualité.",
+        "lat": 43.705,
+        "lng": -1.438
+    },
+    {
+        "name": "Seignosse - Les Bourdaines",
+        "location": "Landes",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Onde puissante, rapide et souvent très lisse le matin.",
+        "lat": 43.692,
+        "lng": -1.439
+    },
+    {
+        "name": "Seignosse - Les Estagnots",
+        "location": "Landes",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Produit parfois l'un des meilleurs tubes d'Europe.",
+        "lat": 43.682,
+        "lng": -1.442
+    },
+    {
+        "name": "Hossegor - La Gravière",
+        "location": "Landes",
+        "difficulty": "Expert",
+        "wave_type": "Beach Break",
+        "description": "Un Beach Break ultime : creux, dantesque et punitif.",
+        "lat": 43.666,
+        "lng": -1.444
+    },
+    {
+        "name": "La Nord",
+        "location": "Hossegor, Landes",
+        "difficulty": "Expert",
+        "wave_type": "Beach Break",
+        "description": "Spot du large supportant des houles très massives (Gun obligatoire).",
+        "lat": 43.66,
+        "lng": -1.445
+    },
+    {
+        "name": "La Sud",
+        "location": "Hossegor, Landes",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "Protégé par le port, la vague est idéale pour l'instruction.",
+        "lat": 43.655,
+        "lng": -1.443
+    },
+    {
+        "name": "Capbreton - Le Santocha",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Vagues très fun qui déroulent autour des blockhaus de la Seconde Guerre Mondiale.",
+        "lat": 43.64,
+        "lng": -1.446
+    },
+    {
+        "name": "Capbreton - La Piste",
+        "location": "Landes",
+        "difficulty": "Expert",
+        "wave_type": "Beach Break",
+        "description": "Tubes mythiques ultra-rapides qui cassent juste au bord.",
+        "lat": 43.633,
+        "lng": -1.448
+    },
+    {
+        "name": "Labenne Océan",
+        "location": "Landes",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Forts courants latéraux provoquant des vagues instables mais radciales.",
+        "lat": 43.595,
+        "lng": -1.465
+    },
+    {
+        "name": "Ondres Plage",
+        "location": "Landes",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Ultime plage dunaire des Landes sauvage avant le Pays Basque.",
+        "lat": 43.578,
+        "lng": -1.485
+    },
+    {
+        "name": "Tarnos - La Digue",
+        "location": "Landes",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Bancs de sable fixés par la digue de l'embouchure de l'Adour.",
+        "lat": 43.541,
+        "lng": -1.516
+    },
+    {
+        "name": "Les Cavaliers",
+        "location": "Anglet, Côte Basque",
+        "difficulty": "Avancé",
+        "wave_type": "Beach Break",
+        "description": "Des ondes tubulaires magnifiques très prisées des surfeurs pros locaux.",
+        "lat": 43.528,
+        "lng": -1.53
+    },
+    {
+        "name": "Marinella",
+        "location": "Anglet, Côte Basque",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Spot accessible coincé entre les nombreuses digues d'Anglet.",
+        "lat": 43.513,
+        "lng": -1.54
+    },
+    {
+        "name": "Biarritz - Grande Plage",
+        "location": "Biarritz, Côte Basque",
+        "difficulty": "Débutant/Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Le berceau royal du surf européen éclairé sous les lampadaires.",
+        "lat": 43.483,
+        "lng": -1.558
+    },
+    {
+        "name": "Côte des Basques",
+        "location": "Biarritz, Côte Basque",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Lieu magique pour le Longboard avec pour décor la Villa Belza.",
+        "lat": 43.477,
+        "lng": -1.567
+    },
+    {
+        "name": "Ilbarritz",
+        "location": "Bidart, Côte Basque",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Beach Break",
+        "description": "Paysage spectaculaire au pied du château dominant la falaise.",
+        "lat": 43.461,
+        "lng": -1.579
+    },
+    {
+        "name": "Parlementia",
+        "location": "Guéthary, Côte Basque",
+        "difficulty": "Expert",
+        "wave_type": "Reef Break",
+        "description": "Une vague puissante qui déferle au large sur un reef profond (style Sunset Beach).",
+        "lat": 43.425,
+        "lng": -1.611
+    },
+    {
+        "name": "Lafitenia",
+        "location": "Saint-Jean-de-Luz",
+        "difficulty": "Avancé",
+        "wave_type": "Point Break",
+        "description": "Longue droite sur fond rocheux, exceptionnelle quand elle marche.",
+        "lat": 43.411,
+        "lng": -1.625
+    },
+    {
+        "name": "Erromardie",
+        "location": "Saint-Jean-de-Luz",
+        "difficulty": "Intermédiaire",
+        "wave_type": "Reef Break",
+        "description": "Spot encastré offrant une houle propre par vent de Sud.",
+        "lat": 43.402,
+        "lng": -1.637
+    },
+    {
+        "name": "Hendaye - Plage Centrale",
+        "location": "Hendaye, Côte Basque",
+        "difficulty": "Débutant",
+        "wave_type": "Beach Break",
+        "description": "La piste verte du surf ! Protégé par une baie et des rochers légendaires.",
+        "lat": 43.376,
+        "lng": -1.776
+    }
+]

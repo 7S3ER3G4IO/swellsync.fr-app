@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SwellSync | Actu Surf — News, Compétitions & Lifestyle</title>
+    <meta name="description"
+        content="Toute l'actualité surf : compétitions, houles XXL, équipement, environnement et culture surf. L'info surf en temps réel par SwellSync." />
+    <link rel="icon" href="assets/images/swellsync_icon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { primary: '#00bad6', 'bg-dark': '#0a1a1c', 'bg-card': '#0f2123' } } }
+        };
+    </script>
+
+    <style>
+        :root {
+            --p: #00bad6;
+            --dark: #0a1a1c;
+            --card: #0f2123;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                opacity: .7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--p);
+        }
+
+        /* ── Hero article ── */
+        .hero-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            cursor: pointer;
+            transition: transform .3s;
+        }
+
+        .hero-card:hover {
+            transform: scale(1.008);
+        }
+
+        .hero-card .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center top;
+            background-color: #061a22;
+            /* fallback bg si image absente */
+            transition: transform .7s ease;
+        }
+
+        .hero-card:hover .hero-bg {
+            transform: scale(1.05);
+        }
+
+        .hero-card .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5, 15, 18, .92) 0%, rgba(5, 15, 18, .45) 55%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px 48px;
+        }
+
+        @media(max-width:640px) {
+            .hero-content {
+                padding: 24px;
+            }
+        }
+
+        /* ── News cards ── */
+        .news-card {
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform .25s, box-shadow .25s, border-color .25s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 186, 214, 0.1);
+            border-color: rgba(0, 186, 214, 0.22);
+        }
+
+        .news-img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+            transition: transform .5s ease;
+            background: linear-gradient(135deg, #0a1a1c, #112226);
+        }
+
+        .news-card:hover .news-img {
+            transform: scale(1.06);
+        }
+
+        .img-wrap {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cat-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 186, 214, 0.15);
+            border: 1px solid rgba(0, 186, 214, 0.45);
+            color: #00bad6;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            backdrop-filter: blur(8px);
+        }
+
+        .news-body {
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+        }
+
+        .badge-primary {
+            background: rgba(0, 186, 214, 0.12);
+            border: 1px solid rgba(0, 186, 214, 0.35);
+            color: var(--p);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        /* ── CTA Btn ── */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            background: var(--p);
+            color: #050e10;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            text-decoration: none;
+            transition: opacity .2s, transform .15s;
+        }
+
+        .btn-primary:hover {
+            opacity: .88;
+            transform: scale(1.03);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            border: 2px solid rgba(0, 186, 214, 0.45);
+            color: var(--p);
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            background: transparent;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 186, 214, 0.1);
+            border-color: rgba(0, 186, 214, .7);
+        }
+
+        /* ── Newsletter ── */
+        .nl-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: #e2e8f0;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .nl-input:focus {
+            border-color: rgba(0, 186, 214, .5);
+        }
+
+        .nl-input::placeholder {
+            color: #475569;
+        }
+
+        /* ── Sidebar trending ── */
+        .trend-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        /* ── Grid animation ── */
+        .news-card {
+            animation: fadeUp .4s ease both;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 186, 214, 0.2);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 186, 214, 0.2);
+            border-radius: 2px;
+        }
+
+        /* ── Infinite scroll sentinel ── */
+        .scroll-sentinel {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner-ring {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(0, 186, 214, .15);
+            border-top-color: #00bad6;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Badge Nouveau ── */
+        .badge-new {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: #fff;
+            font-size: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            padding: 3px 8px;
+            border-radius: 999px;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(244, 63, 94, .4);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+
+            0%,
+            100% {
+                box-shadow: 0 2px 8px rgba(244, 63, 94, .4);
+            }
+
+            50% {
+                box-shadow: 0 2px 16px rgba(244, 63, 94, .7);
+            }
+        }
+
+        /* ── Bookmark btn ── */
+        .bookmark-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .45);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, .12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all .2s;
+            z-index: 2;
+            font-size: 14px;
+        }
+
+        .bookmark-btn:hover {
+            background: rgba(0, 186, 214, .2);
+            border-color: rgba(0, 186, 214, .5);
+            transform: scale(1.15);
+        }
+
+        .bookmark-btn.bookmarked {
+            background: rgba(244, 63, 94, .25);
+            border-color: rgba(244, 63, 94, .5);
+        }
+
+        /* ── Read time badge ── */
+        .read-time {
+            font-size: 9px;
+            color: #475569;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* ── Lazy image fade ── */
+        .news-img {
+            opacity: 0;
+            transition: opacity .4s ease, transform .5s ease;
+        }
+
+        .news-img.loaded {
+            opacity: 1;
+        }
+
+        /* ── Article Modal ── */
+        #article-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            pointer-events: none;
+            padding: 0 0 0 0;
+        }
+
+        #article-modal.open {
+            pointer-events: all;
+        }
+
+        #modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 10, 12, .72);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            transition: opacity .3s ease;
+        }
+
+        #article-modal.open #modal-backdrop {
+            opacity: 1;
+        }
+
+        #modal-sheet {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 720px;
+            background: #0d2226;
+            border-radius: 28px 28px 0 0;
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-bottom: none;
+            padding: 0;
+            transform: translateY(100%);
+            transition: transform .38s cubic-bezier(.34, 1.1, .7, 1);
+            max-height: 88vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #article-modal.open #modal-sheet {
+            transform: translateY(0);
+        }
+
+        #modal-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            background: #061a22;
+        }
+
+        #modal-body {
+            padding: 24px 28px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        #modal-handle {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, .15);
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+
+        /* ── Stats bar ── */
+        .stat-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 186, 214, .08);
+            border: 1px solid rgba(0, 186, 214, .15);
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .stat-pill span {
+            color: #00bad6;
+        }
+    </style>
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://swellsync.surf/actu.html">
+    <meta property="og:title" content="SwellSync | Actualités Surf">
+    <meta property="og:description"
+        content="Toute l'actualité surf : compétitions, culture, lifestyle et innovations du monde du surf.">
+    <meta property="og:image" content="https://swellsync.surf/assets/images/swellsync_og.jpg">
+    <meta property="og:site_name" content="SwellSync">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SwellSync | Actualités Surf">
+    <meta name="twitter:description"
+        content="Toute l'actualité surf : compétitions, culture, lifestyle et innovations du monde du surf.">
+    <meta name="twitter:image" content="https://swellsync.surf/assets/images/swellsync_og.jpg">
+</head>
+
+<body>
+
+
+    <!-- PAGE CONTENT -->
+    <div class="pt-6 pb-36 px-4 max-w-7xl mx-auto">
+
+        <!-- PAGE TITLE -->
+        <div class="mb-10" style="animation:fadeUp .5s ease both">
+            <div class="flex items-center gap-3 mb-3">
+                <span class="badge badge-primary" data-i18n="actu.badge">📰 Actualités</span>
+                <span class="badge"
+                    style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#64748b;"
+                    data-i18n="actu.subtitle">Surf
+                    · Houle · Culture</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-black text-white mb-2" data-i18n="actu.title">Actu <span
+                    style="color:var(--p)">Surf</span>
+            </h1>
+            <p class="text-slate-400 max-w-2xl">Compétitions, houles XXL, équipement, environnement et culture — toute
+                l'info surf par SwellSync.</p>
+        </div>
+
+        <!-- LAYOUT PRINCIPAL : hero + sidebar -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-14" style="animation:fadeUp .5s .1s ease both">
+
+            <!-- HERO ARTICLE -->
+            <div class="lg:col-span-2">
+                <div class="hero-card">
+                    <div class="hero-bg"
+                        style="background-image:linear-gradient(to top,rgba(3,10,12,.92) 0%,rgba(3,10,12,.35) 60%,transparent 100%),url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQj3sp-Veg2FfR41YQL-UfmSEUI7fA68dk9RBDjbc63NYxc1WhWcQot-SWOGMEE11rNzD3kPwM2xEouJM43VjZIx7bpZBKEaTWTt98fZq78XLRwmawhKesYpQHhPfv2_NeS99vGbbzyISs6dnYeTE0BEC-JTYxBHUe2__tXbKIeXVuyJp7Kb0IVOt_BXbyjmsGCbHFIT6rE4u8oBngjMtq5wZqFyl1_F5ulYWrsOb-YUr5M7zv1C_NtNbv2ixpQfrtqvy6jtkb4Uc');">
+                    </div>
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge badge-primary">🌊 Breaking</span>
+                            <span class="badge badge-red">⚠️ Alerte XXL</span>
+                        </div>
+                        <h2 id="hero-title"
+                            class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight mb-3">
+                            La Tempête du Siècle : Houle XXL Déferle sur la Côte Atlantique
+                        </h2>
+                        <p id="hero-desc"
+                            class="text-white/80 text-base sm:text-lg font-medium leading-relaxed mb-6 max-w-2xl">
+                            Des vagues de plus de 15 mètres frappent les côtes landes cette semaine, attirant les
+                            meilleurs surfeurs de big wave pour une session historique sur les récifs extérieurs.
+                        </p>
+                        <a id="hero-btn" href="#" class="btn-primary">
+                            Lire l'article
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR — Trending -->
+            <div class="flex flex-col gap-4">
+                <div class="glass rounded-2xl p-5 flex-1">
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-4">🔥 Tendances</p>
+                    <div class="flex flex-col gap-1">
+                        <!-- Trend items -->
+                        <a href="#" class="trend-item flex items-start gap-3 p-3 rounded-xl transition-colors"
+                            style="text-decoration:none;">
+                            <span class="text-2xl font-black text-primary/30 leading-none mt-0.5 w-6 shrink-0">01</span>
+                            <div>
+                                <p class="text-white font-bold text-sm leading-tight mb-1">Hossegor : Session Mythique à
+                                    la Gravière</p>
+                                <p class="text-slate-500 text-xs">Compétition · 2h ago</p>
+                            </div>
+                        </a>
+                        <a href="#" class="trend-item flex items-start gap-3 p-3 rounded-xl transition-colors"
+                            style="text-decoration:none;">
+                            <span class="text-2xl font-black text-primary/30 leading-none mt-0.5 w-6 shrink-0">02</span>
+                            <div>
+                                <p class="text-white font-bold text-sm leading-tight mb-1">Guéthary : Parlementia en Feu
+                                    ce Weekend</p>
+                                <p class="text-slate-500 text-xs">Spots · 5h ago</p>
+                            </div>
+                        </a>
+                        <a href="#" class="trend-item flex items-start gap-3 p-3 rounded-xl transition-colors"
+                            style="text-decoration:none;">
+                            <span class="text-2xl font-black text-primary/30 leading-none mt-0.5 w-6 shrink-0">03</span>
+                            <div>
+                                <p class="text-white font-bold text-sm leading-tight mb-1">La Torche : Record de
+                                    Fréquentation Battu</p>
+                                <p class="text-slate-500 text-xs">Culture · hier</p>
+                            </div>
+                        </a>
+                        <a href="#" class="trend-item flex items-start gap-3 p-3 rounded-xl transition-colors"
+                            style="text-decoration:none;">
+                            <span class="text-2xl font-black text-primary/30 leading-none mt-0.5 w-6 shrink-0">04</span>
+                            <div>
+                                <p class="text-white font-bold text-sm leading-tight mb-1">WCT 2026 : Calendrier
+                                    Officiel Dévoilé</p>
+                                <p class="text-slate-500 text-xs">Pro Tour · hier</p>
+                            </div>
+                        </a>
+                        <a href="#" class="trend-item flex items-start gap-3 p-3 rounded-xl transition-colors"
+                            style="text-decoration:none;">
+                            <span class="text-2xl font-black text-primary/30 leading-none mt-0.5 w-6 shrink-0">05</span>
+                            <div>
+                                <p class="text-white font-bold text-sm leading-tight mb-1">Neoprène Bio : Les Nouvelles
+                                    Combinaisons Éco</p>
+                                <p class="text-slate-500 text-xs">Équipement · 2j ago</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- Alerte météo -->
+                <div class="rounded-2xl p-5"
+                    style="background:linear-gradient(135deg,rgba(0,186,214,0.1),rgba(0,50,80,0.15));border:1px solid rgba(0,186,214,0.25);">
+                    <p class="text-[10px] text-primary font-black uppercase tracking-widest mb-2">🌊 Alerte Houle</p>
+                    <p class="text-white font-black text-lg mb-1">Houle 4-6m</p>
+                    <p class="text-slate-400 text-xs mb-3">Côte Atlantique · Ce weekend</p>
+                    <a href="spot_detail.html"
+                        class="text-xs font-black text-primary uppercase tracking-widest hover:underline"
+                        style="text-decoration:none;">
+                        Voir les conditions →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTRES PAR CATÉGORIE -->
+        <div class="flex flex-wrap gap-2 mb-8" id="cat-filters" style="animation:fadeUp .5s .15s ease both">
+            <button class="cat-btn active" data-cat="all" onclick="filterCat('all',this)">Tout</button>
+            <button class="cat-btn" data-cat="competition" onclick="filterCat('competition',this)">🏆
+                Compétition</button>
+            <button class="cat-btn" data-cat="spots" onclick="filterCat('spots',this)">🌊 Spots</button>
+            <button class="cat-btn" data-cat="gear" onclick="filterCat('gear',this)">🏄 Équipement</button>
+            <button class="cat-btn" data-cat="environment" onclick="filterCat('environment',this)">🌿
+                Environnement</button>
+            <button class="cat-btn" data-cat="culture" onclick="filterCat('culture',this)">🎥 Culture</button>
+            <button class="cat-btn" data-cat="travel" onclick="filterCat('travel',this)">✈️ Voyage</button>
+            <button class="cat-btn" data-cat="bookmarks" id="bookmarks-tab" onclick="filterCat('bookmarks',this)"
+                style="margin-left:auto;border-color:rgba(244,63,94,.3);color:#f87171">
+                🔖 Favoris <span id="bookmark-count-badge"
+                    class="ml-1 bg-red-500/20 text-red-400 rounded-full px-1.5 text-[9px] font-black hidden">0</span>
+            </button>
+        </div>
+
+        <!-- VUE FAVORIS (injectée dynamiquement) -->
+        <div id="bookmarks-view" class="hidden mb-12">
+            <div id="bookmarks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="bookmarks-empty" class="hidden col-span-3 text-center py-20">
+                <p class="text-5xl mb-4">🔖</p>
+                <p class="text-slate-400 font-bold text-lg mb-2">Aucun article sauvegardé</p>
+                <p class="text-slate-600 text-sm">Clique sur ♡ sur une carte pour sauvegarder un article</p>
+            </div>
+        </div>
+
+        <!-- GRILLE D'ARTICLES -->
+        <!-- Barre de statut live -->
+        <div id="news-status" class="flex items-center gap-3 mb-6 text-xs text-slate-500 font-bold"
+            style="animation:fadeUp .5s .18s ease both">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="news-dot"></span>
+            <span id="news-status-text">Chargement des actus en temps réel...</span>
+            <span id="news-refresh-btn" onclick="loadNews(true)"
+                class="ml-auto text-primary cursor-pointer hover:underline uppercase tracking-widest hidden">&#8635;
+                Actualiser</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="news-grid"
+            style="animation:fadeUp .5s .2s ease both">
+            <!-- Articles injectés dynamiquement par loadNews() -->
+        </div>
+
+
+        <!-- STATS BAR + INFINITE SCROLL SENTINEL -->
+        <div class="flex items-center justify-center gap-4 mb-6 flex-wrap">
+            <div class="stat-pill hidden" id="read-counter-wrap">
+                📚 Articles lus ce mois : <span id="read-counter" class="text-primary font-black">0</span>
+            </div>
+        </div>
+        <div class="scroll-sentinel" id="scroll-sentinel" style="display:none">
+            <div class="spinner-ring" id="load-spinner"></div>
+        </div>
+        <div class="mb-12"></div>
+
+
+        <!-- NEWSLETTER -->
+        <section class="rounded-[2rem] p-10 md:p-16 text-center"
+            style="background:linear-gradient(135deg,rgba(0,186,214,0.07),rgba(0,50,80,0.12));border:1px solid rgba(0,186,214,0.18);">
+            <p class="text-[10px] text-primary font-black uppercase tracking-widest mb-3">📧 Newsletter</p>
+            <h2 class="text-3xl md:text-5xl font-black text-white mb-4">Rejoignez le Lineup</h2>
+            <p class="text-slate-400 text-lg mb-10 max-w-xl mx-auto">Alertes houle, drops gear exclusifs et actus surf
+                directement dans votre boîte mail. Aucun spam.</p>
+            <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onsubmit="handleNewsletter(event)">
+                <input class="nl-input" type="email" data-i18n-placeholder="contact.email_placeholder"
+                    placeholder="votre@email.com" required />
+                <button type="submit" class="btn-primary" style="justify-content:center;white-space:nowrap;">
+                    S'abonner
+                    <span class="material-symbols-outlined text-[16px]">send</span>
+                </button>
+            </form>
+            <p class="text-slate-600 text-xs mt-4 font-bold uppercase tracking-widest">Gratuit · Désabonnement en 1 clic
+            </p>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 pt-14 pb-8 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="md:col-span-2">
+                <div class="flex items-center gap-2 mb-5">
+                    <img src="assets/images/swellsync_icon.svg" alt="SwellSync" class="w-9 h-9">
+                    <span class="text-xl font-black text-white">SwellSync</span>
+                </div>
+                <p class="text-slate-500 text-sm leading-relaxed max-w-sm mb-6">La source de référence pour les
+                    prévisions surf, l'actu et les reviews équipement. 60 spots français en temps réel.</p>
+                <div class="flex gap-3">
+                    <a href="#"
+                        class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-colors text-slate-400 hover:text-primary">
+                        <i class="fab fa-instagram text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-colors text-slate-400 hover:text-primary">
+                        <i class="fab fa-tiktok text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-colors text-slate-400 hover:text-primary">
+                        <i class="fab fa-youtube text-sm"></i>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-black text-sm uppercase tracking-wider mb-5">Navigation</h4>
+                <ul class="space-y-3 text-sm text-slate-500">
+                    <li><a href="index.html" class="hover:text-primary transition-colors"
+                            style="text-decoration:none;">Accueil</a></li>
+                    <li><a href="cotes.html" class="hover:text-primary transition-colors"
+                            style="text-decoration:none;">Côtes & Spots</a></li>
+                    <li><a href="spot_detail.html" class="hover:text-primary transition-colors"
+                            style="text-decoration:none;">Conditions Live</a></li>
+                    <li><a href="actu.html" class="hover:text-primary transition-colors text-primary"
+                            style="text-decoration:none;">Actualités</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-black text-sm uppercase tracking-wider mb-5">Légal</h4>
+                <ul class="space-y-3 text-sm text-slate-500">
+                    <li><a href="legal.html" class="hover:text-primary transition-colors" style="text-decoration:none;"
+                            data-i18n="legal.title">Mentions légales</a></li>
+                    <li><a href="privacy.html" class="hover:text-primary transition-colors"
+                            style="text-decoration:none;">Confidentialité</a></li>
+                    <li><a href="cgv.html" class="hover:text-primary transition-colors"
+                            style="text-decoration:none;">CGV</a></li>
+                    <li><a href="cookies.html" class="hover:text-primary transition-colors"
+                            style="text-decoration:none;">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div
+            class="max-w-7xl mx-auto border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-slate-600 text-xs font-bold">
+            <span>© 2026 SwellSync. Tous droits réservés.</span>
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[14px]">location_on</span>
+                <span>Côte Atlantique, France</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GLOBAL SEARCH MODAL -->
+    <div id="global-search-backdrop"
+        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
+        <div id="global-search-container"
+            class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
+            <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10">
+                <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
+                <input type="text" id="global-search-input"
+                    class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg font-medium placeholder-white/30"
+                    placeholder="Chercher un spot, une page, une info..." autocomplete="off">
+                <button onclick="closeGlobalSearchModal()"
+                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-xl">close</span>
+                </button>
+            </div>
+            <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
+                <div class="text-center py-10 text-slate-500 text-sm font-medium">Que cherchez-vous ? 🏄</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE MODAL (slide-up) -->
+    <div id="article-modal">
+        <div id="modal-backdrop" onclick="closeModal()"></div>
+        <div id="modal-sheet">
+            <div id="modal-handle"></div>
+            <img id="modal-img" src="" alt="" / loading="lazy" decoding="async">
+            <div id="modal-body">
+                <div class="flex items-center gap-2 mb-3 flex-wrap">
+                    <span id="modal-cat" class="cat-badge" style="position:static;font-size:9px"></span>
+                    <span id="modal-readtime" class="read-time" style="font-size:10px;margin-left:6px">⏰ 1 min</span>
+                    <span id="modal-source" class="text-xs text-slate-500 font-semibold ml-auto"></span>
+                </div>
+                <h2 id="modal-title" class="text-white font-black text-xl leading-snug mb-3"></h2>
+                <p id="modal-desc" class="text-slate-400 text-sm leading-relaxed mb-6"></p>
+                <div class="flex gap-3 flex-wrap">
+                    <a id="modal-link" href="#" target="_blank" rel="noopener" class="btn-primary"
+                        style="font-size:13px;padding:12px 22px">
+                        Lire l'article complet
+                        <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                    </a>
+                    <button id="modal-bookmark-btn" onclick="modalToggleBookmark()" class="btn-outline"
+                        style="font-size:13px;padding:12px 22px">
+                        <span id="modal-bookmark-icon" data-i18n="common.save">♡</span>>Sauvegarder</button>
+                    <button id="modal-share-btn" onclick="shareArticle()" class="btn-outline"
+                        style="font-size:13px;padding:12px 18px;min-width:0" title="Partager l'article">
+                        <span class="material-symbols-outlined text-[18px]">share</span>
+                    </button>
+                </div>
+                <p id="modal-date" class="text-slate-600 text-xs mt-5 font-semibold"></p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .cat-btn {
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .cat-btn:hover {
+            color: #e2e8f0;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .cat-btn.active {
+            background: rgba(0, 186, 214, 0.12);
+            color: #00bad6;
+            border-color: rgba(0, 186, 214, 0.4);
+        }
+
+        .news-card.hidden {
+            display: none !important;
+        }
+    </style>
+
+    <script>
+        // ── CONFIG ──────────────────────────────────────────────────────────
+        const REFRESH_INTERVAL = 10 * 60 * 1000;
+        let _allArticles = [];
+        let _currentCat = 'all';
+        let _displayCount = 9;
+        let _countdownTimer = null;
+        let _nextRefresh = 0;
+        let _currentModalArticle = null;
+
+        // ── BOOKMARKS (localStorage) ─────────────────────────────────────────
+        function getBookmarks() {
+            try { return JSON.parse(localStorage.getItem('swellsync_bookmarks') || '[]'); } catch { return []; }
+        }
+        function setBookmarks(arr) {
+            try { localStorage.setItem('swellsync_bookmarks', JSON.stringify(arr)); } catch { }
+        }
+        function isBookmarked(url) { return getBookmarks().some(b => b.url === url); }
+        function toggleBookmark(article) {
+            let bm = getBookmarks();
+            const idx = bm.findIndex(b => b.url === article.url);
+            if (idx > -1) bm.splice(idx, 1);
+            else bm.unshift({ url: article.url, title: article.title, image: article.image, source: article.source, pubDateDisplay: article.pubDateDisplay, savedAt: Date.now() });
+            setBookmarks(bm);
+            return idx === -1;
+        }
+
+        // ── READ TIME ────────────────────────────────────────────────────────
+        function readTime(desc) {
+            return Math.max(1, Math.round((desc || '').split(/\s+/).length / 4));
+        }
+
+        // ── READ COUNTER ─────────────────────────────────────────────────────
+        function updateReadCounter() {
+            try {
+                const key = 'swellsync_read_' + new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
+                const cnt = parseInt(localStorage.getItem(key) || '0');
+                const el = document.getElementById('read-counter');
+                const wrap = document.getElementById('read-counter-wrap');
+                if (el && cnt > 0) {
+                    el.textContent = cnt;
+                    if (wrap) wrap.classList.remove('hidden');
+                }
+            } catch { }
+        }
+
+        // ── ARTICLE MODAL ────────────────────────────────────────────────────
+        function openModal(article) {
+            _currentModalArticle = article;
+            document.getElementById('modal-img').src = article.image;
+            document.getElementById('modal-title').textContent = article.title;
+            document.getElementById('modal-desc').textContent = article.description;
+            document.getElementById('modal-link').href = article.url;
+            document.getElementById('modal-source').textContent = article.source;
+            document.getElementById('modal-date').textContent = '📅 ' + article.pubDateDisplay;
+            const catIco = CAT_ICONS[article.cat] || '📰';
+            document.getElementById('modal-cat').textContent = catIco + ' ' + article.cat;
+            document.getElementById('modal-readtime').innerHTML = '⏰ ' + readTime(article.description) + ' min de lecture';
+            updateModalBookmarkBtn();
+            document.getElementById('article-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            // Incrémenter le compteur de lecture
+            try {
+                const key = 'swellsync_read_' + new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
+                localStorage.setItem(key, (parseInt(localStorage.getItem(key) || '0') + 1).toString());
+                updateReadCounter();
+            } catch { }
+        }
+        function closeModal() {
+            document.getElementById('article-modal').classList.remove('open');
+            document.body.style.overflow = '';
+            setTimeout(() => { const img = document.getElementById('modal-img'); if (img) img.src = ''; }, 400);
+        }
+        function updateModalBookmarkBtn() {
+            if (!_currentModalArticle) return;
+            const bm = isBookmarked(_currentModalArticle.url);
+            const icon = document.getElementById('modal-bookmark-icon');
+            const btn = document.getElementById('modal-bookmark-btn');
+            if (icon) icon.textContent = bm ? '♥' : '♡';
+            if (btn) { btn.style.color = bm ? '#f43f5e' : ''; btn.style.borderColor = bm ? 'rgba(244,63,94,.5)' : ''; }
+        }
+        function modalToggleBookmark() {
+            if (!_currentModalArticle) return;
+            toggleBookmark(_currentModalArticle);
+            updateModalBookmarkBtn();
+            refreshBookmarkBtn(_currentModalArticle.url);
+            updateBookmarkCountBadge();
+        }
+        function refreshBookmarkBtn(url) {
+            document.querySelectorAll('.bookmark-btn[data-url]').forEach(btn => {
+                if (btn.dataset.url === url) {
+                    const bm = isBookmarked(url);
+                    btn.classList.toggle('bookmarked', bm);
+                    btn.textContent = bm ? '♥' : '♡';
+                }
+            });
+        }
+        function toggleBookmarkCard(e, article) {
+            e.stopPropagation();
+            const added = toggleBookmark(article);
+            refreshBookmarkBtn(article.url);
+            updateBookmarkCountBadge();
+            if (typeof Toast !== 'undefined')
+                Toast.show(added ? '♥ Article sauvegardé !' : '♡ Supprimé des favoris', added ? 'success' : 'info', 2500);
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        // ── WEB SHARE API ─────────────────────────────────────────────────────
+        async function shareArticle() {
+            if (!_currentModalArticle) return;
+            const a = _currentModalArticle;
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: a.title, text: a.description, url: a.url });
+                    return;
+                } catch (e) { }
+            }
+            // Fallback : copier l'URL
+            try {
+                await navigator.clipboard.writeText(a.url);
+                if (typeof Toast !== 'undefined') Toast.show('🔗 Lien copié !', 'info', 2500);
+            } catch (e) {
+                if (typeof Toast !== 'undefined') Toast.show('Copier ce lien : ' + a.url, 'info', 5000);
+            }
+        }
+
+        // ── BOOKMARKS VIEW ────────────────────────────────────────────────────
+        function updateBookmarkCountBadge() {
+            const bm = getBookmarks();
+            const badge = document.getElementById('bookmark-count-badge');
+            if (!badge) return;
+            if (bm.length > 0) {
+                badge.textContent = bm.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderBookmarksView() {
+            const bm = getBookmarks();
+            const grid = document.getElementById('bookmarks-grid');
+            const empty = document.getElementById('bookmarks-empty');
+            if (!grid) return;
+            if (bm.length === 0) {
+                grid.innerHTML = '';
+                if (empty) empty.classList.remove('hidden');
+                return;
+            }
+            if (empty) empty.classList.add('hidden');
+            grid.innerHTML = bm.map((a, i) => `
+            <article class="news-card" style="animation-delay:${i * 0.05}s;animation:fadeUp .4s ease both">
+                <div class="img-wrap">
+                    <img class="news-img loaded" src="${a.image}" alt="" onerror="this.src=''" / loading="lazy" decoding="async">
+                    <button class="bookmark-btn bookmarked" data-url="${a.url}"
+                        onclick="removeFromBookmarksView('${encodeURIComponent(a.url)}')">♥</button>
+                </div>
+                <div class="news-body">
+                    <h3 class="text-white font-black text-sm leading-tight mb-2"
+                        style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+                        ${a.title}
+                    </h3>
+                    <div class="mt-auto flex items-center justify-between text-slate-600 text-xs font-bold">
+                        <span class="text-primary/70">${a.source}</span>
+                        <span class="text-slate-500">${a.pubDateDisplay}</span>
+                    </div>
+                    <a href="${a.url}" target="_blank" rel="noopener"
+                        class="mt-3 text-xs font-black text-primary hover:underline uppercase tracking-widest"
+                        style="text-decoration:none">
+                        Lire l'article →
+                    </a>
+                </div>
+            </article>`).join('');
+        }
+
+        function removeFromBookmarksView(encodedUrl) {
+            const url = decodeURIComponent(encodedUrl);
+            let bm = getBookmarks();
+            bm = bm.filter(b => b.url !== url);
+            setBookmarks(bm);
+            updateBookmarkCountBadge();
+            renderBookmarksView();
+            if (typeof Toast !== 'undefined') Toast.show('♡ Supprimé des favoris', 'info', 2000);
+        }
+
+        // ── SWIPE TO DISMISS MODAL ────────────────────────────────────────────
+        (function initSwipe() {
+            const sheet = document.getElementById('modal-sheet');
+            if (!sheet) return;
+            let startY = 0, curY = 0, dragging = false;
+            sheet.addEventListener('touchstart', e => {
+                startY = e.touches[0].clientY;
+                dragging = true;
+                sheet.style.transition = 'none';
+            }, { passive: true });
+            sheet.addEventListener('touchmove', e => {
+                if (!dragging) return;
+                curY = e.touches[0].clientY;
+                const dy = Math.max(0, curY - startY);
+                sheet.style.transform = `translateY(${dy}px)`;
+            }, { passive: true });
+            sheet.addEventListener('touchend', () => {
+                dragging = false;
+                sheet.style.transition = '';
+                if (curY - startY > 120) {
+                    closeModal();
+                } else {
+                    sheet.style.transform = '';
+                }
+            });
+        })();
+
+
+        // ── LAZY IMG OBSERVER ────────────────────────────────────────────────
+        const FALLBACK_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFtMn9sl5uziht77j7nS1vaJZEQb5-4ciXfZAlVsDu9KLKjxo2Tr__5H-LgQxLbL6pkpGOOtCbQgXETvjI54ulD8I9LyB89MePIeiwDxPC0l7_N9SHm7DT3tSnTqrb2wJnCtm-9l9_wHBRKNMjhm0LyOKJ3JZXbgr9x2RaL92Neju0x-8dKe1y88H6knlCdoSsDL03yeIzPTBOj6milpb7HZwAH9qZEmjQfFfDlRNSEl4RzgasEyAtHtySonnV7iil8R9B828davk';
+        const imgObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const img = entry.target;
+                const src = img.dataset.src;
+                if (!src) { img.classList.add('loaded'); return; }
+                img.src = src;
+                img.onload = () => img.classList.add('loaded');
+                img.onerror = () => { img.src = FALLBACK_IMG; img.classList.add('loaded'); };
+                imgObserver.unobserve(img);
+            });
+        }, { rootMargin: '150px' });
+
+        // ── INFINITE SCROLL ──────────────────────────────────────────────────
+        const sentinelObserver = new IntersectionObserver(entries => {
+            if (!entries[0].isIntersecting) return;
+            const filtered = _currentCat === 'all' ? _allArticles : _allArticles.filter(a => (CAT_KEY[a.cat] || 'actu') === _currentCat);
+            if (_displayCount >= filtered.length) return;
+            const spinner = document.getElementById('load-spinner');
+            if (spinner) spinner.style.display = 'block';
+            setTimeout(() => {
+                _displayCount += 6;
+                renderGrid();
+                if (spinner) spinner.style.display = 'none';
+            }, 350);
+        }, { rootMargin: '80px' });
+
+        // ── CAT ICONS ────────────────────────────────────────────────────────
+        const CAT_ICONS = {
+            'Compétition': '🏆', 'Houle': '🌊', 'Équipement': '🏄',
+            'Environnement': '🌿', 'Voyage': '✈️', 'Culture': '🎥', 'Actu': '📰'
+        };
+        const CAT_KEY = {
+            'Compétition': 'competition', 'Houle': 'spots', 'Équipement': 'gear',
+            'Environnement': 'environment', 'Voyage': 'travel', 'Culture': 'culture', 'Actu': 'actu'
+        };
+
+        // ── SKELETON ─────────────────────────────────────────────────────────
+        function showSkeletons(count = 6) {
+            const grid = document.getElementById('news-grid');
+            grid.innerHTML = Array.from({ length: count }, (_, i) => `
+            <div class="news-card" style="animation-delay:${i * 0.05}s">
+                <div style="width:100%;aspect-ratio:16/9;background:linear-gradient(90deg,#0f2123 25%,#152a2d 50%,#0f2123 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;"></div>
+                <div class="news-body" style="gap:10px">
+                    <div style="height:14px;border-radius:6px;background:#1a2f33;width:${60 + i * 5}%"></div>
+                    <div style="height:10px;border-radius:6px;background:#152a2d;width:${70 + i * 3}%"></div>
+                    <div style="height:10px;border-radius:6px;background:#152a2d;width:${40 + i * 4}%;margin-top:8px"></div>
+                </div>
+            </div>`).join('');
+        }
+
+        // ── RENDER CARD ──────────────────────────────────────────────────────
+        function renderCard(a, i) {
+            const catKey = CAT_KEY[a.cat] || 'actu';
+            const icon = CAT_ICONS[a.cat] || '📰';
+            const delay = (i % 9) * 0.05;
+            const isNew = (Date.now() - new Date(a.pubDate).getTime()) < 86400000;
+            const bm = isBookmarked(a.url);
+            const rt = readTime(a.description);
+            // Sérialisation sécurisée pour l'attribut HTML
+            const artJSON = JSON.stringify(a).replace(/\\/g, '\\\\').replace(/"/g, '&quot;');
+            return `
+            <article class="news-card" data-cat="${catKey}" style="animation-delay:${delay}s"
+                onclick="openModal(JSON.parse(this.dataset.article))" data-article="${artJSON}">
+                <div class="img-wrap">
+                    ${isNew ? '<span class="badge-new">✨ Nouveau</span>' : ''}
+                    <img class="news-img" data-src="${a.image}" alt="${a.title.replace(/"/g, '')}" / loading="lazy" decoding="async">
+                    <span class="cat-badge">${icon} ${a.cat}</span>
+                    <button class="bookmark-btn${bm ? ' bookmarked' : ''}" data-url="${a.url}"
+                        onclick="event.stopPropagation();toggleBookmarkCard(event,JSON.parse(this.closest('article').dataset.article))">${bm ? '♥' : '♡'}</button>
+                </div>
+                <div class="news-body">
+                    <h3 class="text-white font-black text-sm leading-tight mb-2 hover:text-primary transition-colors" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+                        ${a.title}
+                    </h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-3" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+                        ${a.description}
+                    </p>
+                    <div class="mt-auto flex items-center justify-between text-slate-600 text-xs font-bold">
+                        <span class="text-primary/70">${a.source}</span>
+                        <span class="read-time">⏰ ${rt}min &nbsp;·&nbsp; ${a.pubDateDisplay}</span>
+                    </div>
+                </div>
+            </article>`;
+        }
+
+        // ── RENDER GRID ──────────────────────────────────────────────────────
+        function renderGrid() {
+            const grid = document.getElementById('news-grid');
+            const filtered = _currentCat === 'all'
+                ? _allArticles
+                : _allArticles.filter(a => (CAT_KEY[a.cat] || 'actu') === _currentCat);
+            const visible = filtered.slice(0, _displayCount);
+
+            if (visible.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-16 text-slate-500">
+                    <p class="text-4xl mb-3">🏄</p>
+                    <p class="font-bold">Aucun article dans cette catégorie.</p>
+                </div>`;
+                return;
+            }
+            grid.innerHTML = visible.map((a, i) => renderCard(a, i)).join('');
+            // Lazy load
+            grid.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
+            // Infinite scroll sentinel
+            const sentinel = document.getElementById('scroll-sentinel');
+            if (sentinel) {
+                sentinelObserver.disconnect();
+                if (_displayCount < filtered.length) {
+                    sentinelObserver.observe(sentinel);
+                    sentinel.style.display = '';
+                } else {
+                    sentinel.style.display = 'none';
+                }
+            }
+        }
+
+        // ── UPDATE HERO ──────────────────────────────────────────────────────
+        function updateHero(articles) {
+            if (!articles || !articles.length) return;
+            const heroArticle = articles.find(a => a.image && !a.image.includes('aida-public')) || articles[0];
+            const a = heroArticle;
+            const heroBg = document.querySelector('.hero-bg');
+            const heroTitle = document.getElementById('hero-title');
+            const heroDesc = document.getElementById('hero-desc');
+            const heroBtn = document.getElementById('hero-btn');
+
+            if (heroBg) {
+                heroBg.style.backgroundImage = `linear-gradient(to top,rgba(3,10,12,.95) 0%,rgba(3,10,12,.4) 55%,rgba(0,180,160,.08) 100%),url('${a.image}')`;
+                const testImg = new Image();
+                testImg.onerror = () => { heroBg.style.backgroundImage = 'linear-gradient(135deg,#061a22 0%,#0a3040 50%,#00b4a0 100%)'; };
+                testImg.src = a.image;
+            }
+            const dec = s => { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
+            if (heroTitle) heroTitle.textContent = dec(a.title);
+            if (heroDesc) heroDesc.textContent = dec(a.description);
+            if (heroBtn) {
+                heroBtn.onclick = () => openModal(a);
+                heroBtn.querySelector('span.material-symbols-outlined') && (heroBtn.querySelector('span.material-symbols-outlined').textContent = 'open_in_new');
+            }
+
+            // Trending
+            const trendItems = document.querySelectorAll('.trend-item');
+            articles.filter(art => art !== heroArticle).slice(0, 5).forEach((art, i) => {
+                if (!trendItems[i]) return;
+                const p = trendItems[i].querySelector('p.text-white');
+                const sub = trendItems[i].querySelector('p.text-slate-500');
+                trendItems[i].href = art.url;
+                trendItems[i].target = '_blank';
+                const t = dec(art.title);
+                if (p) p.textContent = t.substring(0, 60) + (t.length > 60 ? '...' : '');
+                if (sub) sub.textContent = art.cat + ' · ' + art.pubDateDisplay;
+            });
+        }
+
+        // ── STATUS BAR ───────────────────────────────────────────────────────
+        function updateStatus(text, color = '#4ade80') {
+            const el = document.getElementById('news-status-text');
+            const dot = document.getElementById('news-dot');
+            const btn = document.getElementById('news-refresh-btn');
+            if (el) el.textContent = text;
+            if (dot) dot.style.background = color;
+            if (btn) btn.classList.remove('hidden');
+        }
+
+        function startCountdown() {
+            _nextRefresh = Date.now() + REFRESH_INTERVAL;
+            clearInterval(_countdownTimer);
+            _countdownTimer = setInterval(() => {
+                const rem = Math.max(0, Math.round((_nextRefresh - Date.now()) / 1000));
+                const m = Math.floor(rem / 60), s = rem % 60;
+                updateStatus(`${_allArticles.length} actus en direct · Prochain refresh dans ${m}:${String(s).padStart(2, '0')}`, '#4ade80');
+                if (rem <= 0) { clearInterval(_countdownTimer); loadNews(); }
+            }, 1000);
+        }
+
+        // ── LOAD NEWS ────────────────────────────────────────────────────────
+        async function loadNews(force = false) {
+            showSkeletons(9);
+            updateStatus('Récupération des actus surf en cours...', '#f59e0b');
+            try {
+                const url = force ? '/api/surf-news?nocache=' + Date.now() : '/api/surf-news';
+                const r = await fetch(url);
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                const data = await r.json();
+                _allArticles = data.articles || [];
+                if (_allArticles.length === 0) throw new Error('Aucun article reçu');
+                updateHero(_allArticles);
+                renderGrid();
+                const d = new Date(data.fetchedAt);
+                const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                updateStatus(`${_allArticles.length} actus surf en direct${data.cached ? ' (cache)' : ''} · Mis à jour à ${time}`, '#4ade80');
+                startCountdown();
+            } catch (e) {
+                console.error('[Actu] Erreur:', e);
+                updateStatus('Erreur de chargement · Réessayez', '#ef4444');
+                if (!_allArticles.length) {
+                    document.getElementById('news-grid').innerHTML = `<div class="col-span-3 text-center py-16 text-slate-500">
+                        <p class="text-4xl mb-3">📡</p>
+                        <p class="font-bold mb-2">Impossible de charger les actus</p>
+                        <button onclick="loadNews(true)" class="btn-outline mt-4" style="font-size:12px;padding:8px 20px">↻ Réessayer</button>
+                    </div>`;
+                }
+            }
+        }
+
+        // ── FILTER ───────────────────────────────────────────────────────────
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const newsGrid = document.getElementById('news-grid');
+            const newsStatus = document.getElementById('news-status');
+            const sentinel = document.getElementById('scroll-sentinel');
+            const bmView = document.getElementById('bookmarks-view');
+            const statsBar = document.querySelector('.flex.items-center.justify-center.gap-4.mb-6');
+
+            if (cat === 'bookmarks') {
+                _currentCat = 'bookmarks';
+                // Masquer grille live, afficher vue favoris
+                if (newsGrid) newsGrid.style.display = 'none';
+                if (newsStatus) newsStatus.style.display = 'none';
+                if (sentinel) sentinel.style.display = 'none';
+                if (statsBar) statsBar.style.display = 'none';
+                if (bmView) bmView.classList.remove('hidden');
+                renderBookmarksView();
+            } else {
+                _currentCat = cat;
+                _displayCount = 9;
+                // Masquer vue favoris, afficher grille live
+                if (bmView) bmView.classList.add('hidden');
+                if (newsGrid) newsGrid.style.display = '';
+                if (newsStatus) newsStatus.style.display = '';
+                if (statsBar) statsBar.style.display = '';
+                renderGrid();
+            }
+        }
+
+        // ── NEWSLETTER ───────────────────────────────────────────────────────
+        function handleNewsletter(e) {
+            e.preventDefault();
+            if (typeof Toast !== 'undefined') Toast.show('🏄 Bienvenue dans le lineup ! Check ton mail.', 'success', 4000);
+            e.target.reset();
+        }
+
+        // ── INIT ─────────────────────────────────────────────────────────────
+        updateReadCounter();
+        updateBookmarkCountBadge();
+        loadNews();
+
+        // Navbar scroll effect
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            nav.style.background = window.scrollY > 50 ? 'rgba(10,26,28,0.92)' : '';
+        });
+
+        // Auth badge
+        try {
+            if (localStorage.getItem('swellsync_user')) {
+                const d = document.getElementById('login-status-icon');
+                if (d) { d.classList.replace('bg-red-500', 'bg-green-500'); d.innerHTML = '<i class="fa-solid fa-check text-[7px] text-white"></i>'; }
+            }
+        } catch (e) { }
+    </script>
+
+    <script src="js/auth_auto.js" defer></script>
+    <script src="js/toast.js" defer></script>
+    <script src="js/auth_modal.js" defer></script>
+
+
+
+    <!-- ══ SwellSync App Bottom Nav ══ -->
+    <nav
+        style="position:fixed;bottom:0;left:0;right:0;z-index:999;background:rgba(8,15,26,0.95);backdrop-filter:blur(16px);border-top:1px solid rgba(0,186,214,0.15);padding:12px 24px 24px;display:flex;justify-content:space-around;align-items:center;">
+        <a href="pages/home.html"
+            style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#64748b;text-decoration:none;">
+            <span class="material-symbols-outlined" style="font-size:22px;">home</span>
+            <span style="font-size:10px;">Home</span>
+        </a>
+        <a href="pages/map.html"
+            style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#64748b;text-decoration:none;">
+            <span class="material-symbols-outlined" style="font-size:22px;">travel_explore</span>
+            <span style="font-size:10px;">Spots</span>
+        </a>
+        <a href="pages/alerts.html"
+            style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#64748b;text-decoration:none;">
+            <span class="material-symbols-outlined" style="font-size:22px;">notifications</span>
+            <span style="font-size:10px;">Alertes</span>
+        </a>
+        <a href="actu.html"
+            style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#00bad6;text-decoration:none;">
+            <span class="material-symbols-outlined"
+                style="font-size:22px;font-variation-settings:'FILL' 1;">newspaper</span>
+            <span style="font-size:10px;font-weight:700;">News</span>
+            <div style="width:4px;height:4px;background:#00bad6;border-radius:50%;margin-top:1px;"></div>
+        </a>
+        <a href="pages/profile.html"
+            style="display:flex;flex-direction:column;align-items:center;gap:2px;color:#64748b;text-decoration:none;">
+            <span class="material-symbols-outlined" style="font-size:22px;">person</span>
+            <span style="font-size:10px;">Profil</span>
+        </a>
+    </nav>
+    <style>
+        body {
+            padding-bottom: 80px !important
+        }
+    </style>
+</body>
+
+
+</html>

@@ -1,0 +1,69 @@
+{
+    "name": "SwellSync",
+    "short_name": "SwellSync",
+    "description": "Prévisions surf en temps réel — spots, houle & communauté.",
+    "start_url": "/pages/home.html",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "lang": "fr",
+    "background_color": "#080f1a",
+    "theme_color": "#00bad6",
+    "categories": [
+        "sports",
+        "weather",
+        "lifestyle"
+    ],
+    "icons": [
+        {
+            "src": "/assets/images/swellsync_logo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/assets/images/swellsync_logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Carte des Spots",
+            "short_name": "Spots",
+            "description": "Carte interactive des spots de surf",
+            "url": "/pages/map.html",
+            "icons": [
+                {
+                    "src": "/assets/images/swellsync_logo.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Communauté",
+            "short_name": "Commu",
+            "description": "Feed communautaire surf",
+            "url": "/pages/community.html",
+            "icons": [
+                {
+                    "src": "/assets/images/swellsync_logo.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Alertes Houle",
+            "short_name": "Alertes",
+            "description": "Gérer tes alertes de conditions",
+            "url": "/pages/alerts.html",
+            "icons": [
+                {
+                    "src": "/assets/images/swellsync_logo.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}

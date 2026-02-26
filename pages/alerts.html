@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Mes Alertes</title>
+    <meta name="description"
+        content="SwellSync Alertes — Recevez des notifications quand vos spots préférés atteignent vos critères de houle.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        .glass {
+            background: rgba(15, 36, 56, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1)
+        }
+
+        .glow-primary {
+            box-shadow: 0 0 15px rgba(0, 186, 214, 0.4)
+        }
+
+        body {
+            min-height: max(884px, 100dvh)
+        }
+
+        /* Modal */
+        #modal {
+            display: none
+        }
+
+        #modal.open {
+            display: flex
+        }
+
+        /* ── Light Mode ── */
+        html.light body {
+            background: linear-gradient(160deg, #f0f9ff, #e0f2fe);
+            color: #1e293b;
+        }
+
+        html.light .glass {
+            background: rgba(255, 255, 255, .8);
+            border-color: rgba(0, 186, 214, .15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .07);
+        }
+
+        html.light header.glass {
+            background: rgba(240, 249, 255, .9) !important;
+        }
+
+        html.light nav.glass {
+            background: rgba(255, 255, 255, .92) !important;
+            border-top-color: rgba(0, 186, 214, .15) !important;
+        }
+
+        html.light .bg-\[\#080f1a\] {
+            background: transparent;
+        }
+
+        html.light .bg-\[\#0f2438\] {
+            background: #fff !important;
+            border-color: #e2eaf4 !important;
+        }
+
+        html.light .text-slate-100 {
+            color: #1e293b;
+        }
+
+        html.light .text-slate-400,
+        html.light .text-slate-500 {
+            color: #64748b;
+        }
+    </style>
+
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="bg-[#080f1a] font-display text-slate-100 flex flex-col">
+
+    <header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-[#00bad6]/10">
+        <div class="flex items-center gap-3">
+            <a href="home.html" class="material-symbols-outlined text-[#00bad6] cursor-pointer">arrow_back</a>
+            <h1 class="text-xl font-bold tracking-tight">Mes Alertes</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <span id="countBadge"
+                class="px-2 py-0.5 bg-[#00bad6]/20 text-[#00bad6] text-xs font-bold rounded-full active:scale-95 transition-transform">0</span>
+            <a href="abonnement.html"
+                class="text-[9px] font-black bg-amber-400/20 text-amber-400 px-2.5 py-1 rounded-full border border-amber-400/30 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[12px]">star</span>PRO
+            </a>
+        </div>
+    </header>
+
+    <!-- Paywall Banner -->
+    <div id="paywallBanner" class="hidden mx-4 mt-4 rounded-2xl overflow-hidden border border-amber-400/30"
+        style="background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(245,158,11,.04))">
+        <div class="p-5 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-amber-400/20 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-amber-400 text-3xl">lock</span>
+            </div>
+            <div>
+                <h2 class="font-black text-base text-amber-300">Fonctionnalité Pro</h2>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Les alertes houle en temps réel sont réservées
+                    aux membres <strong class="text-amber-400">SwellSync Pro</strong>. Reçois une notification dès que
+                    les conditions sont parfaites à ton spot favori.</p>
+            </div>
+            <div class="space-y-2 text-left">
+                <div class="flex items-center gap-2 text-xs text-slate-300">
+                    <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Alertes
+                    houle illimitées
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-300">
+                    <span
+                        class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Notifications
+                    push temps réel
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-300">
+                    <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Prévisions 7
+                    jours par spot
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-300">
+                    <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Analyse de
+                    vent et période
+                </div>
+            </div>
+            <a href="abonnement.html"
+                class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-base text-black transition-all active:scale-[.98]"
+                style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+                <span class="material-symbols-outlined">star</span>
+                Passer à Pro — Débloquer les Alertes
+            </a>
+            <p class="text-[10px] text-slate-500">Dés 4,99€/mois · Annulation à tout moment</p>
+        </div>
+    </div>
+
+    <main class="flex-1 p-4 space-y-4 pb-36" id="alertsList">
+        <div class="flex items-center justify-center py-20">
+            <div class="w-6 h-6 rounded-full border-2 border-[#00bad6] border-t-transparent animate-spin"></div>
+        </div>
+    </main>
+
+    <!-- FAB Ajouter -->
+    <div class="fixed bottom-24 right-6 z-30" id="alertsFab">
+        <button onclick="openModal()"
+            class="bg-[#00bad6] glow-primary text-[#080f1a] w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all font-bold">
+            <span class="material-symbols-outlined">add</span>
+        </button>
+    </div>
+
+    <!-- Modal Nouvelle Alerte -->
+    <div id="modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
+        <div class="glass w-full max-w-md rounded-t-3xl p-6 space-y-5 border-t border-[#00bad6]/20">
+            <div class="w-12 h-1.5 bg-slate-700 rounded-full mx-auto"></div>
+            <h2 class="text-xl font-bold text-center">Nouvelle Alerte</h2>
+
+            <div>
+                <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Spot</label>
+                <select id="newSpotSel"
+                    class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
+                    <option value="">Chargement…</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Hauteur min (m)</label>
+                    <input id="newHeight" type="number" value="1.5" step="0.5" min="0.5" max="10"
+                        class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Période min (s)</label>
+                    <input id="newPeriod" type="number" value="10" step="1" min="5" max="25"
+                        class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeModal()"
+                    class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 font-semibold hover:bg-slate-800 transition-colors">Annuler</button>
+                <button onclick="createAlert()"
+                    class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold hover:opacity-90 transition-opacity active:scale-95 transition-transform">Créer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span class="material-symbols-outlined"
+                    style="font-variation-settings:\'FILL\' 1">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px] font-bold">Alertes</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+
+    <script src="js/api.js"></script>
+    <script>
+        let alerts = [];
+        const ICONS = { tsunami: 'tsunami', air: 'air', sunny: 'sunny', waves: 'waves' };
+
+        async function loadAlerts() {
+            // Vérifier statut Pro
+            let isPro = false;
+            try {
+                const me = await API.auth.me();
+                isPro = !!me.is_pro;
+            } catch {
+                // Non connecté
+                document.getElementById('alertsList').innerHTML = `
+      <div class="flex flex-col items-center justify-center py-16 gap-3 text-slate-500">
+        <span class="material-symbols-outlined text-5xl">notifications_off</span>
+        <p class="text-sm text-center">Connecte-toi pour voir tes alertes</p>
+        <a href="../index.html" class="mt-2 px-6 py-3 bg-[#00bad6] text-[#080f1a] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
+      </div>`;
+                return;
+            }
+            // Paywall Pro
+            if (!isPro) {
+                document.getElementById('alertsList').innerHTML = `
+      <div class="flex flex-col items-center gap-5 py-10 px-4 text-center">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center shadow-xl shadow-[#00bad6]/30">
+          <span class="material-symbols-outlined text-4xl text-[#080f1a]">notifications_active</span>
+        </div>
+        <h2 class="text-2xl font-black">Alertes Houle</h2>
+        <p class="dark:text-slate-400 text-slate-500 text-sm leading-relaxed max-w-xs">
+          Sois le premier alerté dès que tes spots préférés atteignent les conditions idéales.<br/>
+          Disponible avec <span class="text-[#00bad6] font-bold">SwellSync Pro</span>.
+        </p>
+        <div class="space-y-2 text-left w-full max-w-xs">
+          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Alertes illimitées sur tous tes spots</div>
+          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Notifications en temps réel</div>
+          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Critères personnalisés (hauteur, période)</div>
+          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>16 jours de prévisions</div>
+        </div>
+        <a href="abonnement.html" class="w-full max-w-xs py-4 rounded-2xl bg-gradient-to-r from-[#00bad6] to-emerald-400 text-[#080f1a] font-black text-center hover:opacity-90 transition-opacity block">
+          Passer Pro — 4,99€/mois
+        </a>
+        <p class="text-xs dark:text-slate-500 text-slate-400">Engagement mensuel · Résiliable à tout moment</p>
+      </div>`;
+                document.getElementById('alertsFab').classList.add('hidden');
+                return;
+            }
+            try {
+                alerts = await API.alerts.list();
+                renderAlerts();
+            } catch {
+                document.getElementById('alertsList').innerHTML = `<p class="text-slate-500 text-sm text-center py-10">Erreur de chargement</p>`;
+            }
+        }
+
+        function renderAlerts() {
+            const el = document.getElementById('alertsList');
+            document.getElementById('countBadge').textContent = alerts.length;
+            if (!alerts.length) {
+                el.innerHTML = `
+      <div class="flex flex-col items-center justify-center py-16 gap-3 text-slate-500">
+        <span class="material-symbols-outlined text-5xl">notifications_active</span>
+        <p class="text-sm">Aucune alerte — crée-en une avec le bouton +</p>
+      </div>`;
+                return;
+            }
+            el.innerHTML = alerts.map((a, i) => `
+    <div class="glass p-5 rounded-xl flex items-center justify-between group transition-all duration-300 ${a.active ? '' : 'opacity-50 grayscale'}">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-lg bg-[#00bad6]/10 flex items-center justify-center text-[#00bad6] active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-2xl">waves</span>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold">${a.spot_name}</h3>
+          <p class="text-sm text-[#00bad6] font-medium">&gt; ${a.min_height}m · ${a.min_period}s</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" class="sr-only peer" ${a.active ? 'checked' : ''} onchange="toggleAlert(${a.id}, this.checked)"/>
+          <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00bad6] active:scale-95 transition-transform"></div>
+        </label>
+        <button onclick="deleteAlert(${a.id})" class="text-red-400/60 hover:text-red-400 transition-colors">
+          <span class="material-symbols-outlined text-sm">delete</span>
+        </button>
+      </div>
+    </div>`).join('');
+        }
+
+        async function toggleAlert(id, active) {
+            try {
+                await API.alerts.toggle(id, active ? 1 : 0);
+                const a = alerts.find(x => x.id === id);
+                if (a) a.active = active ? 1 : 0;
+                toast(active ? '🔔 Alerte activée' : 'Alerte désactivée');
+                renderAlerts();
+            } catch { toast('Erreur', 'err'); }
+        }
+
+        async function deleteAlert(id) {
+            showConfirmModal('Supprimer cette alerte ?', 'Cette action est irréversible. L\'alerte sera définitivement supprimée.', async () => {
+                try {
+                    await API.alerts.delete(id);
+                    alerts = alerts.filter(a => a.id !== id);
+                    renderAlerts();
+                    toast('Alerte supprimée');
+                } catch { toast('Erreur', 'err'); }
+            }, { danger: true, confirmText: 'Supprimer' });
+        }
+
+        // Modal
+        async function openModal() {
+            document.getElementById('modal').classList.add('open');
+            // Charger les spots dans le select
+            try {
+                const spots = await API.spots.list();
+                const sel = document.getElementById('newSpotSel');
+                sel.innerHTML = spots.map(s => `<option value="${s.id}" data-name="${s.name}">${s.name} — ${s.location}</option>`).join('');
+            } catch { }
+        }
+        function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+        async function createAlert() {
+            const sel = document.getElementById('newSpotSel');
+            const spotId = sel.value;
+            const spotName = sel.options[sel.selectedIndex]?.dataset.name || sel.options[sel.selectedIndex]?.text;
+            const minH = parseFloat(document.getElementById('newHeight').value) || 1.5;
+            const minP = parseInt(document.getElementById('newPeriod').value) || 10;
+            if (!spotId) { toast('Choisis un spot', 'err'); return; }
+            try {
+                const r = await API.alerts.add({ spot_id: spotId, spot_name: spotName, min_height: minH, min_period: minP });
+                alerts.unshift({ id: r.id, spot_id: spotId, spot_name: spotName, min_height: minH, min_period: minP, active: 1 });
+                renderAlerts();
+                closeModal();
+                toast('🔔 Alerte créée !');
+            } catch { toast('Connecte-toi pour créer une alerte', 'err'); }
+        }
+
+        // Fermer modal en cliquant à l'extérieur
+        document.getElementById('modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('modal')) closeModal();
+        });
+
+        loadAlerts();
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+    <script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

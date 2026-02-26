@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SwellSync — Recherche</title>
+    <meta name="description" content="SwellSync Recherche — Trouvez des spots, des surfeurs et des conditions.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #080f1a;
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .12);
+        }
+
+        .chip {
+            border: 1px solid rgba(0, 186, 214, .2);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background: #00bad6;
+            color: #080f1a;
+            border-color: #00bad6;
+        }
+
+        .result-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .result-row:hover {
+            background: rgba(0, 186, 214, .04);
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .profile-card:hover {
+            background: rgba(0, 186, 214, .03);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .anim {
+            animation: fadeUp .25s ease both;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none
+        }
+
+        /* Avatar gradient colors */
+        .av-cyan {
+            background: rgba(0, 186, 214, .2);
+            color: #00bad6;
+        }
+
+        .av-purple {
+            background: rgba(168, 85, 247, .2);
+            color: #a855f7;
+        }
+
+        .av-emerald {
+            background: rgba(16, 185, 129, .2);
+            color: #10b981;
+        }
+
+        .av-amber {
+            background: rgba(245, 158, 11, .2);
+            color: #f59e0b;
+        }
+
+        .av-red {
+            background: rgba(244, 63, 94, .2);
+            color: #f43f5e;
+        }
+    </style>
+    <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="min-h-screen pb-28">
+
+    <!-- Header Search -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/92 border-b border-[#00bad6]/15 px-3 py-3">
+        <div class="flex items-center gap-2">
+            <a href="javascript:history.back()"
+                class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-400 shrink-0">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            </a>
+            <div class="flex-1 relative">
+                <input id="globalSearch" autofocus type="search" placeholder="Surfeurs, spots, sessions, posts…"
+                    class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-2xl pl-4 pr-10 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#00bad6]/60"
+                    oninput="handleSearch(this.value)" />
+                <span
+                    class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-[18px]">search</span>
+            </div>
+        </div>
+        <!-- Catégories -->
+        <div class="flex gap-2 overflow-x-auto pb-0.5 mt-2 no-scrollbar">
+            <button class="chip active" onclick="setCategory('all',this)">🌊 Tout</button>
+            <button class="chip" onclick="setCategory('surfers',this)">🏄 Surfeurs</button>
+            <button class="chip" onclick="setCategory('spots',this)">📍 Spots</button>
+            <button class="chip" onclick="setCategory('posts',this)">💬 Posts</button>
+            <button class="chip" onclick="setCategory('sessions',this)">🎯 Sessions</button>
+        </div>
+    </header>
+
+    <main class="px-0">
+        <!-- État initial: suggestions tendances -->
+        <div id="defaultView" class="px-4 pt-4 space-y-5">
+            <div>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">🔥 Tendances</p>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="fillSearch('Hossegor')"
+                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Hossegor</button>
+                    <button onclick="fillSearch('La Torche')"
+                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">La
+                        Torche</button>
+                    <button onclick="fillSearch('Biarritz')"
+                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Biarritz</button>
+                    <button onclick="fillSearch('Lacanau')"
+                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Lacanau</button>
+                    <button onclick="fillSearch('houle')"
+                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">2m+
+                        de houle</button>
+                    <button onclick="fillSearch('offshore')"
+                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Vent
+                        offshore</button>
+                </div>
+            </div>
+            <!-- Surfeurs populaires -->
+            <div>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">⭐ Surfeurs populaires
+                </p>
+                <div class="card rounded-2xl overflow-hidden divide-y divide-white/5" id="defaultSurfers"></div>
+            </div>
+            <!-- Spots populaires -->
+            <div>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">📍 Spots populaires</p>
+                <div class="card rounded-2xl overflow-hidden divide-y divide-white/5">
+                    <div class="result-row" onclick="fillSearch('Hossegor')">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
+                            <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80"
+                                class="w-full h-full object-cover" alt="Hossegor" />
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm">Hossegor — La Gravière</p>
+                            <p class="text-[10px] text-slate-400">Landes · Expert · 2.5m actuellement</p>
+                        </div>
+                        <span class="text-[10px] text-emerald-400 font-bold shrink-0">Excellent</span>
+                    </div>
+                    <div class="result-row" onclick="fillSearch('La Torche')">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
+                            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
+                                class="w-full h-full object-cover" alt="La Torche" />
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm">La Torche</p>
+                            <p class="text-[10px] text-slate-400">Bretagne · Intermédiaire · 1.8m</p>
+                        </div>
+                        <span class="text-[10px] text-[#00bad6] font-bold shrink-0">Bon</span>
+                    </div>
+                    <div class="result-row" onclick="fillSearch('Biarritz')">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
+                            <img src="https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80"
+                                class="w-full h-full object-cover" alt="Biarritz" />
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm">Biarritz — Côte des Basques</p>
+                            <p class="text-[10px] text-slate-400">Pays Basque · Débutant · 1.2m</p>
+                        </div>
+                        <span class="text-[10px] text-yellow-400 font-bold shrink-0">Correct</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Résultats -->
+        <div id="searchResults" class="hidden">
+            <!-- AdSense Slot -->
+            <div class="sw-ad-slot" data-ad-slot="SEARCH_TOP_1" data-ad-format="fluid"></div>
+            <div id="resultsList"></div>
+            <p id="noResults" class="hidden text-center text-slate-500 text-sm py-10 px-4">Aucun résultat pour "<span
+                    id="noResultsQuery"></span>" — essaie un autre terme 🔍</p>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="map.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">travel_explore</span><span
+                class="text-[10px] font-bold">Spots</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+    <script>
+        // ============================================================
+        // DATA — Surfeurs enrichis avec bio, spots surfés, stats
+        // ============================================================
+        const SURFERS_DB = [
+            {
+                id: 'jeromesS', name: 'JerômeS', av: 'J', avClass: 'av-cyan',
+                badge: '⭐ Pro', region: '🏄 Pays Basque',
+                bio: 'Surfeur depuis 15 ans, je chasse les houles atlantiques 🌊 Spé shortboard et grosses vagues. Coach certifié FFSurf.',
+                sessions: 42, followers: 287, following: 134,
+                spots: ['Hossegor — La Gravière', 'Biarritz', 'Seignosse'],
+                spotImgs: ['🌊', '🏄', '🔥'],
+                posts: [
+                    { id: 1, text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12 },
+                    { id: 6, text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67 }
+                ]
+            },
+            {
+                id: 'marieLR', name: 'MarieLR', av: 'M', avClass: 'av-purple',
+                region: '⚓ Bretagne',
+                bio: 'Pro surfeuse WQS 🏄‍♀️ Bretagne dans le cœur. Spécialiste technique et coaching débutants. La Torche is home.',
+                sessions: 38, followers: 193, following: 89,
+                spots: ['La Torche', 'La Palue', 'Pointe de la Torche'],
+                spotImgs: ['⚓', '🌊', '🏄'],
+                posts: [
+                    { id: 2, text: "Quelqu'un a des infos sur La Torche ce week-end ? 🏄‍♀️ Je prévois d'y aller samedi matin.", time: '18min', likes: 5 },
+                    { id: 3, text: 'Houle 2.8m prévue vendredi sur la côte basque selon Stormglass. Qui sera à Hossegor ? 🤙', time: '1h', likes: 23 }
+                ]
+            },
+            {
+                id: 'alexSurf29', name: 'AlexSurf29', av: 'A', avClass: 'av-emerald',
+                region: '⚓ Bretagne',
+                bio: 'Surfeur breton depuis le berceau 🤙 Amateur de spots secrets et de spots bondés. Longboard et fish.',
+                sessions: 31, followers: 145, following: 201,
+                spots: ['La Palue', 'La Torche', 'Lacanau Ocean'],
+                spotImgs: ['⚓', '🏄', '🌊'],
+                posts: [
+                    { id: 5, text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31 }
+                ]
+            },
+            {
+                id: 'surfGuide64', name: 'SurfGuide64', av: 'S', avClass: 'av-amber',
+                badge: '⭐ Pro', region: '🌊 Landes',
+                bio: 'Guide surf pro dans les Landes 🔥 Lacanau, Hossegor, Seignosse. Je partage les meilleures conditions du moment.',
+                sessions: 28, followers: 312, following: 67,
+                spots: ['Lacanau Ocean', 'Hossegor', 'Seignosse — Les Bourdaines'],
+                spotImgs: ['🌊', '🔥', '🏄'],
+                posts: [
+                    { id: 4, text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18 }
+                ]
+            },
+            {
+                id: 'bretagneSurf', name: 'BretagneSurf', av: 'B', avClass: 'av-red',
+                badge: '⚓ Bretagne', region: '⚓ Bretagne',
+                bio: 'La Bretagne c\'est la vraie vie 🤙 Vague de Belle-île, Quiberon, La Palue. Anti-touriste et pro-nature.',
+                sessions: 25, followers: 167, following: 445,
+                spots: ['Belle-île', 'La Palue', 'Quiberon'],
+                spotImgs: ['⚓', '🌊', '🏄'],
+                posts: [
+                    { id: 5, text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau.', time: '3h', likes: 31 }
+                ]
+            },
+        ];
+
+        // Posts complets (pour recherche dans les posts)
+        const ALL_POSTS = [
+            { id: 1, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '⭐ Pro', text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12, tag: 'session' },
+            { id: 2, user: 'MarieLR', userId: 'marieLR', av: 'M', avClass: 'av-purple', text: "Quelqu'un a des infos sur La Torche ce week-end ? 🏄‍♀️ Je prévois d'y aller samedi matin.", time: '18min', likes: 5, tag: 'question' },
+            { id: 3, user: 'AlexSurf29', userId: 'alexSurf29', av: 'A', avClass: 'av-emerald', text: 'Houle 2.8m prévue vendredi sur la côte basque selon Stormglass. Qui sera à Hossegor ? 🤙', time: '1h', likes: 23, tag: 'houle' },
+            { id: 4, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '⭐ Pro', text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18, tag: 'spot' },
+            { id: 5, user: 'BretagneSurf', userId: 'bretagneSurf', av: 'B', avClass: 'av-red', text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31, tag: 'session' },
+            { id: 6, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '⭐ Pro', text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67, tag: 'competition' },
+            { id: 7, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '⭐ Pro', text: 'Conditions de rêve à Lacanau ce matin ! 1.5m propre, vent nul, eau à 17°C. Parfait pour les débutants 🌊', time: '6h', likes: 44, tag: 'session' },
+            { id: 8, user: 'MarieLR', userId: 'marieLR', av: 'M', avClass: 'av-purple', text: 'Découvert un spot secret en Bretagne hier 🤫 Seuls 2 surfeurs à l\'eau, fond de sable parfait, 1.2m propre.', time: '1j', likes: 67, tag: 'spot' },
+        ];
+
+        let allSpots = [], category = 'all', searchTimeout;
+
+        // Render default popular surfers
+        function renderDefaultSurfers() {
+            document.getElementById('defaultSurfers').innerHTML = SURFERS_DB.slice(0, 3).map(s => surferRow(s, true)).join('');
+        }
+
+        function surferRow(s, compact = false) {
+            return `<div class="result-row" onclick="goToProfile('${s.id}')">
+        <div class="w-10 h-10 rounded-full ${s.avClass} flex items-center justify-center font-black shrink-0 text-base">${s.av}</div>
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-bold text-sm">${s.name}</span>
+                ${s.badge ? `<span class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full font-bold">${s.badge}</span>` : ''}
+                <span class="text-[9px] text-slate-500">${s.region}</span>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-0.5 line-clamp-1">${s.bio}</p>
+            ${!compact ? `<div class="flex gap-3 mt-1 text-[10px] text-slate-500">
+                <span><strong class="text-white">${s.followers}</strong> followers</span>
+                <span><strong class="text-white">${s.sessions}</strong> sessions</span>
+                <span class="text-[#00bad6]">${s.spots.slice(0, 2).join(' · ')}</span>
+            </div>` : `<p class="text-[10px] text-[#00bad6] mt-0.5">${s.spots.slice(0, 2).join(' · ')}</p>`}
+        </div>
+        <span class="material-symbols-outlined text-slate-600 text-[18px] shrink-0">chevron_right</span>
+    </div>`;
+        }
+
+        function surferCardFull(s) {
+            return `<div class="profile-card" onclick="goToProfile('${s.id}')">
+        <div class="flex items-start gap-3 px-4 pt-4 pb-3">
+            <div class="w-14 h-14 rounded-full ${s.avClass} flex items-center justify-center font-black shrink-0 text-2xl border-2 border-white/10">${s.av}</div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="font-black text-base">${s.name}</span>
+                    ${s.badge ? `<span class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full font-bold">${s.badge}</span>` : ''}
+                </div>
+                <p class="text-[10px] text-slate-400">${s.region}</p>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed line-clamp-2">${s.bio}</p>
+                <div class="flex gap-4 mt-2 text-[10px]">
+                    <span class="text-slate-400"><strong class="text-white">${s.followers}</strong> followers</span>
+                    <span class="text-slate-400"><strong class="text-white">${s.following}</strong> abonnements</span>
+                    <span class="text-slate-400"><strong class="text-[#00bad6]">${s.sessions}</strong> sessions</span>
+                </div>
+            </div>
+        </div>
+        <div class="px-4 pb-3 flex items-center gap-2">
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mr-1">Spots :</p>
+            ${s.spots.map(sp => `<span class="text-[10px] bg-[#0f2438] border border-[#00bad6]/20 px-2 py-0.5 rounded-full text-slate-300">${sp}</span>`).join('')}
+        </div>
+        <div class="flex items-center gap-2 px-4 pb-4">
+            <button onclick="followUser(event,'${s.id}','${s.name}')" id="follow-btn-${s.id}"
+                class="px-4 py-1.5 rounded-xl text-xs font-black transition-all text-[#080f1a]"
+                style="background:linear-gradient(135deg,#00bad6,#0077cc)">+ Suivre</button>
+            <button onclick="goToProfile('${s.id}')" class="flex-1 text-center py-1.5 rounded-xl text-xs font-bold border border-white/10 text-slate-400">Voir le profil →</button>
+        </div>
+    </div>`;
+        }
+
+        function postResultHtml(p, highlight = '') {
+            const nhl = norm(highlight);
+            let txt = p.text;
+            if (nhl) {
+                const re = new RegExp(`(${escapeRe(highlight)})`, 'gi');
+                txt = txt.replace(re, '<mark class="bg-[#00bad6]/30 text-[#00bad6] rounded px-0.5 not-italic active:scale-95 transition-transform">$1</mark>');
+            }
+            return `<div class="result-row anim" onclick="goToPost(${p.id})">
+        <div class="w-9 h-9 rounded-full ${p.avClass} flex items-center justify-center font-black shrink-0 text-sm">${p.av}</div>
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5">
+                <span class="font-bold text-sm">${p.user}</span>
+                ${p.badge ? `<span class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full font-bold">${p.badge}</span>` : ''}
+                <span class="text-[9px] text-slate-500 ml-auto">${p.time}</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-0.5 line-clamp-2 leading-relaxed">${txt}</p>
+            <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-500">
+                <span>❤️ ${p.likes}</span>
+                <span class="text-[#00bad6] font-bold">Voir le message →</span>
+            </div>
+        </div>
+    </div>`;
+        }
+
+        function norm(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+        function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+        function setCategory(c, el) {
+            category = c;
+            document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            const q = document.getElementById('globalSearch').value;
+            if (q.trim()) execSearch(q); else renderDefault();
+        }
+
+        function fillSearch(q) { document.getElementById('globalSearch').value = q; handleSearch(q); }
+
+        function handleSearch(q) {
+            clearTimeout(searchTimeout);
+            if (!q.trim()) { renderDefault(); return; }
+            searchTimeout = setTimeout(() => execSearch(q), 200);
+        }
+
+        function renderDefault() {
+            document.getElementById('defaultView').classList.remove('hidden');
+            document.getElementById('searchResults').classList.add('hidden');
+        }
+
+        async function execSearch(q) {
+            if (!allSpots.length) {
+                try { allSpots = await API.spots.list(); } catch {
+                    allSpots = [
+                        { id: 'hossegor', name: 'Hossegor — La Gravière', location: 'Landes', difficulty: 'expert', cond: 'Excellent' },
+                        { id: 'latorche', name: 'La Torche', location: 'Bretagne', difficulty: 'intermediaire', cond: 'Bon' },
+                        { id: 'biarritz', name: 'Biarritz — Côte des Basques', location: 'Pays Basque', difficulty: 'debutant', cond: 'Correct' },
+                        { id: 'lacanau', name: 'Lacanau Ocean', location: 'Gironde', difficulty: 'intermediaire', cond: 'Bon' },
+                        { id: 'seignosse', name: 'Seignosse — Les Bourdaines', location: 'Landes', difficulty: 'avance', cond: 'Excellent' },
+                        { id: 'lapalue', name: 'La Palue', location: 'Bretagne', difficulty: 'avance', cond: 'Bon' },
+                        { id: 'bidart', name: 'Bidart', location: 'Pays Basque', difficulty: 'debutant', cond: 'Correct' },
+                        { id: 'capbreton', name: 'Capbreton', location: 'Landes', difficulty: 'intermediaire', cond: 'Bon' },
+                    ];
+                }
+            }
+            const nq = norm(q);
+            const inc = cat => category === 'all' || category === cat;
+
+            let surfers = inc('surfers') ? SURFERS_DB.filter(s => norm(s.name).includes(nq) || norm(s.bio).includes(nq) || norm(s.region).includes(nq) || s.spots.some(sp => norm(sp).includes(nq))) : [];
+            let spots = inc('spots') ? allSpots.filter(s => norm(s.name).includes(nq) || norm(s.location || '').includes(nq)) : [];
+            let posts = inc('posts') ? ALL_POSTS.filter(p => norm(p.text).includes(nq) || norm(p.user).includes(nq)) : [];
+            let sessions = inc('sessions') ? [
+                { id: 's1', name: 'Hossegor 🔥 2m+', sub: 'JerômeS · Auj. · ⭐⭐⭐⭐⭐' },
+                { id: 's2', name: 'La Torche — conditions parfaites', sub: 'MarieLR · Hier · ⭐⭐⭐⭐' },
+                { id: 's3', name: 'Lacanau — session du matin', sub: 'AlexSurf29 · Sam. · ⭐⭐⭐' },
+                { id: 's4', name: 'Bidart — vague propre', sub: 'BretagneSurf · Ven. · ⭐⭐⭐⭐' },
+            ].filter(s => norm(s.name).includes(nq) || norm(s.sub).includes(nq)) : [];
+
+            const condColor = c => ({ 'Excellent': 'text-emerald-400', 'Très bon': 'text-[#00bad6]', 'Bon': 'text-green-400', 'Correct': 'text-yellow-400' }[c] || 'text-slate-400');
+            const diffLabel = d => ({ debutant: '🌊 Débutant', intermediaire: '⚡ Inter.', avance: '🔥 Avancé', expert: '💀 Expert' }[d?.toLowerCase()] || d || '');
+            const SPOT_IMGS = {
+                hossegor: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80',
+                latorche: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+                biarritz: 'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80',
+            };
+            const spotImg = s => SPOT_IMGS[s.id] || SPOT_IMGS.biarritz;
+
+            let html = '';
+            // SURFERS
+            if (surfers.length) {
+                html += `<div class="px-4 pt-3 pb-1"><p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">🏄 Surfeurs (${surfers.length})</p></div>`;
+                html += `<div class="divide-y divide-white/5">` + surfers.map(s => surferCardFull(s)).join('') + `</div>`;
+            }
+            // SPOTS
+            if (spots.length) {
+                html += `<div class="px-4 pt-3 pb-1"><p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">📍 Spots (${spots.length})</p></div>`;
+                html += spots.map(s => `<div class="result-row anim" onclick="window.location.href='map.html'">
+            <div class="w-10 h-10 rounded-xl shrink-0 overflow-hidden"><img src="${spotImg(s)}" class="w-full h-full object-cover" alt="${s.name}"/></div>
+            <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-400">${s.location || ''} · ${diffLabel(s.difficulty)}</p></div>
+            <span class="text-[10px] font-bold ${condColor(s.cond || 'Bon')} shrink-0">${s.cond || 'Bon'}</span>
+        </div>`).join('');
+            }
+            // POSTS (avec surbrillance du terme recherché)
+            if (posts.length) {
+                html += `<div class="px-4 pt-3 pb-1"><p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">💬 Posts (${posts.length})</p></div>`;
+                html += posts.map(p => postResultHtml(p, q)).join('');
+            }
+            // SESSIONS
+            if (sessions.length) {
+                html += `<div class="px-4 pt-3 pb-1"><p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">🎯 Sessions (${sessions.length})</p></div>`;
+                html += sessions.map(s => `<div class="result-row anim" onclick="window.location.href='community.html'">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-emerald-400 text-[18px]">surfing</span></div>
+            <div class="flex-1 min-w-0"><p class="font-bold text-sm">${s.name}</p><p class="text-[10px] text-slate-400">${s.sub}</p></div>
+        </div>`).join('');
+            }
+
+            const total = surfers.length + spots.length + posts.length + sessions.length;
+            document.getElementById('defaultView').classList.add('hidden');
+            document.getElementById('searchResults').classList.remove('hidden');
+            document.getElementById('resultsList').innerHTML = html || '';
+            document.getElementById('resultsList').classList.toggle('hidden', !total);
+            document.getElementById('noResults').classList.toggle('hidden', !!total);
+            if (!total) document.getElementById('noResultsQuery').textContent = q;
+        }
+
+        function goToPost(postId) {
+            window.location.href = `community.html#post-${postId}`;
+        }
+
+        function goToProfile(userId) {
+            window.location.href = `user-profile.html?id=${userId}`;
+        }
+
+        let followedUsers = JSON.parse(localStorage.getItem('sw_followed') || '[]');
+
+        function followUser(e, userId, userName) {
+            e.stopPropagation();
+            const btn = document.getElementById('follow-btn-' + userId);
+            if (followedUsers.includes(userId)) {
+                followedUsers = followedUsers.filter(id => id !== userId);
+                btn.textContent = '+ Suivre';
+                btn.style.background = 'linear-gradient(135deg,#00bad6,#0077cc)';
+                btn.style.color = '#080f1a';
+            } else {
+                followedUsers.push(userId);
+                btn.textContent = '✓ Abonné·e';
+                btn.style.background = 'rgba(16,185,129,.15)';
+                btn.style.color = '#10b981';
+                btn.style.border = '1px solid rgba(16,185,129,.3)';
+                // Notification simulée
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ type: 'SIMULATE_NOTIF', title: 'Nouvel abonné·e !', body: `Tu viens de suivre ${userName} 🤙` });
+                }
+            }
+            localStorage.setItem('sw_followed', JSON.stringify(followedUsers));
+        }
+
+        // Init
+        renderDefaultSurfers();
+    </script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Home</title>
+    <meta name="description"
+        content="SwellSync — Prévisions surf en direct, conditions des spots et communauté de surfeurs sur la côte Atlantique.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh)
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none
+        }
+
+        .fill-1 {
+            font-variation-settings: 'FILL' 1
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, rgba(0, 186, 214, 0.06) 25%, rgba(0, 186, 214, 0.12) 50%, rgba(0, 186, 214, 0.06) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0
+            }
+
+            100% {
+                background-position: -200% 0
+            }
+        }
+
+        /* ── Light Mode ── */
+        html.light body {
+            background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #1e293b;
+        }
+
+        html.light .glass {
+            background: rgba(255, 255, 255, .75);
+            border-color: rgba(0, 186, 214, .15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .06);
+        }
+
+        html.light header.glass {
+            background: rgba(255, 255, 255, .85);
+        }
+
+        html.light nav.glass,
+        html.light nav.sticky {
+            background: rgba(255, 255, 255, .9) !important;
+            border-top-color: rgba(0, 186, 214, .15) !important;
+        }
+
+        html.light .bg-\[\#080f1a\] {
+            background: transparent;
+        }
+
+        html.light .text-slate-100 {
+            color: #1e293b;
+        }
+
+        html.light .text-slate-400 {
+            color: #64748b;
+        }
+
+        /* ── Light full override ── */
+        html.light body {
+            background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+            color: #1e293b !important;
+        }
+
+        html.light body.bg-\[\#080f1a\] {
+            background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+        }
+
+        html.light .glass {
+            background: rgba(255, 255, 255, .82) !important;
+            border-color: rgba(0, 186, 214, .15) !important;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .06) !important;
+        }
+
+        html.light header {
+            background: rgba(255, 255, 255, .9) !important;
+            border-bottom-color: rgba(0, 186, 214, .18) !important;
+        }
+
+        html.light nav.fixed {
+            background: rgba(255, 255, 255, .95) !important;
+            border-top-color: rgba(0, 186, 214, .2) !important;
+        }
+
+        html.light .bg-\[\#0f2438\] {
+            background: #fff !important;
+            border-color: #e2eaf4 !important;
+        }
+
+        html.light .text-slate-500 {
+            color: #64748b !important;
+        }
+
+        /* Transition smooth sur le changement de thème */
+        body,
+        header,
+        nav {
+            transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+        }
+
+        /* Header scroll shrink */
+        #mainHeader {
+            transition: padding 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #mainHeader.scrolled {
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
+            background: rgba(8, 15, 26, 0.97) !important;
+            box-shadow: 0 2px 20px rgba(0, 186, 214, 0.12);
+        }
+
+        #mainHeader.scrolled #headerLogo {
+            transform: scale(0.92);
+        }
+
+        #headerLogo {
+            transition: transform 0.3s ease;
+        }
+    </style>
+
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="bg-[#080f1a] font-display text-slate-100 min-h-screen pb-24">
+
+    <!-- Header -->
+    <header id="mainHeader"
+        class="sticky top-0 z-50 backdrop-blur-md bg-[#080f1a]/80 border-b border-[#00bad6]/10 px-3 py-3 flex items-center gap-2">
+        <!-- Logo (prend le reste de la place, ne déborde pas) -->
+        <div id="headerLogo" class="flex items-center gap-2 min-w-0 flex-1">
+            <div
+                class="size-8 shrink-0 rounded-full bg-[#00bad6]/20 flex items-center justify-center border border-[#00bad6]/30 active:scale-95 transition-transform">
+                <img src="../assets/images/swellsync_icon.svg" alt="SwellSync" class="w-5 h-5 object-contain"
+                    style="filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(2222%) hue-rotate(152deg) brightness(101%) contrast(106%);">
+            </div>
+            <h1 class="text-lg font-bold truncate">SwellSync</h1>
+        </div>
+        <!-- Boutons droite (ne rétrécissent jamais) -->
+        <div class="flex items-center gap-1 shrink-0">
+            <a href="search.html"
+                class="p-2 rounded-full hover:bg-[#00bad6]/10 text-slate-400 active:scale-95 transition-transform">
+                <span class="material-symbols-outlined text-[22px]">search</span>
+            </a>
+            <a href="alerts.html"
+                class="p-2 rounded-full hover:bg-[#00bad6]/10 text-slate-400 active:scale-95 transition-transform">
+                <span class="material-symbols-outlined text-[22px]">notifications</span>
+            </a>
+            <a href="profile.html" id="hdrAvatar"
+                class="size-9 rounded-full border-2 border-[#00bad6] overflow-hidden bg-[#00bad6]/20 flex items-center justify-center active:scale-95 transition-transform">
+                <span class="material-symbols-outlined text-[#00bad6] text-[20px]">person</span>
+            </a>
+        </div>
+    </header>
+
+
+    <main class="max-w-md mx-auto p-4 space-y-6">
+
+        <!-- Hero Card: premier spot -->
+        <section>
+            <div id="heroCard" class="skeleton rounded-xl h-72"></div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="grid grid-cols-3 gap-3">
+            <a href="map.html"
+                class="flex flex-col items-center justify-center p-4 rounded-xl bg-[#0f2438] border border-[#00bad6]/10 hover:border-[#00bad6]/40 transition-colors group">
+                <div
+                    class="size-12 rounded-lg bg-[#00bad6]/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-[#00bad6]">map</span>
+                </div>
+                <span class="text-xs font-semibold text-slate-300">Spot Map</span>
+            </a>
+            <a href="spot_detail.html"
+                class="flex flex-col items-center justify-center p-4 rounded-xl bg-[#0f2438] border border-[#00bad6]/10 hover:border-[#00bad6]/40 transition-colors group">
+                <div
+                    class="size-12 rounded-lg bg-[#00bad6]/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-[#00bad6]">calendar_month</span>
+                </div>
+                <span class="text-xs font-semibold text-slate-300 text-center leading-tight">7-Day</span>
+            </a>
+            <a href="alerts.html"
+                class="flex flex-col items-center justify-center p-4 rounded-xl bg-[#0f2438] border border-[#00bad6]/10 hover:border-[#00bad6]/40 transition-colors group">
+                <div
+                    class="size-12 rounded-lg bg-[#00bad6]/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-[#00bad6]">notification_important</span>
+                </div>
+                <span class="text-xs font-semibold text-slate-300">Alertes</span>
+            </a>
+        </section>
+
+        <!-- Top Spots -->
+        <section class="space-y-3">
+            <div class="flex items-center justify-between px-1">
+                <h3 class="text-lg font-bold">Top spots aujourd'hui</h3>
+                <a href="map.html" class="text-[#00bad6] text-sm font-medium">Voir tous</a>
+            </div>
+            <div id="spotsList" class="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4">
+                <!-- skeletons -->
+                <div class="skeleton min-w-[160px] h-40 rounded-xl flex-shrink-0"></div>
+                <div class="skeleton min-w-[160px] h-40 rounded-xl flex-shrink-0"></div>
+                <div class="skeleton min-w-[160px] h-40 rounded-xl flex-shrink-0"></div>
+            </div>
+            <!-- AdSense Slot -->
+            <div class="sw-ad-slot" data-ad-slot="HOME_INFEED_1" data-ad-format="fluid"></div>
+            <section class="mt-2">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-[#00bad6] text-xl">air</span>
+                    <h2 class="font-bold text-base">Vent & Houle — Live</h2>
+                    <span class="ml-auto text-[10px] text-slate-400 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+                        Temps réel
+                    </span>
+                </div>
+                <!-- Stats rapides ventmétéo -->
+                <div id="windStats" class="grid grid-cols-3 gap-2 mb-3">
+                    <div
+                        class="rounded-xl bg-[#0f2438] border border-[#00bad6]/15 p-3 flex flex-col items-center gap-1">
+                        <span class="material-symbols-outlined text-[#00bad6] text-lg">air</span>
+                        <span id="wStatWind" class="text-lg font-black text-white">—</span>
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wide">Vent km/h</span>
+                    </div>
+                    <div
+                        class="rounded-xl bg-[#0f2438] border border-[#00bad6]/15 p-3 flex flex-col items-center gap-1">
+                        <span class="material-symbols-outlined text-[#00bad6] text-lg">waves</span>
+                        <span id="wStatWave" class="text-lg font-black text-white">—</span>
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wide">Houle m</span>
+                    </div>
+                    <div
+                        class="rounded-xl bg-[#0f2438] border border-[#00bad6]/15 p-3 flex flex-col items-center gap-1">
+                        <span class="material-symbols-outlined text-[#00bad6] text-lg">thermostat</span>
+                        <span id="wStatTemp" class="text-lg font-black text-white">—</span>
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wide">Eau °C</span>
+                    </div>
+                </div>
+                <!-- Section Communauté -->
+                <section class="mt-2">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-[#00bad6] text-xl">groups</span>
+                        <h2 class="font-bold text-base">Communauté</h2>
+                        <a href="/pages/community.html"
+                            class="ml-auto text-[10px] text-[#00bad6] font-semibold flex items-center gap-1">
+                            Voir tout <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </a>
+                    </div>
+                    <!-- Feed preview -->
+                    <div class="rounded-2xl border border-[#00bad6]/15 bg-[#0f2438] overflow-hidden">
+                        <!-- Post preview rows -->
+                        <div id="communityFeed" class="divide-y divide-white/5">
+                            <!-- Post 1 — JerômeS -->
+                            <div class="flex items-start gap-3 p-3 hover:bg-[#00bad6]/5 transition-colors group cursor-pointer active:scale-95 transition-transform"
+                                onclick="window.location.href='community.html#post-1'">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-[#00bad6]/20 flex items-center justify-center shrink-0 text-sm font-bold text-[#00bad6] active:scale-95 transition-transform">
+                                    J</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold">JerômeS</span>
+                                        <span class="text-[9px] text-slate-500">2min</span>
+                                        <span
+                                            class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 rounded-full font-bold">⭐
+                                            Pro</span>
+                                    </div>
+                                    <p class="text-xs text-slate-300 mt-0.5">Session incroyable à Hossegor ce matin 🔥
+                                        2m+ de houle, vent offshore parfait</p>
+                                    <div class="flex items-center gap-3 mt-1.5">
+                                        <button
+                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-red-400 hover:scale-110 active:scale-95"
+                                            onclick="event.stopPropagation();homeHeart(this,1)">
+                                            <span
+                                                class="material-symbols-outlined text-sm transition-all">favorite_border</span>12
+                                        </button>
+                                        <button
+                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-[#00bad6] hover:scale-110 active:scale-95"
+                                            onclick="event.stopPropagation();window.location.href='community.html#post-1'">
+                                            <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>3
+                                        </button>
+                                        <span
+                                            class="text-[10px] text-[#00bad6] ml-auto font-semibold group-hover:underline">Voir
+                                            →</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Post 2 — MarieLR -->
+                            <div class="flex items-start gap-3 p-3 hover:bg-purple-500/5 transition-colors group cursor-pointer"
+                                onclick="window.location.href='community.html#post-2'">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 text-sm font-bold text-purple-400">
+                                    M</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold">MarieLR</span>
+                                        <span class="text-[9px] text-slate-500">18min</span>
+                                    </div>
+                                    <p class="text-xs text-slate-300 mt-0.5">Quelqu'un a des infos sur La Torche ce
+                                        week-end ? 🏄‍♀️</p>
+                                    <div class="flex items-center gap-3 mt-1.5">
+                                        <button
+                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-red-400 hover:scale-110 active:scale-95"
+                                            onclick="event.stopPropagation();homeHeart(this,2)">
+                                            <span class="material-symbols-outlined text-sm">favorite_border</span>5
+                                        </button>
+                                        <button
+                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-[#00bad6] hover:scale-110 active:scale-95"
+                                            onclick="event.stopPropagation();window.location.href='community.html#post-2'">
+                                            <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>7
+                                        </button>
+                                        <span
+                                            class="text-[10px] text-[#00bad6] ml-auto font-semibold group-hover:underline">Répondre
+                                            →</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- CTA -->
+                        <a href="community.html"
+                            class="flex items-center justify-center gap-2 p-3 border-t border-white/5 text-[#00bad6] text-xs font-semibold hover:bg-[#00bad6]/5 transition-colors active:scale-95 transition-transform">
+                            <span class="material-symbols-outlined text-sm">add_circle</span>
+                            Rejoindre la discussion
+                        </a>
+                    </div>
+                </section>
+
+
+
+
+                <!-- 🏄 Widget — Mes Spots Favoris -->
+                <section class="mt-2" id="favSpotsSection">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-red-400 text-xl fill-1"
+                            style="font-variation-settings:'FILL' 1">favorite</span>
+                        <h2 class="font-bold text-base">Mes Spots Favoris</h2>
+                        <a href="map.html"
+                            class="ml-auto text-[10px] text-[#00bad6] font-semibold flex items-center gap-1">
+                            Carte <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </a>
+                    </div>
+                    <!-- Skeleton loading -->
+                    <div id="favSpotsLoading" class="grid grid-cols-1 gap-2">
+                        <div class="skeleton rounded-2xl h-20"></div>
+                        <div class="skeleton rounded-2xl h-20" style="animation-delay:.1s"></div>
+                    </div>
+                    <!-- Content -->
+                    <div id="favSpotsContent" class="hidden space-y-2"></div>
+                    <!-- Empty state -->
+                    <div id="favSpotsEmpty"
+                        class="hidden rounded-2xl border border-white/5 bg-[#0f2438] p-5 text-center">
+                        <span class="material-symbols-outlined text-slate-600 text-3xl">favorite_border</span>
+                        <p class="font-semibold text-slate-400 text-sm mt-2">Pas encore de spots favoris</p>
+                        <p class="text-slate-600 text-xs mt-1">Ajoute des spots depuis la carte pour les suivre ici</p>
+                        <a href="map.html"
+                            class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 rounded-xl bg-[#00bad6]/15 text-[#00bad6] font-bold text-xs active:scale-95 transition-transform">
+                            <span class="material-symbols-outlined text-sm">map</span> Explorer la carte
+                        </a>
+                    </div>
+                </section>
+
+
+
+                <!-- Coaching Widget -->
+                <section class="mt-2">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-amber-400 text-xl">school</span>
+                        <h2 class="font-bold text-base">Coaching Pro</h2>
+                        <a href="/pages/coaching.html"
+                            class="ml-auto text-[10px] text-[#00bad6] font-semibold flex items-center gap-1">Découvrir
+                            <span class="material-symbols-outlined text-sm">chevron_right</span></a>
+                    </div>
+                    <a href="/pages/coaching.html" class="block rounded-2xl overflow-hidden border border-amber-400/20"
+                        style="background:linear-gradient(135deg,rgba(15,36,56,.9),rgba(5,10,22,.95))">
+                        <div class="p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span
+                                    class="text-[9px] bg-amber-400 text-black px-2 py-0.5 rounded-full font-black">CERTIFIÉS
+                                    FFSURF</span>
+                                <span class="text-[9px] text-slate-400">Coachs pros</span>
+                            </div>
+                            <p class="font-black text-sm leading-tight mb-3">Progresse plus vite à l'eau avec un coach
+                                professionnel 🤙</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="bg-[#080f1a]/60 rounded-xl p-2.5">
+                                    <span class="material-symbols-outlined text-[#00bad6] text-[16px]">call</span>
+                                    <p class="text-[11px] font-bold mt-0.5">Appel</p>
+                                    <p class="text-[#00bad6] font-black text-sm">80€<span
+                                            class="text-slate-500 text-[9px]">/h</span></p>
+                                </div>
+                                <div class="bg-[#080f1a]/60 rounded-xl p-2.5">
+                                    <span class="material-symbols-outlined text-purple-400 text-[16px]">videocam</span>
+                                    <p class="text-[11px] font-bold mt-0.5">Visio</p>
+                                    <p class="text-purple-400 font-black text-sm">120€<span
+                                            class="text-slate-500 text-[9px]">/h</span></p>
+                                </div>
+                                <div class="bg-[#080f1a]/60 rounded-xl p-2.5">
+                                    <span class="material-symbols-outlined text-amber-400 text-[16px]">surfing</span>
+                                    <p class="text-[11px] font-bold mt-0.5">Présentiel</p>
+                                    <p class="text-amber-400 font-black text-sm">200€<span
+                                            class="text-slate-500 text-[9px]">/h</span></p>
+                                </div>
+                                <div
+                                    class="bg-[#00bad6]/10 border border-[#00bad6]/20 rounded-xl p-2.5 active:scale-95 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-[#00bad6] text-[16px]">workspace_premium</span>
+                                    <p class="text-[11px] font-bold mt-0.5 text-[#00bad6]">Pack 5 sessions</p>
+                                    <p class="text-[#00bad6] font-black text-sm">799€</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </section>
+
+                <!-- Section Vent & Vagues (Windy) -->
+                <section class="mt-2">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-[#00bad6] text-xl">air</span>
+                        <h2 class="font-bold text-base">Vent &amp; Vagues</h2>
+                    </div>
+                    <!-- Carte Windy -->
+                    <div class="rounded-2xl overflow-hidden border border-[#00bad6]/15 shadow-lg" style="height:200px">
+                        <iframe width="100%" height="100%"
+                            src="https://embed.windy.com/embed2.html?lat=44.649&lon=-1.172&detailLat=44.649&detailLon=-1.172&width=650&height=450&zoom=5&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=false&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1"
+                            frameborder="0" style="border:none;display:block">
+                        </iframe>
+                    </div>
+                    <p class="text-[10px] text-slate-500 text-center mt-1.5">Carte météo interactive — glisse pour
+                        explorer</p>
+                </section>
+            </section>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="home.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">home</span><span
+                class="text-[10px] font-bold">Home</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+
+    <script src="js/api.js"></script>
+    <script>
+        const IMGS = [
+            'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80',
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+            'https://lh3.googleusercontent.com/aida-public/AB6AXuAAhwRCj0JJ9LpPToEok55WGAsV4hErcBoXQ8fT8pXjr2LxU-0XtvYG8B6cn9EdVdT2qqJ65pBrjCURP7P7QB6262Ytc4fChVJetcHzYZ-IhxEBu-rcjIK30JssGj7IlCZI_4km7HqK1r2KLyP9tRzSuaxLiad-fSv0epohsziAKqAUvJc-sGgdIFhz1biqFS3lQryGJ1UCdOEEIhegd-a87peIJLJLhIf7fVPQETqjHh_dSi4jD3zddo3Tu7PteKiN3qkBq-vaWWo'
+        ];
+
+        let allSpots = [];
+
+        async function init() {
+            // Avatar profil
+            try {
+                const me = await API.auth.me();
+                if (me.avatar_url) {
+                    const av = document.getElementById('hdrAvatar');
+                    av.innerHTML = `<img src="${me.avatar_url}" class="w-full h-full object-cover"/>`;
+                }
+            } catch { }
+
+            // Charger spots
+            try {
+                allSpots = await API.spots.list();
+                // Géolocalisation → spot le plus proche
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async pos => {
+                        const { latitude: lat, longitude: lng } = pos.coords;
+                        const nearest = [...allSpots].filter(s => s.lat && s.lng).sort((a, b) =>
+                            Math.hypot(a.lat - lat, a.lng - lng) - Math.hypot(b.lat - lat, b.lng - lng)
+                        )[0];
+                        await renderHero(nearest || allSpots[0], lat, lng);
+                    }, async () => {
+                        await renderHero(allSpots[0]);
+                    });
+                } else {
+                    await renderHero(allSpots[0]);
+                }
+                renderList(allSpots.slice(0, 6));
+            } catch {
+                renderFallback();
+            }
+        }
+
+        async function renderHero(spot, userLat, userLng) {
+            const id = spot?.id || 1;
+            const name = spot?.name || 'La Gravière';
+            const loc = spot?.location || 'Hossegor';
+
+            // Chercher les prévisions Stormglass / mock
+            let waveH = '—', period = '—', windSpeed = '—', waterTemp = '—', isMock = true;
+            try {
+                const fc = await fetch(`/api/spots/${id}/forecast`).then(r => r.json());
+                isMock = fc.mock;
+                if (fc.data?.length) {
+                    const now = fc.data[0];
+                    waveH = now.waveHeight != null ? parseFloat(now.waveHeight).toFixed(1) : '—';
+                    period = now.wavePeriod != null ? Math.round(now.wavePeriod) + 's' : '—';
+                    windSpeed = now.windSpeed != null ? Math.round(now.windSpeed) + 'km/h' : '—';
+                    waterTemp = now.waterTemp != null ? Math.round(now.waterTemp) + '°C' : '—';
+                }
+            } catch { }
+
+            // Calculer distance si géoloc dispo
+            let distHtml = '';
+            if (userLat && spot?.lat) {
+                const d = Math.hypot(spot.lat - userLat, (spot.lng || 0) - (userLng || 0)) * 111;
+                distHtml = `<span class="text-[10px] text-slate-400">${d < 1 ? '<1km' : Math.round(d) + 'km'} de vous</span>`;
+            }
+
+            document.getElementById('heroCard').outerHTML = `
+            <a href="spot_detail.html?id=${id}" class="block relative overflow-hidden rounded-xl bg-[#0f2438] border border-[#00bad6]/20 shadow-xl">
+              <div class="absolute inset-0 opacity-40">
+                <img src="${IMGS[0]}" class="w-full h-full object-cover" loading="lazy"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2438] via-[#0f2438]/60 to-transparent"></div>
+              </div>
+              <div class="relative p-5 space-y-3">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[#00bad6] text-[10px] font-bold uppercase tracking-widest">${userLat ? '📍 Spot le plus proche' : 'Spot du Moment'}</span>
+                    ${isMock ? '' : '<span class="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">● Live</span>'}
+                    ${distHtml}
+                  </div>
+                  <h2 class="text-3xl font-bold text-white">${name}</h2>
+                  <p class="text-slate-400 text-sm">${loc}</p>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-6xl font-black text-white">${waveH}</span>
+                  <span class="text-[#00bad6] font-medium">m</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                  <div class="flex items-center gap-2 text-slate-300"><span class="material-symbols-outlined text-[#00bad6]/80 text-lg">timer</span><span class="text-sm">Houle: <b>${period}</b></span></div>
+                  <div class="flex items-center gap-2 text-slate-300"><span class="material-symbols-outlined text-[#00bad6]/80 text-lg">air</span><span class="text-sm">Vent: <b>${windSpeed}</b></span></div>
+                  <div class="flex items-center gap-2 text-slate-300"><span class="material-symbols-outlined text-[#00bad6]/80 text-lg">water_drop</span><span class="text-sm">Marée: <b class="text-emerald-400">Montante</b></span></div>
+                  <div class="flex items-center gap-2 text-slate-300"><span class="material-symbols-outlined text-[#00bad6]/80 text-lg">thermostat</span><span class="text-sm">Eau: <b>${waterTemp}</b></span></div>
+                </div>
+              </div>
+            </a>`;
+        }
+
+        function renderList(spots) {
+            const el = document.getElementById('spotsList');
+            if (!spots?.length) { el.innerHTML = '<p class="text-slate-500 text-sm">Aucun spot disponible</p>'; return; }
+            el.innerHTML = spots.map((s, i) => `
+            <a href="spot_detail.html?id=${s.id}" class="min-w-[160px] bg-[#0f2438] rounded-xl border border-[#00bad6]/10 overflow-hidden shadow-lg flex-shrink-0">
+              <div class="h-24 relative overflow-hidden">
+                <img src="${IMGS[i % IMGS.length]}" class="w-full h-full object-cover" loading="lazy"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2438] to-transparent"></div>
+                <div class="absolute bottom-1 left-2 text-xs text-white font-bold opacity-70">${s.difficulty || ''}</div>
+              </div>
+              <div class="p-3">
+                <h4 class="font-bold text-sm truncate">${s.name}</h4>
+                <p class="text-slate-400 text-xs truncate">${s.location}</p>
+                <p class="text-[#00bad6] font-bold text-lg mt-1">${(1.2 + Math.random() * 2).toFixed(1)}m</p>
+              </div>
+            </a>`).join('');
+        }
+
+        function renderFallback() {
+            document.getElementById('heroCard').outerHTML = `
+            <a href="spot_detail.html?id=1" class="block relative overflow-hidden rounded-xl bg-[#0f2438] border border-[#00bad6]/20 shadow-xl" style="min-height:220px;background:linear-gradient(135deg,#0a1628 0%,#0f2438 50%,#0d2240 100%)">
+              <div class="absolute inset-0 bg-gradient-to-br from-[#00bad6]/10 to-transparent"></div>
+              <div class="relative p-6">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-[#00bad6] text-xs font-bold uppercase tracking-widest">Spot du Moment</span>
+                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">● Démo</span>
+                </div>
+                <h2 class="text-3xl font-bold text-white mt-1">La Gravière</h2>
+                <p class="text-slate-400 text-sm">Hossegor, Landes</p>
+                <div class="flex items-baseline gap-2 mt-4">
+                  <span class="text-6xl font-black text-white">2.4</span>
+                  <span class="text-[#00bad6] font-medium">m</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                  <div class="flex items-center gap-2 text-slate-300"><span class="material-symbols-outlined text-[#00bad6]/80 text-lg">timer</span><span class="text-sm">Houle: <b>12s</b></span></div>
+                  <div class="flex items-center gap-2 text-slate-300"><span class="material-symbols-outlined text-[#00bad6]/80 text-lg">air</span><span class="text-sm">Vent: <b>15 km/h</b></span></div>
+                </div>
+              </div>
+            </a>`;
+            document.getElementById('spotsList').innerHTML = '<p class="text-slate-500 text-sm px-2">Connecte-toi pour voir les conditions en direct 🌊</p>';
+        }
+
+        // ── Recherche rapide ──────────────────────────────────
+        function searchSpots(q) {
+            const res = document.getElementById('searchDrop');
+            if (!q.trim() || !allSpots.length) { res.classList.add('hidden'); return; }
+            const hits = allSpots.filter(s =>
+                s.name.toLowerCase().includes(q.toLowerCase()) ||
+                s.location.toLowerCase().includes(q.toLowerCase())
+            ).slice(0, 6);
+            if (!hits.length) { res.classList.add('hidden'); return; }
+            res.innerHTML = hits.map(s => `
+                <a href="spot_detail.html?id=${s.id}" class="flex items-center gap-3 px-4 py-3 hover:bg-[#00bad6]/10 transition-colors border-b border-white/5 last:border-0 active:scale-95 transition-transform">
+                  <span class="material-symbols-outlined text-[#00bad6] text-sm">waves</span>
+                  <div>
+                    <p class="font-semibold text-sm">${s.name}</p>
+                    <p class="text-xs text-slate-400">${s.location}</p>
+                  </div>
+                </a>`).join('');
+            res.classList.remove('hidden');
+        }
+
+        init();
+    </script>
+
+
+    <!-- Assistant SwellSync FAB (minimized) -->
+    <div class="fixed right-4 bottom-28 z-40">
+        <button onclick="toggleChat()" id="chatFab"
+            class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00bad6] to-[#0077cc] shadow-lg shadow-[#00bad6]/20 flex items-center justify-center text-[#080f1a] hover:scale-110 active:scale-95 transition-all border border-white/20">
+            <span class="material-symbols-outlined text-[18px] font-bold" id="chatFabIcon">support_agent</span>
+        </button>
+    </div>
+
+    <!-- Assistant panel (compact) -->
+    <div id="chatPanel" class="fixed right-4 bottom-44 z-40 hidden">
+        <div class="w-72 bg-[#0f2438] border border-[#00bad6]/30 rounded-2xl shadow-2xl overflow-hidden">
+            <div
+                class="bg-gradient-to-r from-[#00bad6]/20 to-[#0077cc]/20 px-3 py-2.5 flex items-center justify-between border-b border-[#00bad6]/20">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#00bad6] text-[18px]">smart_toy</span>
+                    <span class="font-bold text-sm">Swell AI</span>
+                </div>
+                <button onclick="toggleChat()" class="text-slate-400 hover:text-white transition-colors"><span
+                        class="material-symbols-outlined text-sm">close</span></button>
+            </div>
+            <div id="chatMsgs" class="h-36 overflow-y-auto p-3 space-y-2 text-sm">
+                <div class="flex gap-2">
+                    <div
+                        class="w-6 h-6 rounded-full bg-[#00bad6]/20 flex items-center justify-center flex-shrink-0 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-[#00bad6] text-[12px]">smart_toy</span>
+                    </div>
+                    <div
+                        class="bg-[#00bad6]/10 rounded-xl rounded-tl-sm px-3 py-2 text-slate-200 text-xs max-w-[85%] active:scale-95 transition-transform">
+                        Salut 🤙 Je suis Swell AI. Pose-moi une question sur les vagues !
+                    </div>
+                </div>
+            </div>
+            <div class="p-2.5 border-t border-[#00bad6]/10">
+                <div class="flex flex-wrap gap-1 mb-2">
+                    <button onclick="askAI('Meilleur spot demain ?')"
+                        class="text-[10px] px-2.5 py-1 rounded-full bg-[#00bad6]/10 text-[#00bad6] border border-[#00bad6]/20 active:scale-95 transition-transform">Meilleur
+                        spot ?</button>
+                    <button onclick="askAI('Conditions Hossegor ?')"
+                        class="text-[10px] px-2.5 py-1 rounded-full bg-[#00bad6]/10 text-[#00bad6] border border-[#00bad6]/20 active:scale-95 transition-transform">Hossegor
+                        ?</button>
+                </div>
+                <div class="flex gap-2">
+                    <input id="chatInput" type="text" placeholder="Ta question…"
+                        class="flex-1 bg-[#080f1a] rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/50 border border-[#00bad6]/10"
+                        onkeydown="if(event.key==='Enter')sendChat()" />
+                    <button onclick="sendChat()"
+                        class="w-8 h-8 rounded-xl bg-[#00bad6] text-[#080f1a] flex items-center justify-center hover:opacity-90 transition-opacity flex-shrink-0 active:scale-95 transition-transform"><span
+                            class="material-symbols-outlined text-[16px]">send</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chatOpen = false;
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chatPanel').classList.toggle('hidden', !chatOpen);
+            document.getElementById('chatFabIcon').textContent = chatOpen ? 'close' : 'support_agent';
+        }
+
+        // Heart animation dans le widget communauté
+        const homeLikes = JSON.parse(localStorage.getItem('sw_homeLikes') || '{}');
+        function homeHeart(btn, postId) {
+            const key = 'p' + postId;
+            if (homeLikes[key]) return; // Déjà liké
+            homeLikes[key] = true;
+            localStorage.setItem('sw_homeLikes', JSON.stringify(homeLikes));
+            const icon = btn.querySelector('.material-symbols-outlined');
+            const countNode = btn.lastChild;
+            // Animation: scale bounce rouge
+            icon.textContent = 'favorite';
+            icon.style.color = '#f87171';
+            icon.style.transition = 'transform .12s ease';
+            icon.style.transform = 'scale(1.6)';
+            btn.classList.add('text-red-400');
+            setTimeout(() => { icon.style.transform = 'scale(0.9)'; }, 140);
+            setTimeout(() => { icon.style.transform = 'scale(1)'; }, 260);
+            // Float heart
+            const rect = btn.getBoundingClientRect();
+            const h = document.createElement('div');
+            h.textContent = '\u2764\ufe0f';
+            h.style.cssText = `position:fixed;font-size:16px;pointer-events:none;z-index:9999;left:${rect.left + 10}px;top:${rect.top}px;transition:all .7s ease;opacity:1;`;
+            document.body.appendChild(h);
+            requestAnimationFrame(() => { h.style.transform = 'translateY(-40px) scale(.5)'; h.style.opacity = '0'; });
+            setTimeout(() => h.remove(), 800);
+            // Increment count
+            if (countNode && countNode.nodeType === 3) {
+                const n = parseInt(countNode.textContent.trim()) + 1;
+                countNode.textContent = n;
+            }
+        }
+
+
+        // ──────────────────────────────────────────────
+        // Widget Mes Spots Favoris — API réelle
+        // ──────────────────────────────────────────────
+        const DIFF_STYLE = {
+            'debutant': { label: '🟢 Débutant', cls: 'bg-emerald-500/20 text-emerald-400' },
+            'intermediaire': { label: '🔵 Intermédiaire', cls: 'bg-[#00bad6]/20 text-[#00bad6]' },
+            'avance': { label: '🟠 Avancé', cls: 'bg-amber-500/20 text-amber-400' },
+            'expert': { label: '🔴 Expert', cls: 'bg-red-500/20 text-red-400' },
+        };
+        async function loadFavSpots() {
+            const loading = document.getElementById('favSpotsLoading');
+            const content = document.getElementById('favSpotsContent');
+            const empty = document.getElementById('favSpotsEmpty');
+            if (!loading || !content || !empty) return;
+            try {
+                const r = await fetch('/api/members/favorites', { credentials: 'include' });
+                if (!r.ok) throw new Error();
+                const spots = await r.json();
+                loading.classList.add('hidden');
+                if (!spots || spots.length === 0) {
+                    empty.classList.remove('hidden');
+                    return;
+                }
+                content.classList.remove('hidden');
+                content.innerHTML = spots.slice(0, 3).map((s, i) => {
+                    const diff = DIFF_STYLE[s.difficulty] || DIFF_STYLE['intermediaire'];
+                    const icons = ['🏄', '🌊', '🤙'];
+                    return `<a href="map.html?spot=${s.spot_id}"
+                        class="flex items-center gap-3 rounded-2xl border border-white/5 bg-[#0f2438] p-3.5 transition-all hover:border-[#00bad6]/30 hover:bg-[#00bad6]/5 active:scale-[.98]"
+                        style="animation-delay:${i * .06}s">
+                        <div class="w-11 h-11 rounded-xl bg-[#00bad6]/10 flex items-center justify-center text-xl shrink-0 active:scale-95 transition-transform">${icons[i % icons.length]}</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-black text-sm truncate">${s.name}</p>
+                            <p class="text-[10px] text-slate-500 truncate">📍 ${s.location || 'France'}</p>
+                            <span class="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-full mt-0.5 ${diff.cls}">${diff.label}</span>
+                        </div>
+                        <div class="flex flex-col items-end gap-1 shrink-0">
+                            <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
+                            <span class="text-[9px] text-slate-600">Favoris</span>
+                        </div>
+                    </a>`;
+                }).join('');
+                if (spots.length > 3) {
+                    content.insertAdjacentHTML('beforeend',
+                        `<a href="map.html" class="text-center text-[#00bad6] text-xs font-bold block py-2">Voir tous les ${spots.length} favoris →</a>`);
+                }
+            } catch {
+                loading.classList.add('hidden');
+                empty.classList.remove('hidden');
+            }
+        }
+        loadFavSpots();
+
+
+        // Animation header au scroll
+        (function () {
+            const hdr = document.getElementById('mainHeader');
+            const main = document.querySelector('main') || document.body;
+            main.addEventListener('scroll', () => {
+                hdr.classList.toggle('scrolled', main.scrollTop > 30);
+            }, { passive: true });
+        })();
+        function appendMsg(role, text) {
+            const el = document.getElementById('chatMsgs');
+            const isAI = role === 'ai';
+            el.insertAdjacentHTML('beforeend', `
+          <div class="flex gap-2 ${isAI ? '' : 'flex-row-reverse'}">
+            ${isAI ? '<div class="w-7 h-7 rounded-full bg-[#00bad6]/20 flex items-center justify-center flex-shrink-0 active:scale-95 transition-transform"><span class="material-symbols-outlined text-[#00bad6] text-[14px]">smart_toy</span></div>' : ''}
+            <div class="${isAI ? 'bg-[#00bad6]/10 rounded-tl-sm' : 'bg-[#0077cc]/20 rounded-tr-sm'} rounded-xl px-3 py-2 text-slate-200 max-w-[85%] text-sm active:scale-95 transition-transform">${text}</div>
+          </div>`);
+            el.scrollTop = el.scrollHeight;
+        }
+        async function askAI(q) {
+            document.getElementById('chatInput').value = q;
+            await sendChat();
+        }
+        async function sendChat() {
+            const inp = document.getElementById('chatInput');
+            const q = inp.value.trim();
+            if (!q) return;
+            inp.value = '';
+            appendMsg('user', q);
+            appendMsg('ai', '<span class="animate-pulse">…</span>');
+            try {
+                const r = await fetch('/api/ai/swell-whisperer', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userProfile: { question: q }, liveContext: { spots: allSpots?.slice(0, 5) } })
+                }).then(x => x.json());
+                document.getElementById('chatMsgs').lastChild.remove();
+                appendMsg('ai', r.response || r.message || 'Je n\'ai pas pu obtenir une réponse 🤔');
+            } catch {
+                document.getElementById('chatMsgs').lastChild.remove();
+                appendMsg('ai', '⚠️ Je ne suis pas disponible pour le moment. Réessaie !');
+            }
+        }
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

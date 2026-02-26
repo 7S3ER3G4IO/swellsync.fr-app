@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SwellSync | Légal</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00bad6",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#0f2123",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Meta-Tags Web App & PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f2123">
+    <!-- Optimisations Mobile pures Apple -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SwellSync">
+    <link rel="apple-touch-icon" href="assets/images/swellsync_icon.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/images/swellsync_icon.svg">
+    <link rel="shortcut icon" href="assets/images/swellsync_icon.svg">
+    <!-- Nos styles personnels (Pour les Toasts Custom et variables) -->
+    <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/light-mode.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <!-- FontAwesome pour les logos de marques -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+
+</head>
+
+<body
+    class="bg-background-dark text-white font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
+            <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 py-3 my-3 mx-4 lg:mx-auto rounded-full" style="background: rgba(7,15,16,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06);">
+                <!-- Left: Logo -->
+                <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
+                    <div class="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center border border-primary/25">
+                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync" class="w-5 h-5 object-contain" style="filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(2222%) hue-rotate(152deg) brightness(101%) contrast(106%);">
+                    </div>
+                    <span class="text-lg font-black text-white hidden sm:block tracking-tight">SwellSync</span>
+                </a>
+
+                <!-- Center: Nav Links -->
+                <div class="hidden md:flex items-center gap-1" id="nav-center-links">
+                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="cotes.html">Côtes</a>
+                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="spot_detail.html">Conditions</a>
+                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="actu.html">Actualités</a>
+                    <div class="relative" id="nav-plus-wrapper">
+                        <button class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1" id="nav-plus-btn">
+                            Plus
+                            <svg class="w-3.5 h-3.5 transition-transform duration-200" id="nav-plus-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Auth -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <button
+                        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+                        id="btn-login" onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
+                        <span class="material-symbols-outlined text-[18px]" id="btn-login-avatar">person</span>
+                        <span id="nav-login-text">Connexion</span>
+                        <div class="w-2 h-2 rounded-full bg-red-500 shrink-0" id="login-status-icon"></div>
+                    </button>
+                    <button
+                        class="hidden md:flex bg-primary text-[#0a1516] font-bold text-[13px] px-5 py-2.5 rounded-full hover:brightness-110 hover:scale-[1.03] active:scale-[0.97] transition-all"
+                        onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
+                        S'inscrire
+                    </button>
+                    <button
+                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white md:hidden"
+                        id="mobile-menu-btn">
+                        <span class="material-symbols-outlined text-[20px]">menu</span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+    <!-- Contenu Légal -->
+    <main class="pt-32 pb-24 max-w-4xl mx-auto px-6 relative z-10">
+        <div class="mb-12 border-b border-white/10 pb-8">
+            <span class="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Préférences
+                Utilisateur</span>
+            <h1 class="text-4xl md:text-5xl font-black mb-4">Gérer mes <br /><span class="text-primary">Traceurs
+                    (Cookies)</span></h1>
+            <p class="text-slate-400 font-medium">Contrôlez finement l'empreinte numérique que vous laissez sur la
+                plateforme.</p>
+        </div>
+
+        <div
+            class="prose prose-invert prose-p:text-slate-400 prose-headings:text-white prose-a:text-primary max-w-none">
+
+            <p class="text-lg">Lors de votre consultation de l'application SwellSync, des informations relatives à votre
+                navigation sont susceptibles d'être enregistrées dans des fichiers "Cookies", installés sur votre
+                terminal (Smartphone, PC, Tablette).</p>
+            <p class="mb-8">Nous avons fait le choix de la transparence et d'une conception "Privacy by Design" :
+                <strong>Nous n'utilisons aucun traceur publicitaire intrusif.</strong>
+            </p>
+
+            <h3 class="text-2xl font-bold mt-8 mb-4">Vos Préférences Globales</h3>
+            <div class="space-y-4">
+
+                <!-- Option 1 : Toujours Actif -->
+                <div
+                    class="glass p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="material-symbols-outlined text-green-400">check_circle</span>
+                            <h4 class="font-bold text-white text-lg m-0 leading-none">Cookies Techniques Strictly
+                                Nécessaires</h4>
+                        </div>
+                        <p class="text-sm text-slate-400 m-0">Indispensables au site pour fonctionner (Sauvegarder
+                            l'état sombre, conserver votre Panier VIP PRO, maintenir votre connexion via 'JSON Web
+                            Token' sans vous déconnecter à chaque clic sur la carte).</p>
+                    </div>
+                    <div class="shrink-0">
+                        <span
+                            class="text-[10px] text-background-dark font-black uppercase tracking-widest px-3 py-1 rounded bg-slate-300">Toujours
+                            Actif</span>
+                    </div>
+                </div>
+
+                <!-- Option 2 : Optionnel -->
+                <div
+                    class="glass p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:border-primary/30 transition-colors">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="material-symbols-outlined text-primary">analytics</span>
+                            <h4 class="font-bold text-white text-lg m-0 leading-none">Cookies de Performance
+                                d'Intelligence Artificielle</h4>
+                        </div>
+                        <p class="text-sm text-slate-400 m-0">Aide notre équipe (statistiques anonymisées) à savoir
+                            "Quels sont les 60 Spots les plus consultés hier ?", pour allouer aux serveurs Leaflet de la
+                            puissance serveur avant un très gros week-end.</p>
+                    </div>
+                    <div class="shrink-0">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div
+                                class="w-14 h-7 bg-background-dark rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-slate-400 peer-checked:after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary border border-white/20">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Option 3 : Optionnel -->
+                <div
+                    class="glass p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:border-primary/30 transition-colors">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="material-symbols-outlined text-orange-400">tune</span>
+                            <h4 class="font-bold text-white text-lg m-0 leading-none">Cookies de Fonctionnalités &
+                                Cartographie</h4>
+                        </div>
+                        <p class="text-sm text-slate-400 m-0">Mémorise votre comportement sur la "Carte Leaflet" : Sur
+                            quel niveau de Zoom Micro êtes vous resté en quittant l'App ? Quel "Filtre" pour les graphs
+                            de vent avez-vous activé hier ?</p>
+                    </div>
+                    <div class="shrink-0">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div
+                                class="w-14 h-7 bg-background-dark rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-slate-400 peer-checked:after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary border border-white/20">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <button
+                class="w-full mt-8 bg-primary/10 hover:bg-primary text-primary hover:text-background-dark transition-all duration-300 py-4 rounded-xl font-black uppercase tracking-widest border border-primary/30"
+                onclick="alert('Vos préférences viennent d\'être sauvegardées sur votre terminal courant.')">
+                Sauvegarder mes Préférences
+            </button>
+            <p class="text-xs text-center mt-3 text-slate-500">Un Cookie de session valide pendant 6 mois sera posé pour
+                retenir ce choix actuel.</p>
+
+        </div>
+    </main>
+
+
+    <!-- Footer Professionnel -->
+    <footer class="bg-[#0a1516] text-slate-400 py-16 border-t border-white/5 mt-12 w-full">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-2">
+                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo" class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
+                        <span class="font-display font-black text-xl text-white tracking-tight">Swell<span
+                                class="text-primary">Sync</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed mt-2">La plateforme de prévision de surf la plus technologique du
+                        marché. Surf smart, ride hard.</p>
+                    <div class="flex gap-4 mt-4">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
+                                class="fa-brands fa-tiktok"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
+                                class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">SwellSync</h4>
+                    <a href="index.html" class="text-sm hover:text-primary transition-colors">La Carte Interactive</a>
+                    <a href="#" class="text-sm hover:text-primary transition-colors">Spots Tendances</a>
+                    <a href="#" class="text-sm hover:text-primary transition-colors">Abonnement PRO</a>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Légal</h4>
+                    <button onclick="openLegalModal('cgv')"
+                        class="text-left text-sm hover:text-primary transition-colors">Conditions Générales
+                        (CGV)</button>
+                    <button onclick="openLegalModal('privacy')"
+                        class="text-left text-sm hover:text-primary transition-colors">Politique de
+                        Confidentialité</button>
+                    <button onclick="openLegalModal('legal')"
+                        class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions Légales</button>
+                    <button onclick="openLegalModal('cookies')"
+                        class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Assistance</h4>
+                    <p class="text-sm mb-2">Notre équipe est basée à Hossegor, France. Nous répondons en moins de 24h.
+                    </p>
+                    <a href="mailto:support@swellsync.com"
+                        class="text-primary font-bold hover:underline flex items-center gap-2 text-sm">
+                        <span class="material-symbols-outlined text-[16px]">mail</span>
+                        support@swellsync.com
+                    </a>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium">
+                <p>&copy; 2026 SwellSync Technology. Tous droits réservés.</p>
+                <div class="flex items-center gap-2 mt-4 md:mt-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                    Serveurs Opérationnels (99.9% Uptime)
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Légal Modals Container -->
+    <div id="legal-modal-backdrop"
+        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+        <div id="legal-modal-container"
+            class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-full overflow-y-auto custom-scrollbar relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col">
+            <div
+                class="w-full flex justify-end p-6 border-b border-white/5 sticky top-0 bg-background-dark/90 backdrop-blur z-20">
+                <button onclick="closeLegalModal()"
+                    class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="legal-modal-content" class="p-8 md:p-12 w-full">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Scripts -->
+    <script src="js/legal_modals.js?v=6"></script>
+    <script src="js/global_search.js" defer></script>
+
+    
+<!-- Global Search Modal -->
+<div id="global-search-backdrop"
+    class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
+    <div id="global-search-container"
+        class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
+
+        <!-- Search Input Area -->
+        <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
+            <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
+            <input type="text" id="global-search-input"
+                class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
+                placeholder="Chercher un spot, une page, une info..." autocomplete="off">
+            <button onclick="closeGlobalSearchModal()"
+                class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+        </div>
+
+        <!-- Search Results Area -->
+        <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
+            <div class="text-center py-10 text-slate-500 text-sm font-medium">
+                Que cherchez-vous ? 🏄
+            </div>
+        </div>
+
+        <!-- Footer Hints -->
+        <div
+            class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
+            <div class="flex items-center gap-2">
+                <span class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
+                        class="font-sans mr-1">&#8593;&#8595;</span> Naviguer</span>
+                <span
+                    class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entr&#233;e
+                    <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
+            </div>
+            <div>SwellSync Global Search</div>
+        </div>
+    </div>
+</div>
+
+    <script src="js/nav.js"></script>
+    <script src="js/auth_auto.js" defer></script>
+</body>
+</html>

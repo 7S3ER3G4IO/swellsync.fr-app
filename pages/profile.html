@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Profil</title>
+    <meta name="description"
+        content="SwellSync Profil — Gérez votre profil surfeur, vos badges et votre historique de sessions.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        .glass {
+            background: rgba(15, 36, 56, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 186, 214, 0.1)
+        }
+
+        body {
+            min-height: max(884px, 100dvh)
+        }
+
+        /* Edit modal */
+        #editModal {
+            display: none
+        }
+
+        #editModal.open {
+            display: flex
+        }
+    </style>
+
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="bg-[#080f1a] font-display text-slate-100 min-h-screen pb-24">
+
+    <header class="flex items-center justify-between p-6 sticky top-0 z-10 glass">
+        <a href="home.html" class="material-symbols-outlined text-slate-400 cursor-pointer">chevron_left</a>
+        <h1 class="text-xl font-bold">Mon Profil</h1>
+        <div class="flex items-center gap-2">
+            <button onclick="document.getElementById('editModal').classList.add('open')"
+                class="material-symbols-outlined text-slate-400 cursor-pointer text-[22px]">edit</button>
+            <a href="settings.html"
+                class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
+                <span class="material-symbols-outlined text-[#00bad6] text-[20px]">add</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 py-6 space-y-8">
+
+        <!-- Avatar + infos -->
+        <section class="flex flex-col items-center text-center space-y-4">
+            <div class="relative">
+                <label for="avatarInput" class="cursor-pointer block group">
+                    <div id="avatarRing" class="w-32 h-32 rounded-full border-4 border-[#00bad6]/30 p-1">
+                        <div id="avatarImg"
+                            class="w-full h-full rounded-full bg-[#00bad6]/20 flex items-center justify-center overflow-hidden active:scale-95 transition-transform">
+                            <span class="material-symbols-outlined text-[#00bad6] text-5xl"
+                                id="avatarIcon">person</span>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute bottom-1 right-1 bg-[#00bad6] text-[#080f1a] w-8 h-8 rounded-full flex items-center justify-center border-2 border-[#080f1a] group-hover:scale-110 transition-transform shadow-lg active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-sm">photo_camera</span>
+                    </div>
+                </label>
+                <input type="file" id="avatarInput" accept="image/*" class="hidden" onchange="uploadAvatar(event)" />
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold" id="profileName">Chargement…</h2>
+                <p class="text-[#00bad6]/70 font-medium" id="profileLevel">—</p>
+                <p class="text-slate-500 text-sm mt-1" id="profileEmail">—</p>
+            </div>
+
+            <div id="proBadge"
+                class="hidden px-4 py-1.5 rounded-full bg-gradient-to-r from-[#00bad6]/20 to-emerald-500/20 border border-[#00bad6]/30 text-[#00bad6] text-xs font-bold uppercase tracking-widest">
+                ⭐ Membre Pro
+            </div>
+
+            <!-- Social links -->
+            <div id="socialLinks" class="flex items-center gap-3 mt-2 hidden">
+                <a id="linkInsta" href="#" target="_blank"
+                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center hidden"
+                    title="Instagram">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <path
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                </a>
+                <a id="linkTiktok" href="#" target="_blank"
+                    class="w-8 h-8 rounded-lg bg-black flex items-center justify-center hidden" title="TikTok">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                        <path
+                            d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.43v-7.15a8.16 8.16 0 005.58 2.09V11.1a4.84 4.84 0 01-2.09-.47V6.69h2.09z" />
+                    </svg>
+                </a>
+                <a id="linkYoutube" href="#" target="_blank"
+                    class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center hidden" title="YouTube">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <path
+                            d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                </a>
+                <a id="linkTwitter" href="#" target="_blank"
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center hidden" title="X / Twitter">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                        <path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex gap-2 mt-3 w-full max-w-xs">
+                <button onclick="shareProfile(document.getElementById('profileName').textContent)"
+                    class="flex-1 py-2 rounded-xl bg-[#00bad6]/10 border border-[#00bad6]/30 text-[#00bad6] font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-sm">share</span> Partager
+                </button>
+                <button onclick="shareApp()"
+                    class="flex-1 py-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-sm">download</span> Partager l'app
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="grid grid-cols-3 gap-3">
+            <div class="glass p-4 rounded-xl flex flex-col items-center text-center border-b-2 border-b-[#00bad6]/40">
+                <span id="statSessions" class="text-2xl font-bold text-[#00bad6]">—</span>
+                <span class="text-[10px] uppercase tracking-widest text-slate-400 mt-1">Sessions</span>
+            </div>
+            <div class="glass p-4 rounded-xl flex flex-col items-center text-center border-b-2 border-b-[#00bad6]/40">
+                <span id="statFavs" class="text-2xl font-bold text-[#00bad6]">—</span>
+                <span class="text-[10px] uppercase tracking-widest text-slate-400 mt-1">Favoris</span>
+            </div>
+            <div class="glass p-4 rounded-xl flex flex-col items-center text-center border-b-2 border-b-[#00bad6]/40">
+                <span id="statAlerts" class="text-2xl font-bold text-[#00bad6]">—</span>
+                <span class="text-[10px] uppercase tracking-widest text-slate-400 mt-1">Alertes</span>
+            </div>
+        </section>
+        <!-- Followers/Following row -->
+        <section class="grid grid-cols-2 gap-3">
+            <div class="glass p-3 rounded-xl flex flex-col items-center text-center cursor-pointer"
+                onclick="window.location.href='settings.html'">
+                <span id="statFollowers" class="text-xl font-bold text-[#00bad6]">—</span>
+                <span class="text-[10px] uppercase tracking-widest text-slate-400">Abonnés</span>
+            </div>
+            <div class="glass p-3 rounded-xl flex flex-col items-center text-center cursor-pointer"
+                onclick="window.location.href='settings.html'">
+                <span id="statFollowing" class="text-xl font-bold text-[#00bad6]">—</span>
+                <span class="text-[10px] uppercase tracking-widest text-slate-400">Abonnements</span>
+            </div>
+        </section>
+
+        <!-- Spots Favoris -->
+        <section id="favsSection" class="space-y-3 hidden">
+            <h3 class="text-lg font-bold">⭐ Mes Spots Favoris</h3>
+            <div id="favsList" class="space-y-2"></div>
+        </section>
+
+        <!-- Profil Communauté -->
+        <section class="space-y-3">
+            <div class="flex items-center justify-between px-1">
+                <h3 class="text-lg font-bold">Profil Communauté</h3>
+                <a href="community.html" class="text-[10px] text-[#00bad6] font-semibold flex items-center gap-1">
+                    Voir <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </a>
+            </div>
+            <div class="glass rounded-2xl p-4 space-y-4">
+                <!-- Bio -->
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1.5">Bio</p>
+                    <p id="profileBio" class="text-sm text-slate-300 leading-relaxed">Surfeur passionné depuis toujours
+                        🤙 Je chasse les houles atlantiques et partage mes sessions avec la communauté SwellSync.</p>
+                </div>
+                <!-- Stats communauté -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-[#080f1a] rounded-xl p-3 text-center">
+                        <span class="text-lg font-black text-[#00bad6]" id="statPosts">0</span>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-wide mt-0.5">Posts</p>
+                    </div>
+                    <div class="bg-[#080f1a] rounded-xl p-3 text-center">
+                        <span class="text-lg font-black text-[#00bad6]" id="statReplies">0</span>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-wide mt-0.5">Réponses</p>
+                    </div>
+                    <div class="bg-[#080f1a] rounded-xl p-3 text-center">
+                        <span class="text-lg font-black text-[#00bad6]" id="statLikes">0</span>
+                        <p class="text-[9px] text-slate-500 uppercase tracking-wide mt-0.5">Likes reçus</p>
+                    </div>
+                </div>
+                <!-- Surf infos -->
+                <div class="space-y-3 border-t border-white/5 pt-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="material-symbols-outlined text-[#00bad6] text-base">surfing</span>
+                            <span class="text-slate-400">Niveau</span>
+                        </div>
+                        <span class="text-sm font-bold" id="surfLevel">Intermédiaire</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="material-symbols-outlined text-[#00bad6] text-base">waves</span>
+                            <span class="text-slate-400">Houle préférée</span>
+                        </div>
+                        <span class="text-sm font-bold" id="prefWave">1.5m — 2.5m</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="material-symbols-outlined text-[#00bad6] text-base">calendar_today</span>
+                            <span class="text-slate-400">Depuis</span>
+                        </div>
+                        <span class="text-sm font-bold" id="surfSince">2018</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="material-symbols-outlined text-[#00bad6] text-base">place</span>
+                            <span class="text-slate-400">Spot signature</span>
+                        </div>
+                        <span class="text-sm font-bold" id="sigSpot">Hossegor 🔥</span>
+                    </div>
+                </div>
+                <!-- Lien communauté -->
+                <a href="community.html"
+                    class="flex items-center justify-center gap-2 mt-2 w-full py-2.5 rounded-xl border border-[#00bad6]/30 text-[#00bad6] text-sm font-bold hover:bg-[#00bad6]/10 transition-colors active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-[18px]">groups</span>
+                    Rejoindre la discussion communauté
+                </a>
+            </div>
+        </section>
+
+        <!-- Paramètres -->
+        <section class="space-y-3">
+            <h3 class="text-lg font-bold px-1">Paramètres</h3>
+            <div class="glass rounded-xl overflow-hidden divide-y divide-[#00bad6]/10">
+                <!-- Mode sombre/clair -->
+                <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-[#00bad6]/5 transition-colors active:scale-95 transition-transform"
+                    onclick="swToggleTheme()">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-[#00bad6]" id="themeIcon">dark_mode</span>
+                        <span class="font-medium" id="themeLabel">Mode Sombre</span>
+                    </div>
+                    <div id="themeToggle"
+                        class="w-12 h-6 bg-[#00bad6] rounded-full relative p-1 cursor-pointer transition-all active:scale-95 transition-transform">
+                        <div id="themeThumb"
+                            class="w-4 h-4 bg-[#080f1a] rounded-full translate-x-6 transition-transform"></div>
+                    </div>
+                </div>
+
+                <!-- Langue -->
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center gap-3"><span
+                            class="material-symbols-outlined text-[#00bad6]">language</span><span
+                            class="font-medium">Langue</span></div>
+                    <div
+                        class="flex items-center gap-1 bg-[#00bad6]/10 p-1 rounded-xl active:scale-95 transition-transform">
+                        <button class="px-2.5 py-1 text-[#00bad6] text-xs font-bold rounded-lg transition-all"
+                            id="langFR" onclick="setLang('fr')">FR</button>
+                        <button class="px-2.5 py-1 text-[#00bad6] text-xs font-bold rounded-lg transition-all"
+                            id="langEN" onclick="setLang('en')">EN</button>
+                        <button class="px-2.5 py-1 text-[#00bad6] text-xs font-bold rounded-lg transition-all"
+                            id="langES" onclick="setLang('es')">ES</button>
+                        <button class="px-2.5 py-1 text-[#00bad6] text-xs font-bold rounded-lg transition-all"
+                            id="langPT" onclick="setLang('pt')">PT</button>
+                    </div>
+                </div>
+
+                <a href="alerts.html"
+                    class="flex items-center justify-between p-4 hover:bg-[#00bad6]/5 transition-colors active:scale-95 transition-transform">
+                    <div class="flex items-center gap-3"><span
+                            class="material-symbols-outlined text-[#00bad6]">notifications_active</span><span
+                            class="font-medium">Mes Alertes Houle</span></div>
+                    <span class="material-symbols-outlined text-slate-500">chevron_right</span>
+                </a>
+
+                <div class="flex items-center justify-between p-4 hover:bg-[#00bad6]/5 transition-colors cursor-pointer active:scale-95 transition-transform"
+                    onclick="currentUser ? document.getElementById('editModal').classList.add('open') : window.location.href='/pages../index.html?redirect=/pages/profile.html'">
+                    <div class="flex items-center gap-3"><span
+                            class="material-symbols-outlined text-[#00bad6]">manage_accounts</span><span
+                            class="font-medium">Modifier le profil</span></div>
+                    <span class="material-symbols-outlined text-slate-500">chevron_right</span>
+                </div>
+
+                <div class="flex items-center justify-between p-4 hover:bg-[#00bad6]/5 transition-colors cursor-pointer active:scale-95 transition-transform"
+                    onclick="enablePush()">
+                    <div class="flex items-center gap-3"><span
+                            class="material-symbols-outlined text-[#00bad6]">notifications_active</span><span
+                            class="font-medium">Notifications Push</span></div>
+                    <span id="pushStatus"
+                        class="text-xs px-2 py-1 rounded-full bg-slate-700 text-slate-400">Inactif</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sessions Journal -->
+        <section id="sessionsSection" class="space-y-3 hidden">
+            <h3 class="text-lg font-bold">🏄 Mes Sessions</h3>
+            <div id="sessionsList" class="space-y-2"></div>
+        </section>
+
+        <!-- Sign Out -->
+        <button onclick="signOut()"
+            class="w-full py-4 text-red-400 font-bold border border-red-400/20 rounded-xl hover:bg-red-400/10 transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">logout</span> Se déconnecter
+        </button>
+
+    </main>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
+        <div class="glass w-full max-w-md rounded-t-3xl p-6 space-y-4 border-t border-[#00bad6]/20">
+            <div class="w-12 h-1.5 bg-slate-700 rounded-full mx-auto"></div>
+            <h2 class="text-xl font-bold text-center">Modifier le Profil</h2>
+
+            <div>
+                <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Prénom / Pseudo</label>
+                <input id="editName" type="text" placeholder="Lucas Dupont"
+                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+            </div>
+
+            <div>
+                <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Bio / Description</label>
+                <textarea id="editBio" rows="3"
+                    placeholder="Surfeur passionné depuis toujours 🤙 Partage tes sessions..."
+                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6] resize-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Niveau</label>
+                    <select id="editLevel"
+                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
+                        <option value="debutant">🌊 Débutant</option>
+                        <option value="intermediaire">⚡ Intermédiaire</option>
+                        <option value="avance">🔥 Avancé</option>
+                        <option value="pro">⭐ Pro / Compétition</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Année de début</label>
+                    <input id="editSince" type="number" placeholder="2018" min="1970" max="2025"
+                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                </div>
+            </div>
+
+            <div>
+                <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Houle préférée</label>
+                <select id="editPrefWave"
+                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
+                    <option>
+                        < 1m — Petites et sympas</option>
+                    <option>1m — 1.5m — Ideales</option>
+                    <option selected>1.5m — 2.5m — Bien roulées</option>
+                    <option>2.5m+ — Grosses sessions</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Spot signature</label>
+                <input id="editSigSpot" type="text" placeholder="Ex: Hossegor, La Torche..."
+                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="document.getElementById('editModal').classList.remove('open')"
+                    class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 font-semibold">Annuler</button>
+                <button onclick="saveProfile()"
+                    class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold active:scale-95 transition-transform">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">person</span><span
+                class="text-[10px] font-bold">Profil</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+    </nav>
+
+
+    <script src="js/api.js"></script>
+    <script>
+        let me = null;
+
+        async function init() {
+            try {
+                me = await API.auth.me();
+                document.getElementById('profileName').textContent = me.name || me.email?.split('@')[0] || 'Surfeur';
+                document.getElementById('profileLevel').textContent = levelLabel(me.level);
+                document.getElementById('profileEmail').textContent = me.email || '';
+                document.getElementById('editName').value = me.name || '';
+                document.getElementById('editLevel').value = me.level || 'debutant';
+                if (me.is_pro) document.getElementById('proBadge').classList.remove('hidden');
+                if (me.avatar_url) showAvatar(me.avatar_url);
+            } catch {
+                document.getElementById('profileName').textContent = 'Non connecté';
+                document.getElementById('profileLevel').textContent = '';
+                document.getElementById('profileEmail').textContent = '';
+            }
+
+            // Stats en parallèle
+            loadStats();
+            loadFavorites();
+            swSyncThemeOnLoad();
+            initLangUI();
+        }
+
+
+
+        function levelLabel(lvl) {
+            return { debutant: 'Débutant 🌊', intermediaire: 'Intermédiaire ⚡', avance: 'Avancé 🔥', pro: 'Pro ⭐' }[lvl] || lvl || '—';
+        }
+
+        async function loadStats() {
+            try {
+                const alerts = await API.alerts.list();
+                document.getElementById('statAlerts').textContent = alerts.length;
+            } catch { document.getElementById('statAlerts').textContent = '0'; }
+            try {
+                const journal = await API.journal.list();
+                document.getElementById('statSessions').textContent = journal.length;
+                loadJournalSection(journal);
+            } catch { document.getElementById('statSessions').textContent = '0'; }
+        }
+
+        function loadJournalSection(sessions) {
+            if (!sessions?.length) return;
+            const sec = document.getElementById('sessionsSection');
+            sec.classList.remove('hidden');
+            const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+            document.getElementById('sessionsList').innerHTML = sessions.slice(0, 5).map(s => `
+              <div class="glass p-4 rounded-xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-emerald-400">sports_score</span>
+                  <div>
+                    <p class="font-bold text-sm">${s.spot_name || 'Spot'}</p>
+                    <p class="text-[10px] text-slate-400">${s.date || ''} · ${s.duration_min || '?'}min</p>
+                  </div>
+                </div>
+                <span class="text-yellow-400 text-xs font-bold">${stars(s.rating || 3)}</span>
+              </div>`).join('');
+        }
+
+        async function loadFavorites() {
+            try {
+                const favs = await API.favorites.list();
+                document.getElementById('statFavs').textContent = favs.length;
+                if (favs.length > 0) {
+                    document.getElementById('favsSection').classList.remove('hidden');
+                    document.getElementById('favsList').innerHTML = favs.map(f => `
+        <div class="glass p-4 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#00bad6]">waves</span>
+            <div>
+              <p class="font-bold text-sm">${f.name}</p>
+              <p class="text-xs text-slate-400">${f.location}</p>
+            </div>
+          </div>
+          <a href="spot_detail.html?id=${f.spot_id}" class="text-[#00bad6] text-xs font-bold">Voir</a>
+        </div>`).join('');
+                }
+            } catch { document.getElementById('statFavs').textContent = '0'; }
+        }
+
+        function showAvatar(src) {
+            const wrap = document.getElementById('avatarImg');
+            wrap.innerHTML = `<img src="${src}" class="w-full h-full object-cover" alt="avatar"/>`;
+        }
+
+        async function uploadAvatar(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async ev => {
+                const b64 = ev.target.result;
+                showAvatar(b64);
+                try {
+                    await API.auth.uploadAvatar(b64);
+                    toast('📷 Photo de profil mise à jour !');
+                } catch { toast('Connecte-toi pour changer ta photo', 'err'); }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveProfile() {
+            const name = document.getElementById('editName').value.trim();
+            const level = document.getElementById('editLevel').value;
+            try {
+                await API.auth.updateProfile({ name, level });
+                document.getElementById('profileName').textContent = name || me?.email?.split('@')[0] || 'Surfeur';
+                document.getElementById('profileLevel').textContent = levelLabel(level);
+                document.getElementById('editModal').classList.remove('open');
+                toast('✅ Profil mis à jour !');
+            } catch { toast('Connecte-toi pour modifier le profil', 'err'); }
+        }
+
+        async function signOut() {
+            try {
+                await API.auth.logout();
+                toast('À bientôt ! 🤙');
+                setTimeout(() => { location.href = '/'; }, 1000);
+            } catch { location.href = '/'; }
+        }
+
+        const I18N = {
+            fr: { sessions: 'SESSIONS', favoris: 'FAVORIS', alertes: 'ALERTES', parametres: 'Paramètres', modeSombre: 'Mode Sombre', modeClair: 'Mode Clair', langue: 'Langue', mesAlertes: 'Mes Alertes Houle', modifierProfil: 'Modifier le profil', notifications: 'Notifications Push', deconnexion: 'Se déconnecter', navHome: 'Home', navSpots: 'Spots', navAlertes: 'Alertes', navNews: 'News', navProfil: 'Profil', abonnement: 'Abonnement Pro', nonConnecte: 'Non connecté' },
+            en: { sessions: 'SESSIONS', favoris: 'FAVORITES', alertes: 'ALERTS', parametres: 'Settings', modeSombre: 'Dark Mode', modeClair: 'Light Mode', langue: 'Language', mesAlertes: 'My Swell Alerts', modifierProfil: 'Edit Profile', notifications: 'Push Notifications', deconnexion: 'Sign Out', navHome: 'Home', navSpots: 'Spots', navAlertes: 'Alerts', navNews: 'News', navProfil: 'Profile', abonnement: 'Pro Plan', nonConnecte: 'Not logged in' },
+            es: { sessions: 'SESIONES', favoris: 'FAVORITOS', alertes: 'ALERTAS', parametres: 'Ajustes', modeSombre: 'Modo Oscuro', modeClair: 'Modo Claro', langue: 'Idioma', mesAlertas: 'Mis Alertas de Oleaje', modifierProfil: 'Editar Perfil', notifications: 'Notificaciones Push', deconnexion: 'Cerrar Sesión', navHome: 'Inicio', navSpots: 'Spots', navAlertes: 'Alertas', navNews: 'Noticias', navProfil: 'Perfil', abonnement: 'Plan Pro', nonConnecte: 'Sin sesión' },
+            pt: { sessions: 'SESSÕES', favoris: 'FAVORITOS', alertes: 'ALERTAS', parametres: 'Configurações', modeSombre: 'Modo Escuro', modeClaro: 'Modo Claro', langue: 'Idioma', mesAlertas: 'Minhas Alertas de Ondas', modifierProfil: 'Editar Perfil', notifications: 'Notificações Push', deconnexion: 'Sair', navHome: 'Início', navSpots: 'Spots', navAlertes: 'Alertas', navNews: 'Notícias', navProfil: 'Perfil', abonnement: 'Plano Pro', nonConnecte: 'Sem sessão' }
+        };
+
+        function applyI18n(l) {
+            const t = I18N[l] || I18N.fr;
+            const set = (id, key) => { const el = document.getElementById(id); if (el) el.textContent = t[key]; };
+            // Stats labels
+            document.querySelectorAll('[data-label="sessions"]').forEach(e => e.textContent = t.sessions);
+            document.querySelectorAll('[data-label="favoris"]').forEach(e => e.textContent = t.favoris);
+            document.querySelectorAll('[data-label="alertes"]').forEach(e => e.textContent = t.alertes);
+            // Nav items
+            document.querySelectorAll('[data-label="navHome"]').forEach(e => e.textContent = t.navHome);
+            document.querySelectorAll('[data-label="navSpots"]').forEach(e => e.textContent = t.navSpots);
+            document.querySelectorAll('[data-label="navAlertes"]').forEach(e => e.textContent = t.navAlertes);
+            document.querySelectorAll('[data-label="navNews"]').forEach(e => e.textContent = t.navNews);
+            document.querySelectorAll('[data-label="navProfil"]').forEach(e => e.textContent = t.navProfil);
+            // Theme labels
+            const isLight = document.documentElement.classList.contains('light');
+            const themeLabel = document.getElementById('themeLabel');
+            if (themeLabel) themeLabel.textContent = isLight ? t.modeClair : t.modeSombre;
+        }
+
+        function setLang(l) {
+            ['langFR', 'langEN', 'langES', 'langPT'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.remove('bg-[#00bad6]', 'text-[#080f1a]');
+                el.classList.add('text-[#00bad6]');
+            });
+            const el = document.getElementById('lang' + l.toUpperCase());
+            if (el) { el.classList.add('bg-[#00bad6]', 'text-[#080f1a]'); el.classList.remove('text-[#00bad6]'); }
+            localStorage.setItem('sw_lang', l);
+            document.documentElement.lang = l;
+            applyI18n(l);
+            toast('Langue : ' + l.toUpperCase());
+        }
+
+
+        // Lang sync on load
+        function initLangUI() {
+            const lang = localStorage.getItem('sw_lang') || 'fr';
+            setLang(lang);
+        }
+
+
+        // Fermer modal
+        document.getElementById('editModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('editModal')) document.getElementById('editModal').classList.remove('open');
+        });
+
+        // Push Notifications
+        async function enablePush() {
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                toast('Notifications push non supportées sur ce navigateur', 'err'); return;
+            }
+            try {
+                const keyRes = await fetch('/api/push/vapid-public-key').then(r => r.json());
+                if (keyRes.error) { toast('Push non configuré sur le serveur', 'err'); return; }
+                const perm = await Notification.requestPermission();
+                if (perm !== 'granted') { toast('Permission refusée', 'err'); return; }
+                const reg = await navigator.serviceWorker.ready;
+                const sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(keyRes.publicKey)
+                });
+                await fetch('/api/members/push-subscribe', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subscription: sub })
+                });
+                document.getElementById('pushStatus').textContent = '✅ Actif';
+                document.getElementById('pushStatus').className = 'text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400';
+                toast('🔔 Notifications activées !');
+            } catch (e) { toast('Erreur : ' + e.message, 'err'); }
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = atob(base64);
+            return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+        }
+
+        init();
+    </script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
+</body>
+
+</html>

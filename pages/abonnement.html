@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync Pro — Abonnement</title>
+    <meta name="description" content="SwellSync Pro — Abonnement premium avec alertes houle, prévisions 16 jours et webcams HD.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { fontFamily: { display: ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        :root {
+            --cyan: #00bad6;
+            --emerald: #10b981
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100dvh
+        }
+
+        /* Dark */
+        .dark body {
+            background: #080f1a;
+            color: #f1f5f9
+        }
+
+        .dark .glass {
+            background: rgba(15, 36, 56, .6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, .07)
+        }
+
+        .dark .card-free {
+            background: rgba(15, 36, 56, .5);
+            border: 1px solid rgba(255, 255, 255, .08)
+        }
+
+        .dark .card-pro {
+            background: linear-gradient(135deg, rgba(0, 186, 214, .12), rgba(16, 185, 129, .08));
+            border: 2px solid rgba(0, 186, 214, .4)
+        }
+
+        .dark .divider {
+            border-color: rgba(255, 255, 255, .07)
+        }
+
+        .dark .faq-card {
+            background: rgba(15, 36, 56, .5);
+            border: 1px solid rgba(255, 255, 255, .07)
+        }
+
+        .dark .pill-tab {
+            background: rgba(15, 36, 56, .8);
+            border: 1px solid rgba(0, 186, 214, .15)
+        }
+
+        .dark .pill-tab button.active {
+            background: #00bad6;
+            color: #080f1a
+        }
+
+        .dark .pill-tab button {
+            color: #64748b
+        }
+
+        .dark .chip-feat {
+            background: rgba(0, 186, 214, .1);
+            border: 1px solid rgba(0, 186, 214, .2);
+            color: #00bad6
+        }
+
+        .dark .nav-back {
+            background: rgba(8, 15, 26, .85);
+            border-bottom: 1px solid rgba(0, 186, 214, .1)
+        }
+
+        /* Light */
+        .light body {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            color: #1e293b
+        }
+
+        .light .glass {
+            background: rgba(255, 255, 255, .7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 186, 214, .15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .06)
+        }
+
+        .light .card-free {
+            background: #fff;
+            border: 1px solid #e2eaf4;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .05)
+        }
+
+        .light .card-pro {
+            background: linear-gradient(135deg, rgba(0, 186, 214, .06), rgba(16, 185, 129, .04));
+            border: 2px solid rgba(0, 186, 214, .5)
+        }
+
+        .light .divider {
+            border-color: #e2eaf4
+        }
+
+        .light .faq-card {
+            background: #fff;
+            border: 1px solid #e2eaf4
+        }
+
+        .light .pill-tab {
+            background: #e0ecf4;
+            border: 1px solid #c7dff7
+        }
+
+        .light .pill-tab button.active {
+            background: #00bad6;
+            color: #fff
+        }
+
+        .light .pill-tab button {
+            color: #64748b
+        }
+
+        .light .chip-feat {
+            background: rgba(0, 186, 214, .1);
+            border: 1px solid rgba(0, 186, 214, .25);
+            color: #0099b3
+        }
+
+        .light .nav-back {
+            background: rgba(240, 249, 255, .9);
+            border-bottom: 1px solid #c7dff7
+        }
+
+        /* Shared */
+        .glow {
+            box-shadow: 0 0 40px rgba(0, 186, 214, .25), 0 0 80px rgba(0, 186, 214, .1)
+        }
+
+        .glow-sm {
+            box-shadow: 0 0 16px rgba(0, 186, 214, .3)
+        }
+
+        .btn-pro {
+            background: linear-gradient(135deg, #00bad6, #10b981);
+            color: #080f1a;
+            font-weight: 900;
+            border-radius: 1rem;
+            transition: all .2s
+        }
+
+        .btn-pro:hover {
+            filter: brightness(1.1);
+            transform: scale(1.03)
+        }
+
+        .btn-pro:active {
+            transform: scale(.97)
+        }
+
+        .check {
+            color: var(--cyan)
+        }
+
+        .lock {
+            color: #94a3b8
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-8px)
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 186, 214, .4)
+            }
+
+            70% {
+                box-shadow: 0 0 0 16px rgba(0, 186, 214, 0)
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 186, 214, 0)
+            }
+        }
+
+        @keyframes badge-pop {
+            0% {
+                transform: scale(0) rotate(-10deg)
+            }
+
+            70% {
+                transform: scale(1.1) rotate(2deg)
+            }
+
+            100% {
+                transform: scale(1) rotate(0)
+            }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite
+        }
+
+        .wave-ring {
+            animation: pulse-ring 2s ease-out infinite
+        }
+
+        .badge-pop {
+            animation: badge-pop .5s cubic-bezier(.34, 1.56, .64, 1) both
+        }
+
+        .wave-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 160px;
+            overflow: hidden;
+            pointer-events: none
+        }
+
+        .price-big {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 900;
+            line-height: 1
+        }
+
+        .toggle-slide {
+            transition: all .3s cubic-bezier(.34, 1.56, .64, 1)
+        }
+    </style>
+
+    <style>
+      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
+      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
+      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
+      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
+      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
+      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
+      .light [class*="text-white"] { color: #0f172a !important; }
+      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
+      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
+      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
+      .light .section-label { color: #334155 !important; }
+      .light .setting-row:hover { background: #e2e8f0 !important; }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="pb-20">
+
+    <!-- Nav back -->
+    <nav class="nav-back sticky top-0 z-30 backdrop-blur-md px-4 py-3 flex items-center gap-3">
+        <a onclick="history.back()"
+            class="flex size-9 items-center justify-center rounded-full dark:bg-white/5 bg-black/5 cursor-pointer hover:bg-[#00bad6]/10 transition-colors active:scale-95 transition-transform">
+            <span class="material-symbols-outlined text-[#00bad6]">arrow_back</span>
+        </a>
+        <span class="font-bold text-sm">SwellSync Pro</span>
+        <div class="ml-auto">
+            <a href="home.html" class="text-xs text-[#00bad6] font-bold hover:underline">Retour à l'app</a>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="relative px-4 pt-12 pb-20 text-center overflow-hidden max-w-2xl mx-auto">
+        <!-- Badge animé -->
+        <div
+            class="badge-pop inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-[#00bad6]/10 border border-[#00bad6]/30 text-[#00bad6] text-xs font-black uppercase tracking-widest active:scale-95 transition-transform">
+            <span class="wave-ring w-2 h-2 rounded-full bg-[#00bad6] inline-block active:scale-95 transition-transform"></span>
+            Abonnement Pro
+        </div>
+
+        <!-- Icône centrale -->
+        <div
+            class="float mx-auto mb-8 w-24 h-24 rounded-[2rem] bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center shadow-2xl glow">
+            <span class="material-symbols-outlined text-5xl text-[#080f1a]"
+                style="font-variation-settings:'FILL' 1">waves</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+            Surfe au niveau<br /><span
+                class="bg-gradient-to-r from-[#00bad6] to-emerald-400 bg-clip-text text-transparent">supérieur</span>
+        </h1>
+        <p class="dark:text-slate-400 text-slate-500 text-base max-w-sm mx-auto leading-relaxed">
+            Alertes instantanées, prévisions 16 jours, accès à tous les 60 spots — sans compromis.
+        </p>
+    </section>
+
+    <!-- ═══ TOGGLE MENSUEL / ANNUEL ═══ -->
+    <div class="flex justify-center mb-10">
+        <div class="pill-tab flex rounded-2xl p-1 gap-1">
+            <button id="tabMonthly" onclick="setPlan('monthly')"
+                class="active px-5 py-2 rounded-xl text-sm font-bold transition-all">Mensuel</button>
+            <button id="tabYearly" onclick="setPlan('yearly')"
+                class="px-5 py-2 rounded-xl text-sm font-bold transition-all">
+                Annuel
+                <span
+                    class="ml-1.5 bg-emerald-400/20 text-emerald-400 text-[10px] font-black px-1.5 py-0.5 rounded-full">−40%</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ═══ CARDS PRICING ═══ -->
+    <div class="max-w-2xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 gap-5 mb-12">
+
+        <!-- FREE -->
+        <div class="card-free rounded-3xl p-6 flex flex-col gap-4">
+            <div>
+                <p class="text-xs dark:text-slate-500 text-slate-400 font-bold uppercase tracking-widest mb-1">Gratuit
+                </p>
+                <div class="flex items-baseline gap-1">
+                    <span class="price-big">0€</span>
+                </div>
+                <p class="text-xs dark:text-slate-500 text-slate-400 mt-1">Pour toujours</p>
+            </div>
+            <ul class="space-y-2.5 flex-1 text-sm">
+                <li class="flex items-center gap-2"><span
+                        class="material-symbols-outlined check text-[18px]">check_circle</span>60 spots avec conditions
+                </li>
+                <li class="flex items-center gap-2"><span
+                        class="material-symbols-outlined check text-[18px]">check_circle</span>Prévisions 24h & 7 jours
+                </li>
+                <li class="flex items-center gap-2"><span
+                        class="material-symbols-outlined check text-[18px]">check_circle</span>Favoris & journal de
+                    sessions</li>
+                <li class="flex items-center gap-2 opacity-40"><span
+                        class="material-symbols-outlined lock text-[18px]">lock</span>Alertes houle</li>
+                <li class="flex items-center gap-2 opacity-40"><span
+                        class="material-symbols-outlined lock text-[18px]">lock</span>Prévisions 16 jours</li>
+                <li class="flex items-center gap-2 opacity-40"><span
+                        class="material-symbols-outlined lock text-[18px]">lock</span>Webcams HD</li>
+            </ul>
+            <a href="home.html"
+                class="block w-full py-3.5 rounded-2xl text-center font-bold dark:border dark:border-white/10 dark:hover:bg-white/5 bg-slate-100 hover:bg-slate-200 transition-colors text-sm">
+                Continuer gratuitement
+            </a>
+        </div>
+
+        <!-- PRO -->
+        <div class="card-pro rounded-3xl p-6 flex flex-col gap-4 relative overflow-hidden">
+            <!-- Badge populaire -->
+            <div
+                class="absolute top-4 right-4 bg-gradient-to-r from-[#00bad6] to-emerald-400 text-[#080f1a] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                Populaire
+            </div>
+
+            <div>
+                <p class="text-xs text-[#00bad6] font-bold uppercase tracking-widest mb-1">Pro</p>
+                <div class="flex items-baseline gap-1">
+                    <span id="proPrice"
+                        class="price-big bg-gradient-to-r from-[#00bad6] to-emerald-400 bg-clip-text text-transparent">4,99€</span>
+                    <span class="dark:text-slate-400 text-slate-500 text-sm font-bold" id="proPeriod">/mois</span>
+                </div>
+                <p id="proBilledAs" class="text-xs text-emerald-400 mt-1 font-semibold h-4"></p>
+            </div>
+
+            <ul class="space-y-2.5 flex-1 text-sm">
+                <li class="flex items-center gap-2"><span
+                        class="material-symbols-outlined check text-[18px]">check_circle</span>Tout le plan Gratuit</li>
+                <li class="flex items-center gap-2 font-semibold"><span
+                        class="material-symbols-outlined text-emerald-400 text-[18px]">notifications_active</span>Alertes
+                    houle illimitées</li>
+                <li class="flex items-center gap-2 font-semibold"><span
+                        class="material-symbols-outlined text-emerald-400 text-[18px]">calendar_month</span>Prévisions
+                    <b>16 jours</b>
+                </li>
+                <li class="flex items-center gap-2 font-semibold"><span
+                        class="material-symbols-outlined text-emerald-400 text-[18px]">videocam</span>Webcams HD temps
+                    réel</li>
+                <li class="flex items-center gap-2 font-semibold"><span
+                        class="material-symbols-outlined text-emerald-400 text-[18px]">bar_chart</span>Stats sessions
+                    avancées</li>
+                <li class="flex items-center gap-2 font-semibold"><span
+                        class="material-symbols-outlined text-emerald-400 text-[18px]">support_agent</span>Support
+                    prioritaire</li>
+            </ul>
+
+            <button onclick="subscribe()" class="btn-pro w-full py-4 rounded-2xl text-center text-sm glow-sm">
+                <span id="ctaLabel">Commencer — 4,99€/mois</span>
+            </button>
+            <p class="text-center text-xs dark:text-slate-500 text-slate-400">Résiliable à tout moment · Aucun
+                engagement</p>
+        </div>
+    </div>
+
+    <!-- ═══ FEATURES GRID ═══ -->
+    <section class="max-w-2xl mx-auto px-4 mb-14">
+        <h2 class="text-2xl font-black text-center mb-8">Tout ce que tu débloques</h2>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="glass rounded-2xl p-4 flex gap-3 items-start">
+                <span class="material-symbols-outlined text-[#00bad6] text-2xl mt-0.5"
+                    style="font-variation-settings:'FILL' 1">notifications_active</span>
+                <div>
+                    <p class="font-bold text-sm">Alertes Houle</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500 mt-0.5">Notifié dès que tes spots atteignent
+                        tes critères</p>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-4 flex gap-3 items-start">
+                <span class="material-symbols-outlined text-emerald-400 text-2xl mt-0.5"
+                    style="font-variation-settings:'FILL' 1">calendar_month</span>
+                <div>
+                    <p class="font-bold text-sm">16 Jours de prévisions</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500 mt-0.5">Planifie tes sessions 2 semaines à
+                        l'avance</p>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-4 flex gap-3 items-start">
+                <span class="material-symbols-outlined text-[#00bad6] text-2xl mt-0.5"
+                    style="font-variation-settings:'FILL' 1">videocam</span>
+                <div>
+                    <p class="font-bold text-sm">Webcams HD</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500 mt-0.5">Vérifie les conditions en direct sur
+                        les spots</p>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-4 flex gap-3 items-start">
+                <span class="material-symbols-outlined text-emerald-400 text-2xl mt-0.5"
+                    style="font-variation-settings:'FILL' 1">bar_chart</span>
+                <div>
+                    <p class="font-bold text-sm">Stats avancées</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500 mt-0.5">Analyse tes sessions, progression,
+                        spots préférés</p>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-4 flex gap-3 items-start">
+                <span class="material-symbols-outlined text-[#00bad6] text-2xl mt-0.5"
+                    style="font-variation-settings:'FILL' 1">explore</span>
+                <div>
+                    <p class="font-bold text-sm">Spots exclusifs</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500 mt-0.5">Accès aux spots premium et secrets
+                        locaux</p>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-4 flex gap-3 items-start">
+                <span class="material-symbols-outlined text-emerald-400 text-2xl mt-0.5"
+                    style="font-variation-settings:'FILL' 1">support_agent</span>
+                <div>
+                    <p class="font-bold text-sm">Support prioritaire</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500 mt-0.5">Réponse en moins de 24h par l'équipe
+                        SwellSync</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ TÉMOIGNAGES ═══ -->
+    <section class="max-w-2xl mx-auto px-4 mb-14">
+        <h2 class="text-2xl font-black text-center mb-8">Ils surfent avec SwellSync Pro</h2>
+        <div class="space-y-4">
+            <div class="glass rounded-2xl p-5">
+                <div class="flex items-center gap-3 mb-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center font-black text-[#080f1a]">
+                        T</div>
+                    <div>
+                        <p class="font-bold text-sm">Thomas R.</p>
+                        <p class="text-xs dark:text-slate-400 text-slate-500">Hossegor, Surfer avancé</p>
+                    </div>
+                    <div class="ml-auto text-yellow-400 text-sm">★★★★★</div>
+                </div>
+                <p class="text-sm dark:text-slate-300 text-slate-600 leading-relaxed">"Les alertes houle m'ont sauvé
+                    plusieurs sessions cette saison. Dès que La Gravière dépasse 2m avec une bonne période, je reçois
+                    une notif. Incontournable."</p>
+            </div>
+            <div class="glass rounded-2xl p-5">
+                <div class="flex items-center gap-3 mb-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center font-black text-[#080f1a]">
+                        S</div>
+                    <div>
+                        <p class="font-bold text-sm">Sophie M.</p>
+                        <p class="text-xs dark:text-slate-400 text-slate-500">Brest, Intermédiaire</p>
+                    </div>
+                    <div class="ml-auto text-yellow-400 text-sm">★★★★★</div>
+                </div>
+                <p class="text-sm dark:text-slate-300 text-slate-600 leading-relaxed">"Les prévisions 16 jours m'ont
+                    permis d'organiser mes vacances surf en Espagne parfaitement. J'ai surfé des conditions idéales
+                    toute la semaine !"</p>
+            </div>
+            <div class="glass rounded-2xl p-5">
+                <div class="flex items-center gap-3 mb-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-[#00bad6] flex items-center justify-center font-black text-[#080f1a]">
+                        M</div>
+                    <div>
+                        <p class="font-bold text-sm">Marc L.</p>
+                        <p class="text-xs dark:text-slate-400 text-slate-500">Lacanau, Compétiteur</p>
+                    </div>
+                    <div class="ml-auto text-yellow-400 text-sm">★★★★★</div>
+                </div>
+                <p class="text-sm dark:text-slate-300 text-slate-600 leading-relaxed">"4,99€/mois pour ne jamais rater
+                    une session épique ? C'est le meilleur investissement surf que j'ai fait depuis l'achat de ma
+                    planche."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FAQ ═══ -->
+    <section class="max-w-2xl mx-auto px-4 mb-16">
+        <h2 class="text-2xl font-black text-center mb-8">Questions fréquentes</h2>
+        <div class="space-y-3">
+            <details class="faq-card rounded-2xl p-5 cursor-pointer group">
+                <summary class="font-bold flex justify-between items-center list-none">
+                    Puis-je annuler à tout moment ?
+                    <span
+                        class="material-symbols-outlined text-[#00bad6] text-xl group-open:rotate-180 transition-transform">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm dark:text-slate-400 text-slate-500 leading-relaxed">Oui, totalement. Aucun
+                    engagement. Tu peux annuler depuis les paramètres de ton profil à n'importe quel moment, sans frais
+                    ni pénalité.</p>
+            </details>
+            <details class="faq-card rounded-2xl p-5 cursor-pointer group">
+                <summary class="font-bold flex justify-between items-center list-none">
+                    Comment fonctionnent les alertes houle ?
+                    <span
+                        class="material-symbols-outlined text-[#00bad6] text-xl group-open:rotate-180 transition-transform">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm dark:text-slate-400 text-slate-500 leading-relaxed">Tu définis tes critères
+                    (hauteur minimale, période, spot) et on t'envoie une notification push dès que les conditions
+                    correspondent. Tu peux créer autant d'alertes que tu veux.</p>
+            </details>
+            <details class="faq-card rounded-2xl p-5 cursor-pointer group">
+                <summary class="font-bold flex justify-between items-center list-none">
+                    L'abonnement annuel, c'est combien exactement ?
+                    <span
+                        class="material-symbols-outlined text-[#00bad6] text-xl group-open:rotate-180 transition-transform">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm dark:text-slate-400 text-slate-500 leading-relaxed">35,88€/an au lieu de 59,88€ —
+                    soit 2,99€/mois. Tu économises 24€ par an, l'équivalent de 5 cafés sur la plage.</p>
+            </details>
+            <details class="faq-card rounded-2xl p-5 cursor-pointer group">
+                <summary class="font-bold flex justify-between items-center list-none">
+                    Les prévisions 16 jours, sont-elles fiables ?
+                    <span
+                        class="material-symbols-outlined text-[#00bad6] text-xl group-open:rotate-180 transition-transform">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm dark:text-slate-400 text-slate-500 leading-relaxed">Les prévisions à 7 jours ont
+                    une précision très haute. Au-delà, les tendances sont fiables à 70-80%. Parfait pour planifier un
+                    voyage, moins pour optimiser une session précise.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- ═══ CTA FINAL ═══ -->
+    <section class="max-w-md mx-auto px-4 mb-8 text-center">
+        <div class="glass rounded-3xl p-8 space-y-5">
+            <div
+                class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto glow">
+                <span class="material-symbols-outlined text-3xl text-[#080f1a]"
+                    style="font-variation-settings:'FILL' 1">waves</span>
+            </div>
+            <h2 class="text-2xl font-black">Prêt à surfer comme un Pro ?</h2>
+            <p class="text-sm dark:text-slate-400 text-slate-500">Rejoins des milliers de surfeurs qui ne ratent plus
+                jamais une session grâce à SwellSync.</p>
+            <button onclick="subscribe()" class="btn-pro w-full py-4 rounded-2xl text-center font-black text-base glow">
+                <span id="ctaLabel2">Commencer — 4,99€/mois</span>
+            </button>
+            <p class="text-xs dark:text-slate-500 text-slate-400">🔒 Paiement sécurisé · Résiliable à tout moment</p>
+        </div>
+    </section>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person</span><span
+                class="text-[10px] font-bold">Profil</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+    </nav>
+
+    <script>
+        let plan = 'monthly';
+
+        function setPlan(p) {
+            plan = p;
+            const monthly = p === 'monthly';
+            document.getElementById('tabMonthly').classList.toggle('active', monthly);
+            document.getElementById('tabYearly').classList.toggle('active', !monthly);
+
+            const price = monthly ? '4,99€' : '2,99€';
+            const period = monthly ? '/mois' : '/mois';
+            const billed = monthly ? '' : 'Facturé 35,88€/an — Économise 40%';
+            const cta = monthly ? 'Commencer — 4,99€/mois' : 'Commencer — 35,88€/an';
+
+            // Animate price change
+            const priceEl = document.getElementById('proPrice');
+            priceEl.style.transition = 'transform .2s,opacity .2s';
+            priceEl.style.transform = 'scale(.8)';
+            priceEl.style.opacity = '0';
+            setTimeout(() => {
+                priceEl.textContent = price;
+                priceEl.style.transform = 'scale(1)';
+                priceEl.style.opacity = '1';
+            }, 150);
+
+            document.getElementById('proPeriod').textContent = period;
+            document.getElementById('proBilledAs').textContent = billed;
+            document.getElementById('ctaLabel').textContent = cta;
+            document.getElementById('ctaLabel2').textContent = cta;
+        }
+
+        function subscribe() {
+            const btn = document.querySelectorAll('[onclick="subscribe()"]');
+            btn.forEach(b => {
+                b.disabled = true;
+                b.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Redirection…';
+            });
+            setTimeout(() => {
+                // Show a nice in-page modal instead of alert()
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
+                modal.innerHTML = `
+                    <div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4">
+                            <span class="material-symbols-outlined text-3xl text-[#080f1a]" style="font-variation-settings:'FILL' 1">rocket_launch</span>
+                        </div>
+                        <h3 class="text-xl font-black mb-2">Bientôt disponible ! 🚀</h3>
+                        <p class="text-sm text-slate-400 mb-4">L'abonnement SwellSync Pro sera disponible très prochainement. Tu seras parmi les premiers informés !</p>
+                        <p class="text-xs text-[#00bad6] font-bold mb-4">📧 pro@swellsync.app</p>
+                        <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris !</button>
+                    </div>`;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+                btn.forEach(b => {
+                    b.disabled = false;
+                    b.innerHTML = `<span id="ctaLabel">${plan === 'monthly' ? 'Commencer — 4,99€/mois' : 'Commencer — 35,88€/an'}</span>`;
+                });
+            }, 1200);
+        }
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+<script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

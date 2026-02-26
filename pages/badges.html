@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SwellSync — Badges & Cosmétiques</title>
+    <meta name="description"
+        content="SwellSync Badges — Collectez et équipez des badges cosmétiques pour votre profil.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #080f1a;
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .12);
+        }
+
+        .badge-card {
+            background: #0f2438;
+            border: 2px solid rgba(255, 255, 255, .06);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            transition: all .2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .badge-card:hover {
+            border-color: rgba(0, 186, 214, .3);
+            transform: translateY(-2px);
+        }
+
+        .badge-card.equipped {
+            border-color: #00bad6;
+            background: rgba(0, 186, 214, .08);
+        }
+
+        .badge-card.equipped::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 11px;
+            font-weight: 900;
+            color: #00bad6;
+        }
+
+        .badge-card.pro-locked {
+            opacity: .5;
+        }
+
+        .badge-card.pro-locked::before {
+            content: '⭐';
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            font-size: 10px;
+        }
+
+        .badge-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+            line-height: 1;
+        }
+
+        .badge-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .badge-desc {
+            font-size: 9px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .equip-btn {
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 8px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all .15s;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pop-in {
+            animation: popIn .3s ease both;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: all .2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #00bad6;
+            border-bottom-color: #00bad6;
+        }
+
+        .tab-btn:not(.active) {
+            color: #64748b;
+        }
+    </style>
+    <script src="js/theme.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="min-h-screen pb-10">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        <a href="javascript:history.back()"
+            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        </a>
+        <h1 class="font-black text-base flex-1">Badges & Cosmétiques</h1>
+        <div class="text-xs bg-amber-400/20 text-amber-400 font-bold px-2.5 py-1 rounded-full">
+            <span id="equippedCount">0</span> équipé(s)
+        </div>
+    </header>
+
+    <!-- Current Badge -->
+    <div class="px-4 pt-4 pb-2">
+        <div class="card rounded-2xl p-4 flex items-center gap-4">
+            <div id="currentBadgeIcon"
+                class="text-4xl w-14 h-14 flex items-center justify-center bg-[#00bad6]/10 rounded-xl active:scale-95 transition-transform">
+                🏄</div>
+            <div class="flex-1">
+                <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">Badge principal</p>
+                <p id="currentBadgeName" class="font-black text-sm mt-0.5">🤙 Surfeur Libre</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Visible sur ton profil et tes posts</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex border-b border-white/5 mb-4 mx-4">
+        <button class="tab-btn active" onclick="switchCategory('region', this)">Régions</button>
+        <button class="tab-btn" onclick="switchCategory('style', this)">Style</button>
+        <button class="tab-btn" onclick="switchCategory('achievement', this)">Succès</button>
+        <button class="tab-btn" onclick="switchCategory('pro', this)">Pro ⭐</button>
+    </div>
+
+    <!-- Badges grid -->
+    <div id="badgesGrid" class="px-4 grid grid-cols-3 gap-3"></div>
+
+    <script>
+        const BADGES = {
+            region: [
+                { id: 'libre', icon: '/assets/images/swellsync_logo.png', useImg: true, name: 'Surfeur Libre', desc: 'Badge de base', free: true },
+                { id: 'basque', icon: '/assets/images/badges/basque.png', useImg: true, name: 'Pays Basque', desc: 'La côte mythique', free: true },
+                { id: 'bretagne', icon: '/assets/images/badges/bretagne.png', useImg: true, name: 'Bretagne', desc: 'Les lames armoricaines', free: true },
+                { id: 'landes', icon: '/assets/images/badges/landes.png', useImg: true, name: 'Les Landes', desc: 'Côte Landaise', free: true },
+                { id: 'reunion', icon: '/assets/images/badges/reunion.png', useImg: true, name: 'La Réunion', desc: 'Île intense', free: true },
+                { id: 'vendee', icon: '🌊', name: 'Vendée', desc: 'La Côte de Lumière', free: true },
+                { id: 'normandie', icon: '⚔️', name: 'Normandie', desc: 'Spots secrets du nord', free: true },
+                { id: 'guadeloupe', icon: '/assets/images/badges/guadeloupe.png', useImg: true, name: 'Guadeloupe', desc: 'Antilles françaises', free: true },
+                { id: 'world', icon: '🗺️', name: 'World Surfer', desc: 'Surfer partout', free: false, pro: true },
+            ],
+            style: [
+                { id: 'shortboard', icon: '/assets/images/badges/shortboard.png', useImg: true, name: 'Shortboard', desc: 'Performance pure', free: true },
+                { id: 'longboard', icon: '🎿', name: 'Longboard', desc: 'Style soul', free: true },
+                { id: 'bodyboard', icon: '🟦', name: 'Bodyboard', desc: 'Caresser les tubes', free: true },
+                { id: 'windsurf', icon: '🏄‍♂️', name: 'Windsurf', desc: 'Vent + vagues', free: true },
+                { id: 'sup', icon: '🚣', name: 'SUP', desc: 'Stand-up paddle', free: true },
+                { id: 'foil', icon: '✈️', name: 'Foil', desc: 'Vol au-dessus des vagues', free: false, pro: true },
+            ],
+            achievement: [
+                { id: 'earlybird', icon: '🌅', name: 'Early Bird', desc: '10 sessions avant 8h', free: true },
+                { id: 'tuberider', icon: '🌀', name: 'Tube Rider', desc: '5 tubes enregistrés', free: true },
+                { id: 'kook', icon: '🪝', name: 'OG Member', desc: 'Membre depuis le beta', free: true },
+                { id: '100sessions', icon: '💯', name: '100 Sessions', desc: 'Centurion des vagues', free: false, pro: true },
+                { id: 'legend', icon: '🏆', name: 'Légendaire', desc: 'Top 1% communauté', free: false, pro: true },
+                { id: 'addict', icon: '🔥', name: 'Addict', desc: '30 jours de suite', free: false, pro: true },
+            ],
+            pro: [
+                { id: 'prostar', icon: '/assets/images/badges/prostar.png', useImg: true, name: 'Pro Star', desc: 'Badge Pro officiel', free: false, pro: true },
+                { id: 'elite', icon: '💎', name: 'Elite', desc: 'Membre Elite SwellSync', free: false, pro: true },
+                { id: 'shaper', icon: '🔨', name: 'Shaper', desc: 'Façonne les vagues', free: false, pro: true },
+                { id: 'ambassador', icon: '🌐', name: 'Ambassadeur', desc: 'Official SwellSync Ambassador', free: false, pro: true },
+                { id: 'darkwave', icon: '🖤', name: 'Dark Wave', desc: 'Badge exclusif nuit', free: false, pro: true },
+                { id: 'golden', icon: '✨', name: 'Golden State', desc: 'Badge or exclusif', free: false, pro: true },
+            ]
+        };
+
+        let equipped = JSON.parse(localStorage.getItem('sw_badges') || '["libre"]');
+        let isPro = false; // Will check via API
+        let currentCat = 'region';
+
+        // Check pro
+        fetch('/api/auth/me', { credentials: 'include' })
+            .then(r => r.json())
+            .then(m => { isPro = (m.member || m)?.plan === 'pro' || (m.member || m)?.isPro; renderGrid(); })
+            .catch(() => renderGrid());
+
+        function switchCategory(cat, btn) {
+            currentCat = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGrid();
+        }
+
+        const BADGE_IMGS = {
+            'basque': '/assets/images/badges/basque.png',
+            'bretagne': '/assets/images/badges/bretagne.png',
+            'landes': '/assets/images/badges/landes.png',
+            'reunion': '/assets/images/badges/reunion.png',
+            'guadeloupe': '/assets/images/badges/guadeloupe.png',
+            'shortboard': '/assets/images/badges/shortboard.png',
+            'elite': '/assets/images/badges/elite.png',
+            'prostar': '/assets/images/badges/prostar.png',
+        };
+
+        function renderGrid() {
+            const badges = BADGES[currentCat];
+            const grid = document.getElementById('badgesGrid');
+            grid.innerHTML = badges.map((b, i) => {
+                const isEquipped = equipped.includes(b.id);
+                const proLocked = b.pro && !isPro;
+                const hasImg = BADGE_IMGS[b.id];
+                const iconHtml = hasImg
+                    ? `<img src="${BADGE_IMGS[b.id]}" alt="${b.name}" style="width:48px;height:48px;border-radius:50%;object-fit:cover">`
+                    : `<span class="badge-icon">${b.icon}</span>`;
+                return `<div class="badge-card pop-in ${isEquipped ? 'equipped' : ''} ${proLocked ? 'pro-locked' : ''}"
+            style="animation-delay:${i * .04}s"
+            onclick="${proLocked ? "showProGate()" : `equipBadge('${b.id}','${b.icon}','${b.name}')`}">
+            ${iconHtml}
+            <div class="badge-name">${b.name}</div>
+            <div class="badge-desc">${b.desc}</div>
+            <div class="equip-btn ${isEquipped ? 'bg-[#00bad6] text-[#080f1a]' : 'bg-white/8 text-slate-400'} active:scale-95 transition-transform">
+                ${isEquipped ? '✓ Équipé' : proLocked ? '⭐ Pro' : 'Équiper'}
+            </div>
+        </div>`;
+            }).join('');
+            updateEquippedCount();
+        }
+
+
+        function equipBadge(id, icon, name) {
+            const idx = equipped.indexOf(id);
+            if (idx > -1) {
+                // Si on a cliqué sur un badge déjà équipé, on le déséquipe
+                // Sauf si c'est le badge 'libre' (badge de base par défaut)
+                if (id !== 'libre') {
+                    equipped.splice(idx, 1);
+                    localStorage.setItem('sw_badges', JSON.stringify(equipped));
+                    // Si on déséquipe le badge principal actuel, on remet le 'libre'
+                    const currentMain = JSON.parse(localStorage.getItem('sw_main_badge') || '{}');
+                    if (currentMain.id === id) {
+                        localStorage.setItem('sw_main_badge', JSON.stringify({ id: 'libre', icon: '/assets/images/swellsync_logo.png', useImg: true, name: 'Surfeur Libre' }));
+                        document.getElementById('currentBadgeIcon').textContent = '🤙';
+                        document.getElementById('currentBadgeName').textContent = '🤙 Surfeur Libre';
+                    }
+                    renderGrid();
+                    return;
+                }
+            } else {
+                equipped.push(id);
+            }
+
+            // Set as main badge
+            localStorage.setItem('sw_badges', JSON.stringify(equipped));
+            localStorage.setItem('sw_main_badge', JSON.stringify({ id, icon, name }));
+            document.getElementById('currentBadgeIcon').textContent = icon;
+            document.getElementById('currentBadgeName').textContent = `${icon} ${name}`;
+            renderGrid();
+
+            // Animate 
+            const el = document.getElementById('currentBadgeIcon');
+            el.style.transform = 'scale(1.3)';
+            setTimeout(() => { el.style.transition = 'transform .2s'; el.style.transform = 'scale(1)'; }, 10);
+        }
+
+        function updateEquippedCount() {
+            document.getElementById('equippedCount').textContent = equipped.length;
+        }
+
+        function showProGate() {
+            showConfirmModal('⭐ Badge Pro', 'Ce badge est réservé aux membres SwellSync Pro. Découvre tous les avantages Pro !', () => {
+                window.location.href = 'abonnement.html';
+            }, { confirmText: 'Voir les offres Pro', cancelText: 'Plus tard' });
+        }
+
+        // Init main badge display
+        const mainBadge = JSON.parse(localStorage.getItem('sw_main_badge') || '{"id":"libre","icon":"🤙","name":"Surfeur Libre"}');
+        document.getElementById('currentBadgeIcon').textContent = mainBadge.icon;
+        document.getElementById('currentBadgeName').textContent = `${mainBadge.icon} ${mainBadge.name}`;
+
+        renderGrid();
+    </script>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person</span><span
+                class="text-[10px] font-bold">Profil</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+    </nav>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+    <script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

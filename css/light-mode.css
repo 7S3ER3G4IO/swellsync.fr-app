@@ -1,0 +1,110 @@
+/**
+ * SwellSync — Light Mode CSS
+ * Appliqué quand <html class="light"> est présent via le toggle 🌙/☀️
+ * Variables : remplacent les tons sombres par des tons clairs
+ */
+
+/* ─── Transitions globales ─────────────────────────────────── */
+html.light,
+html.light body,
+html.light .glass,
+html.light header,
+html.light section,
+html.light .card,
+html.light nav {
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ─── Fond et texte global ───────────────────────────────────── */
+html.light body {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+/* ─── Navbar ─────────────────────────────────────────────────── */
+html.light header nav,
+html.light #main-nav nav {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(0, 186, 214, 0.15) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+html.light .nav-link {
+    color: #334155 !important;
+}
+html.light .nav-link:hover {
+    color: #00bad6 !important;
+}
+
+/* ─── Glass / Cards ──────────────────────────────────────────── */
+html.light .glass {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    backdrop-filter: blur(16px);
+}
+
+html.light .card,
+html.light .journal-card,
+html.light .alert-card {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    color: #0f172a !important;
+}
+
+/* ─── Textes ─────────────────────────────────────────────────── */
+html.light .text-white { color: #0f172a !important; }
+html.light .text-slate-400 { color: #64748b !important; }
+html.light .text-slate-300 { color: #475569 !important; }
+html.light .text-slate-500 { color: #64748b !important; }
+html.light .text-slate-600 { color: #475569 !important; }
+
+/* ─── Couleur primaire : garde le cyan ───────────────────────── */
+html.light .text-primary { color: #0099b8 !important; }
+html.light .bg-primary { background: #00bad6 !important; }
+html.light .border-primary { border-color: #00bad6 !important; }
+
+/* ─── Inputs & selects ───────────────────────────────────────── */
+html.light select,
+html.light input[type="text"],
+html.light input[type="email"],
+html.light input[type="number"],
+html.light input[type="date"],
+html.light textarea {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+    color: #0f172a !important;
+}
+
+/* ─── Segments hero/hero-gradient ───────────────────────────── */
+html.light section[class*="bg-background-dark"],
+html.light section.bg-background-dark {
+    background: #e8f4f8 !important;
+}
+
+/* ─── Chatbot ────────────────────────────────────────────────── */
+html.light #swell-chat-container {
+    background: rgba(255,255,255,0.95) !important;
+    border-color: rgba(0,186,214,0.3) !important;
+}
+
+html.light #swell-chat-messages .user-msg {
+    background: #00bad6 !important;
+    color: #fff !important;
+}
+
+html.light #swell-chat-messages .bot-msg {
+    background: rgba(0,0,0,0.06) !important;
+    color: #0f172a !important;
+}
+
+/* ─── Bouton toggle navbar (light mode actif) ────────────────── */
+html.light #theme-toggle-btn {
+    background: rgba(0, 186, 214, 0.12) !important;
+    border-color: rgba(0, 186, 214, 0.3) !important;
+}
+
+/* ─── Stat pills ─────────────────────────────────────────────── */
+html.light .stat-pill {
+    background: rgba(0,186,214,0.08) !important;
+    border-color: rgba(0,186,214,0.18) !important;
+}

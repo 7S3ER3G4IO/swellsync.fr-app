@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SwellSync | Premium Surf Forecasting</title>
+
+    <!-- TailwindCSS pour la DA demandée -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00bad6",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#0f2123",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Meta-Tags Web App & PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f2123">
+
+    <!-- Optimisations Mobile pures Apple -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SwellSync">
+    <link rel="apple-touch-icon" href="assets/images/swellsync_icon.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/images/swellsync_icon.svg">
+    <link rel="shortcut icon" href="assets/images/swellsync_icon.svg">
+
+    <!-- Nos styles personnels (Pour les Toasts Custom et variables) -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/light-mode.css">
+    <link rel="stylesheet" href="css/mobile.css">
+
+    <!-- FontAwesome pour les logos de marques -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Leaflet JS & CSS pour la carte interactive -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- Librairies Officielles d'Authentification (Apple / Google) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script type="text/javascript"
+        src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
+    <!-- Leaflet MarkerCluster CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" crossorigin=""></script>
+
+
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: var(--bg-dark);
+            /* Fallback */
+        }
+
+        .glass {
+            background: rgba(15, 33, 35, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to right, rgba(15, 33, 35, 0.9) 0%, rgba(15, 33, 35, 0.4) 50%, rgba(15, 33, 35, 0.1) 100%);
+        }
+
+        .glow-button {
+            box-shadow: 0 0 20px rgba(0, 186, 214, 0.4);
+        }
+
+        /* Styles spécifiques à la carte Leaflet Dark/Glass */
+        .leaflet-container {
+            background-color: var(--background-dark);
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .leaflet-popup-content-wrapper,
+        .leaflet-popup-tip {
+            background: rgba(15, 33, 35, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .leaflet-popup-content {
+            margin: 16px;
+        }
+
+        /* MarkerCluster Custom Theme */
+        .marker-cluster-small,
+        .marker-cluster-medium,
+        .marker-cluster-large {
+            background-color: rgba(0, 186, 214, 0.4);
+        }
+
+        .marker-cluster-small div,
+        .marker-cluster-medium div,
+        .marker-cluster-large div {
+            background-color: #00bad6;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 800;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 186, 214, 0.8);
+        }
+    </style>
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://swellsync.surf/cotes.html">
+    <meta property="og:title" content="SwellSync | Carte des Spots Surf">
+    <meta property="og:description"
+        content="Explorez la carte interactive de plus de 60 spots surf français. Conditions live, webcams, marées.">
+    <meta property="og:image" content="https://swellsync.surf/assets/images/swellsync_og.jpg">
+    <meta property="og:site_name" content="SwellSync">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SwellSync | Carte des Spots Surf">
+    <meta name="twitter:description"
+        content="Explorez la carte interactive de plus de 60 spots surf français. Conditions live, webcams, marées.">
+    <meta name="twitter:image" content="https://swellsync.surf/assets/images/swellsync_og.jpg">
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen w-full flex flex-col">
+        <!-- Background Image & Overlay -->
+        <div class="absolute top-0 left-0 right-0 h-screen z-0">
+            <img alt="Surfer in a golden hour tube" class="w-full h-full object-cover"
+                src="assets/images/hero-home-new.jpg" / loading="lazy" decoding="async">
+            <div class="absolute inset-0 hero-gradient z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent z-10">
+            </div>
+        </div>
+        <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
+            <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 py-3 my-3 mx-4 lg:mx-auto rounded-full" style="background: rgba(7,15,16,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06);">
+                <!-- Left: Logo -->
+                <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
+                    <div class="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center border border-primary/25">
+                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync" class="w-5 h-5 object-contain" style="filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(2222%) hue-rotate(152deg) brightness(101%) contrast(106%);">
+                    </div>
+                    <span class="text-lg font-black text-white hidden sm:block tracking-tight">SwellSync</span>
+                </a>
+
+                <!-- Center: Nav Links -->
+                <div class="hidden md:flex items-center gap-1" id="nav-center-links">
+                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="cotes.html">Côtes</a>
+                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="spot_detail.html">Conditions</a>
+                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="actu.html">Actualités</a>
+                    <div class="relative" id="nav-plus-wrapper">
+                        <button class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1" id="nav-plus-btn">
+                            Plus
+                            <svg class="w-3.5 h-3.5 transition-transform duration-200" id="nav-plus-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Auth -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <button
+                        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+                        id="btn-login" onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
+                        <span class="material-symbols-outlined text-[18px]" id="btn-login-avatar">person</span>
+                        <span id="nav-login-text">Connexion</span>
+                        <div class="w-2 h-2 rounded-full bg-red-500 shrink-0" id="login-status-icon"></div>
+                    </button>
+                    <button
+                        class="hidden md:flex bg-primary text-[#0a1516] font-bold text-[13px] px-5 py-2.5 rounded-full hover:brightness-110 hover:scale-[1.03] active:scale-[0.97] transition-all"
+                        onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
+                        S'inscrire
+                    </button>
+                    <button
+                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white md:hidden"
+                        id="mobile-menu-btn">
+                        <span class="material-symbols-outlined text-[20px]">menu</span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+
+
+
+        <!-- Hero Section pour Côtes -->
+        <main class="relative z-20 flex-grow flex flex-col max-w-7xl mx-auto px-6 pt-32 pb-24 min-h-screen w-full">
+
+            <section class="mb-16 relative" data-purpose="region-map-selector">
+                <div class="flex flex-col items-center mb-12 mt-12">
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/30 bg-primary/5 text-[10px] font-bold tracking-widest text-primary mb-6 uppercase">
+                        <span class="w-2 h-2 bg-primary rounded-full animate-pulse" data-i18n="home.map_title"></span>>Réseau Mondial</div>
+                    <h2 class="text-5xl font-bold mb-4 text-white">Carte <span class="text-primary">En Direct</span>
+                    </h2>
+                    <p class="text-slate-400 max-w-2xl text-center leading-relaxed">Explorez notre liste de spots de
+                        surf premiums à travers le monde. Conditions en temps réel vérifiées et garanties à <span
+                            class="text-primary font-bold">100%</span> par nos 12 modèles météorologiques.</p>
+                </div>
+                <!-- Simulated 3D Map Container -->
+                <div
+                    class="relative w-full aspect-[21/9] rounded-[2.5rem] overflow-hidden glass border border-primary/20 flex flex-col items-center justify-center group shadow-[0_0_50px_rgba(0,186,214,0.15)] bg-background-dark/50 p-4">
+                    <!-- Interactive Leaflet Map -->
+                    <div id="cotes-surf-map" class="w-full h-full rounded-[2rem] z-10 flex-grow border border-white/5">
+                    </div>
+                    <!-- Badge superposé -->
+                    <div
+                        class="absolute top-8 right-8 z-[400] glass px-4 py-2 rounded-full text-xs font-bold text-white flex items-center gap-2 shadow-lg">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        SYNCHRONISÉ
+                    </div>
+                    <!-- Top Left Control overlay -->
+                    <div
+                        class="absolute top-8 left-8 z-[400] glass px-6 py-3 rounded-full border-white/10 pointer-events-auto flex items-center gap-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">SATELLITE LINK
+                                ACTIVE</span>
+                        </div>
+                        <div class="w-px h-4 bg-white/10"></div>
+                        <div class="flex items-center gap-3">
+                            <button
+                                class="text-[10px] font-bold text-primary hover:text-white transition-colors uppercase tracking-widest">REGIONS</button>
+                            <button
+                                class="text-[10px] font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">LAYERS</button>
+                        </div>
+                    </div>
+                    <!-- G4 — Filtre distance géoloc -->
+                    <div id="geo-filter-panel"
+                        class="absolute bottom-8 left-1/2 -translate-x-1/2 z-[400] pointer-events-auto"
+                        style="background:rgba(7,15,16,0.92);border:1px solid rgba(0,186,214,0.2);border-radius:999px;padding:10px 20px;backdrop-filter:blur(16px);display:flex;align-items:center;gap:14px;box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+                        <span style="font-size:13px;">📍</span>
+                        <span
+                            style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap;"
+                            id="geo-filter-label" data-i18n="cotes.filter_all">Tous les spots</span>
+                        <input type="range" id="geo-distance-slider" min="0" max="500" step="25" value="0"
+                            style="width:140px;accent-color:#00bad6;cursor:pointer;"
+                            oninput="applyDistanceFilter(this.value)" title="Filtrer par distance">
+                        <span style="font-size:11px;font-weight:900;color:#00bad6;min-width:50px;"
+                            id="geo-dist-val">Tout</span>
+                        <button onclick="resetDistanceFilter()"
+                            style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#64748b;font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;cursor:pointer;transition:all 0.2s;"
+                            onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#64748b'">✕
+                            Reset</button>
+                    </div>
+                </div>
+            </section>
+            <!-- END: Region Selector Hero -->
+
+            <!-- BEGIN: Forecast and Live Widgets -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-8" id="forecast-details">
+                <!-- Column 1: Live Weather & Wind (Main Focus) -->
+                <div class="lg:col-span-1 flex flex-col gap-8">
+                    <!-- Weather Card -->
+                    <div class="glass p-8 rounded-[2rem] glow-button relative overflow-hidden h-full border border-primary/20 bg-gradient-to-br from-background-dark/90 to-background-dark shadow-2xl"
+                        data-purpose="weather-widget">
+                        <div class="absolute top-0 right-0 p-6">
+                            <div
+                                class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+                                <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                                <span class="text-[10px] font-bold text-primary tracking-widest">EN DIRECT</span>
+                            </div>
+                        </div>
+                        <h3 id="wi-spot-name" class="text-xs font-bold text-slate-500 mb-6 uppercase tracking-[0.2em]">
+                            Sélection: Biarritz
+                        </h3>
+                        <div class="flex items-baseline gap-2 mb-10">
+                            <span id="wi-swell-m"
+                                class="text-8xl font-black text-white tracking-tighter drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">2.4</span>
+                            <span class="text-3xl font-light text-slate-500">m</span>
+                            <div class="ml-4 flex flex-col">
+                                <span id="wi-status"
+                                    class="text-primary font-bold text-xs tracking-wide uppercase">Amélioration</span>
+                                <span id="wi-period" class="text-sm text-slate-500">Période 11s</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-8 border-t border-primary/10 pt-8 mt-auto">
+                            <div class="flex flex-col gap-1">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Vent</p>
+                                <p id="wi-wind" class="text-2xl font-black text-white">6kt <span
+                                        class="text-[10px] font-bold text-primary uppercase ml-1 block mt-1 bg-primary/10 border border-primary/20 rounded-full px-2 py-0.5 inline-block text-center max-w-max">Offshore</span>
+                                </p>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Marée</p>
+                                <p id="wi-tide" class="text-xl font-black text-white leading-tight">Descen<br />dante
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Spot List Grid -->
+                <div class="lg:col-span-2">
+                    <div class="glass border border-primary/20 rounded-[2.5rem] overflow-hidden shadow-2xl h-[600px] flex flex-col"
+                        data-purpose="spot-forecast-table">
+                        <div
+                            class="px-8 py-6 border-b border-white/10 flex justify-between items-center bg-white/5 shrink-0">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center text-primary bg-primary/10 rounded-lg">
+                                    <span class="material-symbols-outlined text-[18px]">waves</span>
+                                </div>
+                                <h3 class="font-black tracking-widest text-white uppercase text-lg">NOS 60 SPOTS</h3>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button
+                                    class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 text-[10px] font-bold text-primary tracking-widest uppercase bg-primary/5">
+                                    <span class="material-symbols-outlined text-[14px]">swipe_up</span> DÉFILER
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-y-auto flex-grow custom-scrollbar relative">
+                            <table class="w-full text-left relative">
+                                <thead
+                                    class="bg-background-dark/80 backdrop-blur-md text-xs text-slate-500 uppercase font-black tracking-widest sticky top-0 z-20 shadow-md">
+                                    <tr>
+                                        <th class="px-8 py-5">Nom du Spot</th>
+                                        <th class="px-6 py-5">Houle</th>
+                                        <th class="px-6 py-5">Période</th>
+                                        <th class="px-6 py-5">Vent</th>
+                                        <th class="px-6 py-5 text-right">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5 font-medium" id="cotes-spots-tbody">
+                                    <!-- Les 60 spots seront injectés ici dynamiquement -->
+                                    <tr class="hover:bg-white/5 transition-colors group">
+                                        <td colspan="5" class="px-8 py-10 text-center text-slate-500 text-sm">
+                                            <div class="animate-pulse flex items-center justify-center gap-2">
+                                                <span
+                                                    class="material-symbols-outlined text-primary rotating">sync</span>
+                                                Synchronisation avec les bouées météo...
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8" data-purpose="advanced-metrics">
+                <!-- Swell Direction & Energy Card -->
+                <div
+                    class="glass p-8 rounded-[2rem] border border-primary/20 shadow-xl group hover:-translate-y-1 transition-transform relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-8">Analyse de Houle
+                    </h4>
+                    <div class="flex items-center justify-between mb-8 relative z-10">
+                        <div
+                            class="relative w-24 h-24 border-2 border-primary/20 rounded-full flex items-center justify-center bg-background-dark/50">
+                            <div
+                                class="absolute inset-0 rounded-full border border-dashed border-primary/40 animate-[spin_10s_linear_infinite]">
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-primary text-5xl rotate-[210deg] drop-shadow-[0_0_15px_rgba(0,186,214,0.8)]">navigation</span>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-5xl font-black text-white tracking-tighter">WSW</p>
+                            <p class="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">Dir. 210°</p>
+                            <p
+                                class="text-xs text-slate-400 mt-2 font-medium bg-white/5 px-2 py-1 rounded inline-block">
+                                Énergie: 840 kJ</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 relative z-10">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-slate-500">
+                            <span>Régularité</span><span class="text-white">74%</span>
+                        </div>
+                        <div class="w-full h-2 bg-background-dark rounded-full overflow-hidden shadow-inner">
+                            <div class="w-3/4 h-full bg-primary shadow-[0_0_10px_rgba(0,186,214,0.8)]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wind Velocity Graph Card -->
+                <div
+                    class="glass p-8 rounded-[2rem] border border-primary/20 shadow-xl group hover:-translate-y-1 transition-transform relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-8">Vitesse du Vent
+                        (24h)</h4>
+                    <div class="h-28 flex items-end gap-1.5 mb-6 relative z-10">
+                        <div class="flex-1 bg-primary/20 h-1/2 rounded-t hover:bg-primary/40 transition-colors"></div>
+                        <div class="flex-1 bg-primary/30 h-3/4 rounded-t hover:bg-primary/50 transition-colors"></div>
+                        <div class="flex-1 bg-primary/40 h-full rounded-t hover:bg-primary/60 transition-colors"></div>
+                        <div class="flex-1 bg-primary/80 h-[90%] rounded-t shadow-[0_0_15px_rgba(0,186,214,0.5)]"></div>
+                        <div class="flex-1 bg-primary/30 h-1/2 rounded-t hover:bg-primary/50 transition-colors"></div>
+                        <div class="flex-1 bg-primary/20 h-1/3 rounded-t hover:bg-primary/40 transition-colors"></div>
+                        <div class="flex-1 bg-primary/10 h-1/4 rounded-t hover:bg-primary/30 transition-colors"></div>
+                    </div>
+                    <div class="flex justify-between items-end relative z-10">
+                        <div>
+                            <p class="text-4xl font-black text-white leading-none">12 <span
+                                    class="text-sm text-slate-500 font-bold ml-1">kts</span></p>
+                            <p class="text-[10px] text-primary uppercase font-bold tracking-widest mt-2">Rafales Max
+                                18kt</p>
+                        </div>
+                        <div class="text-right">
+                            <span
+                                class="px-3 py-1 rounded bg-green-500/10 text-green-400 text-[10px] font-black uppercase tracking-widest border border-green-500/20">Offshore</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tide Chart Card -->
+                <div
+                    class="glass p-8 rounded-[2rem] border border-primary/20 shadow-xl group hover:-translate-y-1 transition-transform relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-8">Cycles des Marées
+                    </h4>
+                    <div class="relative h-28 w-full flex items-center relative z-10">
+                        <!-- Use SVG directly for tide line -->
+                        <svg class="w-full h-full text-primary/40 overflow-visible" preserveAspectRatio="none"
+                            viewBox="0 0 100 20">
+                            <path d="M0,10 Q25,0 50,10 T100,20" fill="none" stroke="currentColor" stroke-dasharray="2 2"
+                                stroke-width="0.5"></path>
+                            <circle cx="35" cy="6" fill="#00bad6" r="2"
+                                class="animate-pulse shadow-[0_0_10px_rgba(0,186,214,1)]"></circle>
+                        </svg>
+                        <div class="absolute top-[10%] left-[35%] -translate-x-1/2">
+                            <div
+                                class="px-2 py-0.5 bg-primary rounded-sm text-[8px] font-black text-background-dark tracking-widest shadow-[0_0_10px_rgba(0,186,214,0.4)]">
+                                MAINTENANT</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6 relative z-10">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <p
+                                class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[12px] text-primary">arrow_upward</span>
+                                Marée Haute
+                            </p>
+                            <p class="text-xl font-black text-white">14:24 <span
+                                    class="text-[10px] text-slate-400 align-top ml-1">(3.8m)</span></p>
+                        </div>
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                            <p
+                                class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[12px] text-slate-400">arrow_downward</span>
+                                Marée Basse
+                            </p>
+                            <p class="text-xl font-black text-white">20:45 <span
+                                    class="text-[10px] text-slate-400 align-top ml-1">(0.9m)</span></p>
+                        </div>
+                        <script>
+                            // Fonction pour mettre à jour le widget avec les données du spot
+                            function updateDashboard(spot, autoScroll = true) {
+                                // Mettre à jour le nom
+                                document.getElementById("wi-spot-name").innerText = "Sélection: " + spot.name;
+
+                                // Mettre à jour la houle
+                                document.getElementById("wi-swell-m").innerText = spot.current_swell_m;
+
+                                // Mettre à jour la période
+                                document.getElementById("wi-period").innerText = "Période " + spot.current_period_s + "s";
+
+                                // Statut textuel basé sur la houle
+                                let statusText = "Amélioration";
+                                let statusColor = "text-primary";
+                                if (spot.current_swell_m < 0.5) { statusText = "Flat"; statusColor = "text-red-500"; }
+                                else if (spot.current_swell_m > 2) { statusText = "Solide"; statusColor = "text-purple-400"; }
+                                document.getElementById("wi-status").innerText = statusText;
+                                document.getElementById("wi-status").className = `${statusColor} font-bold text-xs tracking-wide uppercase`;
+
+                                // Vent
+                                const windLabel = (spot.wind_direction && spot.wind_direction.includes('E')) ? 'Offshore' : 'Onshore';
+                                const windColor = windLabel === 'Offshore' ? 'text-primary border-primary/20 bg-primary/10' : 'text-red-500 border-red-500/20 bg-red-500/10';
+                                document.getElementById("wi-wind").innerHTML = `${spot.wind_speed_kts}kt <span class="text-[10px] font-bold ${windColor} uppercase ml-1 block mt-1 rounded-full px-2 py-0.5 inline-block text-center max-w-max">${windLabel}</span>`;
+
+                                // Marée (statique pour la simulation, mais vous pourriez la lier à des données)
+                                const tides = ['Montante', 'Descendante', 'Étale Haute', 'Étale Basse'];
+                                const randomTide = tides[Math.floor(Math.random() * tides.length)];
+                                document.getElementById("wi-tide").innerHTML = randomTide;
+
+                                // Scroll smoothly to the dashboard to show the user (si demandé)
+                                if (autoScroll) {
+                                    document.getElementById('forecast-details').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                            }
+
+                            // Chargement dynamique des spots et initialisation Leaflet
+                            // Attendre que Leaflet ET MarkerCluster soient disponibles avant d\'initialiser la carte
+                            function waitForLeaflet(cb, attempts) {
+                                attempts = attempts || 0;
+                                if (typeof L !== "undefined" && typeof L.markerClusterGroup === "function") {
+                                    cb();
+                                } else if (attempts < 50) {
+                                    setTimeout(() => waitForLeaflet(cb, attempts + 1), 100);
+                                } else {
+                                    console.error("[Carte] Leaflet ou MarkerCluster non chargé après 5s");
+                                }
+                            }
+
+                            // Démarrer immédiatement si la page est chargée, sinon au load
+                            function initCotesMap() {
+                                waitForLeaflet(async () => {
+                                    try {
+                                        const res = await fetch('/api/spots');
+                                        const data = await res.json();
+
+                                        if (Array.isArray(data)) {
+                                            const tbody = document.getElementById('cotes-spots-tbody');
+                                            tbody.innerHTML = ''; // Nettoyer le squelette de chargement
+
+                                            // Limiter à 60
+                                            const spots = data.slice(0, 60);
+
+                                            // --- INITIALISATION MAP LEAFLET ---
+                                            // On le centre sur la France par défaut, on ajuste selon les spots
+                                            const map = L.map('cotes-surf-map', {
+                                                attributionControl: false
+                                            }).setView([46.2276, 2.2137], 5);
+
+                                            // Tuiles sombres type 'CartoDB Dark Matter' pour le style Premium SwellSync
+                                            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                                                subdomains: 'abcd',
+                                                maxZoom: 19
+                                            }).addTo(map);
+
+                                            // Initialiser le groupe de Cluster
+                                            const markers = L.markerClusterGroup({
+                                                showCoverageOnHover: false,
+                                                maxClusterRadius: 40 // distance en px entre chaque rassemblement
+                                            });
+
+                                            const bounds = L.latLngBounds();
+
+                                            spots.forEach((spot, index) => {
+                                                // Ajout des valeurs simulées si absentes (Cas d'un accès DB sans données en temps réel)
+                                                if (!spot.current_swell_m) {
+                                                    spot.current_swell_m = parseFloat((Math.random() * 2.5 + 0.5).toFixed(1));
+                                                    spot.current_period_s = Math.floor(Math.random() * 8 + 6);
+                                                    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                                                    spot.wind_direction = directions[Math.floor(Math.random() * directions.length)];
+                                                    spot.wind_speed_kts = Math.floor(Math.random() * 15 + 2);
+                                                }
+
+                                                // Mapper les coordonnées de la BDD ('lat' et 'lng') vers les variables attendues
+                                                const spotLat = spot.latitude || spot.lat;
+                                                const spotLng = spot.longitude || spot.lng;
+
+                                                if (spotLat && spotLng) {
+                                                    // Couleur marker selon houle
+                                                    const h = spot.current_swell_m || 0;
+                                                    let dotColor = '#475569';
+                                                    let statusText = 'Plat';
+                                                    let scoreColor = '#64748b';
+                                                    if (h >= 2.0) { dotColor = '#c084fc'; statusText = 'Solide 💜'; scoreColor = '#c084fc'; }
+                                                    else if (h >= 1.2) { dotColor = '#00bad6'; statusText = 'Épique 🔵'; scoreColor = '#00bad6'; }
+                                                    else if (h >= 0.6) { dotColor = '#4ade80'; statusText = 'Bon 🟢'; scoreColor = '#4ade80'; }
+                                                    else if (h >= 0.3) { dotColor = '#facc15'; statusText = 'Moyen 🟡'; scoreColor = '#facc15'; }
+
+                                                    const customIcon = L.divIcon({
+                                                        className: '',
+                                                        html: `<div style="position:relative;display:flex;align-items:center;"><div style="background-color:${dotColor};width:14px;height:14px;border-radius:50%;box-shadow:0 0 12px ${dotColor};border:2px solid #fff;position:absolute;left:-7px;top:-7px;"></div><span style="position:absolute;left:10px;top:-9px;" class="px-1.5 py-0.5 rounded shadow-xl bg-background-dark/80 backdrop-blur-sm text-white text-[9px] uppercase tracking-widest font-black border border-white/10 whitespace-nowrap pointer-events-none">${spot.name.split(',')[0]}</span></div>`,
+                                                        iconSize: [0, 0],
+                                                        iconAnchor: [0, 0]
+                                                    });
+
+                                                    const marker = L.marker([spotLat, spotLng], { icon: customIcon });
+                                                    const favId = `fav-map-${spot.id}`;
+
+                                                    marker.bindPopup(`
+                                                    <div style="min-width:260px;padding:16px;border-radius:16px;border:1.5px solid rgba(0,186,214,0.5);background:rgba(10,21,22,0.95);backdrop-filter:blur(20px);box-shadow:0 0 30px rgba(0,186,214,0.3);">
+                                                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1);">
+                                                            <div>
+                                                                <h3 style="margin:0;font-size:13px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:0.1em;">${spot.name.split(',')[0]}</h3>
+                                                                <p style="margin:2px 0 0;font-size:9px;color:#64748b;">${spot.location || ''}</p>
+                                                            </div>
+                                                            <button id="${favId}" onclick="event.stopPropagation();addFavFromMap(${spot.id},'${spot.name.split(',')[0].replace(/'/g, "\\'")}',this)" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" title="Favori">
+                                                                <i class="fa-regular fa-heart" style="color:rgba(255,255,255,0.3);font-size:13px;"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+                                                            <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.05);">
+                                                                <p style="margin:0 0 2px;font-size:8px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;">Houle</p>
+                                                                <p style="margin:0;font-weight:900;color:#fff;font-size:15px;">${spot.current_swell_m}<span style="font-size:9px;color:#64748b;">m</span></p>
+                                                                <p style="margin:2px 0 0;font-size:8px;color:#475569;">${spot.current_period_s}s</p>
+                                                            </div>
+                                                            <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.05);">
+                                                                <p style="margin:0 0 2px;font-size:8px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;">Vent</p>
+                                                                <p style="margin:0;font-weight:900;color:#00bad6;font-size:15px;">${spot.wind_speed_kts || '~'}<span style="font-size:9px;color:#64748b;">kt</span></p>
+                                                                <p style="margin:2px 0 0;font-size:8px;color:#475569;">${spot.wind_direction || ''}</p>
+                                                            </div>
+                                                            <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.05);">
+                                                                <p style="margin:0 0 2px;font-size:8px;color:#64748b;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;">Statut</p>
+                                                                <p style="margin:4px 0;font-weight:900;font-size:10px;color:${scoreColor};">${statusText.split(' ')[0]}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button onclick="window.location.href='/spot_detail.html?id=${spot.id}'" style="width:100%;padding:10px;background:rgba(0,186,214,0.1);border:1px solid rgba(0,186,214,0.3);color:#00bad6;border-radius:10px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#00bad6';this.style.color='#070f10';" onmouseout="this.style.background='rgba(0,186,214,0.1)';this.style.color='#00bad6';">
+                                                            📊 Conditions Complètes →
+                                                        </button>
+                                                    </div>
+                                                `, { closeButton: false });
+
+                                                    marker.on('click', () => {
+                                                        const currentZoom = map.getZoom();
+                                                        const targetZoom = currentZoom < 11 ? 11 : Math.min(currentZoom + 1, 14);
+                                                        map.flyTo([spotLat, spotLng], targetZoom, { duration: 0.6 });
+                                                        updateDashboard(spot, false);
+                                                    });
+
+                                                    markers.addLayer(marker);
+                                                    bounds.extend([spotLat, spotLng]);
+                                                    // Stocker lat/lng sur le marker pour le filtre distance
+                                                    marker._spotLat = spotLat;
+                                                    marker._spotLng = spotLng;
+                                                    marker._spotName = spot.name;
+                                                    window._cotesSpotsMarkers = window._cotesSpotsMarkers || [];
+                                                    window._cotesSpotsMarkers.push(marker);
+                                                }
+
+                                                // --- TABLEAU ---
+                                                let statusBadge = `<span class="px-4 py-1.5 bg-primary/10 border border-primary/20 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">Épique</span>`;
+                                                const sw = spot.current_swell_m;
+                                                if (sw < 0.5) {
+                                                    statusBadge = `<span class="px-4 py-1.5 bg-slate-700/50 border border-slate-600/30 text-slate-400 text-[10px] font-black rounded-full uppercase tracking-widest">Plat</span>`;
+                                                } else if (sw < 1.0) {
+                                                    statusBadge = `<span class="px-4 py-1.5 bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-[10px] font-black rounded-full uppercase tracking-widest">Moyen</span>`;
+                                                } else if (sw >= 2.0) {
+                                                    statusBadge = `<span class="px-4 py-1.5 bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[10px] font-black rounded-full uppercase tracking-widest">Solide</span>`;
+                                                } else {
+                                                    statusBadge = `<span class="px-4 py-1.5 bg-emerald-400/10 border border-emerald-400/20 text-emerald-400 text-[10px] font-black rounded-full uppercase tracking-widest">Bon</span>`;
+                                                }
+
+                                                const windDirShort = spot.wind_direction || 'N';
+                                                const windSpeed = spot.wind_speed_kts || '0';
+
+                                                const markup = `
+                                            <tr class="hover:bg-white/5 transition-colors group cursor-pointer relative overflow-hidden" onclick="window.location.href='spot_detail.html?id=${spot.id}'" title="Voir les conditions détaillées">
+                                                <td class="px-8 py-4 font-bold text-white text-[15px] flex items-center gap-2">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse flex-shrink-0"></span>
+                                                    ${spot.name.substring(0, 25)}${spot.name.length > 25 ? '...' : ''}
+                                                </td>
+                                                <td class="px-6 py-4 text-slate-300 font-medium whitespace-nowrap">${spot.current_swell_m}m</td>
+                                                <td class="px-6 py-4 text-slate-400">${spot.current_period_s}s</td>
+                                                <td class="px-6 py-4 text-primary font-bold whitespace-nowrap">${windDirShort} ${windSpeed}kt</td>
+                                                <td class="px-6 py-4 text-right">${statusBadge}</td>
+                                            </tr>
+                                            `;
+                                                tbody.insertAdjacentHTML('beforeend', markup);
+
+                                                // Initialiser le premier spot comme sélection par défaut
+                                                if (index === 0) {
+                                                    updateDashboard(spot);
+                                                }
+                                            });
+
+                                            // Ajouter tous les marqueurs groupés à la carte
+                                            map.addLayer(markers);
+
+                                            // Ajuster la carte pour voir tous les marqueurs si la zone est valide
+                                            if (bounds.isValid()) {
+                                                map.fitBounds(bounds, { padding: [50, 50] });
+                                            }
+
+                                            // Fonction favori depuis la map (bouton popup)
+                                            window.addFavFromMap = async function (spotId, spotName, btn) {
+                                                const saved = localStorage.getItem('swellsync_user');
+                                                if (!saved) {
+                                                    if (typeof Toast !== 'undefined') Toast.show('Connecte-toi pour ajouter des favoris ❤️', 'info');
+                                                    if (typeof openAuthModal !== 'undefined') setTimeout(openAuthModal, 600);
+                                                    return;
+                                                }
+                                                try {
+                                                    const r = await fetch('/api/members/favorites', {
+                                                        method: 'POST', credentials: 'include',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({ spot_id: parseInt(spotId) })
+                                                    });
+                                                    if (r.ok) {
+                                                        const icon = btn.querySelector('i');
+                                                        if (icon) { icon.className = 'fa-solid fa-heart'; icon.style.color = '#f87171'; }
+                                                        btn.style.background = 'rgba(239,68,68,0.15)';
+                                                        btn.style.borderColor = 'rgba(239,68,68,0.3)';
+                                                        if (typeof Toast !== 'undefined') Toast.show(`${spotName} ajouté aux favoris ❤️`, 'success');
+                                                    }
+                                                } catch (e) {
+                                                    if (typeof Toast !== 'undefined') Toast.show('Erreur réseau', 'error');
+                                                }
+                                            };
+
+                                            // Exposer la fonction au window pour les onClicks inline
+                                            window.cotesUpdateDashboard = updateDashboard;
+                                            tbody.insertAdjacentHTML('beforeend', markup);
+
+                                            // ── G4 : Filtre distance géoloc ────────────────────────────────
+                                            // Initialiser le MarkerClusterGroup sur window pour y accéder depuis applyDistanceFilter
+                                            window._cotesMarkersGroup = markers;
+                                            map.addLayer(markers);
+                                            if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 8 });
+
+                                            // Géoloc pour activer le slider (sans spam — uniquement sur cotes.html)
+                                            if (navigator.geolocation && !sessionStorage.getItem('swellsync_cotes_geo')) {
+                                                sessionStorage.setItem('swellsync_cotes_geo', '1');
+                                                navigator.geolocation.getCurrentPosition(
+                                                    pos => {
+                                                        window._userGeoLat = pos.coords.latitude;
+                                                        window._userGeoLng = pos.coords.longitude;
+                                                        const lbl = document.getElementById('geo-filter-label');
+                                                        if (lbl) lbl.textContent = 'Spots à moins de';
+                                                        const slider = document.getElementById('geo-distance-slider');
+                                                        if (slider) slider.disabled = false;
+                                                    },
+                                                    () => {
+                                                        const lbl = document.getElementById('geo-filter-label');
+                                                        if (lbl) { lbl.textContent = 'Géoloc indisponible'; lbl.style.color = '#475569'; }
+                                                        const slider = document.getElementById('geo-distance-slider');
+                                                        if (slider) slider.disabled = true;
+                                                    },
+                                                    { timeout: 6000, maximumAge: 600000 }
+                                                );
+                                            }
+                                        }
+                                    } catch (e) { console.error('[Carte] Erreur init:', e); }
+                                }); // fin waitForLeaflet
+                            } // fin initCotesMap
+
+                            // Déclencher : immédiatement si le DOM est prêt, sinon au load
+                            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                                initCotesMap();
+                            } else {
+                                window.addEventListener('load', initCotesMap, { once: true });
+                            }
+                        </script>
+
+        </main>
+
+        <!-- Download App Section -->
+        <section id="download-app"
+            class="relative w-full py-24 bg-background-light dark:bg-background-dark text-slate-900 dark:text-white border-t border-slate-200 dark:border-white/5 overflow-hidden">
+            <!-- Background Elements -->
+            <div
+                class="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-3xl rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 left-0 w-1/2 h-full bg-blue-500/5 blur-3xl rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div
+                    class="glass p-10 md:p-16 rounded-[3rem] border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12 bg-gradient-to-r from-background-dark/80 to-background-dark/40">
+
+                    <div class="flex-1 text-center lg:text-left">
+                        <span
+                            class="text-primary font-bold tracking-widest uppercase text-xs mb-4 block flex items-center justify-center lg:justify-start gap-2">
+                            <span class="material-symbols-outlined text-[16px]">install_mobile</span>
+                            Disponible Partout
+                        </span>
+                        <h2 class="text-4xl md:text-5xl font-black mb-6 leading-tight">Mettez l'Océan <br /><span
+                                class="text-primary">dans votre poche.</span></h2>
+                        <p class="text-slate-400 max-w-xl mx-auto lg:mx-0 font-light text-lg mb-8">
+                            Ne ratez plus jamais la session de l'année. Recevez des alertes push ultra-précises,
+                            consultez
+                            nos 12 modèles météo hors-ligne et connectez-vous aux caméras HD directement depuis votre
+                            smartphone.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                            <!-- Apple App Store Button -->
+                            <button
+                                class="flex items-center gap-3 bg-white hover:bg-slate-100 text-black px-6 py-3 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-[0_10px_30px_rgba(255,255,255,0.1)] w-full sm:w-auto"
+                                onclick="installApplePWA()">
+                                <span class="text-3xl"><i class="fa-brands fa-apple"></i></span>
+                                <div class="text-left flex flex-col">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-widest text-slate-500 leading-none mb-1">Télécharger
+                                        sur</span>
+                                    <span class="text-lg font-black leading-none">App Store</span>
+                                </div>
+                            </button>
+
+                            <!-- Google Play Button -->
+                            <button
+                                class="flex items-center gap-3 bg-transparent border border-white/20 hover:border-primary/50 hover:bg-white/5 px-6 py-3 rounded-2xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto"
+                                onclick="installAndroidPWA()">
+                                <span class="text-3xl text-primary"><i class="fa-brands fa-google-play"></i></span>
+                                <div class="text-left flex flex-col">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-widest text-slate-400 leading-none mb-1">Disponible
+                                        sur</span>
+                                    <span class="text-lg font-black leading-none text-white">Google Play</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div
+                            class="mt-8 flex items-center justify-center lg:justify-start gap-4 text-xs font-bold text-slate-500">
+                            <div class="flex -space-x-3">
+                                <img src="https://i.pravatar.cc/100?img=1"
+                                    class="w-8 h-8 rounded-full border-2 border-background-dark" alt="User" /
+                                    loading="lazy" decoding="async">
+                                <img src="https://i.pravatar.cc/100?img=2"
+                                    class="w-8 h-8 rounded-full border-2 border-background-dark" alt="User" /
+                                    loading="lazy" decoding="async">
+                                <img src="https://i.pravatar.cc/100?img=3"
+                                    class="w-8 h-8 rounded-full border-2 border-background-dark" alt="User" /
+                                    loading="lazy" decoding="async">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-background-dark bg-primary flex items-center justify-center text-white text-[10px]">
+                                    +54k</div>
+                            </div>
+                            <span>Surfeurs connectés</span>
+                        </div>
+                    </div>
+
+                    <!-- Phone Mockup Mock -->
+                    <div class="flex-1 relative flex justify-center lg:justify-end w-full max-w-sm lg:max-w-none">
+                        <div
+                            class="relative w-64 h-[500px] border-[8px] border-slate-800 rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,186,214,0.3)] bg-background-dark transform rotate-6 hover:rotate-0 transition-transform duration-700">
+                            <!-- Enoche iPhone -->
+                            <div
+                                class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-xl z-20">
+                            </div>
+
+                            <!-- Contenu du téléphone -->
+                            <div class="w-full h-full relative overflow-hidden bg-background-dark">
+                                <div class="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent z-10">
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&q=80&w=400&h=800"
+                                    alt="App Preview" class="w-full h-full object-cover mix-blend-overlay opacity-50" /
+                                    loading="lazy" decoding="async">
+
+                                <!-- UI Fictive -->
+                                <div class="absolute inset-0 z-20 p-4 flex flex-col justify-end pb-8">
+                                    <div class="glass p-4 rounded-3xl mb-4 border border-white/10 shadow-lg">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                            <span
+                                                class="text-xs font-bold uppercase tracking-widest text-primary">Alerte
+                                                Houle</span>
+                                        </div>
+                                        <h4 class="font-black text-xl text-white mb-1">Hossegor 3.5m</h4>
+                                        <p class="text-[10px] text-slate-300">Conditions épiques à La Gravière. Prenez
+                                            votre
+                                            planche.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Section Témoignages / Avis Premium -->
+        <section id="reviews-premium"
+            class="relative w-full py-24 bg-background-dark text-white border-t border-white/5 overflow-hidden">
+            <div
+                class="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row items-end justify-between gap-6 relative z-10">
+                <div class="flex flex-col gap-3">
+                    <span class="text-primary font-bold tracking-widest uppercase text-sm flex items-center gap-2">
+                        <span class="material-symbols-outlined text-yellow-400 text-[18px]">workspace_premium</span>
+                        L'Élite Connectée
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-black text-white leading-tight">Même les pros<br>ne jurent que
+                        par
+                        <span class="text-primary">l'Abonnement.</span>
+                    </h2>
+                </div>
+                <div class="text-right">
+                    <div class="flex items-center gap-1 justify-end mb-2">
+                        <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
+                        <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
+                        <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
+                        <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
+                        <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
+                    </div>
+                    <p class="text-slate-400 font-medium">4.9/5 sur plus de 10,000 surfeurs équipés</p>
+                    <span
+                        class="text-[10px] text-primary font-black uppercase tracking-widest bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 mt-3 inline-flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[14px]">swipe</span> Swiper à l'horizontal
+                    </span>
+                </div>
+            </div>
+
+            <!-- Slider Horizontal (Scroll/Swipe) -->
+            <div class="w-full overflow-x-auto pb-8 custom-scrollbar scroll-smooth pl-6 xl:pl-[calc((100vw-80rem)/2)]">
+                <div class="flex gap-6 w-max pr-6">
+                    <!-- Avis 1 (Pro) -->
+                    <div
+                        class="glass p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/10 flex flex-col gap-6 relative group transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 shadow-lg">
+                        <div
+                            class="absolute -top-4 right-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-background-dark text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-[0_0_15px_rgba(250,204,21,0.5)]">
+                            WCT Surfer
+                        </div>
+                        <p class="text-lg font-light italic text-slate-300">"Depuis que j'ai souscrit à l'abonnement
+                            SWELLSYNC, je ne loupe plus une seule session parfaite. Le radar d'alerte houle premium est
+                            lunaire
+                            de précision. Ça vaut 100 fois son prix."</p>
+                        <div class="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100"
+                                    class="w-12 h-12 rounded-full border-2 border-primary" alt="User" loading="lazy"
+                                    decoding="async">
+                                <div>
+                                    <h4 class="font-black text-white text-sm">Jeremy F.</h4>
+                                    <p class="text-primary text-[10px] font-bold uppercase tracking-widest">Hossegor,
+                                        France
+                                    </p>
+                                </div>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-white/10 text-4xl group-hover:text-primary/20 transition-colors">format_quote</span>
+                        </div>
+                    </div>
+
+                    <!-- Avis 2 -->
+                    <div
+                        class="glass p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/10 flex flex-col gap-6 relative group transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 shadow-lg">
+                        <p class="text-lg font-light italic text-slate-300">"J'hésitais à prendre le pass Premium, mais
+                            l'accès instantané et en direct aux 60 caméras HD le long des côtes Atlantique m'économise
+                            des
+                            heures de route et d'essence !"</p>
+                        <div class="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100"
+                                    class="w-12 h-12 rounded-full border-2 border-white/20" alt="User" loading="lazy"
+                                    decoding="async">
+                                <div>
+                                    <h4 class="font-black text-white text-sm">Léa Dupont</h4>
+                                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Biarritz,
+                                        France</p>
+                                </div>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-white/10 text-4xl group-hover:text-primary/20 transition-colors">format_quote</span>
+                        </div>
+                    </div>
+
+                    <!-- Avis 3 -->
+                    <div
+                        class="glass p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/10 flex flex-col gap-6 relative group transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 shadow-lg">
+                        <p class="text-lg font-light italic text-slate-300">"Le graphique 'énergie des vagues en joules'
+                            combiné au cycle de la marée m'a complètement fait abandonner les autres sites météo
+                            obsolètes.
+                            C'est l'outil ultime."</p>
+                        <div class="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
+                            <div class="flex items-center gap-3">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100"
+                                    class="w-12 h-12 rounded-full border-2 border-white/20" alt="User" loading="lazy"
+                                    decoding="async">
+                                <div>
+                                    <h4 class="font-black text-white text-sm">Thomas B.</h4>
+                                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Lacanau,
+                                        France</p>
+                                </div>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-white/10 text-4xl group-hover:text-primary/20 transition-colors">format_quote</span>
+                        </div>
+                    </div>
+
+                    <!-- Avis 4 (Explication Benefices Abonnement) -->
+                    <div
+                        class="bg-gradient-to-br from-primary to-blue-600 p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/20 flex flex-col items-center justify-center text-center gap-4 relative group shadow-[0_15px_40px_rgba(0,186,214,0.3)] shrink-0">
+                        <span class="material-symbols-outlined text-white text-5xl mb-2">diamond</span>
+                        <h3 class="text-3xl font-black text-white leading-tight">Devenez Membre <br>Swell<span
+                                class="text-background-dark">Sync</span> PRO</h3>
+                        <ul class="text-left text-sm text-white/90 font-medium space-y-2 mt-2 w-full max-w-[250px]">
+                            <li class="flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-green-300 text-[16px]">check_circle</span>
+                                Alertes
+                                Push Personnalisées</li>
+                            <li class="flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-green-300 text-[16px]">check_circle</span>
+                                Cams HD
+                                100% Débloquées</li>
+                            <li class="flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-green-300 text-[16px]">check_circle</span>
+                                Analyse
+                                Prévision Avancée 15 Jours</li>
+                        </ul>
+                        <button
+                            class="mt-4 bg-background-dark text-white font-black uppercase tracking-widest px-6 py-3 rounded-full hover:bg-white hover:text-background-dark transition-colors border border-transparent hover:border-white w-full"
+                            onclick="Toast.show('Ouverture de la fenêtre d\'Abonnement... 💎', 'info')">
+                            Obtenir Premium
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Moteur Océanique Section -->
+        <section id="technology"
+            class="relative w-full py-24 bg-background-light dark:bg-background-dark text-slate-900 dark:text-white border-t border-slate-200 dark:border-white/5 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
+                <div class="flex-1">
+                    <span
+                        class="text-primary font-bold tracking-widest uppercase text-sm mb-4 block flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">memory</span>
+                        Sous le capot
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-black mb-6 leading-tight">12 Modèles Météo <br /><span
+                            class="text-primary">Avancés en réseau.</span></h2>
+                    <p class="text-slate-400 font-light text-lg mb-8 leading-relaxed">
+                        SwellSync ne se contente pas de copier/coller les données de la NOAA ou de Météo France. Nous
+                        agrégeons en temps réel 12 modèles de prédictions climatiques (GFS, ECMWF, ICON...) que notre
+                        système d'analyse océanographique exclusif étudie et pondère avec une précision absolue.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass p-5 rounded-2xl border border-white/5 shadow-sm">
+                            <span class="text-3xl font-black text-white">99.8%</span>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">De Fiabilité
+                                Radar</p>
+                        </div>
+                        <div class="glass p-5 rounded-2xl border border-white/5 shadow-sm">
+                            <span class="text-3xl font-black text-primary">5ms</span>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Latence
+                                Serveur
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 w-full flex justify-center lg:justify-end relative">
+                    <div
+                        class="w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full border border-white/10 flex items-center justify-center relative shadow-[0_0_50px_rgba(0,186,214,0.1)]">
+                        <!-- Rings -->
+                        <div
+                            class="absolute inset-4 rounded-full border border-primary/20 animate-[spin_10s_linear_infinite]">
+                        </div>
+                        <div
+                            class="absolute inset-12 rounded-full border border-primary/40 animate-[spin_15s_linear_infinite_reverse]">
+                        </div>
+                        <div
+                            class="absolute inset-20 rounded-full border border-white/10 border-dashed animate-[spin_20s_linear_infinite]">
+                        </div>
+                        <!-- Center core -->
+                        <div
+                            class="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,186,214,0.5)] backdrop-blur-md border border-primary/50 relative z-10">
+                            <span class="material-symbols-outlined text-primary text-4xl animate-pulse">hub</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter & Capture d'email -->
+        <section id="newsletter" class="relative w-full py-20 bg-primary">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
+            </div>
+            <div class="max-w-4xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
+                <span class="material-symbols-outlined text-background-dark text-5xl mb-4">mail</span>
+                <h2 class="text-3xl md:text-5xl font-black text-background-dark mb-4">Ne laissez plus passer le swell
+                    parfait.</h2>
+                <p class="text-background-dark/80 font-medium text-lg mb-8 max-w-2xl">
+                    Inscrivez-vous à notre liste secrète. Recevez gratuitement nos rapports météo hebdos et soyez alerté
+                    avant tout le monde des houles XXL (Code Rouge).
+                </p>
+                <form class="w-full max-w-md flex flex-col sm:flex-row gap-3"
+                    onsubmit="event.preventDefault(); Toast.show('Bienvenue dans la communauté ! Vous recevrez bientôt notre premier rapport. 🌊', 'success')">
+                    <input type="email" data-i18n-placeholder="contact.email_placeholder" placeholder="votre@email.com" required
+                        class="flex-1 bg-white/10 border border-background-dark/20 text-background-dark placeholder-background-dark/50 px-5 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-background-dark focus:bg-white/20 transition-all font-bold">
+                    <button type="submit"
+                        class="bg-background-dark text-white font-black uppercase tracking-widest px-8 py-4 rounded-xl hover:bg-slate-800 transition-colors shadow-xl hover:-translate-y-1">
+                        S'Abonner
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- F.A.Q Section -->
+        <section id="faq"
+            class="relative w-full py-24 bg-background-light dark:bg-background-dark text-slate-900 dark:text-white">
+            <div class="max-w-3xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <span class="text-primary font-bold tracking-widest uppercase text-sm mb-2 block">Assistance
+                        Rapide</span>
+                    <h2 class="text-3xl md:text-4xl font-black">Questions Fréquentes</h2>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <!-- FAQ Item 1 -->
+                    <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
+                        onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-lg">Quels sont les pays couverts par SwellSync ?</h4>
+                            <span
+                                class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
+                        </div>
+                        <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Actuellement, notre système avancé
+                            (Version Bêta) est entraîné spécifiquement sur la façade Atlantique Française (60 spots).
+                            Nous
+                            déploierons l'Europe entière d'ici le prochain trimestre.</p>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
+                        onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-lg">D'où proviennent vos caméras HD en direct ?</h4>
+                            <span
+                                class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
+                        </div>
+                        <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Nous avons notre propre réseau de
+                            caméras privatives installées sur les balcons et toits partenaires face aux spots,
+                            garantissant
+                            un flux privé, sans publicité, et en qualité 4K quand le réseau le permet.</p>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
+                        onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-lg">L'abonnement "PRO" est-il sans engagement ?</h4>
+                            <span
+                                class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
+                        </div>
+                        <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Oui, absolument. SWELLSYNC PRO est
+                            un
+                            pass mensuel. Vous pouvez l'annuler en un clic depuis votre espace membre, juste avant
+                            l'hiver
+                            par exemple, sans aucun frais caché ni préavis de plusieurs mois.</p>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
+                        onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-lg">Comment fonctionne le calcul d'Énergie de la Houle (en kJ) ?
+                            </h4>
+                            <span
+                                class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
+                        </div>
+                        <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Contrairement aux sites classiques
+                            qui
+                            ne vous donnent que la "Hauteur" de vague, notre algorithme calcule l'énergie brute en
+                            KiloJoules (kJ).
+                            Elle prend en compte la hauteur, la période spatiale et la force du vent offshore pour
+                            calculer
+                            la puissance réelle de l'impact sur le banc de sable. C'est l'indicateur ultime pour choisir
+                            sa
+                            planche : une vague de 1.5m à 1000kJ est molle (Longboard), à 3000kJ elle est creuse et
+                            tubulaire (Shortboard).</p>
+                    </div>
+
+                    <!-- FAQ Item 5 -->
+                    <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
+                        onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-lg">Puis-je utiliser mon même compte sur le PC et sur mon Mobile ?
+                            </h4>
+                            <span
+                                class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
+                        </div>
+                        <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Bien sûr. SWELLSYNC PRO est une
+                            licence cross-platform. Une fois abonné, vous pouvez vous connecter sur le site web depuis
+                            votre
+                            bureau en semaine, et utiliser l'Application Mobile téléchargée en arrivant sur le parking
+                            de la
+                            plage le week-end, tant que vous restez le seul et unique utilisateur du compte sécurisé.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Professionnel -->
+        <footer class="bg-[#0a1516] text-slate-400 py-16 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
+
+                    <!-- Colonne 1 : Marque -->
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-2">
+                            <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo"
+                                class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
+                            <span class="font-display font-black text-xl text-white tracking-tight">Swell<span
+                                    class="text-primary">Sync</span></span>
+                        </div>
+                        <p class="text-sm leading-relaxed mt-2">La plateforme de prévision de surf la plus technologique
+                            du
+                            marché. Surf smart, ride hard.</p>
+                        <div class="flex gap-4 mt-4">
+                            <a href="#"
+                                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
+                                    class="fa-brands fa-instagram"></i></a>
+                            <a href="#"
+                                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
+                                    class="fa-brands fa-tiktok"></i></a>
+                            <a href="#"
+                                class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
+                                    class="fa-brands fa-x-twitter"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Colonne 2 : Liens Rapides -->
+                    <div class="flex flex-col gap-4">
+                        <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">SwellSync</h4>
+                        <a href="cotes.html" class="text-sm hover:text-primary transition-colors">La Carte
+                            Interactive</a>
+                        <a href="index.html#trending-spots" class="text-sm hover:text-primary transition-colors">Spots
+                            Tendances</a>
+                        <a href="abonnement.html" class="text-sm hover:text-primary transition-colors">Abonnement PRO</a>
+                        <a href="index.html#download-app"
+                            class="text-sm hover:text-primary transition-colors">Télécharger l'App</a>
+                    </div>
+
+
+                    <!-- Colonne 3 : Légal -->
+                    <div class="flex flex-col gap-4">
+                        <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Légal</h4>
+                        <button onclick="openLegalModal('cgv')"
+                            class="text-left text-sm hover:text-primary transition-colors">Conditions Générales
+                            (CGV)</button>
+                        <button onclick="openLegalModal('privacy')"
+                            class="text-left text-sm hover:text-primary transition-colors">Politique de
+                            Confidentialité</button>
+                        <button onclick="openLegalModal('legal')"
+                            class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions Légales</button>
+                        <button onclick="openLegalModal('cookies')"
+                            class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
+                    </div>
+                    <!-- Colonne 4 : Support -->
+                    <div class="flex flex-col gap-4">
+                        <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Assistance</h4>
+                        <p class="text-sm mb-2">Notre équipe est basée à Hossegor, France. Nous répondons en moins de
+                            24h.
+                        </p>
+                        <a href="mailto:support@swellsync.com"
+                            class="text-primary font-bold hover:underline flex items-center gap-2 text-sm">
+                            <span class="material-symbols-outlined text-[16px]">mail</span>
+                            support@swellsync.com
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium">
+                    <p>&copy; 2026 SwellSync Technology. Tous droits réservés.</p>
+                    <div class="flex items-center gap-2 mt-4 md:mt-0">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        Serveurs Opérationnels (99.9% Uptime)
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Auth / Profile Modal Container -->
+        <div id="auth-modal-backdrop"
+            class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+            <div id="auth-modal-container"
+                class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-md relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col items-center">
+
+                <button onclick="closeAuthModal()"
+                    class="absolute top-6 right-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white z-20">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+
+                <!-- Auth Header -->
+                <div class="w-full pt-10 pb-6 px-8 flex flex-col items-center border-b border-white/5 bg-white/5">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">lock_person</span>
+                    </div>
+                    <h3 class="text-3xl font-black text-white text-center">SwellSync<span
+                            class="text-primary">.ID</span>
+                    </h3>
+                    <p class="text-slate-400 text-sm mt-2 text-center">Sécurité A2F Requise (App non partagée)</p>
+                </div>
+
+                <!-- Auth Body -->
+                <div id="auth-step-1" class="p-8 w-full flex flex-col gap-4 bg-background-dark">
+
+                    <!-- Option 1: Apple Sign In -->
+                    <div id="appleid-signin" onclick="triggerAppleAuth()"
+                        class="w-full bg-[#111] border border-white/20 text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-colors cursor-pointer">
+                        <i class="fa-brands fa-apple text-xl"></i>
+                        Continuer avec Apple
+                    </div>
+
+                    <!-- Option 2: Google Sign In -->
+                    <button onclick="triggerGoogleAuth()"
+                        class="w-full bg-white text-black border border-white/20 font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-200 transition-colors focus:outline-none shadow-md cursor-pointer">
+                        <i class="fa-brands fa-google text-xl text-blue-500"></i>
+                        Continuer avec Google
+                    </button>
+
+                    <div class="flex items-center gap-4 my-2 opacity-50">
+                        <div class="h-px bg-white/20 flex-1"></div>
+                        <span class="text-[10px] font-bold text-white uppercase tracking-widest">OU via Email</span>
+                        <div class="h-px bg-white/20 flex-1"></div>
+                    </div>
+
+                    <form class="flex flex-col gap-3" onsubmit="handleAuthForm(event)">
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">mail</span>
+                            <input type="email" id="auth-identifier" placeholder="Votre Adresse Email" required
+                                class="w-full bg-white/5 border border-white/10 text-white placeholder-slate-500 pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-medium text-sm">
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-primary text-background-dark font-black py-4 rounded-xl hover:bg-white transition-colors uppercase tracking-widest mt-2 shadow-[0_10px_20px_rgba(0,186,214,0.3)]">
+                            Recevoir un Code (A2F)
+                        </button>
+                    </form>
+
+                    <p class="text-center text-[10px] text-slate-500 mt-4 px-4">
+                        En vous connectant, vous acceptez que vos données de contact soient transmises sécuritairement à
+                        notre base de données.
+                    </p>
+                </div>
+
+                <!-- Auth Body: Step 2 (Verification) -->
+                <div id="auth-step-2" class="p-8 w-full flex-col gap-4 bg-background-dark hidden">
+                    <div class="text-center mb-6">
+                        <h4 class="text-xl font-bold text-white mb-2">Vérification Requise</h4>
+                        <p class="text-sm text-slate-400">Un code à 6 chiffres vient d'être envoyé au <br><strong
+                                id="auth-identifier-display" class="text-white"></strong></p>
+                    </div>
+
+                    <form class="flex flex-col gap-3" onsubmit="verifyAuthCode(event)">
+                        <div class="flex justify-between gap-2 mb-4">
+                            <input type="text" maxlength="1"
+                                class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                required autofocus>
+                            <input type="text" maxlength="1"
+                                class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                required>
+                            <input type="text" maxlength="1"
+                                class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                required>
+                            <input type="text" maxlength="1"
+                                class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                required>
+                            <input type="text" maxlength="1"
+                                class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                required>
+                            <input type="text" maxlength="1"
+                                class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                required>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-primary text-background-dark font-black py-4 rounded-xl hover:bg-white transition-colors uppercase tracking-widest shadow-[0_10px_20px_rgba(0,186,214,0.3)]">
+                            Valider le Code
+                        </button>
+                        <button type="button" onclick="resetAuthModal()"
+                            class="w-full text-slate-400 text-sm font-bold mt-2 hover:text-white transition-colors">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile Modal -->
+        <div id="profile-modal-backdrop"
+            class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[115] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+            <div id="profile-modal-container"
+                class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-md relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col">
+                <button onclick="closeProfileModal()"
+                    class="absolute top-6 right-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white z-20">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+                <div class="p-8 pb-0 flex flex-col items-center relative z-10 mt-4">
+                    <div id="profile-avatar-large"
+                        class="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center text-4xl font-black text-primary border-4 border-background-dark shadow-[0_0_20px_rgba(0,186,214,0.4)] relative mb-4">
+                        <span id="profile-avatar-letter">U</span>
+                        <div
+                            class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-background-dark flex items-center justify-center">
+                            <i class="fa-solid fa-check text-[10px] text-white"></i>
+                        </div>
+                    </div>
+                    <h2 id="profile-name" class="text-2xl font-black text-white">Utilisateur</h2>
+                    <p id="profile-email" class="text-sm text-slate-400 mt-1">email@example.com</p>
+                    <div
+                        class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mt-4">
+                        Membre SWELLSYNC
+                    </div>
+                </div>
+
+                <div id="profile-main-menu" class="p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
+                    <button onclick="showProfileFavorites()"
+                        class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-400">favorite</span>
+                            <span data-i18n="dashboard.my_spots">Mes Spots Favoris</span>
+                        </div>
+                        <span class="material-symbols-outlined text-slate-500">chevron_right</span>
+                    </button>
+                    <button onclick="showProfileAlerts()"
+                        class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors group">
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="material-symbols-outlined text-yellow-400 group-hover:scale-110 transition-transform">workspace_premium</span>
+                            <span class="text-yellow-400">Alertes Surf PRO</span>
+                        </div>
+                        <span class="material-symbols-outlined text-slate-500">chevron_right</span>
+                    </button>
+                    <button onclick="showProfileAIPrefs()"
+                        class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-400">settings</span>
+                            <span>Préférences Système</span>
+                        </div>
+                        <span class="material-symbols-outlined text-slate-500">chevron_right</span>
+                    </button>
+
+                    <button onclick="logoutProfile()"
+                        class="w-full mt-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-black py-4 rounded-xl transition-colors uppercase tracking-widest text-sm">
+                        Déconnexion
+                    </button>
+                </div>
+
+                <!-- View: Favorites -->
+                <div id="profile-favorites-view"
+                    class="hidden p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
+                    <div class="flex items-center mb-4">
+                        <button onclick="hideProfileViews()"
+                            class="text-slate-400 hover:text-white transition-colors flex items-center mr-3">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h3 class="text-lg font-black text-white">Spots Favoris (3 Max)</h3>
+                    </div>
+                    <div id="profile-favorites-container" class="flex flex-col gap-3">
+                        <!-- Les spots favoris s'afficheront ici dynamiquement -->
+                    </div>
+
+                    <!-- Premium Upsell -->
+                    <div
+                        class="mt-4 mt-2 p-1 rounded-2xl bg-gradient-to-r from-yellow-500/10 via-yellow-400/20 to-yellow-500/10">
+                        <a href="abonnement.html"
+                            class="flex items-center justify-between w-full p-4 bg-[#0a1516] rounded-xl border border-yellow-400/10 hover:border-yellow-400/30 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-yellow-400/10 flex items-center justify-center border border-yellow-400/20 group-hover:scale-110 transition-transform">
+                                    <span
+                                        class="material-symbols-outlined text-yellow-400 text-[16px]">workspace_premium</span>
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span class="text-white font-bold text-sm tracking-wide">Débloquer la limite</span>
+                                    <span
+                                        class="text-[9px] text-slate-400 font-medium uppercase tracking-widest mt-0.5">Spots
+                                        Favoris Illimités</span>
+                                </div>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-yellow-400/50 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- View: AI Prefs -->
+                <div id="profile-ai-view" class="hidden p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
+                    <div class="flex items-center mb-4">
+                        <button onclick="hideProfileViews()"
+                            class="text-slate-400 hover:text-white transition-colors flex items-center mr-3">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h3 class="text-lg font-black text-white">Configuration Assistant</h3>
+                    </div>
+
+                    <label
+                        class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Swell Whisperer</h4>
+                            <p class="text-xs text-slate-400">Recommandations vocales</p>
+                        </div>
+                        <input type="checkbox" class="toggle toggle-primary" checked />
+                    </label>
+
+                    <label
+                        class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
+                        <div>
+                            <h4 class="text-white font-bold text-sm">Magic Quiver</h4>
+                            <p class="text-xs text-slate-400">Choix planche auto</p>
+                        </div>
+                        <input type="checkbox" class="toggle toggle-primary" checked />
+                    </label>
+
+                    <div class="mt-2 text-xs text-slate-500 leading-relaxed">
+                        Notre algorithme marin analyse en continu près de 12 variables météorologiques par spot pour
+                        optimiser automatiquement votre niveau de surf.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Légal Modals Container -->
+        <div id="legal-modal-backdrop"
+            class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
+            <div id="legal-modal-container"
+                class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-full overflow-y-auto custom-scrollbar relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col">
+                <div
+                    class="w-full flex justify-end p-6 border-b border-white/5 sticky top-0 bg-background-dark/90 backdrop-blur z-20">
+                    <button onclick="closeLegalModal()"
+                        class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <div id="legal-modal-content" class="p-8 md:p-12 w-full">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Global Search Modal -->
+        <div id="global-search-backdrop"
+            class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
+            <div id="global-search-container"
+                class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
+
+                <!-- Search Input Area -->
+                <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
+                    <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
+                    <input type="text" id="global-search-input"
+                        class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
+                        placeholder="Chercher un spot, une page, une info..." autocomplete="off">
+                    <button onclick="closeGlobalSearchModal()"
+                        class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">close</span>
+                    </button>
+                </div>
+
+                <!-- Search Results Area -->
+                <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
+                    <!-- Les résultats seront injectés ici par global_search.js -->
+                    <div class="text-center py-10 text-slate-500 text-sm font-medium">
+                        Que cherchez-vous aujourd'hui ? 🏄‍♂️
+                    </div>
+                </div>
+
+                <!-- Footer Hints -->
+                <div
+                    class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
+                                class="font-sans mr-1">↑↓</span> Naviguer</span>
+                        <span
+                            class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entrée
+                            <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
+                    </div>
+                    <div>SwellSync Global Search</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="js/pwa.js"></script>
+        <!-- G4 : Fonctions globales filtre distance -->
+        <script>
+            function geoHaversineKm(lat1, lon1, lat2, lon2) {
+                const R = 6371, r = d => d * Math.PI / 180;
+                const dLat = r(lat2 - lat1), dLon = r(lon2 - lon1);
+                const a = Math.sin(dLat / 2) ** 2 + Math.cos(r(lat1)) * Math.cos(r(lat2)) * Math.sin(dLon / 2) ** 2;
+                return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            }
+            function applyDistanceFilter(val) {
+                const km = parseInt(val);
+                const valEl = document.getElementById('geo-dist-val');
+                const lbl = document.getElementById('geo-filter-label');
+                if (km === 0) { resetDistanceFilter(); return; }
+                if (valEl) valEl.textContent = km + ' km';
+                if (!window._userGeoLat) {
+                    if (valEl) valEl.textContent = 'Géoloc requise';
+                    return;
+                }
+                const group = window._cotesMarkersGroup;
+                const allMarkers = window._cotesSpotsMarkers || [];
+                if (!group) return;
+                group.clearLayers();
+                let shown = 0;
+                allMarkers.forEach(m => {
+                    if (!m._spotLat) return;
+                    const d = geoHaversineKm(window._userGeoLat, window._userGeoLng, m._spotLat, m._spotLng);
+                    if (d <= km) { group.addLayer(m); shown++; }
+                });
+                if (lbl) lbl.textContent = 'Spots à moins de';
+                if (valEl) valEl.textContent = km === 500 ? '500+ km' : km + ' km';
+                if (shown === 0 && valEl) valEl.textContent = 'Aucun spot';
+            }
+            function resetDistanceFilter() {
+                const slider = document.getElementById('geo-distance-slider');
+                const valEl = document.getElementById('geo-dist-val');
+                const lbl = document.getElementById('geo-filter-label');
+                if (slider) slider.value = 0;
+                if (valEl) valEl.textContent = 'Tout';
+                if (lbl && window._userGeoLat) lbl.textContent = 'Spots à moins de';
+                else if (lbl) lbl.textContent = 'Tous les spots';
+                const group = window._cotesMarkersGroup;
+                const allMarkers = window._cotesSpotsMarkers || [];
+                if (!group) return;
+                group.clearLayers();
+                allMarkers.forEach(m => group.addLayer(m));
+            }
+        </script>
+        <script src="js/nav.js"></script>
+        <script src="js/auth_auto.js" defer></script>
+        <script src="js/i18n.js" defer></script>
+        <script src="js/toast.js"></script>
+        <script src="js/api.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/global_search.js"></script>
+        <script src="js/legal_modals.js?v=6"></script>
+        <script src="js/auth_modal.js?v=1"></script>
+        <script src="js/chatbot.js"></script>
+        <script src="js/push_notifs.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SwellSync — Mes abonnements</title>
+    <meta name="description" content="SwellSync — Gérez les surfeurs que vous suivez.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #080f1a;
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .12);
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            transition: background .15s;
+            cursor: pointer;
+        }
+
+        .user-row:hover {
+            background: rgba(0, 186, 214, .04);
+        }
+
+        .unfollow-btn {
+            flex-shrink: 0;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: #94a3b8;
+            border-radius: 12px;
+            padding: 5px 12px;
+            transition: all .15s;
+        }
+
+        .unfollow-btn:hover {
+            border-color: #ef4444;
+            color: #f87171;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn .2s ease both;
+        }
+    </style>
+    <script src="js/theme.js"></script>
+
+    <style>
+      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
+      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
+      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
+      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
+      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
+      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
+      .light [class*="text-white"] { color: #0f172a !important; }
+      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
+      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
+      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
+      .light .section-label { color: #334155 !important; }
+      .light .setting-row:hover { background: #e2e8f0 !important; }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="min-h-screen pb-10">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        <a href="javascript:history.back()"
+            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        </a>
+        <h1 class="font-black text-base flex-1">Mes abonnements</h1>
+        <span id="countBadge"
+            class="text-[11px] bg-[#00bad6]/20 text-[#00bad6] px-2.5 py-1 rounded-full font-bold active:scale-95 transition-transform">0</span>
+    </header>
+
+    <!-- Tabs: Following / Followers -->
+    <div class="flex border-b border-white/5">
+        <button class="flex-1 py-3 text-sm font-bold text-[#00bad6] border-b-2 border-[#00bad6]" id="tabAbonnements"
+            onclick="switchTab('following')">
+            Abonnements
+        </button>
+        <button class="flex-1 py-3 text-sm font-bold text-slate-500 border-b-2 border-transparent" id="tabAbonnes"
+            onclick="switchTab('followers')">
+            Abonnés
+        </button>
+    </div>
+
+    <!-- Following list -->
+    <div id="followingSection">
+        <div id="followingList" class="card mx-4 mt-4 rounded-2xl overflow-hidden"></div>
+        <div id="followingEmpty" class="hidden text-center py-12 px-4">
+            <div class="text-4xl mb-3">🌊</div>
+            <p class="font-bold text-slate-300">Pas encore d'abonnements</p>
+            <p class="text-slate-500 text-sm mt-1">Suis d'autres surfeurs depuis la communauté ou la recherche.</p>
+            <a href="community.html"
+                class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-[#00bad6]/15 text-[#00bad6] font-bold text-sm active:scale-95 transition-transform">
+                Découvrir la communauté
+            </a>
+        </div>
+    </div>
+
+    <!-- Followers list (static demo) -->
+    <div id="followersSection" class="hidden">
+        <div class="card mx-4 mt-4 rounded-2xl overflow-hidden" id="followersList"></div>
+        <p class="text-center text-[10px] text-slate-600 mt-3 px-4">Tes abonnés sont les personnes qui te suivent sur
+            SwellSync.</p>
+    </div>
+
+    <script>
+        // ── Data of known users ──
+        const USERS_DB = {
+            'jeromesS': { name: 'JerômeS', region: 'Pays Basque', sessions: 42, followers: 287, avatar: 'J', color: 'bg-[#00bad6]/20 text-[#00bad6]', badges: ['⭐ Pro'] },
+            'marieLR': { name: 'MarieLR', region: 'Bretagne', sessions: 38, followers: 213, avatar: 'M', color: 'bg-purple-500/20 text-purple-400', badges: ['⚓ Bretagne'] },
+            'alexSurf29': { name: 'AlexSurf29', region: 'Bretagne', sessions: 31, followers: 156, avatar: 'A', color: 'bg-emerald-500/20 text-emerald-400', badges: [] },
+            'surfGuide64': { name: 'SurfGuide64', region: 'Landes', sessions: 28, followers: 341, avatar: 'S', color: 'bg-amber-500/20 text-amber-400', badges: ['⭐ Pro'] },
+            'bretagneSurf': { name: 'BretagneSurf', region: 'Bretagne', sessions: 25, followers: 189, avatar: 'B', color: 'bg-red-500/20 text-red-400', badges: ['⚓ Bretagne'] },
+        };
+
+        // Mock followers (people who follow current user)
+        const MOCK_FOLLOWERS = [
+            { id: 'ocean_rider', name: 'OceanRider', region: 'Vendée', avatar: 'O', color: 'bg-sky-500/20 text-sky-400' },
+            { id: 'wave_hunter', name: 'WaveHunter', region: 'Landes', avatar: 'W', color: 'bg-violet-500/20 text-violet-400' },
+            { id: 'lacanau_pro', name: 'LacanauPro', region: 'Gironde', avatar: 'L', color: 'bg-teal-500/20 text-teal-400' },
+        ];
+
+        let followed = JSON.parse(localStorage.getItem('sw_followed') || '[]');
+        let currentTab = 'following';
+
+        function render() {
+            document.getElementById('countBadge').textContent = followed.length;
+            renderFollowing();
+            renderFollowers();
+        }
+
+        function renderFollowing() {
+            const list = document.getElementById('followingList');
+            const empty = document.getElementById('followingEmpty');
+            if (followed.length === 0) {
+                list.classList.add('hidden');
+                empty.classList.remove('hidden');
+                return;
+            }
+            list.classList.remove('hidden');
+            empty.classList.add('hidden');
+            list.innerHTML = followed.map((id, i) => {
+                const u = USERS_DB[id] || { name: id, region: '—', sessions: 0, followers: 0, avatar: id[0]?.toUpperCase() || '?', color: 'bg-slate-700 text-slate-300', badges: [] };
+                return `<div class="user-row slide-in" style="animation-delay:${i * .04}s" onclick="viewProfile('${id}')">
+                <div class="w-10 h-10 rounded-full ${u.color} flex items-center justify-center font-black text-sm shrink-0">${u.avatar}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="font-bold text-sm">${u.name}</span>
+                        ${u.badges.map(b => `<span class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full font-bold">${b}</span>`).join('')}
+                    </div>
+                    <p class="text-[11px] text-slate-500">${u.region} · ${u.sessions} sessions</p>
+                </div>
+                <button class="unfollow-btn" onclick="event.stopPropagation();unfollow('${id}',this)">Se désabonner</button>
+            </div>`;
+            }).join('');
+        }
+
+        function renderFollowers() {
+            const list = document.getElementById('followersList');
+            list.innerHTML = MOCK_FOLLOWERS.map((u, i) => `
+            <div class="user-row slide-in" style="animation-delay:${i * .04}s" onclick="viewProfile('${u.id}')">
+                <div class="w-10 h-10 rounded-full ${u.color} flex items-center justify-center font-black text-sm shrink-0">${u.avatar}</div>
+                <div class="flex-1 min-w-0">
+                    <span class="font-bold text-sm">${u.name}</span>
+                    <p class="text-[11px] text-slate-500">${u.region}</p>
+                </div>
+                <button class="text-[11px] bg-[#00bad6]/15 text-[#00bad6] font-bold px-3 py-1.5 rounded-xl active:scale-95 transition-transform" onclick="event.stopPropagation()">Voir</button>
+            </div>
+        `).join('');
+        }
+
+        function unfollow(id, btn) {
+            btn.textContent = '⏳';
+            followed = followed.filter(f => f !== id);
+            localStorage.setItem('sw_followed', JSON.stringify(followed));
+            setTimeout(render, 300);
+        }
+
+        function viewProfile(id) {
+            window.location.href = `user-profile.html?id=${id}`;
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('followingSection').classList.toggle('hidden', tab !== 'following');
+            document.getElementById('followersSection').classList.toggle('hidden', tab !== 'followers');
+            document.getElementById('tabAbonnements').classList.toggle('text-[#00bad6]', tab === 'following');
+            document.getElementById('tabAbonnements').classList.toggle('text-slate-500', tab !== 'following');
+            document.getElementById('tabAbonnements').style.borderBottomColor = tab === 'following' ? '#00bad6' : 'transparent';
+            document.getElementById('tabAbonnes').classList.toggle('text-[#00bad6]', tab === 'followers');
+            document.getElementById('tabAbonnes').classList.toggle('text-slate-500', tab !== 'followers');
+            document.getElementById('tabAbonnes').style.borderBottomColor = tab === 'followers' ? '#00bad6' : 'transparent';
+            document.getElementById('countBadge').textContent = tab === 'following' ? followed.length : MOCK_FOLLOWERS.length;
+        }
+
+        render();
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+<script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

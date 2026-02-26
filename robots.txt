@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Pages applicatives et API — à ne pas indexer
+Disallow: /api/
+Disallow: /admin/
+Disallow: /admin.html
+
+# Resources statiques OK
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+
+Sitemap: https://swellsync.surf/sitemap.xml

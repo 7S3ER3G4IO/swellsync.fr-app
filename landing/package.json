@@ -1,0 +1,13 @@
+{
+    "name": "swellsync-landing",
+    "version": "1.0.0",
+    "description": "SwellSync — Mini site vitrine PWA",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}

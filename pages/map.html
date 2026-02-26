@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Découvrir les Spots</title>
+    <meta name="description" content="SwellSync Spots — Trouvez les meilleurs spots de surf sur la côte Atlantique avec conditions en temps réel.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438", "background-light": "#f0f6ff", "card-light": "#ffffff" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        /* Dark */
+        .dark body {
+            background: #080f1a;
+            color: #f1f5f9
+        }
+
+        .dark .card {
+            background: rgba(15, 36, 56, 0.8);
+            border: 1px solid rgba(0, 186, 214, 0.12)
+        }
+
+        .dark .search-bar {
+            background: rgba(15, 36, 56, 0.8);
+            border: 1px solid rgba(0, 186, 214, 0.15);
+            color: #f1f5f9
+        }
+
+        .dark .chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8
+        }
+
+        .dark .chip.active {
+            background: rgba(0, 186, 214, 0.2);
+            border-color: rgba(0, 186, 214, 0.4);
+            color: #00bad6
+        }
+
+        .dark .page-bg {
+            background: #080f1a
+        }
+
+        .dark .hdr {
+            background: rgba(8, 15, 26, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 186, 214, 0.1)
+        }
+
+        .dark .nav-bar {
+            background: #080f1a;
+            border-top: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .dark .spot-title {
+            color: #f1f5f9
+        }
+
+        .dark .spot-sub {
+            color: #64748b
+        }
+
+        /* Light */
+        .light body {
+            background: #f0f6ff;
+            color: #1e293b
+        }
+
+        .light .card {
+            background: #fff;
+            border: 1px solid #e2eaf4;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06)
+        }
+
+        .light .search-bar {
+            background: #fff;
+            border: 1px solid #c7dff7;
+            color: #1e293b
+        }
+
+        .light .chip {
+            background: #fff;
+            border: 1px solid #e2eaf4;
+            color: #64748b
+        }
+
+        .light .chip.active {
+            background: rgba(0, 186, 214, 0.1);
+            border-color: #00bad6;
+            color: #0099b3
+        }
+
+        .light .page-bg {
+            background: #f0f6ff
+        }
+
+        .light .hdr {
+            background: rgba(240, 246, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #e2eaf4
+        }
+
+        .light .nav-bar {
+            background: #fff;
+            border-top: 1px solid #e2eaf4
+        }
+
+        .light .spot-title {
+            color: #1e293b
+        }
+
+        .light .spot-sub {
+            color: #64748b
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: max(884px, 100dvh)
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, rgba(0, 186, 214, .06) 25%, rgba(0, 186, 214, .12) 50%, rgba(0, 186, 214, .06) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0
+            }
+
+            100% {
+                background-position: -200% 0
+            }
+        }
+    </style>
+
+    <style>
+      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
+      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
+      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
+      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
+      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
+      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
+      .light [class*="text-white"] { color: #0f172a !important; }
+      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
+      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
+      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
+      .light .section-label { color: #334155 !important; }
+      .light .setting-row:hover { background: #e2e8f0 !important; }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="page-bg font-display pb-28">
+
+    <!-- Header sticky -->
+    <header class="hdr sticky top-0 z-30 px-4 py-3 space-y-3">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#00bad6]">travel_explore</span>
+            <h1 class="text-xl font-bold flex-1">Spots</h1>
+            <span id="spotCount"
+                class="text-xs px-2.5 py-1 rounded-full bg-[#00bad6]/20 text-[#00bad6] font-bold active:scale-95 transition-transform">—</span>
+        </div>
+        <!-- Barre de recherche -->
+        <div class="relative">
+            <input id="searchInput" type="search" inputmode="search" placeholder="🔍  Chercher un spot, une ville…"
+                class="search-bar w-full rounded-2xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#00bad6]/40"
+                oninput="onSearch(this.value)" />
+            <button onclick="document.getElementById('searchInput').value='';onSearch('')"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#00bad6] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+        </div>
+        <!-- Filtres -->
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            <button onclick="setChip('all',this)" data-val="all"
+                class="chip active whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">Tous</button>
+            <button onclick="setChip('debutant',this)" data-val="debutant"
+                class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">🌊 Débutant</button>
+            <button onclick="setChip('intermediaire',this)" data-val="intermediaire"
+                class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">⚡ Inter.</button>
+            <button onclick="setChip('avance',this)" data-val="avance"
+                class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">🔥 Avancé</button>
+            <button onclick="setChip('favs',this)" data-val="favs"
+                class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">❤️ Favoris</button>
+        </div>
+    </header>
+
+    <!-- Paywall favoris modal -->
+    <div id="favPaywall"
+        class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="w-full max-w-xs bg-[#0b1929] rounded-3xl border border-amber-400/30 overflow-hidden">
+            <div class="p-6 text-center space-y-3">
+                <div class="w-14 h-14 rounded-2xl bg-amber-400/20 flex items-center justify-center mx-auto">
+                    <span class="material-symbols-outlined text-amber-400 text-3xl">favorite</span>
+                </div>
+                <h2 class="font-black text-base text-amber-300">Limite atteinte !</h2>
+                <p class="text-xs text-slate-400 leading-relaxed">Les membres gratuits peuvent ajouter jusqu'à <strong
+                        class="text-white">3 spots en favoris</strong>. Passe à <strong class="text-amber-400">SwellSync
+                        Pro</strong> pour des favoris illimités.</p>
+                <a href="abonnement.html"
+                    class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-black text-sm text-black"
+                    style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+                    <span class="material-symbols-outlined text-[18px]">star</span>Passer Pro — Favoris illimités
+                </a>
+                <button onclick="document.getElementById('favPaywall').classList.replace('flex','hidden')"
+                    class="w-full py-2 text-slate-500 text-xs">Plus tard</button>
+            </div>
+        </div>
+    </div>
+
+    <main id="list" class="px-4 py-4 space-y-3 max-w-lg mx-auto">
+        <!-- Skeletons -->
+        <div class="skeleton h-20 rounded-2xl"></div>
+        <div class="skeleton h-20 rounded-2xl"></div>
+        <div class="skeleton h-20 rounded-2xl"></div>
+        <div class="skeleton h-20 rounded-2xl"></div>
+        <div class="skeleton h-20 rounded-2xl"></div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined" >home</span><span
+                class="text-[10px]">Home</span>
+            
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="map.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">travel_explore</span><span class="text-[10px] font-bold">Spots</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+
+    <script src="js/api.js"></script>
+    <script>
+        // Image dédiée par spot (lookup par nom/id, fallback si non trouvé)
+        const SPOT_IMGS = {
+            // Hossegor
+            hossegor: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80',
+            // La Torche
+            torche: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+            // Biarritz & fallback
+            biarritz: 'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80',
+        };
+
+        // Retourne l'image appropriée selon le nom/id du spot
+        function getSpotImg(spot) {
+            if (!spot) return SPOT_IMGS.biarritz;
+            const key = (spot.id || spot.name || '').toString().toLowerCase();
+            const name = (spot.name || '').toLowerCase();
+            if (key.includes('hossegor') || name.includes('hossegor') || name.includes('graviere') || name.includes('landes')) return SPOT_IMGS.hossegor;
+            if (key.includes('torche') || name.includes('torche') || name.includes('bretagne') || name.includes('palue') || name.includes('quiberon') || name.includes('belle')) return SPOT_IMGS.torche;
+            // Fallback: utiliser le modulo pour toujours avoir une image
+            const imgs = [SPOT_IMGS.hossegor, SPOT_IMGS.torche, SPOT_IMGS.biarritz];
+            const idx = Math.abs((spot.id || 0) * 37 + 7) % 3;
+            return imgs[idx];
+        }
+
+        const MAX_FAVS_FREE = 3;
+        let allSpots = [], favIds = [], currentFilter = 'all', query = '', isPro = false;
+        const COND = ['Bon', 'Excellent', 'Correct', 'Très bon', 'Correct'];
+
+        const diffLabel = d => ({ debutant: '🌊 Débutant', intermediaire: '⚡ Inter.', avance: '🔥 Avancé', expert: '💀 Expert' }[d?.toLowerCase()] || d || '—');
+        const condColor = c => ({ 'Excellent': 'text-[#00bad6]', 'Très bon': 'text-emerald-400', 'Bon': 'text-green-400', 'Correct': 'text-yellow-400' }[c] || 'text-slate-400');
+        const diffColor = d => ({ debutant: 'bg-emerald-500/20 text-emerald-400', intermediaire: 'bg-yellow-500/20 text-yellow-400', avance: 'bg-orange-500/20 text-orange-400', expert: 'bg-red-500/20 text-red-400' }[d?.toLowerCase()] || 'bg-slate-700 text-slate-400');
+
+        async function init() {
+            try {
+                allSpots = await API.spots.list();
+                try {
+                    const f = await API.favorites.list();
+                    favIds = f.map(x => x.spot_id);
+                } catch { }
+                try {
+                    const me = await API.auth.me();
+                    isPro = !!me.is_pro;
+                } catch { }
+                document.getElementById('spotCount').textContent = allSpots.length + ' spots';
+                render();
+            } catch {
+                document.getElementById('list').innerHTML = '<p class="text-slate-500 text-sm text-center py-10">Impossible de charger les spots.<br/>Vérifie que le serveur tourne.</p>';
+            }
+        }
+
+        function norm(s) {
+            return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+        function getFiltered() {
+            let spots = allSpots;
+            if (currentFilter === 'favs') spots = spots.filter(s => favIds.includes(s.id));
+            else if (currentFilter !== 'all') spots = spots.filter(s => norm(s.difficulty).includes(norm(currentFilter)));
+            if (query) {
+                const q = query.toLowerCase();
+                spots = spots.filter(s => s.name.toLowerCase().includes(q) || s.location.toLowerCase().includes(q));
+            }
+            return spots;
+        }
+
+        async function toggleFav(e, spotId) {
+            e.preventDefault(); e.stopPropagation();
+            const isFav = favIds.includes(spotId);
+            if (!isFav && !isPro && favIds.length >= MAX_FAVS_FREE) {
+                document.getElementById('favPaywall').classList.replace('hidden', 'flex');
+                return;
+            }
+            const btn = e.currentTarget;
+            const icon = btn.querySelector('.material-symbols-outlined');
+
+            if (!isFav) {
+                // Add animation: scale bounce + float hearts
+                btn.style.background = 'rgba(239,68,68,.3)';
+                if (icon) {
+                    icon.style.color = '#f87171';
+                    icon.style.fontVariationSettings = "'FILL' 1";
+                    icon.style.transition = 'transform .12s ease';
+                    icon.style.transform = 'scale(1.6)';
+                    setTimeout(() => { icon.style.transform = 'scale(0.9)'; }, 140);
+                    setTimeout(() => { icon.style.transform = 'scale(1.25)'; }, 250);
+                    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 360);
+                }
+                // Float-up heart particles
+                const rect = btn.getBoundingClientRect();
+                for (let i = 0; i < 5; i++) {
+                    const h = document.createElement('div');
+                    h.textContent = '\u2764\ufe0f';
+                    const x = rect.left + rect.width * 0.5 + (Math.random() - 0.5) * 36;
+                    const y = rect.top + (Math.random() * 4);
+                    h.style.cssText = `position:fixed;font-size:${10 + Math.random() * 10}px;pointer-events:none;z-index:9999;left:${x}px;top:${y}px;transition:all ${0.6 + Math.random() * 0.4}s ease;opacity:1;transform:scale(1);`;
+                    document.body.appendChild(h);
+                    requestAnimationFrame(() => {
+                        h.style.transform = `translateY(-${45 + Math.random() * 35}px) scale(0.4) rotate(${(Math.random() - 0.5) * 30}deg)`;
+                        h.style.opacity = '0';
+                    });
+                    setTimeout(() => h.remove(), 1100);
+                }
+            } else {
+                // Remove animation: dim
+                btn.style.background = 'rgba(0,0,0,.45)';
+                if (icon) {
+                    icon.style.color = 'rgba(255,255,255,.6)';
+                    icon.style.fontVariationSettings = "'FILL' 0";
+                    icon.style.transition = 'transform .15s';
+                    icon.style.transform = 'scale(0.8)';
+                    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 200);
+                }
+            }
+
+            try {
+                if (isFav) {
+                    await API.favorites.remove(spotId);
+                    favIds = favIds.filter(id => id !== spotId);
+                } else {
+                    await API.favorites.add(spotId);
+                    favIds.push(spotId);
+                }
+                render();
+            } catch { render(); }
+        }
+
+        function favBtn(spotId, small = false) {
+            const isFav = favIds.includes(spotId);
+            const sz = small ? 'text-[14px] w-6 h-6' : 'text-[18px] w-8 h-8';
+            return `<button onclick="toggleFav(event,${spotId})" class="${sz} rounded-full flex items-center justify-center transition-all active:scale-90"
+                style="background:${isFav ? 'rgba(239,68,68,.25)' : 'rgba(0,0,0,.45)'}">
+                <span class="material-symbols-outlined ${small ? 'text-[14px]' : 'text-[18px]'} ${isFav ? 'text-red-400' : 'text-white/60'}"
+                style="font-variation-settings:'FILL' ${isFav ? 1 : 0}">favorite</span>
+            </button>`;
+        }
+
+        function render() {
+            const filtered = getFiltered();
+            const el = document.getElementById('list');
+            document.getElementById('spotCount').textContent = filtered.length + ' spots';
+            if (!filtered.length) {
+                el.innerHTML = `<div class="flex flex-col items-center gap-3 py-16 text-slate-500">
+                    <span class="material-symbols-outlined text-5xl">search_off</span>
+                    <p class="text-sm text-center">Aucun spot trouvé<br/><span class="text-xs">Essaie de changer les filtres</span></p>
+                </div>`;
+                return;
+            }
+
+            let html = '';
+
+            // Card Hero (premier spot)
+            const hero = filtered[0];
+            const heroH = (1.2 + Math.abs(Math.sin(hero.id * 7)) * 2).toFixed(1);
+            const herbCond = COND[hero.id % COND.length];
+            const isFavHero = favIds.includes(hero.id);
+            html += `<a href="spot_detail.html?id=${hero.id}" class="card rounded-3xl overflow-hidden block active:scale-[.99] transition-transform relative">
+              <div class="relative w-full" style="height:180px">
+                <img src="${getSpotImg(hero)}" class="w-full h-full object-cover"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div class="absolute top-3 right-3">${favBtn(hero.id)}</div>
+                <div class="absolute bottom-3 left-4 right-14">
+                  <span class="text-[9px] ${condColor(herbCond)} font-black uppercase tracking-wide">${herbCond}</span>
+                  <h2 class="text-white font-black text-lg leading-tight mt-0.5">${hero.name}</h2>
+                  <p class="text-white/60 text-xs">${hero.location}</p>
+                </div>
+              </div>
+              <div class="px-4 py-3 flex items-center gap-3">
+                <span class="text-xs font-bold px-2 py-1 rounded-full ${diffColor(hero.difficulty)}">${diffLabel(hero.difficulty)}</span>
+                <span class="text-white/40 text-xs">·</span>
+                <span class="text-[#00bad6] text-xs font-bold">${heroH}m</span>
+                <span class="ml-auto text-[10px] text-slate-500">${isFavHero ? '❤️ En favoris' : 'Appuyer ❤️ pour sauvegarder'}</span>
+              </div>
+            </a>`;
+
+            // Reste en grille 2 colonnes
+            const rest = filtered.slice(1);
+            if (rest.length) {
+                html += `<div class="grid grid-cols-2 gap-2.5">`;
+                rest.forEach(s => {
+                    const isFav = favIds.includes(s.id);
+                    const h = (1.2 + Math.abs(Math.sin(s.id * 7)) * 2).toFixed(1);
+                    const cond = COND[s.id % COND.length];
+                    html += `
+                    <a href="spot_detail.html?id=${s.id}" class="card rounded-2xl overflow-hidden active:scale-[.98] transition-transform">
+                      <div class="relative w-full" style="height:100px">
+                        <img src="${getSpotImg(s)}" class="w-full h-full object-cover"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-1.5 left-2 right-2">
+                          <p class="text-white font-bold text-sm leading-tight truncate">${s.name}</p>
+                          <p class="text-white/60 text-[9px] truncate">${s.location}</p>
+                        </div>
+                        <div class="absolute top-1.5 right-1.5">${favBtn(s.id, true)}</div>
+                      </div>
+                      <div class="p-2 flex items-center justify-between gap-1">
+                        <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full ${diffColor(s.difficulty)} truncate max-w-[70%]">${diffLabel(s.difficulty)}</span>
+                        <span class="text-[#00bad6] text-xs font-bold shrink-0">${h}m</span>
+                      </div>
+                    </a>`;
+                });
+                html += `</div>`;
+
+                // Mention limite favoris (si non pro)
+                if (!isPro) {
+                    html += `<p class="text-center text-[10px] text-slate-600 mt-1">❤️ ${favIds.length}/${MAX_FAVS_FREE} favoris utilisés${favIds.length >= MAX_FAVS_FREE ? ' — <a href="abonnement.html" class="text-amber-400 font-bold">Pro pour illimités →</a>' : ''}</p>`;
+                }
+            }
+
+            el.innerHTML = html;
+        }
+
+
+        function onSearch(v) { query = v.trim(); render(); }
+
+        function setChip(val, el) {
+            currentFilter = val;
+            document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        init();
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+<script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

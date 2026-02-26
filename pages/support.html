@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SwellSync — Centre d'aide</title>
+    <meta name="description" content="SwellSync Support — FAQ et formulaire de contact pour obtenir de l'aide.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #080f1a;
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .12);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+        }
+
+        .faq-item:last-child {
+            border: none;
+        }
+
+        .faq-q {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            gap: 8px;
+            transition: background .15s;
+        }
+
+        .faq-q:hover {
+            background: rgba(0, 186, 214, .04);
+        }
+
+        .faq-a {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.6;
+            padding: 0 16px 14px;
+            display: none;
+        }
+
+        .faq-item.open .faq-a {
+            display: block;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-chevron {
+            transition: transform .2s;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all .2s;
+        }
+
+        .tab-btn.active {
+            background: #00bad6;
+            color: #080f1a;
+        }
+
+        .tab-btn:not(.active) {
+            color: #64748b;
+        }
+
+        input,
+        textarea,
+        select {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .2);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #f1f5f9;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #00bad6;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #475569;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp .2s ease both;
+        }
+
+        .search-box {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .2);
+            border-radius: 16px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            padding: 0;
+            border-radius: 0;
+        }
+    </style>
+    <script src="js/theme.js"></script>
+
+    <style>
+      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
+      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
+      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
+      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
+      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
+      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
+      .light [class*="text-white"] { color: #0f172a !important; }
+      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
+      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
+      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
+      .light .section-label { color: #334155 !important; }
+      .light .setting-row:hover { background: #e2e8f0 !important; }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="min-h-screen pb-20">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        <a href="javascript:history.back()"
+            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        </a>
+        <h1 class="font-black text-base flex-1">Centre d'aide</h1>
+        <div class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
+            <span class="material-symbols-outlined text-[#00bad6] text-[18px]">help</span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="px-4 pt-5 pb-4 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-[#00bad6]/15 flex items-center justify-center mx-auto mb-3 active:scale-95 transition-transform">
+            <span class="material-symbols-outlined text-[#00bad6] text-3xl">support_agent</span>
+        </div>
+        <h2 class="font-black text-xl mb-1">Comment peut-on t'aider ? 🤙</h2>
+        <p class="text-slate-400 text-sm">Retrouve les réponses à tes questions ci-dessous</p>
+    </div>
+
+    <!-- Search -->
+    <div class="px-4 mb-4">
+        <div class="search-box">
+            <span class="material-symbols-outlined text-slate-500 text-[18px]">search</span>
+            <input type="search" id="faqSearch" placeholder="Rechercher une question…"
+                oninput="filterFAQ(this.value)" />
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="px-4 mb-4">
+        <div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none">
+            <button class="tab-btn active shrink-0" onclick="switchTab('all',this)">Tous</button>
+            <button class="tab-btn shrink-0" onclick="switchTab('compte',this)">Compte</button>
+            <button class="tab-btn shrink-0" onclick="switchTab('pro',this)">Pro & Paiement</button>
+            <button class="tab-btn shrink-0" onclick="switchTab('surf',this)">Surf & Spots</button>
+            <button class="tab-btn shrink-0" onclick="switchTab('tech',this)">Technique</button>
+        </div>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div id="faqList" class="px-4 space-y-2">
+
+        <!-- COMPTE -->
+        <div class="card rounded-2xl overflow-hidden fade-up" data-cat="compte">
+            <div class="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">👤 Compte</div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment modifier mon profil ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → Modifier le profil</strong>. Tu peux changer ton nom, ta
+                    bio, ta région et ta photo de profil. Clique ensuite sur "Sauvegarder" pour valider.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment changer mon mot de passe ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → Changer le mot de passe</strong>. Saisis ton mot de
+                    passe actuel puis le nouveau deux fois. La modification est immédiate.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment supprimer mon compte ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → Supprimer le compte</strong>. Cette action est
+                    irréversible. Toutes tes données seront effacées de nos serveurs dans les 30 jours suivants.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment passer mon compte en privé ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → Compte privé</strong> et active le toggle. Seuls tes
+                    abonnés pourront voir tes posts dans le feed communautaire.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">J'ai oublié mon mot de passe, que faire ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Sur l'écran de connexion, appuie sur <strong>"Mot de passe oublié"</strong>. Un code
+                    de réinitialisation te sera envoyé par email ou SMS selon ton choix.</div>
+            </div>
+        </div>
+
+        <!-- PRO & PAIEMENT -->
+        <div class="card rounded-2xl overflow-hidden fade-up" data-cat="pro" style="animation-delay:.05s">
+            <div class="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">⭐ Pro & Paiement
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Qu'est-ce qu'inclut SwellSync Pro ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Pro inclut : alertes de houle en temps réel, accès aux archives de posts, prévisions
+                    J+15, données historiques illimitées, coach IA avancé, et le badge ⭐ Pro visible sur ton profil.
+                </div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment résilier mon abonnement Pro ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → SwellSync Pro → Gérer l'abonnement</strong>. Tu peux
+                    résilier à tout moment sans frais. Ton accès Pro reste actif jusqu'à la fin de la période payée.
+                </div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">SwellSync Pro est-il remboursable ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Oui, nous offrons une garantie satisfait ou remboursé de 7 jours pour tout nouvel
+                    abonnement. Contacte-nous à support@swellsync.app dans ce délai.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Quels moyens de paiement sont acceptés ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Visa, Mastercard, American Express, Stripe, Apple Pay et Google Pay. Tes données de
+                    carte sont sécurisées et chiffrées via Stripe.</div>
+            </div>
+        </div>
+
+        <!-- SURF & SPOTS -->
+        <div class="card rounded-2xl overflow-hidden fade-up" data-cat="surf" style="animation-delay:.1s">
+            <div class="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">🌊 Surf & Spots</div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment ajouter un spot en favori ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Dans la <strong>carte des spots</strong>, appuie sur un spot puis clique sur le cœur
+                    ❤️. Il apparaît alors dans ta section "Mes Spots Favoris" sur la page d'accueil.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Les prévisions sont-elles fiables ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">SwellSync utilise <strong>Stormglass API</strong> couplé à notre algorithme IA
+                    propriétaire qui analyse 12 paramètres marine en temps réel. La fiabilité est supérieure à 87% sur
+                    48h.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment créer une alerte de houle ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Alertes</strong> (icône cloche ⭐ en navigation). Configure le spot,
+                    la hauteur minimale de houle et la fenêtre horaire. Tu recevras une notification push quand les
+                    conditions sont réunies.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment enregistrer une session de surf ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Dans la <strong>Communauté</strong>, clique sur l'onglet "Sessions" et appuie sur "➕
+                    Nouvelle session". Sélectionne le spot, note les conditions et ton ressenti.</div>
+            </div>
+        </div>
+
+        <!-- TECHNIQUE -->
+        <div class="card rounded-2xl overflow-hidden fade-up" data-cat="tech" style="animation-delay:.15s">
+            <div class="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">🔧 Technique</div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">L'application ne m'affiche pas ma position. Pourquoi ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Vérifie que la <strong>localisation</strong> est autorisée dans <strong>Paramètres →
+                        Autorisations → Localisation</strong>. Sur iOS, va aussi dans Réglages → SwellSync →
+                    Localisation et active "En cours d'utilisation".</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Je ne reçois pas les notifications push. Comment les activer ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → Autorisations → Notifications Push</strong> et active le
+                    toggle. Vérifie aussi les réglages de ton téléphone : Réglages → Notifications → SwellSync.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">Comment changer la langue de l'application ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Va dans <strong>Paramètres → Langue</strong> et choisis entre Français et English.
+                    L'interface de toute l'application sera mise à jour immédiatement.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-q">L'application est lente ou bugge, que faire ?<span
+                        class="material-symbols-outlined text-slate-500 faq-chevron text-[18px]">expand_more</span>
+                </div>
+                <div class="faq-a">Essaie de vider le cache (Paramètres téléphone → SwellSync → Effacer le cache). Si le
+                    problème persiste, désinstalle et réinstalle l'application. Tes données de compte sont conservées.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="px-4 mt-6">
+        <div class="card rounded-2xl p-4 fade-up" style="animation-delay:.2s">
+            <h3 class="font-black text-sm mb-1">📬 Tu n'as pas trouvé ta réponse ?</h3>
+            <p class="text-slate-400 text-xs mb-4">L'équipe SwellSync répond généralement en moins de 24h.</p>
+
+            <div class="space-y-3" id="contactForm">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Sujet</label>
+                    <select id="contactSubject">
+                        <option value="bug">🐛 Signaler un bug</option>
+                        <option value="account">👤 Problème de compte</option>
+                        <option value="billing">💳 Facturation / Abonnement</option>
+                        <option value="feature">💡 Suggestion de fonctionnalité</option>
+                        <option value="other">❓ Autre</option>
+                    </select>
+                </div>
+                <div>
+                    <label
+                        class="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Message</label>
+                    <textarea id="contactMessage" rows="4" placeholder="Décris ton problème en détail…"></textarea>
+                </div>
+                <button onclick="sendContact()" class="w-full py-3 rounded-2xl font-black text-sm text-[#080f1a]"
+                    style="background:#00bad6">
+                    📤 Envoyer le message
+                </button>
+            </div>
+
+            <div id="contactSent" class="hidden text-center py-4">
+                <div class="text-3xl mb-2">✅</div>
+                <p class="font-bold text-emerald-400">Message envoyé !</p>
+                <p class="text-slate-400 text-xs mt-1">Tu recevras une réponse sous 24h à ton email.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="px-4 mt-4">
+        <div class="card rounded-2xl overflow-hidden">
+            <a href="../cgv.html"
+                class="flex items-center gap-3 p-4 border-b border-white/5 hover:bg-white/3 transition-colors">
+                <span class="material-symbols-outlined text-slate-400 text-[18px]">policy</span>
+                <span class="text-sm text-slate-300">Conditions générales d'utilisation</span>
+                <span class="material-symbols-outlined text-slate-600 text-[16px] ml-auto">chevron_right</span>
+            </a>
+            <a href="../privacy.html"
+                class="flex items-center gap-3 p-4 border-b border-white/5 hover:bg-white/3 transition-colors">
+                <span class="material-symbols-outlined text-slate-400 text-[18px]">privacy_tip</span>
+                <span class="text-sm text-slate-300">Politique de confidentialité</span>
+                <span class="material-symbols-outlined text-slate-600 text-[16px] ml-auto">chevron_right</span>
+            </a>
+            <a href="mailto:support@swellsync.app"
+                class="flex items-center gap-3 p-4 hover:bg-white/3 transition-colors">
+                <span class="material-symbols-outlined text-[#00bad6] text-[18px]">email</span>
+                <span class="text-sm text-slate-300">support@swellsync.app</span>
+                <span class="material-symbols-outlined text-slate-600 text-[16px] ml-auto">chevron_right</span>
+            </a>
+        </div>
+    </div>
+
+    <p class="text-center text-[10px] text-slate-700 py-6">SwellSync v2.1.0 · Fait avec ❤️ pour les surfeurs</p>
+
+    <script>
+        function toggleFAQ(item) {
+            const isOpen = item.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        function switchTab(cat, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('#faqList > [data-cat]').forEach(sec => {
+                sec.style.display = (cat === 'all' || sec.dataset.cat === cat) ? '' : 'none';
+            });
+        }
+
+        function filterFAQ(q) {
+            const nq = q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const text = item.textContent.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                item.style.display = (!nq || text.includes(nq)) ? '' : 'none';
+            });
+        }
+
+        function sendContact() {
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value.trim();
+            if (!message) return;
+            // Send via mailto as fallback
+            const subjectLine = encodeURIComponent('SwellSync Support - ' + subject);
+            const body = encodeURIComponent(message);
+            // Try API first, fallback to mailto
+            fetch('/api/contact', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ subject, message })
+            }).catch(() => {
+                window.location.href = `mailto:support@swellsync.app?subject=${subjectLine}&body=${body}`;
+            });
+            document.getElementById('contactForm').classList.add('hidden');
+            document.getElementById('contactSent').classList.remove('hidden');
+        }
+    </script>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person</span><span class="text-[10px] font-bold">Profil</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+    </nav>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+<script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

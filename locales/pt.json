@@ -1,0 +1,273 @@
+{
+  "nav": {
+    "home": "Início",
+    "cotes": "Costa",
+    "conditions": "Condições",
+    "actu": "Notícias",
+    "ai_labs": "AI Labs",
+    "communaute": "Comunidade",
+    "journal": "Diário Surf",
+    "coaching": "Coaching",
+    "abonnement": "Plano Pro",
+    "pro": "Pro Tools",
+    "dashboard": "Meu Dashboard",
+    "contact": "Contato",
+    "login": "Entrar",
+    "logout": "Sair",
+    "search": "Pesquisar",
+    "surf_trip": "Surf Trip",
+    "reseaux": "Redes",
+    "iot": "IoT Network"
+  },
+  "hero": {
+    "title_1": "Surfe as Ondas.",
+    "title_2": "Viva o Momento.",
+    "desc": "Previsões de surf de ponta impulsionadas pela inteligência oceânica em tempo real.",
+    "cta_swell": "Verificar o Swell",
+    "cta_spots": "Explorar Spots",
+    "tagline": "Previsões de surf ultra-precisas",
+    "subtitle": "Dados de satélite · 12 modelos meteorológicos · Tempo real",
+    "cta_map": "Ver o mapa",
+    "cta_conditions": "Condições ao vivo"
+  },
+  "home": {
+    "map_title": "Rede Mundial",
+    "map_heading": "Mapa ao Vivo",
+    "map_desc": "Explore nossa lista de spots de surf premium ao redor do mundo.",
+    "spots_title": "Top Spots de Surf",
+    "spots_live": "Ao vivo · Spots ativos",
+    "spots_subtitle": "Spots Premium",
+    "ai_badge": "IA SWELLSYNC",
+    "ai_title": "Índice de Confiança",
+    "ai_desc": "Cálculo final baseado em 12 bots neurais.",
+    "meteo_title": "Clima ao Vivo",
+    "meteo_desc": "Sistema de Meteorologia Marinha ativo.",
+    "actu_title": "Notícias de Surf",
+    "actu_badge": "Notícias",
+    "faq_title": "Perguntas Frequentes",
+    "faq_subtitle": "Tudo que você precisa saber sobre SwellSync.",
+    "section_spots_title": "Spots em Destaque",
+    "section_spots_sub": "Os melhores spots selecionados hoje.",
+    "swell_forecast": "Previsão de Swell",
+    "swell_reliability": "Verificação da confiabilidade..."
+  },
+  "abonnement": {
+    "badge": "Sem compromisso — Cancele quando quiser",
+    "title": "Surfe",
+    "title2": "sem limites",
+    "desc": "Previsões ultra-precisas, alertas em tempo real e ferramentas pro.",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "save": "Economize 20%",
+    "free": "Gratuito",
+    "pro": "Pro",
+    "elite": "Elite",
+    "free_price": "€0",
+    "pro_price": "€9,90",
+    "elite_price": "€24,90",
+    "per_month": "/mês",
+    "per_year": "/ano",
+    "cta_free": "Começar grátis",
+    "cta_pro": "Escolher Pro",
+    "cta_elite": "Escolher Elite",
+    "popular": "Mais popular",
+    "current": "Seu plano atual",
+    "cancel_anytime": "Cancele quando quiser, sem compromisso.",
+    "secure_payment": "Pagamento seguro pelo Stripe"
+  },
+  "actu": {
+    "title": "Notícias",
+    "subtitle": "Surf · Ondulação · Cultura",
+    "badge": "Notícias",
+    "breaking": "🌊 Últimas notícias",
+    "all": "Tudo",
+    "surf": "Surf",
+    "competition": "Competições",
+    "read_more": "Ler mais",
+    "save": "Guardar",
+    "share": "Partilhar",
+    "no_actu": "Nenhum artigo encontrado."
+  },
+  "coaching": {
+    "badge": "Programa personalizado",
+    "title": "🏄 Coaching de Surf",
+    "subtitle": "Exercícios direcionados, técnica em vídeo e objetivos para melhorar.",
+    "all_levels": "Todos os níveis",
+    "beginner": "Iniciante",
+    "intermediate": "Intermediário",
+    "advanced": "Avançado",
+    "mark_done": "Marcar como feito",
+    "view_exercise": "Ver exercício",
+    "my_objectives": "Meus Objetivos",
+    "add_objective": "+ Objetivo",
+    "weekly_tip": "Dica da semana"
+  },
+  "communaute": {
+    "title": "Comunidade SwellSync",
+    "subtitle": "Conecte-se com outros surfistas.",
+    "badge": "Comunidade",
+    "members": "membros",
+    "online": "online",
+    "new_post": "Nova publicação",
+    "write_placeholder": "Compartilhe sua sessão...",
+    "publish": "Publicar",
+    "cancel": "Cancelar",
+    "follow": "Seguir",
+    "following": "Seguindo"
+  },
+  "contact": {
+    "badge": "Respondemos em 24h",
+    "title": "Contacte",
+    "title2": "a equipa SwellSync",
+    "desc": "Uma pergunta sobre as suas condições, subscrição ou parceria? Estamos aqui.",
+    "name_label": "Nome",
+    "name_placeholder": "O seu nome...",
+    "email_label": "Email",
+    "send": "Enviar mensagem",
+    "sent": "Mensagem enviada! Respondemos em 24h."
+  },
+  "cotes": {
+    "title": "Mapa da Costa",
+    "subtitle": "Explore spots em tempo real.",
+    "badge": "Rede ao Vivo",
+    "conditions": "Condições",
+    "swell": "Ondulação",
+    "wind": "Vento",
+    "tide": "Maré"
+  },
+  "journal": {
+    "title": "Diário de Surf",
+    "subtitle": "Cada sessão merece ser lembrada.",
+    "new_session": "Nova sessão",
+    "export_pdf": "PDF",
+    "sessions": "Sessões",
+    "in_water": "Na água",
+    "best_score": "Melhor pontuação",
+    "spot": "Spot",
+    "date": "Data",
+    "duration": "Duração (min)",
+    "wave_height": "Ondulação (m)",
+    "notes": "Notas",
+    "save": "Guardar",
+    "score": "Pontuação /10"
+  },
+  "surf_trip": {
+    "badge": "Algoritmo SwellSync",
+    "title": "🗺️ Planejador de Surf Trip",
+    "desc": "Encontre os melhores spots segundo a ondulação, a maré e o vento.",
+    "configure": "🔍 Configurar a sua viagem",
+    "region": "Região de partida",
+    "search": "🔍 Encontrar minha viagem",
+    "results_title": "🏄 Spots recomendados",
+    "all_levels": "Todos os níveis",
+    "details": "Ver condições"
+  },
+  "chatbot": {
+    "status": "Conectado · Ao vivo",
+    "clear_title": "Reiniciar",
+    "intro": "Aloha 🤙! Sou o Swell IA, desenvolvido pela SwellSync Live.\n\nDigite /ajuda para os comandos ou faça-me uma pergunta sobre condições, equipamentos ou spots!",
+    "placeholder": "Pergunte-me algo...",
+    "chip_help": "/ajuda",
+    "thinking": "Swell IA está a pensar...",
+    "error": "Desculpe, ocorreu um erro. Tente novamente!"
+  },
+  "spots": {
+    "swell": "Ondulação",
+    "wind": "Vento",
+    "period": "Período",
+    "tide": "Maré",
+    "quality_epic": "Épico",
+    "quality_excellent": "Excelente",
+    "quality_good": "Bom",
+    "quality_flat": "Plano",
+    "offshore": "Offshore"
+  },
+  "auth": {
+    "title": "Entrar",
+    "email_placeholder": "O seu email...",
+    "send_code": "Receber código",
+    "enter_code": "Introduzir código",
+    "verify": "Entrar",
+    "remember_me": "Lembrar-me 30 dias"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "all": "Tudo",
+    "see_more": "Ver mais",
+    "back": "Voltar",
+    "share": "Partilhar",
+    "free": "Grátis",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "refresh": "Atualizar"
+  },
+  "geoloc": {
+    "ask_title": "Spots perto de si",
+    "ask_desc": "Permita que SwellSync aceda à sua localização para ver as condições mais próximas.",
+    "allow": "Permitir localização",
+    "deny": "Não obrigado",
+    "privacy": "🔒 A sua localização nunca é guardada.",
+    "see_conditions": "Ver condições",
+    "itinerary": "Itinerário",
+    "ask_subtitle": "mais próximo 🌊",
+    "result_badge": "Spot mais próximo de você",
+    "from_you": "de você",
+    "nearest_spot": "Spot mais próximo",
+    "live_conditions": "Condições ao vivo",
+    "drive_time": "Tempo de viagem",
+    "loading": "Localizando…",
+    "min_drive": "min",
+    "quality": "Qualidade",
+    "km_away": "km"
+  },
+  "legal": {
+    "title": "Avisos Legais"
+  },
+  "cgv": {
+    "title": "Termos e Condições"
+  },
+  "privacy": {
+    "title": "Política de Privacidade"
+  },
+  "cookies": {
+    "title": "Política de Cookies",
+    "accept": "Aceitar tudo",
+    "reject": "Rejeitar tudo"
+  },
+  "morning_report": {
+    "title": "Morning Report",
+    "badge": "Relatório diário 6h",
+    "epic": "ÉPICO",
+    "good": "BOM",
+    "fair": "RAZOÁVEL",
+    "flat": "PLANO"
+  },
+  "pro": {
+    "title": "SwellSync Pro Tools",
+    "cta": "Ativar Pro",
+    "trial": "Teste grátis 7 dias"
+  },
+  "reseaux": {
+    "title": "As Nossas Redes Sociais",
+    "follow": "Seguir"
+  },
+  "iot": {
+    "title": "Rede IoT",
+    "badge": "Rede de sensores"
+  },
+  "ai_labs": {
+    "title": "SwellSync AI Labs",
+    "badge": "Beta",
+    "placeholder": "Ex: Que condições haverá em Hossegor...?",
+    "send": "Enviar",
+    "thinking": "Analisando..."
+  },
+  "dashboard": {
+    "title": "Meu Dashboard",
+    "welcome": "Bem-vindo,"
+  }
+}

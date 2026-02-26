@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SwellSync — Profil</title>
+    <meta name="description" content="SwellSync — Profil utilisateur et activité.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #080f1a;
+            color: #f1f5f9;
+        }
+
+        .card {
+            background: #0f2438;
+            border: 1px solid rgba(0, 186, 214, .12);
+        }
+
+        .glass {
+            background: rgba(15, 36, 56, .7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 186, 214, .1);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .anim {
+            animation: fadeUp .3s ease both;
+        }
+
+        @keyframes heartPop {
+            0% {
+                transform: scale(1)
+            }
+
+            30% {
+                transform: scale(1.5)
+            }
+
+            60% {
+                transform: scale(0.9)
+            }
+
+            100% {
+                transform: scale(1)
+            }
+        }
+
+        .heart-pop {
+            animation: heartPop .4s ease both;
+        }
+    </style>
+    <script src="js/theme.js"></script>
+
+    <style>
+      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
+      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
+      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
+      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
+      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
+      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
+      .light [class*="text-white"] { color: #0f172a !important; }
+      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
+      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
+      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
+      .light .section-label { color: #334155 !important; }
+      .light .setting-row:hover { background: #e2e8f0 !important; }
+    </style>
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="min-h-screen pb-28">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/92 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        <a href="javascript:history.back()"
+            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        </a>
+        <h1 class="font-black text-base flex-1" id="headerName">Profil</h1>
+        <button onclick="shareProfile()"
+            class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
+            <span class="material-symbols-outlined text-[18px]">share</span>
+        </button>
+    </header>
+
+    <main class="max-w-lg mx-auto">
+
+        <!-- Avatar + infos -->
+        <section class="px-4 pt-5 pb-4">
+            <div class="flex items-start gap-4">
+                <!-- Avatar -->
+                <div id="bigAvatar"
+                    class="w-20 h-20 rounded-full flex items-center justify-center font-black text-3xl shrink-0 anim border-4 border-[#080f1a]">
+                </div>
+                <!-- Stats row (Instagram-style) -->
+                <div class="flex-1 flex items-center justify-around mt-2">
+                    <div class="text-center">
+                        <p class="font-black text-xl" id="statSessions">—</p>
+                        <p class="text-[10px] text-slate-400">Sessions</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-black text-xl" id="statFollowers">—</p>
+                        <p class="text-[10px] text-slate-400">Abonnés</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-black text-xl" id="statFollowing">—</p>
+                        <p class="text-[10px] text-slate-400">Abonnements</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Nom + badges -->
+            <div class="mt-3">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h2 class="font-black text-lg" id="profileName">—</h2>
+                    <span id="profileBadge"
+                        class="hidden text-[9px] bg-amber-400/20 text-amber-400 px-2 py-0.5 rounded-full font-bold"></span>
+                </div>
+                <p class="text-[11px] text-[#00bad6] font-semibold mt-0.5" id="profileRegion">—</p>
+                <p class="text-sm text-slate-300 mt-2 leading-relaxed" id="profileBio">—</p>
+            </div>
+            <!-- Boutons action -->
+            <div class="flex gap-2 mt-4">
+                <button id="followBtn" onclick="toggleFollow()"
+                    class="flex-1 py-2.5 rounded-xl font-black text-sm text-[#080f1a] transition-all"
+                    style="background:linear-gradient(135deg,#00bad6,#0077cc)">
+                    + Suivre
+                </button>
+                <button onclick="window.location.href='community.html'"
+                    class="flex-1 py-2.5 rounded-xl font-bold text-sm border border-white/15 text-slate-300 transition-all">
+                    💬 Message (bientôt)
+                </button>
+                <button onclick="shareProfile()"
+                    class="w-11 h-10 rounded-xl border border-white/15 flex items-center justify-center text-slate-400">
+                    <span class="material-symbols-outlined text-[18px]">more_horiz</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Spots surfés -->
+        <section class="px-4 pb-4">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">📍 Spots favoris</p>
+            <div class="flex gap-2 flex-wrap" id="profileSpots"></div>
+        </section>
+
+        <!-- Tabs posts / sessions -->
+        <div class="flex border-t border-white/5 border-b border-white/5 sticky top-[57px] z-30 bg-[#080f1a]">
+            <button onclick="switchTab('posts',this)"
+                class="flex-1 py-3 text-[11px] font-bold text-[#00bad6] border-b-2 border-[#00bad6] tab-btn">
+                <span class="material-symbols-outlined text-[16px] align-middle mr-1">grid_on</span>Posts
+            </button>
+            <button onclick="switchTab('sessions',this)"
+                class="flex-1 py-3 text-[11px] font-bold text-slate-500 border-b-2 border-transparent tab-btn">
+                <span class="material-symbols-outlined text-[16px] align-middle mr-1">surfing</span>Sessions
+            </button>
+        </div>
+
+        <!-- Posts tab -->
+        <div id="tab-posts" class="px-4 pt-3 space-y-3">
+            <div id="postsList" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Sessions tab -->
+        <div id="tab-sessions" class="hidden px-4 pt-3 space-y-2.5">
+            <div id="sessionsList" class="space-y-2"></div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined" >home</span><span
+                class="text-[10px]">Home</span>
+            
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                style="position:relative;display:inline-block;"><span
+                    class="material-symbols-outlined">notifications</span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="community.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">groups</span><span class="text-[10px] font-bold">Communauté</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+    <script>
+        const SURFERS_DB = {
+            jeromesS: {
+                name: 'JerômeS', av: 'J', avBg: 'rgba(0,186,214,.2)', avColor: '#00bad6',
+                badge: '⭐ Pro', region: '🏄 Pays Basque',
+                bio: 'Surfeur depuis 15 ans, je chasse les houles atlantiques 🌊 Spé shortboard et grosses vagues. Coach certifié FFSurf. Hossegor est ma maison.',
+                sessions: 42, followers: 287, following: 134,
+                spots: ['Hossegor — La Gravière', 'Biarritz', 'Seignosse'],
+                posts: [
+                    { id: 1, text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12, tag: 'session' },
+                    { id: 6, text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67, tag: 'competition' },
+                ],
+                sessionsData: [
+                    { spot: 'Hossegor — La Gravière', wave: '2m — 2.5m', score: '⭐⭐⭐⭐⭐', date: 'Auj.' },
+                    { spot: 'Biarritz — Côte des Basques', wave: '1.5m', score: '⭐⭐⭐⭐', date: 'Hier' },
+                    { spot: 'Seignosse', wave: '1.8m', score: '⭐⭐⭐⭐', date: 'Jeu.' },
+                ]
+            },
+            marieLR: {
+                name: 'MarieLR', av: 'M', avBg: 'rgba(168,85,247,.2)', avColor: '#a855f7',
+                region: '⚓ Bretagne',
+                bio: 'Pro surfeuse WQS 🏄‍♀️ Bretagne dans le cœur. Spécialiste technique et coaching débutants. La Torche is home. 5.0 ⭐ sur SwellSync coach.',
+                sessions: 38, followers: 193, following: 89,
+                spots: ['La Torche', 'La Palue', 'Pointe de la Torche'],
+                posts: [
+                    { id: 2, text: "Quelqu'un a des infos sur La Torche ce week-end ? 🏄‍♀️ Je prévois d'y aller samedi matin.", time: '18min', likes: 5, tag: 'question' },
+                    { id: 3, text: 'Houle 2.8m prévue vendredi sur la côte basque selon Stormglass. Qui sera à Hossegor ? 🤙', time: '1h', likes: 23, tag: 'houle' },
+                    { id: 8, text: 'Découvert un spot secret en Bretagne hier 🤫 Seuls 2 surfeurs à l\'eau, fond de sable parfait, 1.2m propre.', time: '1j', likes: 67, tag: 'spot' },
+                ],
+                sessionsData: [
+                    { spot: 'La Torche', wave: '1.8m', score: '⭐⭐⭐⭐', date: 'Hier' },
+                    { spot: 'La Palue', wave: '1.2m', score: '⭐⭐⭐', date: 'Mer.' },
+                ]
+            },
+            alexSurf29: {
+                name: 'AlexSurf29', av: 'A', avBg: 'rgba(16,185,129,.2)', avColor: '#10b981',
+                region: '⚓ Bretagne',
+                bio: 'Surfeur breton depuis le berceau 🤙 Amateur de spots secrets. Longboard et fish. Anti-touriste, pro-nature, pro-Bretagne.',
+                sessions: 31, followers: 145, following: 201,
+                spots: ['La Palue', 'La Torche', 'Lacanau Ocean'],
+                posts: [
+                    { id: 5, text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31, tag: 'session' },
+                ],
+                sessionsData: [{ spot: 'La Palue', wave: '1.5m', score: '⭐⭐⭐⭐', date: 'Hier' }]
+            },
+            surfGuide64: {
+                name: 'SurfGuide64', av: 'S', avBg: 'rgba(245,158,11,.2)', avColor: '#f59e0b',
+                badge: '⭐ Pro', region: '🌊 Landes',
+                bio: 'Guide surf pro dans les Landes 🔥 Lacanau, Hossegor, Seignosse. Je partage les meilleures conditions du moment. DMs ouverts pour sessions guidées.',
+                sessions: 28, followers: 312, following: 67,
+                spots: ['Lacanau Ocean', 'Hossegor', 'Seignosse — Les Bourdaines'],
+                posts: [
+                    { id: 4, text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18, tag: 'spot' },
+                    { id: 7, text: 'Conditions de rêve à Lacanau ce matin ! 1.5m propre, vent nul, eau à 17°C. Parfait pour les débutants 🌊', time: '6h', likes: 44, tag: 'session' },
+                ],
+                sessionsData: [
+                    { spot: 'Lacanau Ocean', wave: '1.5m', score: '⭐⭐⭐⭐⭐', date: 'Auj.' },
+                    { spot: 'Hossegor', wave: '1.8m', score: '⭐⭐⭐⭐', date: 'Lun.' },
+                ]
+            },
+            bretagneSurf: {
+                name: 'BretagneSurf', av: 'B', avBg: 'rgba(244,63,94,.2)', avColor: '#f43f5e',
+                badge: '⚓ Bretagne', region: '⚓ Bretagne',
+                bio: 'La Bretagne c\'est la vraie vie 🤙 Vague de Belle-île, Quiberon, La Palue. Anti-touriste et pro-nature. Longboard soul surfing.',
+                sessions: 25, followers: 167, following: 445,
+                spots: ['Belle-île', 'La Palue', 'Quiberon'],
+                posts: [
+                    { id: 5, text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31, tag: 'session' },
+                ],
+                sessionsData: [{ spot: 'La Palue', wave: '1.5m', score: '⭐⭐⭐', date: 'Jeu.' }]
+            },
+        };
+
+        // Get user ID from URL
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('id') || 'jeromesS';
+        const user = SURFERS_DB[userId] || SURFERS_DB['jeromesS'];
+
+        let followedUsers = JSON.parse(localStorage.getItem('sw_followed') || '[]');
+        let isFollowed = followedUsers.includes(userId);
+
+        function init() {
+            document.getElementById('headerName').textContent = user.name;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileRegion').textContent = user.region;
+            document.getElementById('profileBio').textContent = user.bio;
+            document.getElementById('statSessions').textContent = user.sessions;
+            document.getElementById('statFollowers').textContent = isFollowed ? user.followers + 1 : user.followers;
+            document.getElementById('statFollowing').textContent = user.following;
+
+            const av = document.getElementById('bigAvatar');
+            av.textContent = user.av;
+            av.style.background = user.avBg;
+            av.style.color = user.avColor;
+
+            if (user.badge) {
+                const b = document.getElementById('profileBadge');
+                b.textContent = user.badge; b.classList.remove('hidden');
+            }
+
+            // Spots
+            document.getElementById('profileSpots').innerHTML = user.spots.map(s =>
+                `<span class="text-[10px] bg-[#0f2438] border border-[#00bad6]/20 px-2.5 py-1 rounded-full text-slate-300">${s}</span>`
+            ).join('');
+
+            updateFollowBtn();
+            renderPosts();
+            renderSessions();
+        }
+
+        function updateFollowBtn() {
+            const btn = document.getElementById('followBtn');
+            if (isFollowed) {
+                btn.textContent = '✓ Abonné·e';
+                btn.style.background = 'rgba(16,185,129,.15)';
+                btn.style.border = '1px solid rgba(16,185,129,.3)';
+                btn.style.color = '#10b981';
+            } else {
+                btn.textContent = '+ Suivre';
+                btn.style.background = 'linear-gradient(135deg,#00bad6,#0077cc)';
+                btn.style.border = '';
+                btn.style.color = '#080f1a';
+            }
+        }
+
+        function toggleFollow() {
+            isFollowed = !isFollowed;
+            if (isFollowed) followedUsers.push(userId);
+            else followedUsers = followedUsers.filter(id => id !== userId);
+            localStorage.setItem('sw_followed', JSON.stringify(followedUsers));
+            document.getElementById('statFollowers').textContent = isFollowed ? user.followers + 1 : user.followers;
+            updateFollowBtn();
+
+            if (isFollowed) {
+                // Feedback visual
+                const btn = document.getElementById('followBtn');
+                btn.style.transform = 'scale(.96)';
+                setTimeout(() => btn.style.transform = '', 200);
+            }
+        }
+
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('text-[#00bad6]', 'border-[#00bad6]');
+                b.classList.add('text-slate-500', 'border-transparent');
+            });
+            el.classList.add('text-[#00bad6]', 'border-[#00bad6]');
+            el.classList.remove('text-slate-500', 'border-transparent');
+            document.getElementById('tab-posts').classList.toggle('hidden', tab !== 'posts');
+            document.getElementById('tab-sessions').classList.toggle('hidden', tab !== 'sessions');
+        }
+
+        const tagLabel = t => ({ session: '🏄 Session', spot: '📍 Spot', houle: '🌊 Houle', competition: '🏆 Compétition', question: '❓ Question' }[t] || t);
+
+        function renderPosts() {
+            document.getElementById('postsList').innerHTML = (user.posts || []).map(p => `
+        <div class="card rounded-2xl p-3.5 space-y-2 anim">
+            <div class="flex items-center gap-2">
+                <span class="text-[9px] bg-[#00bad6]/10 text-[#00bad6] px-2 py-0.5 rounded-full font-semibold active:scale-95 transition-transform">${tagLabel(p.tag)}</span>
+                <span class="text-[9px] text-slate-500 ml-auto">${p.time}</span>
+            </div>
+            <p class="text-sm text-slate-200 leading-relaxed">${p.text}</p>
+            <div class="flex items-center gap-4 pt-1 border-t border-white/5">
+                <span class="text-[11px] text-slate-400 flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">favorite_border</span>${p.likes}</span>
+                <a href="community.html#post-${p.id}" class="text-[11px] text-[#00bad6] font-semibold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[15px]">chat_bubble_outline</span>Voir dans la communauté →
+                </a>
+            </div>
+        </div>`).join('') || '<p class="text-slate-500 text-sm text-center py-6">Aucun post pour l\'instant</p>';
+        }
+
+        function renderSessions() {
+            document.getElementById('sessionsList').innerHTML = (user.sessionsData || []).map(s => `
+        <div class="card rounded-xl p-3 flex items-center gap-3 anim">
+            <span class="material-symbols-outlined text-[#00bad6] text-[20px]">surfing</span>
+            <div class="flex-1">
+                <p class="font-bold text-sm">${s.spot}</p>
+                <p class="text-[10px] text-slate-400">${s.wave} · ${s.score}</p>
+            </div>
+            <span class="text-[10px] text-slate-500">${s.date}</span>
+        </div>`).join('') || '<p class="text-slate-500 text-sm text-center py-6">Aucune session enregistrée</p>';
+        }
+
+        function shareProfile() {
+            const url = window.location.href;
+            if (navigator.share) navigator.share({ title: `Profil ${user.name} — SwellSync`, url });
+            else navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('header button:last-child');
+                btn.innerHTML = '<span class="material-symbols-outlined text-emerald-400 text-[18px]">check</span>';
+                setTimeout(() => btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">share</span>', 2000);
+            });
+        }
+
+        init();
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+<script src="js/adsense.js"></script>
+<script src="js/share-social.js"></script>
+<script src="js/ui-components.js"></script>
+</body>
+
+</html>

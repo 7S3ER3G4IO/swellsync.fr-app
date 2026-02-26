@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #080f1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #f0f8ff;
+            overflow: hidden;
+        }
+
+        .wave-icon {
+            font-size: 56px;
+            animation: bounce 1.5s ease-in-out infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #00bad6;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 0.85rem;
+            color: rgba(240, 248, 255, 0.5);
+            margin-bottom: 28px;
+        }
+
+        .bar-track {
+            width: 200px;
+            height: 4px;
+            background: rgba(0, 186, 214, 0.15);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00bad6, #0077cc);
+            border-radius: 4px;
+            animation: load 3s ease-in-out infinite;
+            width: 0%;
+        }
+
+        @keyframes load {
+            0% {
+                width: 0%;
+            }
+
+            80% {
+                width: 90%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wave-icon">🌊</div>
+    <h1>SwellSync</h1>
+    <p>Démarrage du serveur...</p>
+    <div class="bar-track">
+        <div class="bar-fill"></div>
+    </div>
+</body>
+
+</html>

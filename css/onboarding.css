@@ -1,0 +1,534 @@
+/* ═══════════════════════════════════════════════════════════
+   SwellSync — Onboarding Chatbot (First Visit)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Overlay ────────────────────────────────────────────── */
+#onboarding-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    opacity: 0;
+    animation: obOverlayIn 0.5s ease forwards;
+}
+
+@keyframes obOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes obOverlayOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* ── Chat Window ────────────────────────────────────────── */
+#onboarding-chat {
+    width: min(460px, calc(100vw - 32px));
+    max-height: min(620px, calc(100vh - 64px));
+    display: flex;
+    flex-direction: column;
+    border-radius: 28px;
+    overflow: hidden;
+    background: rgba(4, 12, 15, 0.97);
+    border: 1px solid rgba(0, 186, 214, 0.2);
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(0, 186, 214, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    transform: translateY(30px) scale(0.95);
+    opacity: 0;
+    animation: obChatIn 0.55s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes obChatIn {
+    from {
+        transform: translateY(30px) scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes obChatOut {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(40px) scale(0.92);
+        opacity: 0;
+    }
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.ob-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(0, 186, 214, 0.08), rgba(0, 144, 168, 0.04));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+}
+
+.ob-header-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(0, 186, 214, 0.25), rgba(0, 144, 168, 0.15));
+    border: 1px solid rgba(0, 186, 214, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(0, 186, 214, 0.15);
+}
+
+.ob-header-info h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Lexend', sans-serif;
+    letter-spacing: -0.01em;
+}
+
+.ob-header-info p {
+    margin: 2px 0 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: #00bad6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ob-header-info p::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+    animation: obPulse 2s infinite;
+}
+
+@keyframes obPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+}
+
+/* ── Step Indicator ─────────────────────────────────────── */
+.ob-steps {
+    display: flex;
+    gap: 4px;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    flex-shrink: 0;
+}
+
+.ob-step-dot {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    transition: background 0.4s, box-shadow 0.4s;
+}
+
+.ob-step-dot.active {
+    background: #00bad6;
+    box-shadow: 0 0 8px rgba(0, 186, 214, 0.5);
+}
+
+.ob-step-dot.done {
+    background: rgba(0, 186, 214, 0.4);
+}
+
+/* ── Messages Area ──────────────────────────────────────── */
+.ob-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+.ob-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.ob-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ob-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+}
+
+/* ── Bot Message ────────────────────────────────────────── */
+.ob-msg-bot {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: obMsgIn 0.4s ease forwards;
+}
+
+.ob-msg-bot .ob-msg-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, rgba(0, 186, 214, 0.2), rgba(0, 144, 168, 0.1));
+    border: 1px solid rgba(0, 186, 214, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.ob-msg-bot .ob-msg-bubble {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 2px 16px 16px 16px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 400;
+    max-width: 320px;
+}
+
+.ob-msg-bubble strong {
+    color: #00bad6;
+    font-weight: 800;
+}
+
+@keyframes obMsgIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── User Message ───────────────────────────────────────── */
+.ob-msg-user {
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0;
+    animation: obMsgIn 0.3s ease forwards;
+}
+
+.ob-msg-user .ob-msg-bubble {
+    background: linear-gradient(135deg, #00bad6, #0090a8);
+    border-radius: 16px 2px 16px 16px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #fff;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 700;
+    max-width: 280px;
+}
+
+/* ── Typing Indicator ───────────────────────────────────── */
+.ob-typing {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    opacity: 0;
+    animation: obMsgIn 0.3s ease forwards;
+}
+
+.ob-typing .ob-msg-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, rgba(0, 186, 214, 0.2), rgba(0, 144, 168, 0.1));
+    border: 1px solid rgba(0, 186, 214, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.ob-typing-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 2px 16px 16px 16px;
+}
+
+.ob-typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00bad6;
+    opacity: 0.4;
+    animation: obDot 1.4s infinite;
+}
+
+.ob-typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.ob-typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes obDot {
+
+    0%,
+    60%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    30% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* ── Options / Chips ────────────────────────────────────── */
+.ob-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 0 8px;
+    opacity: 0;
+    animation: obMsgIn 0.4s 0.1s ease forwards;
+}
+
+.ob-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.ob-chip:hover {
+    background: rgba(0, 186, 214, 0.1);
+    border-color: rgba(0, 186, 214, 0.3);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.ob-chip.selected {
+    background: rgba(0, 186, 214, 0.15);
+    border-color: rgba(0, 186, 214, 0.5);
+    color: #00bad6;
+    box-shadow: 0 0 12px rgba(0, 186, 214, 0.2);
+}
+
+.ob-chip .ob-chip-icon {
+    font-size: 16px;
+}
+
+/* ── Confirm Button (multi-select) ──────────────────────── */
+.ob-confirm-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 4px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, #00bad6 0%, #0090a8 100%);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 6px 20px rgba(0, 186, 214, 0.3);
+    opacity: 0;
+    animation: obMsgIn 0.3s ease forwards;
+}
+
+.ob-confirm-btn.visible {
+    display: flex;
+}
+
+.ob-confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 186, 214, 0.5);
+}
+
+/* ── CTA Final ──────────────────────────────────────────── */
+.ob-cta-final {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    margin-top: 8px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, #00bad6 0%, #0090a8 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 0 30px rgba(0, 186, 214, 0.4);
+    animation: obGlow 2s infinite alternate;
+    opacity: 0;
+    animation: obMsgIn 0.5s 0.2s ease forwards, obGlow 2s 0.7s infinite alternate;
+}
+
+.ob-cta-final:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 40px rgba(0, 186, 214, 0.6);
+}
+
+@keyframes obGlow {
+    from {
+        box-shadow: 0 0 20px rgba(0, 186, 214, 0.3);
+    }
+
+    to {
+        box-shadow: 0 0 35px rgba(0, 186, 214, 0.55);
+    }
+}
+
+/* ── Feature Cards (tutorial step) ──────────────────────── */
+.ob-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+    opacity: 0;
+    animation: obMsgIn 0.4s 0.15s ease forwards;
+}
+
+.ob-feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.25s;
+}
+
+.ob-feature-card:hover {
+    background: rgba(0, 186, 214, 0.06);
+    border-color: rgba(0, 186, 214, 0.15);
+    transform: translateX(4px);
+}
+
+.ob-feature-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.ob-feature-text h4 {
+    margin: 0 0 2px;
+    font-size: 12px;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Lexend', sans-serif;
+}
+
+.ob-feature-text p {
+    margin: 0;
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.5;
+    font-family: 'Lexend', sans-serif;
+}
+
+/* ── Mobile Responsive ──────────────────────────────────── */
+@media (max-width: 480px) {
+    #onboarding-chat {
+        width: calc(100vw - 16px);
+        max-height: calc(100vh - 32px);
+        border-radius: 22px;
+    }
+
+    .ob-msg-bubble {
+        max-width: 260px !important;
+    }
+
+    .ob-header {
+        padding: 14px 16px;
+    }
+
+    .ob-messages {
+        padding: 12px 14px;
+    }
+}
+
+@media (max-height: 600px) {
+    #onboarding-chat {
+        max-height: calc(100vh - 24px);
+    }
+}

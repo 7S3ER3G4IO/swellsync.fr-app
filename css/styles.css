@@ -1,0 +1,350 @@
+/* SwellSync - Base CSS Settings */
+:root {
+    --bg-dark: #0a0c10;
+    --bg-card: rgba(22, 26, 35, 0.7);
+    --primary: #00d2ff;
+    /* Vivid Surf Blue/Cyan */
+    --primary-glow: rgba(0, 210, 255, 0.4);
+    --secondary: #3a7bd5;
+    /* Ocean Blue */
+    --accent: #ff4b4b;
+    /* Used for high alert or bad spots */
+    --text-primary: #f0f4f8;
+    --text-muted: #8b9bb4;
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(20, 24, 34, 0.45);
+
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+/* Layout */
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 5%;
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1rem 0;
+    background: rgba(10, 12, 16, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    transition: var(--transition-smooth);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--primary);
+    transition: var(--transition-smooth);
+    border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff;
+    box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 210, 255, 0.6);
+    color: #fff;
+}
+
+.glass-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    color: var(--text-primary);
+}
+
+.glass-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    overflow: hidden;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(58, 123, 213, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(0, 210, 255, 0.1) 0%, transparent 40%);
+    z-index: -1;
+}
+
+.hero-content {
+    max-width: 800px;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #fff, #a0aec0);
+    /* For webkit (Safari) */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Standard property */
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+}
+
+.hero-cta-group {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .nav-links,
+    .nav-actions {
+        display: none;
+    }
+
+    .hero-cta-group {
+        flex-direction: column;
+    }
+}
+
+/* =========================================
+   Toast Notification System
+   ========================================= */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast-success {
+    border-left: 4px solid var(--primary);
+}
+
+.toast-error {
+    border-left: 4px solid var(--accent);
+}
+
+/* =========================================
+   Leaflet Dark Theme Overrides
+   ========================================= */
+.leaflet-bar a,
+.leaflet-bar a:hover {
+    background-color: #0a0c10 !important;
+    color: #00bad6 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaflet-control-attribution {
+    background-color: rgba(10, 12, 16, 0.8) !important;
+    color: #8b9bb4 !important;
+    backdrop-filter: blur(4px);
+    border-radius: 4px 0 0 0;
+}
+
+.leaflet-control-attribution a {
+    color: #00bad6 !important;
+}
+
+/* Fix popup Leaflet spacing */
+.leaflet-popup-content-wrapper {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    width: auto !important;
+}
+
+.leaflet-popup-tip-container {
+    display: none !important;
+}
+/* ─── SKELETON LOADERS ──────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.skeleton {
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0.05) 0%,
+        rgba(255,255,255,0.12) 40%,
+        rgba(255,255,255,0.05) 80%
+    );
+    background-size: 800px 100%;
+    animation: skeleton-shimmer 1.4s infinite linear;
+    border-radius: 8px;
+}
+
+.skeleton-text { height: 14px; border-radius: 6px; margin-bottom: 8px; }
+.skeleton-title { height: 28px; border-radius: 8px; margin-bottom: 12px; }
+.skeleton-badge { height: 24px; width: 70px; border-radius: 20px; display: inline-block; }
+.skeleton-stat { height: 72px; border-radius: 16px; }
+.skeleton-img { min-height: 200px; border-radius: 16px; }
+.skeleton-card { height: 120px; border-radius: 20px; margin-bottom: 12px; }

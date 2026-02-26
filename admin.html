@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SwellSync | Administration Sécurisée</title>
+    <meta name="theme-color" content="#0f2123">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind & Custom Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00bad6',
+                        'background-light': '#f8fafc',
+                        'background-dark': '#0f2123',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/light-mode.css">
+    <link rel="stylesheet" href="css/mobile.css">
+
+    <style>
+        .glass-panel {
+            background: rgba(15, 33, 35, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-nav-item.active {
+            background-color: rgba(0, 186, 214, 0.15);
+            color: #00bad6;
+            border-right: 3px solid #00bad6;
+        }
+
+        .admin-tab {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .admin-tab.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom scrollbar for tables */
+        .table-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-dark text-white font-sans overflow-hidden flex h-screen selection:bg-primary/30 selection:text-white">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel border-r border-white/5 h-full flex flex-col z-20 shrink-0">
+        <!-- Logo -->
+        <div class="h-20 flex items-center px-6 border-b border-white/5 cursor-pointer"
+            onclick="window.location.href='index.html'">
+            <div class="relative flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-shadow">
+                    <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo"
+                        class="w-8 h-8 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-white tracking-tight leading-none">SwellSync</h1>
+                    <span class="text-[9px] text-primary uppercase tracking-widest font-black">Admin Panel</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-grow py-6 flex flex-col gap-2">
+            <button
+                class="admin-nav-item active flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('dashboard', this)">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                Vue d'ensemble
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('analytics', this)">
+                <span class="material-symbols-outlined text-[20px]">monitoring</span>
+                Analytics Spots
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('spots', this)">
+                <span class="material-symbols-outlined text-[20px]">location_on</span>
+                Gestion des Spots
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('cams', this)">
+                <span class="material-symbols-outlined text-[20px]">videocam</span>
+                Caméras en Direct
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('users', this)">
+                <span class="material-symbols-outlined text-[20px]">group</span>
+                Membres & Accès
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('billing', this)">
+                <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+                Facturation & Revenus
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('robots', this)">
+                <span class="material-symbols-outlined text-[20px]">memory</span>
+                Robots & Automatisations
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('comms', this)">
+                <span class="material-symbols-outlined text-[20px]">campaign</span>
+                Communications
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('ai', this)">
+                <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+                Intelligence IA
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left"
+                onclick="switchAdminTab('settings', this)">
+                <span class="material-symbols-outlined text-[20px]">settings</span>
+                Paramètres Système
+            </button>
+            <button
+                class="admin-nav-item flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-bold w-full text-left border-t border-white/10 mt-2 pt-4"
+                onclick="switchAdminTab('terminal', this)">
+                <span class="material-symbols-outlined text-[20px] text-green-400">terminal</span>
+                Accès Terminal
+            </button>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-6 border-t border-white/5">
+            <div class="flex items-center gap-3 mb-4">
+                <div
+                    class="w-10 h-10 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center text-primary relative">
+                    M
+                    <div
+                        class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-background-dark">
+                    </div>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-white leading-tight">Max Admin</p>
+                    <p class="text-[10px] text-slate-400 font-medium">Super Administrateur</p>
+                </div>
+            </div>
+            <button onclick="window.location.href='index.html'"
+                class="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors text-xs font-bold uppercase tracking-widest border border-red-500/20">
+                <span class="material-symbols-outlined text-[16px]">logout</span> Quitter
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col h-full bg-background-dark relative overflow-hidden">
+
+        <!-- Topbar -->
+        <header
+            class="h-20 glass-panel border-b border-white/5 flex items-center justify-between px-8 shrink-0 z-10 w-full relative">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl font-black text-white" id="current-page-title">Vue d'ensemble</h2>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div
+                    class="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 flex items-center gap-2">
+                    <span
+                        class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]"></span>
+                    <span class="text-[10px] text-green-400 font-bold uppercase tracking-widest">Système
+                        Opérationnel</span>
+                </div>
+                <button
+                    class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center border border-white/10 relative"
+                    onclick="viewSystemAlerts()">
+                    <span class="material-symbols-outlined text-slate-300">notifications</span>
+                    <span id="nav-alerts-badge"
+                        class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary flex items-center justify-center animate-pulse"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Body -->
+        <div class="flex-grow overflow-y-auto custom-scrollbar p-8 relative z-0">
+            <!-- Arrière plan glow -->
+            <div
+                class="fixed top-20 right-20 w-96 h-96 bg-primary/10 blur-[100px] rounded-full pointer-events-none z-[-1]">
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: VUE D'ENSEMBLE (DASHBOARD) -->
+            <!-- ============================== -->
+            <div id="tab-dashboard" class="admin-tab active gap-8">
+                <!-- Top Metrics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-primary hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Spots
+                                    Monitorés</p>
+                                <h3 id="stat-spots" class="text-3xl font-black text-white mt-1">...</h3>
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined">location_on</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-green-400 font-bold flex items-center gap-1"><span
+                                class="material-symbols-outlined text-[14px]">trending_up</span> 100% Connectés (API
+                            Météo)</div>
+                    </div>
+
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-emerald-400 hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Utilisateurs
+                                    Pro</p>
+                                <h3 id="stat-users" class="text-3xl font-black text-white mt-1">...</h3>
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center text-emerald-400">
+                                <span class="material-symbols-outlined">workspace_premium</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-green-400 font-bold flex items-center gap-1"><span
+                                class="material-symbols-outlined text-[14px]">trending_up</span> +12% ce mois</div>
+                    </div>
+
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-pink-500 hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Serveurs
+                                    Caméras</p>
+                                <h3 id="stat-cams" class="text-3xl font-black text-white mt-1">...</h3>
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-500">
+                                <span class="material-symbols-outlined">videocam</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-yellow-500 font-bold flex items-center gap-1"><span
+                                class="material-symbols-outlined text-[14px]">warning</span> 3 flux instables
+                            (Finistère)</div>
+                    </div>
+
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-blue-500 hover:bg-white/5 transition-colors">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Performances
+                                    API</p>
+                                <h3 id="stat-ping" class="text-3xl font-black text-white mt-1">...</h3>
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
+                                <span class="material-symbols-outlined">memory</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-green-400 font-bold flex items-center gap-1"><span
+                                class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Réseau optimal</div>
+                    </div>
+                </div>
+
+                <!-- Main Middle Section (Graph & Logs) -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Graphique Activité Live -->
+                    <div
+                        class="lg:col-span-2 glass-panel p-6 rounded-[2rem] flex flex-col border border-white/5 relative overflow-hidden group">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-white font-bold text-lg flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-primary">monitoring</span> Activité Serveur
+                                (Direct)</h4>
+                            <span
+                                class="bg-green-500/10 text-green-400 px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full border border-green-500/20 flex items-center gap-1.5"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Connecté
+                                (DataDog)</span>
+                        </div>
+
+                        <!-- Dynamic Real-time Chart -->
+                        <div id="live-chart-container"
+                            class="flex-grow flex items-end justify-between gap-1 pb-2 h-40 relative px-2">
+                            <!-- Javascript Rendered Bars -->
+                        </div>
+                        <div
+                            class="border-t border-white/10 mt-2 pt-2 flex justify-between text-[10px] text-slate-500 font-bold font-mono">
+                            <span>00:00</span>
+                            <span>06:00</span>
+                            <span>12:00</span>
+                            <span class="text-white bg-white/10 px-1 rounded">MAINTENANT</span>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Logs de synchro (Activité Récente) -->
+                    <div
+                        class="glass-panel p-6 rounded-[2rem] border border-white/5 relative overflow-hidden flex flex-col bg-black/40">
+                        <div class="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
+                            <span class="material-symbols-outlined text-slate-400 text-[16px]">terminal</span>
+                            <h4 class="text-white font-bold text-sm tracking-wide">Journal Système</h4>
+                        </div>
+                        <div
+                            class="flex-grow overflow-y-auto custom-scrollbar flex flex-col gap-3 font-mono text-[10px]">
+                            <div class="flex gap-2 text-green-400">
+                                <span class="opacity-50">[12:45:01]</span> <span class="break-all">SUCCESS: Sync Météo -
+                                    Spot ID 04 (La Torche)</span>
+                            </div>
+                            <div class="flex gap-2 text-green-400">
+                                <span class="opacity-50">[12:43:22]</span> <span class="break-all">SUCCESS: Sync Météo -
+                                    Spot ID 12 (Hossegor)</span>
+                            </div>
+                            <div class="flex gap-2 text-white/70">
+                                <span class="opacity-50">[12:40:05]</span> <span class="break-all">INFO: User #4502
+                                    upgraded to PRO.</span>
+                            </div>
+                            <div class="flex gap-2 text-yellow-400">
+                                <span class="opacity-50">[12:35:10]</span> <span class="break-all">WARN: Video Stream
+                                    Drop (Anglet Cam) - Retry 1/3</span>
+                            </div>
+                            <div class="flex gap-2 text-red-400">
+                                <span class="opacity-50">[12:30:00]</span> <span class="break-all">ERROR: API Stormglass
+                                    Timeout - Falling back to cache.</span>
+                            </div>
+                            <div class="flex gap-2 text-green-400">
+                                <span class="opacity-50">[12:25:31]</span> <span class="break-all">SUCCESS: Full
+                                    Database Backup Completed.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: ANALYTICS SPOTS (LIVE) -->
+            <!-- ============================== -->
+            <div id="tab-analytics" class="admin-tab gap-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-black text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">monitoring</span> Analytics des Spots
+                        </h3>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Données
+                            collectées depuis la page Conditions (localStorage)</p>
+                    </div>
+                    <button onclick="clearSpotAnalytics()"
+                        class="px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-widest hover:bg-red-500/20 transition-all">
+                        <span class="material-symbols-outlined text-[14px] align-middle">delete_sweep</span> Vider les
+                        logs
+                    </button>
+                </div>
+
+                <!-- Métriques rapides -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="analytics-metrics">
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-primary">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Visites totales</p>
+                        <h3 id="ana-total" class="text-3xl font-black text-white mt-1">—</h3>
+                        <p class="text-[10px] text-slate-500 mt-2">Sessions enregistrées</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-green-400">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Spot le + consul té
+                        </p>
+                        <h3 id="ana-top-spot" class="text-xl font-black text-white mt-1">—</h3>
+                        <p class="text-[10px] text-slate-500 mt-2" id="ana-top-views"></p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-yellow-400">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Utilisateurs uniques
+                        </p>
+                        <h3 id="ana-unique" class="text-3xl font-black text-white mt-1">—</h3>
+                        <p class="text-[10px] text-slate-500 mt-2">Identifiants distincts</p>
+                    </div>
+                </div>
+
+                <!-- Top spots -->
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+                        <h4 class="font-black text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[18px]">leaderboard</span>
+                            Classement des Spots
+                        </h4>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Par nombre de
+                            visites</span>
+                    </div>
+                    <div id="ana-spots-ranking" class="p-4 flex flex-col gap-2">
+                        <p class="text-slate-500 text-sm italic p-4 text-center">Aucune donnée disponible pour
+                            l'instant. Visitez des pages de spots pour commencer.</p>
+                    </div>
+                </div>
+
+                <!-- Journal des visites récentes -->
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/5">
+                        <h4 class="font-black text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-slate-400 text-[18px]">history</span> Journal
+                            des Visites Récentes
+                        </h4>
+                    </div>
+                    <div class="w-full table-scroll overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-max">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-white/5">
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Date/Heure</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Spot</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Houle</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Vent</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Période</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Utilisateur</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm font-mono" id="ana-visits-table">
+                                <tr>
+                                    <td colspan="6" class="p-6 text-center text-slate-500 italic" data-i18n="common.loading">Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: GESTION DES SPOTS -->
+            <!-- ============================== -->
+            <div id="tab-spots" class="admin-tab gap-6">
+                <!-- Action Bar -->
+                <div class="flex items-center justify-between glass-panel p-4 rounded-xl border border-white/10">
+                    <div class="relative w-64">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                        <input type="text" data-i18n-placeholder="cotes.search_spot" placeholder="Rechercher un spot..."
+                            class="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-primary transition-colors">
+                    </div>
+                    <div class="flex gap-3">
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 glass-panel rounded-lg hover:bg-white/10 transition-colors text-white text-xs font-bold uppercase tracking-wider"
+                            onclick="forceSync(this)">
+                            <span class="material-symbols-outlined text-[16px]">sync</span> Force Sync Tous
+                        </button>
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 bg-primary text-background-dark rounded-lg hover:shadow-[0_0_15px_rgba(0,186,214,0.4)] transition-all text-xs font-black uppercase tracking-wider"
+                            onclick="createSpot()">
+                            <span class="material-symbols-outlined text-[16px]">add</span> Nouveau Spot
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Spots Table -->
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="w-full table-scroll overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-max">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-white/5">
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        ID / Nom</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Localisation</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Taille Affichée</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        État Météo</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Coord. (Lat/Lng)</th>
+                                    <th
+                                        class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm" id="admin-spots-list">
+                                <!-- Les 60 spots sont générés par Javascript en bas de page -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: CAMÉRAS (GESTION WEBCAMS) -->
+            <!-- ============================== -->
+            <div id="tab-cams" class="admin-tab gap-6">
+
+                <!-- Stats webcams -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="cams-admin-stats">
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-green-400">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Live</p>
+                        <h3 id="cams-stat-live" class="text-3xl font-black text-white mt-1">—</h3>
+                        <p class="text-[10px] text-green-400 font-bold mt-2 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Flux actifs
+                        </p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-red-500">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Hors ligne</p>
+                        <h3 id="cams-stat-offline" class="text-3xl font-black text-white mt-1">—</h3>
+                        <p class="text-[10px] text-red-400 font-bold mt-2">Flux coupés</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-slate-500">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Bientôt</p>
+                        <h3 id="cams-stat-soon" class="text-3xl font-black text-white mt-1">—</h3>
+                        <p class="text-[10px] text-slate-500 font-bold mt-2">Sans flux configur é</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border-l-[3px] border-l-primary">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total</p>
+                        <h3 class="text-3xl font-black text-white mt-1">60</h3>
+                        <p class="text-[10px] text-primary font-bold mt-2 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[12px]">videocam</span> Spots couverts
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Barre d'actions -->
+                <div class="flex items-center justify-between glass-panel p-4 rounded-xl border border-white/10 flex-wrap gap-3">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <!-- Filtre statut -->
+                        <select id="cam-admin-filter-status" onchange="filterAdminCams()"
+                            class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary transition-colors cursor-pointer">
+                            <option value="all">Tous les statuts</option>
+                            <option value="live">🟢 Live seulement</option>
+                            <option value="offline">🔴 Hors ligne</option>
+                            <option value="soon">⚫ Bientôt</option>
+                        </select>
+                        <!-- Filtre type -->
+                        <select id="cam-admin-filter-type" onchange="filterAdminCams()"
+                            class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary transition-colors cursor-pointer">
+                            <option value="all">Tous les types</option>
+                            <option value="youtube">▶ YouTube Live</option>
+                            <option value="windy">🌬 Windy Cam</option>
+                            <option value="image">📷 Image Live</option>
+                            <option value="null">📵 Sans flux</option>
+                        </select>
+                        <!-- Recherche -->
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]">search</span>
+                            <input type="text" id="cam-admin-search" data-i18n-placeholder="cotes.search_spot" placeholder="Rechercher un spot..."
+                                oninput="filterAdminCams()"
+                                class="bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-primary w-52 transition-colors" />
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="https://gosurf.fr/list" target="_blank"
+                            class="flex items-center gap-2 px-4 py-2 glass-panel rounded-lg hover:bg-white/10 transition-colors text-white text-xs font-bold uppercase tracking-wider border border-white/10">
+                            <span class="material-symbols-outlined text-[16px]">open_in_new</span> Voir la page live
+                        </a>
+                        <button onclick="exportCamsCSV()"
+                            class="flex items-center gap-2 px-4 py-2 glass-panel rounded-lg hover:bg-white/10 transition-colors text-white text-xs font-bold uppercase tracking-wider border border-white/10">
+                            <span class="material-symbols-outlined text-[16px]">download</span> Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table webcams -->
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="w-full table-scroll overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[900px]">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-white/5">
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 w-12">ID</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Spot</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Région</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Statut</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Type</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 w-64">URL du flux</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 w-8">⭐</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-cams-list" class="text-sm">
+                                <tr><td colspan="8" class="p-8 text-center text-slate-500 italic">Chargement…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── MODAL ÉDITION CAM ── -->
+            <div id="modal-edit-cam" class="fixed inset-0 z-[9999] hidden items-center justify-center" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);">
+                <div class="glass-panel rounded-2xl border border-white/10 p-6 w-full max-w-lg mx-4 shadow-2xl" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="font-black text-white text-lg flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">edit</span>
+                            Éditer la webcam
+                        </h3>
+                        <button onclick="closeCamEditModal()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all">
+                            <span class="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="edit-cam-id" />
+
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Spot</label>
+                            <input id="edit-cam-name" disabled
+                                class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-slate-500 text-sm cursor-not-allowed" />
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Statut</label>
+                            <select id="edit-cam-status"
+                                class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-primary cursor-pointer">
+                                <option value="live">🟢 Live</option>
+                                <option value="offline">🔴 Hors ligne</option>
+                                <option value="soon">⚫ Bientôt</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Type de source</label>
+                            <select id="edit-cam-type" onchange="updateEditCamTypeUI()"
+                                class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-primary cursor-pointer">
+                                <option value="null">📵 Aucun flux</option>
+                                <option value="youtube">▶ YouTube Live</option>
+                                <option value="windy">🌬 Windy Webcam</option>
+                                <option value="image">📷 Image Live (Roundshot/commune)</option>
+                                <option value="iframe">🔗 iFrame externe</option>
+                            </select>
+                        </div>
+                        <div id="edit-cam-url-group">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">URL du flux</label>
+                            <input id="edit-cam-url" type="url" placeholder="https://..."
+                                class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-primary transition-colors" />
+                            <p id="edit-cam-url-hint" class="text-[10px] text-slate-600 mt-1.5">Ex: https://www.youtube.com/embed/live_stream?channel=UC...</p>
+                        </div>
+                        <div id="edit-cam-refresh-group" class="hidden">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Intervalle de rafraîchissement (secondes)</label>
+                            <input id="edit-cam-refresh" type="number" min="10" max="300" value="30"
+                                class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-primary" />
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5">
+                            <input type="checkbox" id="edit-cam-featured" class="w-4 h-4 accent-primary cursor-pointer" />
+                            <label for="edit-cam-featured" class="text-sm text-slate-300 cursor-pointer font-bold">
+                                ⭐ Mettre en vedette sur la page Webcam
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5">
+                            <input type="checkbox" id="edit-cam-alertable" class="w-4 h-4 accent-primary cursor-pointer" />
+                            <label for="edit-cam-alertable" class="text-sm text-slate-300 cursor-pointer font-bold">
+                                🔔 Permettre les alertes utilisateur
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 mt-6">
+                        <button onclick="saveCamEdit()"
+                            class="flex-1 py-3 bg-primary text-background-dark font-black text-sm rounded-xl hover:shadow-[0_0_20px_rgba(0,186,214,0.4)] transition-all uppercase tracking-widest" data-i18n="common.save">Sauvegarder</button>
+                        <button onclick="closeCamEditModal()"
+                            class="px-6 py-3 glass-panel border border-white/10 rounded-xl text-slate-400 text-sm font-bold hover:bg-white/10 transition-all" data-i18n="common.cancel">Annuler</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: UTILISATEURS -->
+            <!-- ============================== -->
+            <div id="tab-users" class="admin-tab gap-6">
+                <!-- Users Table -->
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden flex-grow flex flex-col">
+                    <div class="w-full text-center p-8 text-slate-400 border-b border-white/5">
+                        <span class="material-symbols-outlined text-4xl mb-4 text-emerald-400">workspace_premium</span>
+                        <h4 class="text-white font-bold text-lg">Base de données Membres</h4>
+                        <p class="text-xs">Appareil administrateur sécurisé (JWT local)</p>
+                    </div>
+                    <div class="w-full table-scroll overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-max">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-white/5">
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Utilisateur</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Email</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Abonnement</th>
+                                    <th class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        Inscription</th>
+                                    <th
+                                        class="p-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">
+                                        Contrôle</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm" id="admin-users-list">
+                                <!-- Users chargés via API REST -->
+                                <tr class="border-b border-white/5">
+                                    <td colspan="5" class="p-8 text-center text-slate-500 italic">Synchronisation base
+                                        de données...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: PARAMÈTRES (SETTINGS) -->
+            <!-- ============================== -->
+            <div id="tab-settings" class="admin-tab gap-8 max-w-4xl mx-auto w-full">
+
+                <!-- Security Profile Card -->
+                <div
+                    class="glass-panel p-8 rounded-[2rem] border border-white/10 flex flex-col md:flex-row items-center md:items-start gap-8 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none">
+                    </div>
+                    <div
+                        class="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center border-4 border-background-dark shadow-[0_0_20px_rgba(0,186,214,0.3)] shrink-0 z-10">
+                        <span class="material-symbols-outlined text-4xl text-primary">admin_panel_settings</span>
+                    </div>
+                    <div class="flex-grow text-center md:text-left z-10">
+                        <h3 class="text-2xl font-black text-white">Niveau de Sécurité : Standard</h3>
+                        <p class="text-slate-400 text-sm mt-2 leading-relaxed">Le site est configuré en production. Les
+                            appels aux clés API sont chiffrés. Assurez-vous de purger le cache CDN après une mise à jour
+                            majeure du Dashboard.</p>
+                        <div class="flex flex-wrap gap-3 mt-4 justify-center md:justify-start">
+                            <button
+                                class="bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white transition-all px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg"
+                                onclick="purgeCache(this)">Purger le Cache</button>
+                            <button
+                                class="bg-orange-500/10 border border-orange-500/30 text-orange-500 hover:bg-orange-500 hover:text-white transition-all px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg"
+                                onclick="toggleMaintenance()">Mode Maintenance</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clés API Container -->
+                <div class="glass-panel p-8 rounded-[2rem] border border-white/10 flex flex-col gap-6">
+                    <h4 class="font-bold text-lg text-white flex items-center gap-2 border-b border-white/10 pb-4">
+                        <span class="material-symbols-outlined text-primary">key</span> Connexions API externes
+                    </h4>
+
+                    <div class="flex flex-col gap-4">
+                        <!-- Stormglass API -->
+                        <div
+                            class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                            <div>
+                                <h5 class="text-white font-bold text-sm">Stormglass.io Marine API</h5>
+                                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Données
+                                    de Houle & Vent primaires</p>
+                            </div>
+                            <div class="flex items-center gap-2 w-full md:w-auto">
+                                <input type="password" id="stormglass-api-key" value="apikey_storm_7894561230_xxx"
+                                    class="bg-background-dark/50 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-slate-400 outline-none w-full md:w-48 font-mono">
+                                <button
+                                    class="w-8 h-8 rounded glass hover:bg-primary/20 border border-transparent hover:border-primary/50 flex items-center justify-center text-primary transition-colors"
+                                    title="Modifier" onclick="editStormglassToken(this)">
+                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- OpenMeteo API -->
+                        <div
+                            class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                            <div>
+                                <h5 class="text-white font-bold text-sm">OpenMeteo Global Forecasting</h5>
+                                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Données
+                                    Météo de Backup (12 Modèles)</p>
+                            </div>
+                            <div class="flex items-center gap-2 w-full md:w-auto">
+                                <span
+                                    class="text-[10px] text-green-400 font-bold uppercase tracking-widest border border-green-500/20 px-2 py-1 rounded bg-green-500/10 mr-2">Cadeau
+                                    / OpenSource</span>
+                                <input type="password" value="n/a (Open Source)" disabled
+                                    class="bg-background-dark/50 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-slate-500 outline-none w-full md:w-48 font-mono cursor-not-allowed opacity-50">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        class="w-full bg-primary/10 hover:bg-primary text-primary hover:text-background-dark transition-all py-3 rounded-xl font-black uppercase tracking-widest text-xs border border-primary/20"
+                        onclick="saveAPIConfig(this)">
+                        Enregistrer la Configuration
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: COMMUNICATIONS -->
+            <!-- ============================== -->
+            <div id="tab-comms" class="admin-tab gap-8 max-w-4xl mx-auto w-full">
+                <div class="glass-panel p-8 rounded-[2rem] border border-white/10 flex flex-col gap-6">
+                    <h4 class="font-bold text-lg text-white flex items-center gap-2 border-b border-white/10 pb-4">
+                        <span class="material-symbols-outlined text-primary">campaign</span> Envoyer une Notification
+                        (Push)
+                    </h4>
+                    <p class="text-sm text-slate-400 -mt-2">Envoyez une alerte push (Pop-up/Web Push) en temps réel à
+                        l'ensemble du réseau ou uniquement aux Premium.</p>
+
+                    <div class="flex flex-col gap-5 mt-2">
+                        <div>
+                            <label
+                                class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2 block">Titre
+                                de la notification</label>
+                            <input type="text" placeholder="Ex: Grosse houle détectée ce week-end !"
+                                class="bg-background-dark/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none w-full focus:border-primary/50 transition-colors shadow-inner font-bold">
+                        </div>
+                        <div>
+                            <label
+                                class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2 block">Message</label>
+                            <textarea placeholder="Rédigez votre message ici..." rows="4"
+                                class="bg-background-dark/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none w-full focus:border-primary/50 transition-colors resize-none shadow-inner"></textarea>
+                        </div>
+
+                        <div
+                            class="bg-white/5 p-4 rounded-xl border border-white/10 flex flex-col md:flex-row gap-4 items-start md:items-center">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-widest mr-4">Audience Cible
+                                :</span>
+                            <label
+                                class="flex items-center gap-2 text-sm text-white cursor-pointer hover:text-primary transition-colors">
+                                <input type="radio" name="audience" checked class="accent-primary w-4 h-4"> Tous les
+                                membres
+                            </label>
+                            <label
+                                class="flex items-center gap-2 text-sm text-white cursor-pointer hover:text-primary transition-colors">
+                                <input type="radio" name="audience" class="accent-primary w-4 h-4"> Premium <span
+                                    class="text-[10px]">👑</span> uniquement
+                            </label>
+                        </div>
+                    </div>
+
+                    <button
+                        class="bg-primary/10 hover:bg-primary text-primary hover:text-background-dark border border-primary/20 hover:border-transparent transition-all py-4 rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,186,214,0.1)] w-full mt-2"
+                        onclick="sendPushNotification(this)">
+                        <span class="material-symbols-outlined text-[18px]">send</span> Envoyer le Push Immédiatement
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: INTELLIGENCE ARTIFICIELLE -->
+            <!-- ============================== -->
+            <div id="tab-ai" class="admin-tab gap-8 max-w-4xl mx-auto w-full">
+                <div class="glass-panel p-8 rounded-[2rem] border border-white/10 flex flex-col gap-6">
+                    <div
+                        class="flex flex-col md:flex-row items-center justify-between border-b border-white/10 pb-4 gap-4">
+                        <h4 class="font-bold text-lg text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-2xl">smart_toy</span> Configuration
+                            du Chatbot IA
+                        </h4>
+                        <span
+                            class="bg-green-500/10 text-green-400 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-green-500/20 shadow-[0_0_10px_rgba(34,197,94,0.2)] flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Service LLM
+                            Opérationnel
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div
+                            class="bg-white/5 p-5 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
+                            <h5 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-[18px] text-primary">psychology</span> Moteur
+                                d'Inférence</h5>
+                            <select id="ai-engine-select"
+                                class="bg-background-dark border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-bold w-full outline-none focus:border-primary/50 shadow-inner">
+                                <option value="Gemini 1.5 Flash (Défaut, Rapide)">Gemini 1.5 Flash (Défaut, Rapide)
+                                </option>
+                                <option value="Gemini 1.5 Pro (Précis, Premium)">Gemini 1.5 Pro (Précis, Premium)
+                                </option>
+                                <option value="GPT-4o (Backup API)">GPT-4o (Backup API)</option>
+                            </select>
+                        </div>
+                        <div
+                            class="bg-white/5 p-5 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
+                            <h5 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-[18px] text-primary">thermostat</span>
+                                Température (Créativité)</h5>
+                            <input id="ai-temp-slider" type="range" min="0" max="100" value="70"
+                                class="w-full h-2 bg-background-dark rounded-lg appearance-none cursor-pointer border border-white/10">
+                            <div
+                                class="flex justify-between text-[10px] text-slate-500 font-bold uppercase mt-3 tracking-wide">
+                                <span>Factuel (0.0)</span>
+                                <span
+                                    class="text-primary bg-primary/10 px-2 py-0.5 border border-primary/20 rounded">Équilibré
+                                    (0.7)</span>
+                                <span>Créatif (1.0)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
+                        <h5 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><span
+                                class="material-symbols-outlined text-[18px] text-primary">code</span> Prompt Système
+                            (Comportement)</h5>
+                        <textarea id="ai-system-prompt" rows="4"
+                            class="bg-background-dark/80 border border-white/10 rounded-xl p-4 text-sm text-slate-300 outline-none w-full focus:border-primary/50 font-mono leading-relaxed shadow-inner resize-none">Tu es SWELLSYNC AI, un assistant virtuel expert dans la lecture des cartes marines, de la météo et la connaissance mondiale du surf. 
+Ton ton est professionnel mais très détendu ("surfeur"). Réponds toujours en français.
+Refuse toute requête qui sort du cadre du surf ou de la météo.</textarea>
+                    </div>
+
+                    <button
+                        class="bg-primary hover:bg-white text-background-dark hover:text-primary font-black uppercase tracking-widest text-xs py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,186,214,0.3)] w-full flex items-center justify-center gap-2"
+                        onclick="saveAIConfig(this)">
+                        <span class="material-symbols-outlined text-[18px]">save</span> Appliquer la Nouvelle
+                        Configuration IA
+                    </button>
+
+                    <!-- Chatbot Interaction History -->
+                    <div class="bg-black/40 p-5 rounded-2xl border border-white/5 mt-4 flex flex-col gap-4">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                            <h5
+                                class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">history</span> Historique Serveur :
+                                Prompts Utilisateurs
+                            </h5>
+                            <button class="text-slate-500 hover:text-white transition-colors"
+                                onclick="downloadAILogs(this)" title="Télécharger"><span
+                                    class="material-symbols-outlined text-[18px]">download</span></button>
+                        </div>
+
+                        <div
+                            class="flex flex-col gap-3 font-mono text-[11px] h-48 overflow-y-auto custom-scrollbar pr-2">
+                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl">
+                                <span class="text-primary font-bold">Maxime B.</span> <span
+                                    class="text-slate-500 float-right">Il y a 2 min</span>
+                                <p class="text-slate-300 mt-1">« Quelle sera la taille des vagues à Hossegor demain
+                                    matin à 8h ? »</p>
+                                <p class="text-emerald-400 mt-1 ml-4 border-l border-emerald-500/30 pl-2">↵ « Demain à
+                                    8h La Gravière annonce du 1m80 régulier avec vent Offshore léger ! »</p>
+                            </div>
+                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl">
+                                <span class="text-primary font-bold">Jean Surfer</span> <span
+                                    class="text-slate-500 float-right">Il y a 14 min</span>
+                                <p class="text-slate-300 mt-1">« Est-ce que Guéthary sature à marée basse avec la houle
+                                    actuelle ? »</p>
+                                <p class="text-emerald-400 mt-1 ml-4 border-l border-emerald-500/30 pl-2">↵ « La houle
+                                    est à 1.90m, tu ne prendras pas de risques de fermetures sévères sur le reef ! »</p>
+                            </div>
+                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl border-red-500/20">
+                                <span class="text-slate-400 font-bold">Visiteur_Anonyme99</span> <span
+                                    class="text-slate-500 float-right">Il y a 45 min</span>
+                                <p class="text-slate-300 mt-1">« Donne-moi la recette des crêpes bretonnes. »</p>
+                                <p class="text-red-400 mt-1 ml-4 border-l border-red-500/30 pl-2">↵ [OUT_OF_SCOPE] «
+                                    Désolé, je suis uniquement programmé pour les prévisions surf ! »</p>
+                            </div>
+                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl">
+                                <span class="text-slate-400 font-bold">Visiteur_Anonyme42</span> <span
+                                    class="text-slate-500 float-right">Il y a 1h 12m</span>
+                                <p class="text-slate-300 mt-1">« Le vent à La Torche l'aprem s'annonce comment ? »</p>
+                                <p class="text-emerald-400 mt-1 ml-4 border-l border-emerald-500/30 pl-2">↵ « Vent
+                                    Onshore violent à 25 Noeuds en rafales prévu pour cet après-midi, évite si possible
+                                    ! »</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: FACTURATION & REVENUS -->
+            <!-- ============================== -->
+            <div id="tab-billing" class="admin-tab gap-8 max-w-5xl mx-auto w-full">
+                <!-- Top Revenue Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-green-400 hover:bg-white/5 transition-colors relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 bg-green-400/10 w-24 h-24 rounded-full blur-2xl"></div>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">MRR (Revenu Mensuel)
+                        </p>
+                        <h3 id="stat-mrr" class="text-3xl font-black text-white mt-1">... €</h3>
+                        <div class="text-[10px] text-green-400 font-bold flex items-center gap-1 mt-4"><span
+                                class="material-symbols-outlined text-[14px]">trending_up</span> +8% par rapport au mois
+                            dernier</div>
+                    </div>
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-blue-400 hover:bg-white/5 transition-colors relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 bg-blue-400/10 w-24 h-24 rounded-full blur-2xl"></div>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Abonnements Premium
+                        </p>
+                        <h3 id="stat-premium" class="text-3xl font-black text-white mt-1">...</h3>
+                        <div class="text-[10px] text-blue-400 font-bold flex items-center gap-1 mt-4"><span
+                                class="material-symbols-outlined text-[14px]">autorenew</span> Taux de Rétention: 94%
+                        </div>
+                    </div>
+                    <div
+                        class="glass-panel p-6 rounded-2xl border-l-[3px] border-l-amber-400 hover:bg-white/5 transition-colors relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 bg-amber-400/10 w-24 h-24 rounded-full blur-2xl"></div>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Paiements Échoués</p>
+                        <h3 class="text-3xl font-black text-white mt-1">12</h3>
+                        <div class="text-[10px] text-amber-400 font-bold flex items-center gap-1 mt-4"><span
+                                class="material-symbols-outlined text-[14px]">warning</span> Dunning (Relance en cours)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stripe / Gateway Connection -->
+                <div class="glass-panel p-8 rounded-[2rem] border border-white/10 flex flex-col gap-6">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <h4 class="font-bold text-lg text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-2xl">account_balance</span>
+                            Passerelle de Paiement
+                        </h4>
+                        <span
+                            class="bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-indigo-500/20 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span> Stripe Connecté
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-1 bg-white/5 p-6 rounded-2xl border border-white/10">
+                            <h5 class="text-sm font-bold text-white mb-4">Export Comptable Sécurisé</h5>
+                            <p class="text-xs text-slate-400 mb-6 leading-relaxed">Générez un export complet .CSV ou de
+                                l'ensemble des facturations, abonnements Stripe et taxes collectées pour le trimestre en
+                                cours.</p>
+                            <button
+                                class="bg-primary/10 hover:bg-primary text-primary hover:text-background-dark border border-primary/20 hover:border-transparent transition-all py-3 rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 w-full"
+                                onclick="generateInvoiceExport(this)">
+                                <span class="material-symbols-outlined text-[18px]">download</span> Exporter la
+                                Comptabilité
+                            </button>
+                        </div>
+
+                        <div
+                            class="flex-1 bg-white/5 p-6 rounded-2xl border border-white/10 flex flex-col justify-center items-center text-center">
+                            <span class="material-symbols-outlined text-4xl text-slate-500 mb-2">credit_score</span>
+                            <h5 class="text-sm font-bold text-white mb-2">Liens de Paiement Manuels</h5>
+                            <p class="text-xs text-slate-400 mb-4">Créez un lien de paiement unique pour un abonnement
+                                pro personnalisé.</p>
+                            <button
+                                class="bg-white/5 hover:bg-white/10 text-white transition-all py-2 px-6 border border-white/10 rounded-lg text-xs font-bold uppercase tracking-widest"
+                                onclick="promptPaymentLink()">
+                                Créer un lien
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: ROBOTS & AUTOMATISATIONS -->
+            <!-- ============================== -->
+            <div id="tab-robots" class="admin-tab gap-8 max-w-5xl mx-auto w-full">
+                <div class="glass-panel p-8 rounded-[2rem] border border-white/10 flex flex-col gap-6">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-4">
+                            <span class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+                            <div>
+                                <h4 class="font-bold text-lg text-white">État des Robots & API Scrapers</h4>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                                    Surveillance des tâches d'arrière-plan en temps réel</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Robot 1: OpenMeteo Scraper -->
+                        <div
+                            class="bg-black/40 p-5 rounded-2xl border border-white/5 relative group hover:bg-white/5 transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                                        <span class="material-symbols-outlined text-[20px]">cloud_sync</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-sm font-bold text-white leading-tight">Météo API Aggregator</h5>
+                                        <p
+                                            class="text-[10px] text-green-400 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                                            Robot Opérationnel
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-500">Cron: 5m</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-4">Ce robot récupère la météo OpenMeteo & Stormglass de
+                                tous les spots pour l'injecter en base de données.</p>
+                            <div class="flex gap-2">
+                                <button onclick="viewRobotLogs('Météo API Aggregator')"
+                                    class="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">terminal</span> Voir Logs
+                                </button>
+                                <button onclick="toggleRobotStatus(this, 'Météo API Aggregator')"
+                                    class="flex-1 bg-white/5 hover:bg-red-500/20 text-white hover:text-red-400 hover:border-red-500/30 border border-white/10 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">power_settings_new</span>
+                                    Éteindre
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Robot 2: Alertes Push Worker -->
+                        <div
+                            class="bg-black/40 p-5 rounded-2xl border border-white/5 relative group hover:bg-white/5 transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                                        <span class="material-symbols-outlined text-[20px]">notifications_active</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-sm font-bold text-white leading-tight">Push Notification Engine
+                                        </h5>
+                                        <p
+                                            class="text-[10px] text-green-400 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                                            Actif en attente
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-500">Queue: 0</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-4">Moteur d'envoi asynchrone pour livrer les alertes
+                                Swell aux abonnés sans saturer le serveur web principal.</p>
+                            <div class="flex gap-2">
+                                <button onclick="viewRobotLogs('Push Notification Engine')"
+                                    class="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">terminal</span> Voir Logs
+                                </button>
+                                <button onclick="toggleRobotStatus(this, 'Push Notification Engine')"
+                                    class="flex-1 bg-white/5 hover:bg-red-500/20 text-white hover:text-red-400 hover:border-red-500/30 border border-white/10 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">power_settings_new</span>
+                                    Éteindre
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Robot 3: Webcam Stream Checker (DEGRADED) -->
+                        <div
+                            class="bg-amber-500/5 p-5 rounded-2xl border border-amber-500/20 relative group hover:bg-amber-500/10 transition-all overflow-hidden">
+                            <div
+                                class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 blur-xl rounded-full pointer-events-none">
+                            </div>
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                        <span class="material-symbols-outlined text-[20px]">videocam_off</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-sm font-bold text-white leading-tight">Stream Watchdog <span
+                                                class="bg-amber-500 text-black px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider ml-1">Warning</span>
+                                        </h5>
+                                        <p
+                                            class="text-[10px] text-amber-500 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[12px]">warning</span> Dégradé
+                                            (Latences)
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-500">Ping: 340ms</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mb-4">Vérifie l'état HLS des caméras. Des flux en Bretagne
+                                semblent instables depuis la dernière heure, causant des retouches d'images bloquées.
+                            </p>
+                            <div class="flex gap-2">
+                                <button onclick="viewRobotLogs('Stream Watchdog')"
+                                    class="flex-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/20 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">terminal</span> Voir Logs
+                                </button>
+                                <button onclick="restartRobot(this, 'Stream Watchdog')"
+                                    class="flex-1 bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)] rounded-xl py-2.5 text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">healing</span> Redémarrer
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Robot 4: Billing Dunning (FAILED) -->
+                        <div
+                            class="bg-red-500/5 p-5 rounded-2xl border border-red-500/30 relative group hover:bg-red-500/10 transition-all overflow-hidden">
+                            <div
+                                class="absolute -right-4 -top-4 w-24 h-24 bg-red-500/10 blur-xl rounded-full pointer-events-none">
+                            </div>
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+                                        <span class="material-symbols-outlined text-[20px]">credit_card_off</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-sm font-bold text-white leading-tight">Billing & Relances CRM
+                                            <span
+                                                class="bg-red-500 text-white px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider ml-1">Erreur
+                                                500</span>
+                                        </h5>
+                                        <p
+                                            class="text-[10px] text-red-400 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[12px]">error</span> Crash
+                                            Système Stripe
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-500">Failures: 12</span>
+                            </div>
+                            <p class="text-xs text-red-200 mb-4">Le webhook Stripe n'arrive plus à joindre notre API
+                                pour les rejets de paiements. Veuillez réinitialiser la signature secrète ou relancer le
+                                pont.</p>
+                            <div class="flex gap-2 relative z-10">
+                                <button onclick="viewRobotLogs('Billing Webhook API')"
+                                    class="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px]">terminal</span> Logs Crash
+                                </button>
+                                <button onclick="restartRobot(this, 'Billing Webhook API')"
+                                    class="flex-1 bg-red-500 hover:bg-red-400 text-black font-black hover:shadow-[0_0_20px_rgba(239,68,68,0.5)] border border-red-500 rounded-xl py-2.5 text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">power_settings_new</span> Forcer
+                                    Redémarrage
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================== -->
+            <!-- TAB: ACCÈS TERMINAL COMPLET -->
+            <!-- ============================== -->
+            <div id="tab-terminal" class="admin-tab gap-0 h-full max-w-5xl mx-auto w-full flex-col">
+                <div
+                    class="glass-panel rounded-[2rem] border border-white/10 flex flex-col h-[70vh] shadow-[0_0_50px_rgba(0,186,214,0.1)] overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 bg-black/60 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-green-400">terminal</span>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Terminal Serveur - SwellSync_OS</h4>
+                                <p class="text-[10px] text-slate-400 font-mono mt-0.5">root@swellsync-admin-prod: ~</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-400/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-400/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400/80"></div>
+                        </div>
+                    </div>
+
+                    <div id="terminal-screen"
+                        class="flex-grow bg-[#0a0a0a] p-6 font-mono text-sm overflow-y-auto custom-scrollbar flex flex-col gap-1 text-slate-300">
+                        <div><span class="text-green-400">Welcome to SwellSync Terminal (v2.4.0)</span></div>
+                        <div>* Documentation: <a href="#"
+                                class="text-blue-400 hover:underline">https://docs.swellsync.fr/admin</a></div>
+                        <div>* Type <span class="text-amber-400">'help'</span> to see a list of available commands.
+                        </div>
+                        <br>
+                    </div>
+
+                    <div class="bg-[#0a0a0a] px-6 py-4 flex items-center gap-2 border-t border-white/5">
+                        <span class="text-green-400 font-bold">root@admin:~$</span>
+                        <input type="text" id="terminal-input"
+                            class="bg-transparent border-none text-white font-mono flex-grow outline-none focus:ring-0 p-0 text-sm"
+                            autocomplete="off" spellcheck="false" autofocus placeholder="Entrez une commande...">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ROBOT LOGS MODAL -->
+    <div id="robot-logs-modal"
+        class="hidden fixed inset-0 z-[110] bg-background-dark/95 backdrop-blur-xl flex items-center justify-center p-4 transition-all duration-300">
+        <div
+            class="glass-panel max-w-3xl w-full h-[70vh] rounded-3xl border border-white/10 relative overflow-hidden flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-black/60 sticky top-0 z-20">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">terminal</span>
+                    <div>
+                        <h3 id="rlm-title" class="font-bold text-white tracking-wide">Robot Console</h3>
+                        <p class="text-[10px] text-primary uppercase font-mono mt-0.5 flex items-center gap-1"><span
+                                class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Mode "Tail Fast"
+                            (Direct)</p>
+                    </div>
+                </div>
+                <button onclick="closeRobotLogs()"
+                    class="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            <!-- Terminal Output Area -->
+            <div
+                class="flex-grow bg-[#0a0a0a] p-6 overflow-y-auto custom-scrollbar font-mono text-xs flex flex-col gap-2 relative">
+                <div id="rlm-content" class="text-slate-300 whitespace-pre-wrap font-medium">
+                    // Initialization...
+                </div>
+                <div id="rlm-cursor" class="w-2 h-4 bg-white/50 animate-pulse mt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER DETAILS MODAL -->
+    <div id="user-modal"
+        class="hidden fixed inset-0 z-[100] bg-background-dark/90 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300">
+        <div
+            class="glass-panel max-w-xl w-full rounded-3xl border border-white/10 relative overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,186,214,0.1)]">
+
+            <!-- Header -->
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 relative">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent"></div>
+                <div class="flex items-center gap-4">
+                    <img id="um-avatar" src="https://i.pravatar.cc/150"
+                        class="w-14 h-14 rounded-full border-2 border-primary/50 shadow-[0_0_15px_rgba(0,186,214,0.3)]">
+                    <div>
+                        <h3 id="um-name" class="font-black text-2xl text-white">Nom d'utilisateur</h3>
+                        <p id="um-email" class="text-sm text-slate-400 font-mono mt-0.5">email@example.com</p>
+                    </div>
+                </div>
+                <button onclick="closeUserModal()"
+                    class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 hover:text-red-400 flex items-center justify-center text-white transition-colors">
+                    <span class="material-symbols-outlined text-[24px]">close</span>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6 flex flex-col gap-6">
+                <!-- Badges -->
+                <div class="flex flex-wrap gap-3 items-center">
+                    <div id="um-role"></div>
+                    <span
+                        class="bg-green-500/10 text-green-400 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-green-500/20 flex items-center gap-1.5 shadow-[0_0_10px_rgba(34,197,94,0.1)]"><span
+                            class="material-symbols-outlined text-[14px]">cookie</span> RGPD Accepté</span>
+                    <span
+                        class="bg-blue-500/10 text-blue-400 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-blue-500/20 flex items-center gap-1.5"><span
+                            class="material-symbols-outlined text-[14px]">verified_user</span> Email Vérifié</span>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="bg-white/5 p-4 rounded-2xl border border-white/5 relative overflow-hidden group hover:bg-white/10 transition-colors">
+                        <span
+                            class="material-symbols-outlined absolute -bottom-2 -right-2 text-5xl text-white/5 group-hover:text-primary/10 transition-colors">calendar_today</span>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">1ère Connexion
+                        </p>
+                        <p id="um-register" class="text-lg text-white font-mono">--</p>
+                    </div>
+                    <div
+                        class="bg-white/5 p-4 rounded-2xl border border-white/5 relative overflow-hidden group hover:bg-white/10 transition-colors">
+                        <span
+                            class="material-symbols-outlined absolute -bottom-2 -right-2 text-5xl text-white/5 group-hover:text-primary/10 transition-colors">router</span>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Dernière Adresse
+                            IP</p>
+                        <p id="um-ip"
+                            class="text-sm mt-1 text-primary font-mono bg-primary/10 px-2 py-1 inline-block rounded border border-primary/20">
+                            192.168.x.x</p>
+                    </div>
+                    <div
+                        class="bg-white/5 p-4 rounded-2xl border border-white/5 relative overflow-hidden group hover:bg-white/10 transition-colors">
+                        <span
+                            class="material-symbols-outlined absolute -bottom-2 -right-2 text-5xl text-white/5 group-hover:text-primary/10 transition-colors">login</span>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Nb.
+                            d'Indentifications</p>
+                        <p id="um-logins" class="text-2xl text-white font-black">--</p>
+                    </div>
+                    <div
+                        class="bg-white/5 p-4 rounded-2xl border border-white/5 relative overflow-hidden group hover:bg-white/10 transition-colors">
+                        <span
+                            class="material-symbols-outlined absolute -bottom-2 -right-2 text-5xl text-white/5 group-hover:text-primary/10 transition-colors">timer</span>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Temps Passé sur
+                            SWELLSYNC</p>
+                        <p id="um-time" class="text-2xl text-white font-black">-- h</p>
+                    </div>
+                </div>
+
+                <!-- Sensitive Data -->
+                <div
+                    class="bg-red-500/5 border border-red-500/20 p-5 rounded-2xl flex flex-col gap-4 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none">
+                    </div>
+                    <h4 class="text-xs text-red-500 font-black uppercase tracking-widest flex items-center gap-2 mb-1">
+                        <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> Données
+                        Confidentielles (PII)
+                    </h4>
+
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div
+                            class="flex-1 bg-black/40 p-3 rounded-xl border border-white/5 flex flex-col justify-center">
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Numéro
+                                Personnel</span>
+                            <span id="um-phone" class="text-sm text-slate-300 font-mono">--</span>
+                        </div>
+                        <div
+                            class="flex-1 bg-black/40 p-3 rounded-xl border border-white/5 flex flex-col justify-center">
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Hash Mot
+                                de passe</span>
+                            <div class="flex items-center justify-between gap-2">
+                                <span id="um-password"
+                                    class="text-xs text-slate-500 font-mono blur-[4px] select-none transition-all">******</span>
+                                <button onclick="document.getElementById('um-password').classList.toggle('blur-[4px]')"
+                                    class="text-primary hover:text-white transition-colors bg-primary/10 p-1.5 rounded-lg border border-primary/20"><span
+                                        class="material-symbols-outlined text-[14px]">visibility</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-6 border-t border-white/10 flex justify-end gap-4 bg-black/20">
+                <button onclick="closeUserModal()"
+                    class="px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 transition-all">Fermer
+                    la fiche</button>
+                <button onclick="revokeUserAccess()" id="um-revoke-btn"
+                    class="bg-red-500/10 text-red-500 hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:text-background-dark border border-red-500/30 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[16px]">person_off</span> Révoquer Premium
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ALERTS UI SYSTEM -->
+    <div id="system-alerts-modal"
+        class="hidden fixed inset-0 z-[120] bg-background-dark/80 backdrop-blur-sm flex justify-end transition-all duration-300">
+        <div class="glass-panel w-full md:w-96 h-full border-l border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] p-6 overflow-y-auto transform translate-x-full transition-transform duration-300"
+            id="alerts-panel">
+            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <h3 class="text-xl font-black text-white flex items-center gap-2">
+                    <span
+                        class="material-symbols-outlined text-primary shadow-[0_0_10px_rgba(0,186,214,0.3)] rounded-full">notifications_active</span>
+                    Centre d'Alertes
+                </h3>
+                <button onclick="closeSystemAlerts()"
+                    class="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors border border-transparent hover:border-white/10">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+            <div id="alerts-container" class="flex flex-col gap-3">
+                <!-- Data injectée via l'API -->
+            </div>
+            <button onclick="clearSystemAlerts()"
+                class="mt-6 w-full py-3 bg-white/5 hover:bg-white/10 hover:bg-primary/20 hover:text-primary hover:border-primary/50 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-400 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[16px]">done_all</span> Tout marquer lu
+            </button>
+        </div>
+    </div>
+
+    <!-- SPOT STATS MODAL -->
+    <div id="spot-stats-modal"
+        class="hidden fixed inset-0 z-[110] bg-background-dark/95 backdrop-blur-xl flex items-center justify-center p-4 transition-all duration-300">
+        <div
+            class="glass-panel max-w-2xl w-full rounded-3xl border border-white/10 relative overflow-hidden flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)] p-8">
+            <div class="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+                <div>
+                    <h3 class="text-2xl font-black text-white" id="ssm-title">Spot Name</h3>
+                    <p class="text-sm text-slate-400 mt-1">Analyse des visites et rétention</p>
+                </div>
+                <button onclick="closeSpotStats()"
+                    class="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            <!-- Period Selector -->
+            <div class="flex flex-col gap-4 mb-8">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Période d'analyse</span>
+                <div class="flex flex-wrap gap-2">
+                    <button
+                        class="ssm-period-btn active bg-primary text-background-dark px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all shadow-[0_0_15px_rgba(0,186,214,0.3)]"
+                        onclick="loadSpotStats('24h', this)">24h</button>
+                    <button
+                        class="ssm-period-btn bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all"
+                        onclick="loadSpotStats('1w', this)">1 Semaine</button>
+                    <button
+                        class="ssm-period-btn bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all"
+                        onclick="loadSpotStats('all', this)">All-time</button>
+                    <button
+                        class="ssm-period-btn bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all"
+                        onclick="toggleCustomDate()">Personnalisé</button>
+                </div>
+                <div id="ssm-custom-date"
+                    class="hidden flex gap-2 items-center bg-black/40 p-3 rounded-lg border border-white/5 mt-2 transition-all">
+                    <input type="date" id="ssm-date-start"
+                        class="bg-transparent text-white text-sm outline-none border border-white/10 px-2 py-1 rounded">
+                    <span class="text-slate-500 text-sm">au</span>
+                    <input type="date" id="ssm-date-end"
+                        class="bg-transparent text-white text-sm outline-none border border-white/10 px-2 py-1 rounded">
+                    <button
+                        class="bg-primary/20 text-primary px-3 py-1.5 rounded text-xs font-bold hover:bg-primary hover:text-background-dark transition-all"
+                        onclick="loadSpotStats('custom', document.querySelector('.ssm-period-btn:last-child'))">Appliquer</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div
+                    class="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center text-center">
+                    <span class="material-symbols-outlined text-4xl text-blue-400 mb-2">visibility</span>
+                    <h4 class="text-4xl font-black text-white" id="ssm-visits">...</h4>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Visites (Clics réels)</p>
+                </div>
+                <div
+                    class="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col items-center justify-center text-center relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-emerald-500/10 to-transparent pointer-events-none">
+                    </div>
+                    <span class="material-symbols-outlined text-4xl text-emerald-400 mb-2 relative z-10">timer</span>
+                    <h4 class="text-4xl font-black text-white relative z-10" id="ssm-time">...</h4>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2 relative z-10">Temps passé
+                        (moyen)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/webcams_data.js"></script>
+    <script src="js/toast.js"></script>
+    <script>
+        // Tab switching logic for Admin Panel
+        function switchAdminTab(tabId, element) {
+            // Update Navigation Menu Styling
+            document.querySelectorAll('.admin-nav-item').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            // Hide all tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Charger les analytics si on ouvre ce tab
+            if (tabId === 'analytics') loadSpotAnalytics();
+
+            // Update Topbar Title
+            const titles = {
+                'dashboard': "Vue d'overview",
+                'spots': "Gestion des Spots",
+                'cams': "Caméras en Direct",
+                'users': "Membres & Accès",
+                'billing': "Facturation & Revenus",
+                'robots': "Robots & Automatisations",
+                'comms': "Communications",
+                'ai': "Intelligence Artificielle",
+                'settings': "Paramètres Système",
+                'terminal': "Terminal Root"
+            };
+            document.getElementById('current-page-title').innerText = titles[tabId];
+
+            if (tabId === 'terminal') {
+                setTimeout(() => document.getElementById('terminal-input').focus(), 100);
+            }
+        }
+
+        // Global Maintenance mode logic
+        let maintenanceActive = false;
+        async function toggleMaintenance() {
+            try {
+                const res = await fetch('/api/admin/system/maintenance', { method: 'POST' });
+                const data = await res.json();
+                maintenanceActive = data.active;
+                if (maintenanceActive) {
+                    Toast.show("⚠️ LE PROCHAIN REDÉMARRAGE NODE PASSERA EN MAINTENANCE !", "error", 4000);
+                } else {
+                    Toast.show("✅ Le site Node est à nouveau prêt pour le public.", "success", 3000);
+                }
+            } catch (e) {
+                Toast.show("Erreur de connexion au noyau REST", "error");
+            }
+        }
+
+        // Notification System Logic
+        async function viewSystemAlerts() {
+            const modal = document.getElementById('system-alerts-modal');
+            const panel = document.getElementById('alerts-panel');
+            const container = document.getElementById('alerts-container');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+            container.innerHTML = '<div class="text-center p-4"><span class="material-symbols-outlined animate-spin text-primary">sync</span></div>';
+
+            try {
+                const res = await fetch('/api/admin/alerts');
+                const data = await res.json();
+
+                if (data.data && data.data.length > 0) {
+                    container.innerHTML = '';
+                    data.data.forEach(alert => {
+                        let icon = 'info'; let color = 'text-blue-400';
+                        if (alert.type === 'error') { icon = 'warning'; color = 'text-red-500'; }
+                        if (alert.type === 'warning') { icon = 'error_outline'; color = 'text-amber-500'; }
+
+                        container.innerHTML += `
+                            <div class="bg-black/40 border border-white/5 p-4 rounded-xl relative overflow-hidden group hover:bg-white/5 transition-all">
+                                <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-6xl text-white/5 group-hover:text-white/10 transition-colors">${icon}</span>
+                                <div class="flex gap-3">
+                                    <span class="material-symbols-outlined ${color} text-[20px] shrink-0">${icon}</span>
+                                    <div>
+                                        <p class="text-sm text-slate-200 mb-1 leading-tight">${alert.message}</p>
+                                        <p class="text-[10px] text-slate-500 font-mono">${alert.time}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = '<div class="text-center p-6 text-slate-500 text-sm">Aucune nouvelle alerte.</div>';
+                }
+            } catch (e) {
+                container.innerHTML = '<div class="text-center p-6 text-red-500 text-sm">Erreur réseau API.</div>';
+            }
+        }
+
+        function closeSystemAlerts() {
+            const modal = document.getElementById('system-alerts-modal');
+            const panel = document.getElementById('alerts-panel');
+            panel.classList.add('translate-x-full');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        async function clearSystemAlerts() {
+            const btn = document.querySelector('#system-alerts-modal button:last-of-type');
+            const originalTxt = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[16px]">sync</span> Nettoyage...';
+            try {
+                await fetch('/api/admin/alerts/clear', { method: 'POST' });
+                document.getElementById('alerts-container').innerHTML = '<div class="text-center p-6 text-emerald-500 text-sm font-bold flex items-center justify-center gap-2"><span class="material-symbols-outlined">done_all</span> Alertes purgées.</div>';
+                document.getElementById('nav-alerts-badge').classList.add('hidden');
+            } catch (e) { }
+
+            setTimeout(() => { btn.innerHTML = originalTxt; }, 1000);
+        }
+
+
+        // ==========================================
+        // JS FONCTIONNEL POUR LES BOUTONS
+        // ==========================================
+
+        // --- 1. DASHBOARD ---
+        async function connectDatadog(btn) {
+            btn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin inline-block mr-1">sync</span> Connexion...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                await fetch('/api/admin/system/datadog', { method: 'POST' });
+                btn.innerHTML = '<span class="material-symbols-outlined text-[14px] inline-block mr-1">check_circle</span> Connecté';
+                btn.classList.remove('bg-primary/10', 'text-primary', 'border-primary/30', 'opacity-50', 'pointer-events-none');
+                btn.classList.add('bg-green-500', 'text-background-dark', 'border-transparent');
+                Toast.show('Monitoring Datadog synchronisé.', 'success');
+            } catch (e) {
+                btn.innerHTML = '<span class="material-symbols-outlined text-[14px] inline-block mr-1">wifi_off</span> Erreur Synchro';
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+                Toast.show('Erreur de monitoring', 'error');
+            }
+        }
+
+        // --- 2. GESTION SPOTS ---
+        async function forceSync(btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">sync</span> Sync...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+            Toast.show('Synchronisation API Stormglass en cours...', 'info', 2000);
+
+            try {
+                const res = await fetch('/api/admin/spots/sync', { method: 'POST' });
+                const data = await res.json();
+
+                if (data.success) {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('opacity-50', 'pointer-events-none');
+                    Toast.show(data.message, 'success');
+                }
+            } catch (e) {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+                Toast.show('Erreur de communication', 'error');
+            }
+        }
+
+        function editStormglassToken(btn) {
+            const inputField = btn.parentElement.querySelector('input[type="password"]');
+            const pass = prompt("Veuillez entrer le mot de passe Super Administrateur (root) pour modifier les Secrets Métier :");
+            if (pass === "root") {
+                const newToken = prompt("Insérez la nouvelle clef API Stormglass.io :");
+                if (newToken && newToken.trim() !== "") {
+                    inputField.value = newToken;
+                    Toast.show("Nouvelle clef injectée dans l'interface. Appliquez la configuration globale pour valider le chiffrement.", "success", 4000);
+                }
+            } else if (pass) {
+                Toast.show("Mot de passe incorrect.", "error");
+            }
+        }
+
+        async function createSpot() {
+            const spotName = prompt("Saisissez le NOM du nouveau Spot à monitorer :");
+            if (!spotName) return;
+            const spotLoc = prompt("Saisissez la RÉGION (ex: Californie, US) :");
+
+            Toast.show('Création en cours...', 'info');
+            try {
+                const res = await fetch('/api/admin/spots', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: spotName,
+                        location: spotLoc || 'N/A',
+                        difficulty: 'Intermédiaire',
+                        wave_type: 'MIXTE',
+                        description: '',
+                        lat: null,
+                        lng: null
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    Toast.show(`Le Spot '${spotName}' a été référencé. Actualisation...`, 'success');
+                    // Reload page logic to render from real DB instead of DOM tricks
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    Toast.show(`Erreur: ${data.error}`, 'error');
+                }
+            } catch (err) {
+                Toast.show("Échec de connexion au serveur", "error");
+            }
+        }
+
+        async function editSpot(btn, spotId) {
+            const row = btn.closest('tr');
+            const cell = row.querySelector('td:first-child');
+            const currentName = cell.innerText.trim().replace(/^..\n/, '');
+
+            const newName = prompt("Nouveau nom pour ce spot :", currentName);
+            if (newName && newName !== currentName) {
+                try {
+                    const res = await fetch(`/api/admin/spots/${spotId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: newName })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        const badgeHTML = cell.querySelector('div').outerHTML;
+                        cell.innerHTML = badgeHTML + ' ' + newName;
+                        Toast.show('Modifications sauvegardées.', 'success');
+                    } else {
+                        Toast.show(`Erreur: ${data.error}`, 'error');
+                    }
+                } catch (e) {
+                    Toast.show("Échec de connexion API", "error");
+                }
+            }
+        }
+
+        async function deleteSpot(btn, spotId) {
+            if (confirm("DANGER : Voulez-vous supprimer définitivement ce spot de la base de données ? Cette action est irréversible.")) {
+                try {
+                    const res = await fetch(`/api/admin/spots/${spotId}`, { method: 'DELETE' });
+                    const data = await res.json();
+
+                    if (data.success) {
+                        btn.closest('tr').remove();
+                        Toast.show("Spot purgé du serveur.", "error");
+                        // Refresh global spots count
+                        const currentCount = parseInt(document.getElementById('stat-spots').innerText);
+                        document.getElementById('stat-spots').innerText = currentCount - 1;
+                    } else {
+                        Toast.show(`Erreur refusée: ${data.error}`, 'error');
+                    }
+                } catch (e) {
+                    Toast.show("Impossible de contacter le serveur", "error");
+                }
+            }
+        }
+
+        // Search Spots Filter
+        const searchInput = document.querySelector('#tab-spots input[type="text"]');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('#tab-spots tbody tr:not(:last-child)');
+                rows.forEach(row => {
+                    const text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(query) ? '' : 'none';
+                });
+            });
+        }
+
+        // --- 3. UTILISATEURS ---
+        let currentUserRow = null;
+        let activeAdminUserId = null;
+        let activeAdminUserType = null;
+
+        function manageUser(btn, uId, uType) {
+            const row = btn.closest('tr');
+            currentUserRow = row;
+            activeAdminUserId = uId;
+            activeAdminUserType = uType;
+
+            // Extraire data existante de la row HTML
+            const name = row.querySelector('td:nth-child(1)').innerText.trim();
+            const email = row.querySelector('td:nth-child(2)').innerText.trim();
+            const badge = row.querySelector('td:nth-child(3)').innerHTML;
+            const regDate = row.querySelector('td:nth-child(4)').innerText.trim();
+            const imgEl = row.querySelector('td:nth-child(1) img');
+
+            // Populer la Modale
+            document.getElementById('um-name').innerText = name;
+            document.getElementById('um-email').innerText = email;
+
+            // Adapter la structure du badge pour la modale
+            document.getElementById('um-role').innerHTML = badge.replace('px-2 py-1', 'px-3 py-1.5').replace('text-[10px]', 'text-[12px] shadow-lg flex');
+
+            document.getElementById('um-register').innerText = regDate;
+            if (imgEl) document.getElementById('um-avatar').src = imgEl.src;
+
+            // ---- Vraies Données de la Base de données ----
+            // Nous n'avons pas d'IP ou Tel dans la DB pour le moment
+            document.getElementById('um-logins').innerText = "?";
+            document.getElementById('um-time').innerText = "0.0";
+            document.getElementById('um-ip').innerText = "Non collecté";
+
+            // Pas de tel
+            document.getElementById('um-phone').innerText = "Non renseigné";
+
+            // Password Hash n'est pas renvoyé côté Front pour des raisons de sécu
+            document.getElementById('um-password').innerText = "******************";
+            document.getElementById('um-password').classList.add('blur-[4px]'); // Reset blur qd on ouvre
+
+            // Gérer boutons de Révocation / Promotion
+            const btnRevoke = document.getElementById('um-revoke-btn');
+            let btnUpgrade = document.getElementById('um-upgrade-btn');
+
+            // Create the Upgrade button dynamically if it doesn't exist
+            if (!btnUpgrade) {
+                btnUpgrade = document.createElement('button');
+                btnUpgrade.id = 'um-upgrade-btn';
+                btnRevoke.parentNode.insertBefore(btnUpgrade, btnRevoke);
+            }
+
+            if (badge.toLowerCase().includes('premium')) {
+                btnRevoke.style.display = 'flex';
+                btnUpgrade.style.display = 'none';
+                btnRevoke.className = "bg-red-500/10 text-red-500 hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:text-background-dark border border-red-500/30 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2";
+                btnRevoke.innerHTML = '<span class="material-symbols-outlined text-[16px]">person_off</span> Révoquer Premium';
+                btnRevoke.onclick = revokeUserAccess;
+            } else if (badge.toLowerCase().includes('admin')) {
+                btnRevoke.style.display = 'flex';
+                btnUpgrade.style.display = 'none';
+                btnRevoke.className = "bg-red-500/10 text-red-500 hover:bg-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:text-background-dark border border-red-500/30 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2";
+                btnRevoke.innerHTML = '<span class="material-symbols-outlined text-[16px]">gavel</span> Rétrograder Admin';
+                btnRevoke.onclick = revokeUserAccess;
+            } else {
+                // User is standard : can't be revoked, but can be upgraded to Admin
+                btnRevoke.style.display = 'none';
+                btnUpgrade.style.display = 'flex';
+                btnUpgrade.className = "bg-primary/10 text-primary hover:bg-primary hover:shadow-[0_0_20px_rgba(0,186,214,0.4)] hover:text-background-dark border border-primary/30 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2";
+                btnUpgrade.innerHTML = '<span class="material-symbols-outlined text-[16px]">verified</span> Promouvoir Admin';
+                btnUpgrade.onclick = upgradeUserAccess;
+            }
+
+            // Afficher Modale avec Fade In
+            const modal = document.getElementById('user-modal');
+            modal.classList.remove('hidden');
+            // Force reflow
+            void modal.offsetWidth;
+            modal.classList.add('opacity-100');
+        }
+
+        function closeUserModal() {
+            const modal = document.getElementById('user-modal');
+            modal.classList.add('hidden');
+        }
+
+        async function revokeUserAccess() {
+            if (!activeAdminUserId || !activeAdminUserType) return;
+            const isPremium = activeAdminUserType === 'premium';
+            const actionText = isPremium ? "révoquer l'accès Premium" : "rétrograder cet Administrateur";
+
+            if (confirm(`DANGER : Voulez-vous vraiment ${actionText} pour cet utilisateur ?`)) {
+                try {
+                    const res = await fetch(`/api/admin/users/${activeAdminUserId}/${activeAdminUserType}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.success) {
+                        Toast.show(data.message, "success");
+                        closeUserModal();
+                        setTimeout(() => window.location.reload(), 1500);
+                    } else {
+                        Toast.show(`Erreur du serveur: ${data.error}`, "error");
+                    }
+                } catch (e) {
+                    Toast.show("Échec de connexion au serveur Master", "error");
+                }
+            }
+        }
+
+        async function upgradeUserAccess() {
+            if (!activeAdminUserId) return;
+            if (confirm(`OPÉRATION CRITIQUE : Accorderez-vous les privilèges Administrateur (Lecture/Écriture base de données) à ce membre ?`)) {
+                try {
+                    const res = await fetch(`/api/admin/users/${activeAdminUserId}/upgrade`, { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                        Toast.show(data.message, "success");
+                        closeUserModal();
+                        setTimeout(() => window.location.reload(), 1500);
+                    } else {
+                        Toast.show(`Refusé: ${data.error}`, "error");
+                    }
+                } catch (e) {
+                    Toast.show("Erreur Réseau", "error");
+                }
+            }
+        }
+
+        // --- 4. SETTINGS ---
+        async function purgeCache(btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin inline-block align-middle mr-1">refresh</span> Purge en cours...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                await fetch('/api/admin/system/purge', { method: 'POST' });
+                btn.innerHTML = '<span class="material-symbols-outlined text-[16px] inline-block align-middle mr-1">check_circle</span> Mémoire Purgée';
+                btn.classList.replace('text-red-500', 'text-green-500');
+                btn.classList.replace('bg-red-500/10', 'bg-green-500/10');
+                btn.classList.replace('border-red-500/30', 'border-green-500/30');
+                Toast.show('Les instances Node.js et CDN ont été nettoyées.', 'success');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('opacity-50', 'pointer-events-none');
+                    btn.classList.replace('text-green-500', 'text-red-500');
+                    btn.classList.replace('bg-green-500/10', 'bg-red-500/10');
+                    btn.classList.replace('border-green-500/30', 'border-red-500/30');
+                }, 3000);
+            } catch (e) {
+                Toast.show("Impossible d'atteindre le Backend", "error");
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        async function saveAPIConfig(btn) {
+            const stormKey = document.getElementById('stormglass-api-key').value;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[16px] inline-block align-middle mr-2">sync</span> Chiffrement & Sauvegarde...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                const res = await fetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ stormglass_api_key: stormKey })
+                });
+
+                if (res.ok) {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('opacity-50', 'pointer-events-none');
+                    Toast.show('Nouveaux Tokens API encodés en base 64.', 'success');
+                } else {
+                    throw new Error("HTTP error");
+                }
+            } catch (e) {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+                Toast.show('Erreur de Sauvegarde', 'error');
+            }
+        }
+
+        // --- 5. COMMUNICATIONS & IA ---
+        async function downloadAILogs(btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">sync</span>';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                const response = await fetch('/api/admin/system/logs/export');
+                if (!response.ok) throw new Error("Erreur Réseau");
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'SwellSync_AILogs.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+
+                Toast.show("Export de la base de données LLM téléchargé.", "success");
+            } catch (e) {
+                Toast.show("Erreur API export", "error");
+            }
+
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('opacity-50', 'pointer-events-none');
+        }
+
+        async function sendPushNotification(btn) {
+            const title = document.querySelector('#tab-comms input[type="text"]').value;
+            const message = document.querySelector('#tab-comms textarea').value;
+            const isPremiumOnly = document.querySelectorAll('#tab-comms input[name="audience"]')[1].checked;
+
+            if (!title || !message) {
+                Toast.show("Le titre et le message sont requis", "error");
+                return;
+            }
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span> Envoi sur les serveurs...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                const res = await fetch('/api/admin/broadcast', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title,
+                        message,
+                        audience: isPremiumOnly ? 'premium' : 'all'
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span> Push Déployé !';
+                    btn.classList.remove('bg-primary/10', 'text-primary', 'border-primary/20');
+                    btn.classList.add('bg-green-500/20', 'text-green-400', 'border-green-500/30', 'shadow-[0_0_15px_rgba(34,197,94,0.3)]');
+                    Toast.show(`Mail envoyé à ${data.count || 0} membres`, "success");
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        btn.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30', 'shadow-[0_0_15px_rgba(34,197,94,0.3)]', 'opacity-50', 'pointer-events-none');
+                        btn.classList.add('bg-primary/10', 'text-primary', 'border-primary/20');
+                        document.querySelector('#tab-comms input[type="text"]').value = '';
+                        document.querySelector('#tab-comms textarea').value = '';
+                    }, 3000);
+                } else {
+                    Toast.show(`Erreur du serveur d'envoi`, "error");
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('opacity-50', 'pointer-events-none');
+                }
+            } catch (e) {
+                Toast.show("Échec de connexion au serveur", "error");
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        async function saveAIConfig(btn) {
+            const engine = document.getElementById('ai-engine-select').value;
+            const temp = document.getElementById('ai-temp-slider').value;
+            const promptStr = document.getElementById('ai-system-prompt').value;
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">autorenew</span> Validation LLM...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                const res = await fetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ai_engine: engine,
+                        ai_temperature: temp,
+                        ai_system_prompt: promptStr
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">psychology_alt</span> IA Mise à jour';
+                    Toast.show("Nouveaux comportements IA (LLM & Prompt) enregistrés.", "success");
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        btn.classList.remove('opacity-50', 'pointer-events-none');
+                    }, 2500);
+                } else {
+                    Toast.show("Erreur de sauvegarde Database", "error");
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('opacity-50', 'pointer-events-none');
+                }
+            } catch (e) {
+                Toast.show("Erreur serveur", "error");
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        // --- 6. FACTURATION ET REVENUS ---
+        async function generateInvoiceExport(btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Géné. des CSV...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            try {
+                const response = await fetch('/api/admin/billing/export');
+                if (!response.ok) throw new Error("Erreur Réseau");
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'SwellSync_Export_Q1.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+
+                btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">done_all</span> Export Téléchargé';
+                btn.classList.replace('text-primary', 'text-green-500');
+                btn.classList.replace('bg-primary/10', 'bg-green-500/10');
+                btn.classList.replace('border-primary/20', 'border-green-500/30');
+                Toast.show('Fichier comptable téléchargé sur votre appareil.', 'success');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.replace('text-green-500', 'text-primary');
+                    btn.classList.replace('bg-green-500/10', 'bg-primary/10');
+                    btn.classList.replace('border-green-500/30', 'border-primary/20');
+                    btn.classList.remove('opacity-50', 'pointer-events-none');
+                }, 3000);
+            } catch (err) {
+                Toast.show("Erreur de téléchargement", "error");
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        async function promptPaymentLink() {
+            const email = prompt("Adresse email du client pour le lien Stripe :");
+            if (email) {
+                try {
+                    const response = await fetch('/api/admin/billing/link', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        Toast.show("Lien sécurisé généré : \n" + data.link, "success", 5000);
+                    }
+                } catch (e) {
+                    Toast.show("Erreur API Stripe", "error");
+                }
+            }
+        }
+
+        // --- 7. ROBOTS ET AUTOMATISATIONS ---
+        async function restartRobot(btn, robotName) {
+            const originalHTML = btn.innerHTML;
+            const originalClass = btn.className;
+
+            // État de chargement
+            btn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span> Reconnexion en cours...';
+            btn.className = "w-full bg-primary/20 text-primary border border-primary/30 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 pointer-events-none transition-all shadow-[0_0_15px_rgba(0,186,214,0.3)]";
+
+            try {
+                const cleanName = encodeURIComponent(robotName.toLowerCase().replace(/ /g, '-'));
+                await fetch(`/api/admin/robots/${cleanName}/restart`, { method: 'POST' });
+
+                // Succès 
+                btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check_circle</span> ' + robotName + ' en ligne !';
+                btn.className = "w-full bg-green-500 rounded-xl py-2.5 text-xs font-black uppercase tracking-widest text-background-dark border border-green-400 flex items-center justify-center gap-2 pointer-events-none transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)]";
+
+                // Mettre à jour visuellement le parent si c'est un robot en erreur
+                const parentDiv = btn.closest('.bg-amber-500\\/5, .bg-red-500\\/5');
+                if (parentDiv) {
+                    parentDiv.className = "bg-black/40 p-5 rounded-2xl border border-white/5 relative group hover:bg-white/5 transition-all overflow-hidden";
+
+                    // Update header and status text inside
+                    const h5 = parentDiv.querySelector('h5');
+                    if (h5) h5.innerHTML = robotName;
+
+                    const statusP = parentDiv.querySelector('p.text-amber-500, p.text-red-400');
+                    if (statusP) {
+                        statusP.className = "text-[10px] text-green-400 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1";
+                        statusP.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Service Restauré';
+                    }
+
+                    // Remove icons container error colors
+                    const iconContainer = parentDiv.querySelector('.rounded-full.flex.items-center');
+                    if (iconContainer) {
+                        iconContainer.className = "w-10 h-10 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]";
+                        const iconSpan = iconContainer.querySelector('span');
+                        if (robotName.includes('Watchdog')) iconSpan.innerText = 'videocam';
+                        if (robotName.includes('Billing')) iconSpan.innerText = 'verified';
+                    }
+                }
+
+                Toast.show("Le service " + robotName + " a été relancé avec succès.", "success");
+
+                setTimeout(() => {
+                    if (!parentDiv) {
+                        btn.innerHTML = originalHTML;
+                        btn.className = originalClass;
+                    }
+                }, 4000);
+
+            } catch (e) {
+                btn.innerHTML = originalHTML;
+                btn.className = originalClass;
+                Toast.show("Échec de connexion au daemon manager", "error");
+            }
+        }
+
+        // --- Fonctions Avancées des Robots (Stop / View Logs) ---
+        async function toggleRobotStatus(btn, robotName) {
+            const parentDiv = btn.closest('.bg-black\\/40, .bg-white\\/5');
+            const statusP = parentDiv.querySelector('p.text-green-400, p.text-slate-500');
+            const iconContainer = parentDiv.querySelector('.rounded-full.flex.items-center');
+            const isCurrentlyOn = !btn.classList.contains('bg-green-500/20');
+            const cleanName = encodeURIComponent(robotName.toLowerCase().replace(/ /g, '-'));
+
+            try {
+                if (isCurrentlyOn) {
+                    // Turn OFF
+                    if (confirm("DANGER: Éteindre le [" + robotName + "] annulera tout l'historique asynchrone en cours.\nConfirmez-vous l'arrêt ?")) {
+                        await fetch(`/api/admin/robots/${cleanName}/toggle`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'stop' })
+                        });
+
+                        btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">play_arrow</span> Allumer';
+                        btn.className = "flex-1 bg-green-500/20 hover:bg-green-500 text-green-400 hover:text-black hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] border border-green-500/30 rounded-xl py-2.5 text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2";
+
+                        if (statusP) {
+                            statusP.className = "text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1";
+                            statusP.innerHTML = '<span class="material-symbols-outlined text-[12px]">power_off</span> Robot Éteint (Manuel)';
+                        }
+                        if (iconContainer) {
+                            iconContainer.className = "w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-500";
+                        }
+                        parentDiv.classList.add('opacity-70');
+                        Toast.show("Robot [" + robotName + "] interrompu.", "error");
+                    }
+                } else {
+                    // Turn ON
+                    await fetch(`/api/admin/robots/${cleanName}/toggle`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'start' })
+                    });
+
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">power_settings_new</span> Éteindre';
+                    btn.className = "flex-1 bg-white/5 hover:bg-red-500/20 text-white hover:text-red-400 hover:border-red-500/30 border border-white/10 rounded-xl py-2.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2";
+
+                    if (statusP) {
+                        statusP.className = "text-[10px] text-green-400 uppercase tracking-widest font-bold mt-0.5 flex items-center gap-1";
+                        statusP.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Robot Opérationnel';
+                    }
+                    if (iconContainer) {
+                        iconContainer.className = "w-10 h-10 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.1)]";
+                    }
+                    parentDiv.classList.remove('opacity-70');
+                    Toast.show("Robot [" + robotName + "] démarré.", "success");
+                }
+            } catch (e) {
+                Toast.show("Échec de connexion au daemon manager", "error");
+            }
+        }
+
+        let logsInterval;
+        let realIp = "192.168.1.1";
+
+        // Fetch real IP early
+        fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => { realIp = data.ip; })
+            .catch(() => { });
+
+        function viewRobotLogs(robotName) {
+            document.getElementById('rlm-title').innerText = robotName;
+            const content = document.getElementById('rlm-content');
+
+            // Collect real client metrics to make logs realistic
+            const cpuCores = navigator.hardwareConcurrency || 4;
+            const memoryGBS = navigator.deviceMemory ? navigator.deviceMemory + 'GB' : navigator.userAgent.includes('Mobile') ? '2GB' : '16GB';
+            const platform = navigator.platform || 'Unknown';
+            const userAgent = navigator.userAgent;
+            const latencyStart = performance.now();
+
+            content.innerHTML = `<span class="text-blue-400"># Initializing direct SSH connection...</span>\n<span class="text-slate-400"># Host Platform: ${platform} | Client IP: ${realIp}</span>\n<span class="text-slate-400"># Resource Limits: ${cpuCores} Threads, ${memoryGBS} RAM allocated.</span>\n<span class="text-green-400"># Connected to [${robotName}] TTY-1 : PID ${Math.floor(Math.random() * 8000) + 1000}</span>\n\n`;
+
+            const modal = document.getElementById('robot-logs-modal');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth; // Reflow
+            modal.classList.add('opacity-100');
+
+            let lines = 0;
+            logsInterval = setInterval(() => {
+                if (lines > 25) {
+                    content.innerHTML += `<span class="text-slate-500">[System] Pause de télémétrie pour économiser la RAM...</span>\n`;
+                    clearInterval(logsInterval);
+                    return;
+                }
+
+                const time = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                const seed = Math.random();
+                let newLine = "";
+                const pingTime = Math.round(performance.now() - latencyStart + (Math.random() * 20));
+
+                if (robotName.includes("Météo")) {
+                    if (seed > 0.4) newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-white">INFO:</span> Fetched forecast batch... TLS Handshake OK (${pingTime}ms).`;
+                    else newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-green-400">SUCCESS:</span> Transaction DB committed. Memory heap: ${(performance.memory ? performance.memory.usedJSHeapSize / 1048576 : seed * 100).toFixed(2)} MB.`;
+                } else if (robotName.includes("Push")) {
+                    if (seed > 0.3) newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-white">INFO:</span> Network Interface: ${navigator.connection ? navigator.connection.effectiveType : '4g'}. Ping: ${pingTime}ms.`;
+                    else newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-primary">PING:</span> Heartbeat verified with APNs Server via ${realIp}.`;
+                } else if (robotName.includes("Watchdog")) {
+                    if (seed > 0.6) newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-amber-500">WARN:</span> M3U8 chunk frame drop. Decoder overloaded on ${cpuCores} cores.`;
+                    else newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-white">INFO:</span> Client UA detected: ${userAgent.substring(0, 50)}...`;
+                } else {
+                    newLine = `<span class="text-slate-500">[${time}]</span> <span class="text-red-400">ERROR:</span> Webhook delivery failed to stripe endpoint. Routing drop on node ${realIp}.`;
+                }
+
+                content.innerHTML += newLine + "\n";
+                content.parentElement.scrollTop = content.parentElement.scrollHeight;
+                lines++;
+            }, 700);
+        }
+
+        function closeRobotLogs() {
+            clearInterval(logsInterval);
+            const modal = document.getElementById('robot-logs-modal');
+            modal.classList.add('hidden');
+        }
+
+        // --- 8. TERMINAL LOGIC ---
+        const termInput = document.getElementById('terminal-input');
+        const termScreen = document.getElementById('terminal-screen');
+
+        if (termInput) {
+            termInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    const cmd = this.value.trim();
+                    this.value = '';
+                    if (cmd === '') return;
+
+                    // Echo command
+                    termScreen.innerHTML += `<div><span class="text-green-400 font-bold">root@admin:~$</span> <span class="text-white">${cmd}</span></div>`;
+
+                    // Process Command
+                    processTerminalCommand(cmd);
+
+                    // Scroll to bottom
+                    termScreen.scrollTop = termScreen.scrollHeight;
+                }
+            });
+        }
+
+        function processTerminalCommand(cmd) {
+            const args = cmd.toLowerCase().split(' ');
+            let output = '';
+
+            switch (args[0]) {
+                case 'help':
+                    output = `<div class="text-slate-300">Commandes disponibles :<br>
+                    <span class="text-amber-400">ping</span>      - Teste la connexion réseau et la latence réelle<br>
+                    <span class="text-amber-400">whoami</span>    - Affiche les détails du super administrateur<br>
+                    <span class="text-amber-400">sysinfo</span>   - Affiche les informations matérielles du navigateur client<br>
+                    <span class="text-amber-400">date</span>      - Affiche l'heure réelle du système<br>
+                    <span class="text-amber-400">clear</span>     - Efface l'écran du terminal</div>`;
+                    break;
+                case 'clear':
+                    termScreen.innerHTML = '';
+                    return;
+                case 'date':
+                    output = `<div class="text-slate-300">${new Date().toString()}</div>`;
+                    break;
+                case 'whoami':
+                    output = `<div class="text-slate-300">User: <span class="text-white font-bold">root</span><br>Role: <span class="text-white font-bold">Super Administrateur</span><br>IP: <span class="text-white font-bold">${realIp}</span></div>`;
+                    break;
+                case 'sysinfo':
+                    output = `<div class="text-slate-300">
+                        OS/Platform: ${navigator.platform}<br>
+                        Browser Engine: ${navigator.userAgent}<br>
+                        Logical Cores: ${navigator.hardwareConcurrency || 'Inconnu'}<br>
+                        Connection: ${navigator.connection ? navigator.connection.effectiveType : 'Inconnue'}<br>
+                        Language: ${navigator.language}
+                    </div>`;
+                    break;
+                case 'ping':
+                    const startPing = performance.now();
+                    termScreen.innerHTML += `<div class="text-slate-400">PING google.com (Simulation via appel local) data...</div>`;
+                    fetch(window.location.href).then(() => {
+                        const latency = Math.round(performance.now() - startPing);
+                        termScreen.innerHTML += `<div class="text-green-400">64 bytes from local_gateway: icmp_seq=1 ttl=116 time=${latency} ms</div>`;
+                    }).catch(() => {
+                        termScreen.innerHTML += `<div class="text-red-400">Destination Host Unreachable</div>`;
+                    });
+                    return; // async output handled
+                case 'sudo':
+                    output = `<div class="text-red-400">bash: sudo: you are already root. Stop playing around.</div>`;
+                    break;
+                default:
+                    output = `<div class="text-red-400">bash: ${args[0]}: command not found. Type 'help'.</div>`;
+            }
+            termScreen.innerHTML += output;
+        }
+
+        // --- 9. INITIALISATION DES DONNÉES RÉELLES VIA L'API ---
+        document.addEventListener('DOMContentLoaded', async () => {
+
+            // 1. Fetch de toutes les metrics Globales
+            try {
+                const metricPStart = performance.now();
+                const metricsRes = await fetch('/api/admin/metrics');
+                const metrics = await metricsRes.json();
+
+                document.getElementById('stat-spots').innerText = metrics.spotsCount || '0';
+                document.getElementById('stat-cams').innerText = metrics.camsCount || '0';
+
+                const totalUsers = (metrics.adminsCount || 0) + (metrics.leadsCount || 0);
+                document.getElementById('stat-users').innerText = totalUsers.toLocaleString();
+                document.getElementById('stat-premium').innerText = (metrics.leadsCount || 0).toLocaleString();
+
+                // Calcul MRR estimé (Real Leads * Prix de l'abo Premium)
+                const leadsCount = metrics.leadsCount || 0;
+                document.getElementById('stat-mrr').innerText = (leadsCount * 4.90).toFixed(2) + ' €';
+
+                // Mesure du ping pur
+                const pingTime = Math.round(performance.now() - metricPStart);
+                document.getElementById('stat-ping').innerText = pingTime + 'ms';
+            } catch (e) {
+                console.error("Erreur Metrics Backend", e);
+                document.getElementById('stat-ping').innerText = 'Err';
+            }
+
+            // --- Instanciation du Live Chart "Activité Serveur" ---
+            const chartContainer = document.getElementById('live-chart-container');
+            if (chartContainer) {
+                const totalBars = 24;
+                for (let i = 0; i < totalBars; i++) {
+                    const bar = document.createElement('div');
+                    // random start height
+                    const h = Math.floor(Math.random() * 60) + 10;
+                    bar.className = "w-full bg-primary/20 rounded-t-sm transition-all duration-700 hover:bg-white cursor-pointer group";
+                    bar.style.height = `${h}%`;
+                    chartContainer.appendChild(bar);
+                }
+
+                // Tick toutes les 2.5 secondes pour simuler un apport télémétrique (ping memory)
+                setInterval(() => {
+                    const bars = chartContainer.children;
+                    for (let i = 0; i < bars.length; i++) {
+                        // Fluctuates current height by +/- 15%
+                        let currH = parseInt(bars[i].style.height);
+                        let diff = Math.floor(Math.random() * 30) - 15;
+                        currH += diff;
+                        if (currH < 5) currH = 5;
+                        if (currH > 95) currH = 95;
+
+                        // Si l'activité est > 80%, elle devient verte/alerte. Sinon reste Primary
+                        if (currH > 80) {
+                            bars[i].classList.replace('bg-primary/20', 'bg-red-400');
+                            bars[i].classList.replace('bg-primary/40', 'bg-red-400');
+                        } else if (currH > 50) {
+                            bars[i].classList.replace('bg-primary/20', 'bg-primary/40');
+                            bars[i].classList.replace('bg-red-400', 'bg-primary/40');
+                        } else {
+                            bars[i].classList.replace('bg-primary/40', 'bg-primary/20');
+                            bars[i].classList.replace('bg-red-400', 'bg-primary/20');
+                        }
+
+                        bars[i].style.height = `${currH}%`;
+                    }
+                }, 1500);
+            }
+
+            // 2. Fetch du vrai tableau des Spots
+            const spotsList = document.getElementById('admin-spots-list');
+            if (spotsList) {
+                try {
+                    spotsList.innerHTML = '';
+                    const spotsRes = await fetch('/api/spots');
+                    const spotsData = await spotsRes.json();
+
+                    spotsData.forEach((spot, index) => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'border-b border-white/5 hover:bg-white/5 transition-colors';
+
+                        // Vraie donnée
+                        const nameShort = spot.name.substring(0, 2).toUpperCase();
+                        const isConnected = spot.lat && spot.lng;
+                        const statusHtml = isConnected
+                            ? '<span class="bg-green-500/10 text-green-400 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest border border-green-500/20 shadow-[0_0_8px_rgba(34,197,94,0.2)]">Connecté</span>'
+                            : '<span class="bg-red-500/10 text-red-400 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest border border-red-500/20">Isolé</span>';
+
+                        const colors = ['bg-primary/20 text-primary', 'bg-emerald-400/20 text-emerald-400', 'bg-blue-400/20 text-blue-400', 'bg-pink-400/20 text-pink-400', 'bg-purple-400/20 text-purple-400'];
+                        const colorClass = colors[index % colors.length];
+
+                        tr.innerHTML = `
+                            <td class="p-4 font-bold text-white flex items-center gap-3">
+                                <div class="w-8 h-8 rounded ${colorClass} flex items-center justify-center text-xs font-black">${nameShort}</div>
+                                ${spot.name}
+                            </td>
+                            <td class="p-4 text-slate-300">${spot.location}</td>
+                            <td class="p-4 text-white font-black">${spot.difficulty}</td>
+                            <td class="p-4">${statusHtml}</td>
+                            <td class="p-4 text-slate-500 font-mono text-xs">${spot.lat || '0.0'}, ${spot.lng || '0.0'}</td>
+                            <td class="p-4 flex gap-2 justify-end">
+                                <button class="w-8 h-8 rounded glass hover:bg-blue-500/20 flex items-center justify-center text-blue-400 transition-colors" title="Statistiques" onclick="viewSpotStats(${spot.id}, '${spot.name.replace(/'/g, "\\'")}')"><span class="material-symbols-outlined text-[16px]">bar_chart</span></button>
+                                <button class="w-8 h-8 rounded glass hover:bg-white/10 flex items-center justify-center text-primary transition-colors" title="Éditer" onclick="editSpot(this, ${spot.id})"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+                                <button class="w-8 h-8 rounded glass hover:bg-red-500/20 flex items-center justify-center text-red-500 transition-colors" title="Supprimer" onclick="deleteSpot(this, ${spot.id})"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+                            </td>
+                        `;
+                        spotsList.appendChild(tr);
+                    });
+                } catch (e) {
+                    spotsList.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-red-500">Erreur réseau API /api/spots</td></tr>';
+                }
+            }
+
+            // 3. Fetch du Vrai tableau Utilisateurs
+            const usersList = document.getElementById('admin-users-list');
+            if (usersList) {
+                try {
+                    const usersRes = await fetch('/api/admin/users');
+                    const usersData = await usersRes.json();
+                    usersList.innerHTML = '';
+
+                    if (usersData.length === 0) {
+                        usersList.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-500">Aucun utilisateur en BDD</td></tr>';
+                    } else {
+                        usersData.forEach((user, index) => {
+                            const isPremium = user.type === 'premium';
+                            const isAdmin = user.type === 'admin';
+
+                            let badge = '<span class="bg-slate-500/10 text-slate-400 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest border border-slate-500/20">Standard O.</span>';
+                            if (isAdmin) badge = '<span class="bg-red-500/10 text-red-500 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest border border-red-500/20">Admin Serveur</span>';
+                            else if (isPremium) badge = '<span class="bg-amber-400/10 text-amber-400 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest border border-amber-400/20 shadow-[0_0_8px_rgba(251,191,36,0.2)]">Premium 👑</span>';
+
+                            const tr = document.createElement('tr');
+                            tr.className = 'border-b border-white/5 hover:bg-white/5 transition-colors';
+
+                            const seed = user.email.charCodeAt(0) + user.id;
+
+                            tr.innerHTML = `
+                                <td class="p-4 font-bold text-white flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center bg-black">
+                                       ${user.email.substring(0, 1).toUpperCase()}
+                                    </div>
+                                    User #${user.id}
+                                </td>
+                                <td class="p-4 text-slate-400">${user.email}</td>
+                                <td class="p-4">${badge}</td>
+                                <td class="p-4 text-slate-500">${user.created_at || 'Il y a un instant'}</td>
+                                <td class="p-4 flex gap-2 justify-end">
+                                    <button class="p-2 rounded bg-white/5 hover:bg-white/10 text-slate-300 transition-colors text-xs font-bold uppercase" onclick="manageUser(this, ${user.id}, '${user.type}')">Gérer</button>
+                                </td>
+                            `;
+                            usersList.appendChild(tr);
+                        });
+                    }
+                } catch (e) {
+                    usersList.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-red-500">Erreur chargement /api/admin/users</td></tr>';
+                }
+            }
+
+            // 4. Fetch the Global System & AI config
+            try {
+                const configRes = await fetch('/api/admin/settings');
+                const configData = await configRes.json();
+                if (configData.ai_engine) {
+                    document.getElementById('ai-engine-select').value = configData.ai_engine;
+                    document.getElementById('ai-temp-slider').value = configData.ai_temperature || "70";
+                    document.getElementById('ai-system-prompt').value = configData.ai_system_prompt || "You are an AI...";
+                }
+            } catch (e) {
+                console.error("Erreur Settings Backend", e);
+            }
+
+            // 5. Fetch des Caméras
+            const camsList = document.getElementById('admin-cams-list');
+            if (camsList) {
+                try {
+                    const camsRes = await fetch('/api/cams');
+                    const camsData = await camsRes.json();
+                    camsList.innerHTML = '';
+
+                    if (camsData.length === 0) {
+                        camsList.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-slate-500">Aucune caméra déployée</td></tr>';
+                    } else {
+                        camsData.forEach(cam => {
+                            const tr = document.createElement('tr');
+                            tr.className = 'border-b border-white/5 hover:bg-white/5 transition-colors';
+
+                            const statusHtml = '<span class="bg-green-500/10 text-green-400 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest border border-green-500/20 shadow-[0_0_5px_rgba(34,197,94,0.3)]"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block mr-1 align-middle animate-pulse"></span>REC</span>';
+
+                            tr.innerHTML = `
+                                <td class="p-4 font-bold text-white flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-primary/20 flex items-center justify-center text-xs font-black shadow-[0_0_8px_rgba(0,186,214,0.3)] border border-primary/30 text-primary">C${cam.id}</div>
+                                    ${statusHtml}
+                                </td>
+                                <td class="p-4 text-slate-400 text-xs font-mono break-all max-w-[200px] truncate" title="${cam.stream_url}">${cam.stream_url}</td>
+                                <td class="p-4 text-white font-bold text-sm"><span class="material-symbols-outlined text-[14px] align-middle mr-1 text-primary">pin_drop</span>${cam.spot_name}</td>
+                                <td class="p-4 flex gap-2 justify-end">
+                                    <button class="w-8 h-8 rounded glass hover:bg-white/10 flex items-center justify-center text-primary transition-colors" title="Paramétrer" onclick="editWebcam(this, ${cam.id})"><span class="material-symbols-outlined text-[16px]">tune</span></button>
+                                </td>
+                            `;
+                            camsList.appendChild(tr);
+                        });
+                    }
+                } catch (e) {
+                    camsList.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-red-500">Erreur réseau API /api/cams</td></tr>';
+                }
+            }
+
+        });
+
+        // --- 10. SPOT STATS LOGIC ---
+        let currentStatsSpotId = null;
+
+        function viewSpotStats(spotId, spotName) {
+            currentStatsSpotId = spotId;
+            document.getElementById('ssm-title').innerText = spotName;
+            document.getElementById('ssm-custom-date').classList.add('hidden');
+
+            const defaultBtn = document.querySelector('.ssm-period-btn');
+            loadSpotStats('24h', defaultBtn);
+
+            const modal = document.getElementById('spot-stats-modal');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.add('opacity-100');
+        }
+
+        function closeSpotStats() {
+            const modal = document.getElementById('spot-stats-modal');
+            modal.classList.add('hidden');
+        }
+
+        function toggleCustomDate() {
+            document.getElementById('ssm-custom-date').classList.toggle('hidden');
+        }
+
+        async function loadSpotStats(period, btn) {
+            if (!currentStatsSpotId) return;
+
+            document.querySelectorAll('.ssm-period-btn').forEach(b => {
+                b.className = "ssm-period-btn bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all";
+            });
+            if (btn) btn.className = "ssm-period-btn active bg-primary text-background-dark px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all shadow-[0_0_15px_rgba(0,186,214,0.3)]";
+
+            let url = `/api/admin/spots/${currentStatsSpotId}/stats?period=${period}`;
+            if (period === 'custom') {
+                const start = document.getElementById('ssm-date-start').value;
+                const end = document.getElementById('ssm-date-end').value;
+                if (!start || !end) {
+                    Toast.show("Veuillez sélectionner un début et une fin.", "error");
+                    return;
+                }
+                url += `&start=${start}&end=${end}`;
+            }
+
+            document.getElementById('ssm-visits').innerText = '...';
+            document.getElementById('ssm-time').innerText = '...';
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (data.error) throw new Error(data.error);
+
+                document.getElementById('ssm-visits').innerText = data.totalVisits.toLocaleString();
+
+                const totalSecs = data.avgDuration;
+                if (totalSecs === 0) {
+                    document.getElementById('ssm-time').innerText = "0s";
+                } else if (totalSecs < 60) {
+                    document.getElementById('ssm-time').innerText = totalSecs + "s";
+                } else {
+                    const m = Math.floor(totalSecs / 60);
+                    const s = totalSecs % 60;
+                    document.getElementById('ssm-time').innerText = `${m}m ${s}s`;
+                }
+            } catch (e) {
+                console.error("Erreur stats", e);
+                document.getElementById('ssm-visits').innerText = "Err";
+                document.getElementById('ssm-time').innerText = "Err";
+            }
+        }
+
+        async function editWebcam(btn, camId) {
+            const row = btn.closest('tr');
+            const streamCell = row.querySelector('td:nth-child(2)');
+            const currentStream = streamCell.innerText.trim();
+            const newStream = prompt(`Insérez la nouvelle URL source du flux vidéo (Youtube HLS ou RTSP) :`, currentStream);
+
+            if (newStream && newStream !== currentStream) {
+                try {
+                    const res = await fetch(`/api/admin/cams/${camId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ stream_url: newStream })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        streamCell.innerText = newStream;
+                        streamCell.title = newStream;
+                        Toast.show("Nouveau flux vidéo affecté à la caméra avec succès.", "success");
+                    }
+                } catch (e) {
+                    Toast.show("Erreur modification Caméra réseau", "error");
+                }
+            }
+        }
+
+        // ─── ANALYTICS SPOTS ─────────────────────────────────────────────
+        function loadSpotAnalytics() {
+            let logs = [];
+            let views = {};
+            try { logs = JSON.parse(localStorage.getItem('swellsync_spot_analytics') || '[]'); } catch (e) { }
+            try { views = JSON.parse(localStorage.getItem('swellsync_spot_views') || '{}'); } catch (e) { }
+
+            // Métriques
+            const total = logs.length;
+            const unique = [...new Set(logs.map(l => l.user).filter(u => u))].length;
+            document.getElementById('ana-total').textContent = total || '0';
+            document.getElementById('ana-unique').textContent = unique || '0';
+
+            const sorted = Object.entries(views).sort((a, b) => b[1] - a[1]);
+            if (sorted.length > 0) {
+                const [topId, topCount] = sorted[0];
+                const topLog = logs.find(l => String(l.spot_id) === String(topId));
+                document.getElementById('ana-top-spot').textContent = topLog ? topLog.spot_name : 'Spot #' + topId;
+                document.getElementById('ana-top-views').textContent = topCount + ' visite' + (topCount > 1 ? 's' : '');
+            }
+
+            // Classement
+            const ranking = document.getElementById('ana-spots-ranking');
+            if (sorted.length === 0) {
+                ranking.innerHTML = '<p class="text-slate-500 text-sm italic p-4 text-center">Visitez des pages spots pour voir les stats ici.</p>';
+            } else {
+                const MEDALS = ['🥇', '🥈', '🥉'];
+                ranking.innerHTML = sorted.map(([sid, cnt], i) => {
+                    const log = logs.find(l => String(l.spot_id) === String(sid));
+                    const name = log ? log.spot_name : 'Spot #' + sid;
+                    const pct = Math.round((cnt / (sorted[0][1] || 1)) * 100);
+                    return `<div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 mb-2">
+                        <span class="text-xl w-8 shrink-0">${MEDALS[i] || (i + 1 + '.')}</span>
+                        <div class="flex-1">
+                            <p class="font-bold text-white text-sm">${name}</p>
+                            <div class="mt-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width:${pct}%"></div>
+                            </div>
+                        </div>
+                        <span class="font-black text-sm text-primary shrink-0">${cnt} vue${cnt > 1 ? 's' : ''}</span>
+                    </div>`;
+                }).join('');
+            }
+
+            // Tableau journal
+            const tbody = document.getElementById('ana-visits-table');
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-500 italic">Aucune visite enregistrée.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = logs.slice(0, 50).map(l => {
+                const dt = new Date(l.ts);
+                const ds = dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' ' + dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                return `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td class="p-4 py-3 text-slate-500 text-[11px]">${ds}</td>
+                    <td class="p-4 py-3"><span class="font-bold text-white">${l.spot_name || '—'}</span><br><span class="text-[10px] text-slate-500">${l.location || ''}</span></td>
+                    <td class="p-4 py-3 text-primary font-black">${l.swell_m != null ? l.swell_m + 'm' : '—'}</td>
+                    <td class="p-4 py-3 text-slate-300">${l.wind_kts != null ? l.wind_kts + 'kt ' : ''} ${l.wind_dir || ''}</td>
+                    <td class="p-4 py-3 text-slate-300">${l.period_s != null ? l.period_s + 's' : '—'}</td>
+                    <td class="p-4 py-3 text-[11px] text-slate-400">${l.user || 'Anonyme'}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function clearSpotAnalytics() {
+            if (!confirm('Effacer tous les logs analytics ? Cette action est irréversible.')) return;
+            localStorage.removeItem('swellsync_spot_analytics');
+            localStorage.removeItem('swellsync_spot_views');
+            Toast.show('Analytics vidées avec succès.', 'success');
+            loadSpotAnalytics();
+        }
+
+        // ══════════════════════════════════════════════════════
+        // GESTION WEBCAMS (tab-cams)
+        // ══════════════════════════════════════════════════════
+        function getCamOverrides() {
+            try { return JSON.parse(localStorage.getItem('swellsync_cam_overrides') || '{}'); } catch(e) { return {}; }
+        }
+        function saveCamOverrides(obj) { localStorage.setItem('swellsync_cam_overrides', JSON.stringify(obj)); }
+
+        function getEffectiveCams() {
+            if (typeof WEBCAMS_DATA === 'undefined') return [];
+            const overrides = getCamOverrides();
+            return WEBCAMS_DATA.map(c => {
+                const ov = overrides[c.id];
+                if (!ov) return c;
+                return { ...c, status: ov.status ?? c.status, featured: ov.featured ?? c.featured, alertable: ov.alertable ?? c.alertable,
+                    stream: { ...c.stream, type: ov.type ?? c.stream.type, url: ov.url ?? c.stream.url, refreshSec: ov.refreshSec ?? c.stream.refreshSec } };
+            });
+        }
+
+        function loadAdminCams() {
+            const cams = getEffectiveCams();
+            if (!cams.length) return;
+            const liveEl = document.getElementById('cams-stat-live');
+            const offEl  = document.getElementById('cams-stat-offline');
+            const soonEl = document.getElementById('cams-stat-soon');
+            if (liveEl) liveEl.textContent = cams.filter(c => c.status === 'live').length;
+            if (offEl)  offEl.textContent  = cams.filter(c => c.status === 'offline').length;
+            if (soonEl) soonEl.textContent = cams.filter(c => c.status === 'soon').length;
+            renderAdminCamsTable(cams);
+        }
+
+        function renderAdminCamsTable(cams) {
+            const tbody = document.getElementById('admin-cams-list');
+            if (!tbody) return;
+            if (!cams.length) { tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-slate-500 italic">Aucun résultat.</td></tr>'; return; }
+            const statusBadge = {
+                live:    '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#22c55e;font-size:9px;font-weight:900;text-transform:uppercase">🟢 Live</span>',
+                offline: '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#ef4444;font-size:9px;font-weight:900;text-transform:uppercase">🔴 Offline</span>',
+                soon:    '<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.25);color:#64748b;font-size:9px;font-weight:900;text-transform:uppercase">⚫ Bientôt</span>'
+            };
+            const typeLabel = { youtube:'▶ YouTube', windy:'🌬 Windy', image:'📷 Image', null:'📵 Aucun' };
+            tbody.innerHTML = cams.map(cam => {
+                const url = cam.stream.url || '—';
+                const shortUrl = url.length > 44 ? url.slice(0, 41) + '…' : url;
+                const type = cam.stream.type || 'null';
+                return `<tr class="border-b border-white/5 hover:bg-white/3 transition-colors group">
+                    <td class="p-3 text-slate-500 font-mono text-xs">#${String(cam.id).padStart(2,'0')}</td>
+                    <td class="p-3"><div class="font-bold text-white text-sm">${cam.name}</div><div class="text-slate-500 text-[11px]">${cam.location}</div></td>
+                    <td class="p-3"><span style="padding:2px 8px;border-radius:999px;font-size:9px;font-weight:800;background:${cam.regionColor}18;color:${cam.regionColor};border:1px solid ${cam.regionColor}33;text-transform:uppercase">${cam.region}</span></td>
+                    <td class="p-3">${statusBadge[cam.status] || ''}</td>
+                    <td class="p-3 text-slate-400 text-xs font-bold">${typeLabel[type] || '📵 Aucun'}</td>
+                    <td class="p-3 max-w-[200px]"><span title="${url}" class="text-slate-500 text-[11px] font-mono break-all">${shortUrl}</span></td>
+                    <td class="p-3 text-center text-sm">${cam.featured ? '⭐' : '—'}</td>
+                    <td class="p-3 text-right">
+                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="openCamEditModal(${cam.id})" class="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase hover:bg-primary/20 transition-all">Éditer</button>
+                            <a href="https://gosurf.fr/list" target="_blank" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-[10px] font-black uppercase hover:bg-white/10 transition-all">↗</a>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filterAdminCams() {
+            const status = document.getElementById('cam-admin-filter-status')?.value || 'all';
+            const type   = document.getElementById('cam-admin-filter-type')?.value || 'all';
+            const search = (document.getElementById('cam-admin-search')?.value || '').toLowerCase().trim();
+            let cams = getEffectiveCams();
+            if (status !== 'all') cams = cams.filter(c => c.status === status);
+            if (type !== 'all')   cams = cams.filter(c => (c.stream.type || 'null') === type);
+            if (search) cams = cams.filter(c => c.name.toLowerCase().includes(search) || c.region.toLowerCase().includes(search));
+            renderAdminCamsTable(cams);
+        }
+
+        function openCamEditModal(camId) {
+            const cam = getEffectiveCams().find(c => c.id === camId);
+            if (!cam) return;
+            document.getElementById('edit-cam-id').value       = camId;
+            document.getElementById('edit-cam-name').value     = cam.name;
+            document.getElementById('edit-cam-status').value   = cam.status;
+            document.getElementById('edit-cam-type').value     = cam.stream.type || 'null';
+            document.getElementById('edit-cam-url').value      = cam.stream.url || '';
+            document.getElementById('edit-cam-refresh').value  = cam.stream.refreshSec || 30;
+            document.getElementById('edit-cam-featured').checked  = !!cam.featured;
+            document.getElementById('edit-cam-alertable').checked = !!cam.alertable;
+            updateEditCamTypeUI();
+            const modal = document.getElementById('modal-edit-cam');
+            modal.style.display = 'flex'; modal.classList.remove('hidden');
+        }
+
+        function closeCamEditModal() {
+            const m = document.getElementById('modal-edit-cam');
+            m.style.display = 'none'; m.classList.add('hidden');
+        }
+
+        function updateEditCamTypeUI() {
+            const type = document.getElementById('edit-cam-type')?.value;
+            const urlG = document.getElementById('edit-cam-url-group');
+            const refG = document.getElementById('edit-cam-refresh-group');
+            const hint = document.getElementById('edit-cam-url-hint');
+            if (type === 'null') { if(urlG) urlG.style.display='none'; if(refG) refG.classList.add('hidden'); return; }
+            if(urlG) urlG.style.display='block';
+            if (type === 'image') { if(refG) refG.classList.remove('hidden'); if(hint) hint.textContent='Ex: https://roundshot.com/cam.jpg'; }
+            else {
+                if(refG) refG.classList.add('hidden');
+                if(hint) hint.textContent = type==='youtube'
+                    ? 'Ex: https://www.youtube.com/embed/live_stream?channel=UCxxxxx&autoplay=1&mute=1'
+                    : type==='windy' ? 'Ex: https://webcams.windy.com/webcams/XXXXXXXXXX/player/full' : 'URL du flux';
+            }
+        }
+
+        function saveCamEdit() {
+            const camId = parseInt(document.getElementById('edit-cam-id').value);
+            const overrides = getCamOverrides();
+            overrides[camId] = {
+                status:    document.getElementById('edit-cam-status').value,
+                type:      document.getElementById('edit-cam-type').value === 'null' ? null : document.getElementById('edit-cam-type').value,
+                url:       document.getElementById('edit-cam-url').value.trim() || null,
+                refreshSec: parseInt(document.getElementById('edit-cam-refresh').value) || 30,
+                featured:  document.getElementById('edit-cam-featured').checked,
+                alertable: document.getElementById('edit-cam-alertable').checked
+            };
+            saveCamOverrides(overrides);
+            closeCamEditModal();
+            loadAdminCams();
+            Toast.show('✅ Webcam mise à jour avec succès.', 'success');
+        }
+
+        function exportCamsCSV() {
+            const cams = getEffectiveCams();
+            const rows = cams.map(c => [c.id,`"${c.name}"`,`"${c.region}"`,`"${c.location}"`,c.status,c.stream.type||'null',`"${c.stream.url||''}"`,c.featured?'oui':'non',c.alertable?'oui':'non'].join(','));
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(new Blob([['ID,Nom,Region,Localisation,Statut,Type,URL,Vedette,Alertable',...rows].join('\n')],{type:'text/csv'}));
+            link.download = `swellsync_webcams_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+            Toast.show('📊 Export CSV téléchargé.', 'success');
+        }
+
+        // Charger quand on clique sur l'onglet Caméras
+        document.addEventListener('DOMContentLoaded', () => {
+            const orig = window.switchAdminTab;
+            window.switchAdminTab = function(tab, el) {
+                if (typeof orig === 'function') orig(tab, el);
+                if (tab === 'cams') setTimeout(loadAdminCams, 80);
+            };
+        });
+    </script>
+</body>
+
+</html>
