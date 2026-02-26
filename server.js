@@ -61,6 +61,29 @@ db.run(`CREATE TABLE IF NOT EXISTS post_comments (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`);
 
+// Table stories (éphémères 24h)
+db.run(`CREATE TABLE IF NOT EXISTS stories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL,
+    media_url TEXT NOT NULL,
+    media_type TEXT DEFAULT 'image',
+    text_overlay TEXT,
+    text_color TEXT DEFAULT '#ffffff',
+    text_position TEXT DEFAULT 'bottom',
+    bg_color TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME DEFAULT (datetime('now', '+24 hours'))
+)`);
+
+// Table story_views (qui a vu)
+db.run(`CREATE TABLE IF NOT EXISTS story_views (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    story_id INTEGER NOT NULL,
+    viewer_id INTEGER NOT NULL,
+    viewed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(story_id, viewer_id)
+)`);
+
 // ── Helper : créer une notification + push ──
 function createNotification(memberId, fromMemberId, type, message, postId) {
     // Ne pas notifier soi-même
@@ -2542,6 +2565,137 @@ app.delete('/api/members/badges/equip', requireAuth, (req, res) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ ok: true, unequipped: true });
         });
+});
+
+// ==========================================
+// STORIES (éphémères 24h)
+// ==========================================
+
+// POST /api/stories — Créer une story (image base64 + texte overlay)
+app.post('/api/stories', requireAuth, (req, res) => {
+    const { image, text, textColor, textPosition, bgColor } = req.body;
+    if (!image) return res.status(400).json({ error: 'Image requise' });
+
+    // Sauvegarder l'image base64 en fichier
+    const fs = require('fs');
+    const path = require('path');
+    const dir = path.join(__dirname, 'assets/uploads/stories');
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+    const ext = image.startsWith('data:image/png') ? '.png' : image.startsWith('data:video') ? '.mp4' : '.jpg';
+    const mediaType = image.startsWith('data:video') ? 'video' : 'image';
+    const filename = `story_${req.member.id}_${Date.now()}${ext}`;
+    const filepath = path.join(dir, filename);
+    const base64Data = image.replace(/^data:[^;]+;base64,/, '');
+    fs.writeFileSync(filepath, base64Data, 'base64');
+
+    const mediaUrl = '/assets/uploads/stories/' + filename;
+
+    db.run(
+        `INSERT INTO stories (member_id, media_url, media_type, text_overlay, text_color, text_position, bg_color)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [req.member.id, mediaUrl, mediaType, text || null, textColor || '#ffffff', textPosition || 'bottom', bgColor || null],
+        function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            const storyId = this.lastID;
+
+            // Notifier les followers
+            db.all('SELECT follower_id FROM follows WHERE following_id = ?', [req.member.id], (e2, followers) => {
+                if (followers && followers.length > 0) {
+                    db.get('SELECT name FROM members WHERE id = ?', [req.member.id], (e3, me) => {
+                        for (const f of followers) {
+                            createNotification(f.follower_id, req.member.id, 'like', `${me?.name || 'Quelqu\'un'} a publié une story 📸`);
+                        }
+                    });
+                }
+            });
+
+            res.json({ ok: true, id: storyId, media_url: mediaUrl });
+        }
+    );
+});
+
+// GET /api/stories — Lister les stories actives, groupées par auteur
+app.get('/api/stories', (req, res) => {
+    const viewerId = req.member?.id || 0;
+    db.all(
+        `SELECT s.*, m.name as author_name, m.avatar_url as author_avatar,
+                (SELECT COUNT(*) FROM story_views WHERE story_id = s.id) as view_count,
+                (SELECT COUNT(*) FROM story_views WHERE story_id = s.id AND viewer_id = ?) as has_viewed
+         FROM stories s
+         LEFT JOIN members m ON s.member_id = m.id
+         WHERE s.expires_at > datetime('now')
+         ORDER BY s.created_at DESC`,
+        [viewerId], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            // Grouper par auteur
+            const grouped = {};
+            for (const row of (rows || [])) {
+                if (!grouped[row.member_id]) {
+                    grouped[row.member_id] = {
+                        member_id: row.member_id,
+                        author_name: row.author_name,
+                        author_avatar: row.author_avatar,
+                        has_unseen: false,
+                        stories: []
+                    };
+                }
+                if (!row.has_viewed) grouped[row.member_id].has_unseen = true;
+                grouped[row.member_id].stories.push(row);
+            }
+            res.json(Object.values(grouped));
+        }
+    );
+});
+
+// GET /api/stories/:id — Voir une story
+app.get('/api/stories/:id', (req, res) => {
+    db.get(
+        `SELECT s.*, m.name as author_name, m.avatar_url as author_avatar,
+                (SELECT COUNT(*) FROM story_views WHERE story_id = s.id) as view_count
+         FROM stories s LEFT JOIN members m ON s.member_id = m.id WHERE s.id = ?`,
+        [req.params.id], (err, row) => {
+            if (err) return res.status(500).json({ error: err.message });
+            if (!row) return res.status(404).json({ error: 'Story introuvable' });
+            res.json(row);
+        }
+    );
+});
+
+// POST /api/stories/:id/view — Marquer comme vue
+app.post('/api/stories/:id/view', requireAuth, (req, res) => {
+    db.run('INSERT INTO story_views (story_id, viewer_id) VALUES (?, ?) ON CONFLICT DO NOTHING',
+        [req.params.id, req.member.id], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ ok: true });
+        });
+});
+
+// DELETE /api/stories/:id — Supprimer sa story
+app.delete('/api/stories/:id', requireAuth, (req, res) => {
+    db.run('DELETE FROM stories WHERE id = ? AND member_id = ?',
+        [req.params.id, req.member.id], function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            if (this.changes === 0) return res.status(403).json({ error: 'Non autorisé' });
+            // Aussi supprimer le fichier
+            db.get('SELECT media_url FROM stories WHERE id = ?', [req.params.id], () => { });
+            res.json({ ok: true });
+        });
+});
+
+// GET /api/stories/:id/viewers — Liste des viewers (pour l'auteur)
+app.get('/api/stories/:id/viewers', requireAuth, (req, res) => {
+    db.all(
+        `SELECT m.id, m.name, m.avatar_url, sv.viewed_at
+         FROM story_views sv
+         LEFT JOIN members m ON sv.viewer_id = m.id
+         WHERE sv.story_id = ? ORDER BY sv.viewed_at DESC`,
+        [req.params.id], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows || []);
+        }
+    );
 });
 
 // GET /api/members/badges — Badges équipés
