@@ -843,9 +843,9 @@
             <a href="#tarifs">Tarifs</a>
             <a href="#faq">FAQ</a>
         </div>
-        <a href="/pages/home.html" class="nav-cta">
-            <span class="material-symbols-outlined" style="font-size:18px">surfing</span>
-            Ouvrir l'app
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
+            <span class="material-symbols-outlined" style="font-size:18px">download</span>
+            Télécharger
         </a>
         <button class="nav-menu-btn"
             onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
@@ -868,10 +868,7 @@
                         <span class="material-symbols-outlined" style="font-size:20px">download</span>
                         Télécharger Android (.apk)
                     </a>
-                    <a href="/pages/home.html" class="btn-outline">
-                        <span class="material-symbols-outlined" style="font-size:20px">surfing</span>
-                        Version Web
-                    </a>
+
                 </div>
                 <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
                     <span
@@ -1018,8 +1015,8 @@
                         <li class="no" style="opacity:.5">Alertes houle (max 2)</li>
                         <li class="no" style="opacity:.5">Pas de publicités</li>
                     </ul>
-                    <a href="/pages/home.html" class="btn-outline" style="width:100%;justify-content:center">Commencer —
-                        Gratuit</a>
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-outline"
+                        style="width:100%;justify-content:center" download>Télécharger — Gratuit</a>
                 </div>
                 <div class="price-card pro animate">
                     <div class="price-name">Pro</div>
@@ -1035,8 +1032,8 @@
                         <li>Support prioritaire</li>
                         <li>Statistiques avancées</li>
                     </ul>
-                    <a href="/pages/abonnement.html" class="btn-primary"
-                        style="width:100%;justify-content:center">Passer Pro</a>
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary"
+                        style="width:100%;justify-content:center" download>Télécharger l'app</a>
                 </div>
             </div>
         </div>
@@ -1108,9 +1105,9 @@
                 style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent">prochaine
                 session</em> ?</h2>
         <p>Rejoins des centaines de surfeurs qui utilisent SwellSync pour ne plus jamais rater la bonne vague.</p>
-        <a href="/pages/home.html" class="btn-primary" style="font-size:16px;padding:16px 40px">
-            <span class="material-symbols-outlined">surfing</span>
-            Lancer SwellSync — C'est gratuit
+        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px" download>
+            <span class="material-symbols-outlined">download</span>
+            Télécharger SwellSync — C'est gratuit
         </a>
         <div class="cta-tags">
             <span class="cta-tag">✅ Pas besoin d'App Store</span>
@@ -1144,7 +1141,7 @@
                 const ua = navigator.userAgent;
                 if (/iPhone|iPad/.test(ua)) {
                     alert('Sur iPhone/iPad :\n1. Appuie sur le bouton Partager (⬆️)\n2. Choisis "Sur l\'écran d\'accueil"');
-                } else { window.location.href = '/pages/home.html'; }
+                } else { alert('Android :\nOuvre swellsync.fr dans Chrome → Menu ⋮ → Installer l\'app'); }
             }
         }
 
@@ -1153,16 +1150,16 @@
             const grid = document.getElementById('spotsGrid');
             const diffEmoji = { 'Débutant': '🟢', 'Intermédiaire': '🟡', 'Avancé': '🔴', 'Expert': '⚫' };
             grid.innerHTML = spots.map(s => `
-                <a class="spot-chip" href="/pages/spot_detail.html?id=${s.id}">
+                <div class="spot-chip" style="cursor:default">
                     <span class="emoji">${diffEmoji[s.difficulty] || '🏄'}</span>
                     <div class="info">
                         <span class="name">${s.name}</span>
                         <span class="loc">${s.location}</span>
                     </div>
-                </a>
+                </div>
             `).join('');
         }).catch(() => {
-            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots. <a href="/pages/home.html">Ouvrir l\'app</a></p>';
+            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots.</p>';
         });
 
         // ── Nav active on scroll ──
