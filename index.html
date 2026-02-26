@@ -1,1799 +1,644 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="fr">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SwellSync | Premium Surf Forecasting</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwellSync — Prévisions Surf en Temps Réel | Télécharger l'App</title>
+    <meta name="description"
+        content="SwellSync est l'app de prévisions surf en temps réel pour la côte Atlantique. 60+ spots, messagerie entre surfeurs, communauté, alertes houle. Gratuit.">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- TailwindCSS pour la DA demandée -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#00bad6",
-                        "background-light": "#f5f8f8",
-                        "background-dark": "#0f2123",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #040a14;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        /* ═══ HERO ═══ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 186, 214, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 214, 150, 0.08) 0%, transparent 50%);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: rgba(0, 186, 214, 0.1);
+            border: 1px solid rgba(0, 186, 214, 0.2);
+            font-size: 12px;
+            color: #00bad6;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+            animation: fadeInUp .8s ease;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00bad6;
+            animation: pulse 2s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 0%, #00bad6 50%, #00d696 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            animation: fadeInUp .8s ease .1s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: #94a3b8;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 36px;
+            animation: fadeInUp .8s ease .2s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp .8s ease .3s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #00bad6, #00d696);
+            color: #040a14;
+            font-weight: 800;
+            font-size: 15px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all .3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 186, 214, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f1f5f9;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all .3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ═══ PHONE MOCKUP ═══ */
+        .phone-wrapper {
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease .5s both;
+        }
+
+        .phone-frame {
+            width: 280px;
+            height: 560px;
+            border-radius: 40px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 100px rgba(0, 186, 214, 0.15), 0 0 0 1px rgba(0, 186, 214, 0.1);
+            position: relative;
+            background: #080f1a;
+        }
+
+        .phone-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 37px;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 28px;
+            background: #040a14;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .phone-glow {
+            position: absolute;
+            inset: -40px;
+            border-radius: 60px;
+            background: radial-gradient(ellipse, rgba(0, 186, 214, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        /* ═══ STATS BAR ═══ */
+        .stats-bar {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 60px 20px;
+            animation: fadeInUp .8s ease .6s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #00bad6;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* ═══ FEATURES ═══ */
+        .section {
+            padding: 80px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 100px;
+            background: rgba(0, 186, 214, 0.08);
+            border: 1px solid rgba(0, 186, 214, 0.15);
+            font-size: 11px;
+            color: #00bad6;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        .section h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .section h2 span {
+            color: #00bad6;
+        }
+
+        .section>p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 48px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all .4s;
+            cursor: default;
+        }
+
+        .feature-card:hover {
+            background: rgba(0, 186, 214, 0.04);
+            border-color: rgba(0, 186, 214, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 22px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* ═══ CTA ═══ */
+        .cta-section {
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 186, 214, 0.04) 50%, transparent 100%);
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin-bottom: 36px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ═══ PLATFORMS ═══ */
+        .platforms {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .platform-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .platform-badge svg {
+            width: 18px;
+            height: 18px;
+            fill: #94a3b8;
+        }
+
+        /* ═══ FOOTER ═══ */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #475569;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: #00bad6;
+            text-decoration: none;
+        }
+
+        /* ═══ ANIMATIONS ═══ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .3;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media(max-width:640px) {
+            .stats-bar {
+                gap: 24px;
+            }
+
+            .stat-num {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .phone-frame {
+                width: 240px;
+                height: 480px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ NAV ═══ -->
+    <nav
+        style="position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px);background:rgba(4,10,20,0.8);border-bottom:1px solid rgba(255,255,255,0.05);padding:12px 24px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync"
+                style="width:32px;height:32px;border-radius:8px">
+            <span style="font-weight:800;font-size:18px">Swell<span style="color:#00bad6">Sync</span></span>
+        </div>
+        <a href="/pages/home.html" class="btn-primary" style="padding:8px 20px;font-size:13px;border-radius:10px">
+            Ouvrir l'app
+        </a>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <div class="hero-badge"><span class="dot"></span> Disponible maintenant — Gratuit</div>
+        <h1>Surfe les meilleures<br>vagues de France</h1>
+        <p>Prévisions surf en temps réel, 60+ spots sur la côte Atlantique, messagerie entre surfeurs et communauté
+            active. Tout dans une seule app. 🏄</p>
+
+        <div class="hero-buttons">
+            <a href="/pages/home.html" class="btn-primary">
+                <span class="material-symbols-outlined" style="font-size:20px">surfing</span>
+                Lancer SwellSync
+            </a>
+            <button onclick="installPWA()" class="btn-secondary" id="installBtn">
+                <span class="material-symbols-outlined" style="font-size:20px">download</span>
+                Installer l'app
+            </button>
+        </div>
+
+        <div class="platforms">
+            <div class="platform-badge">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
+                    <path
+                        d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11" />
+                </svg>
+                iOS
+            </div>
+            <div class="platform-badge">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M17.523 2.236l-2.141 3.707a9.575 9.575 0 00-3.382-.608 9.575 9.575 0 00-3.382.608L6.477 2.236A.39.39 0 005.8 2.236L3.66 5.943a.39.39 0 00.337.584h1.09A9.531 9.531 0 002 13.49v.546a.39.39 0 00.39.39h19.22a.39.39 0 00.39-.39v-.546a9.531 9.531 0 00-3.087-6.963h1.09a.39.39 0 00.337-.584l-2.14-3.707a.39.39 0 00-.677 0zM8.5 11a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm7 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM2 16.39a.39.39 0 01.39-.39h19.22a.39.39 0 01.39.39v4.22A1.39 1.39 0 0120.61 22H3.39A1.39 1.39 0 012 20.61v-4.22z" />
+                </svg>
+                Android
+            </div>
+            <div class="platform-badge">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+                </svg>
+                Windows
+            </div>
+            <div class="platform-badge">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
+                </svg>
+                macOS
+            </div>
+        </div>
+
+        <!-- Phone mockup -->
+        <div class="phone-wrapper float">
+            <div class="phone-glow"></div>
+            <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <iframe src="/pages/home.html" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ STATS ═══ -->
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-num">60+</div>
+            <div class="stat-label">Spots de surf</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">7j</div>
+            <div class="stat-label">Prévisions</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Données live</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Gratuit</div>
+        </div>
+    </div>
+
+    <!-- ═══ FEATURES ═══ -->
+    <section class="section">
+        <div class="section-tag">✨ Fonctionnalités</div>
+        <h2>Tout ce dont un surfeur <span>a besoin</span></h2>
+        <p>SwellSync concentre prévisions, communauté et outils dans une app élégante et rapide.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(0,186,214,0.1)">🌊</div>
+                <h3>Prévisions 7 jours</h3>
+                <p>Hauteur des vagues, période, direction du vent, température de l'eau — toutes les données StormGlass
+                    en temps réel.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(16,185,129,0.1)">🗺️</div>
+                <h3>Carte interactive</h3>
+                <p>60+ spots sur la côte Atlantique avec conditions live, webcams et infos détaillées pour chaque spot.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(139,92,246,0.1)">💬</div>
+                <h3>Messagerie privée</h3>
+                <p>Discute avec d'autres surfeurs, partage des sessions et organise des sorties directement dans l'app.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(245,158,11,0.1)">👥</div>
+                <h3>Communauté</h3>
+                <p>Publie tes sessions, partage des photos, suis tes surfeurs préférés et collecte des badges.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(239,68,68,0.1)">🔔</div>
+                <h3>Alertes houle</h3>
+                <p>Configure des alertes personnalisées par spot — sois notifié quand les conditions sont parfaites.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(6,182,212,0.1)">📱</div>
+                <h3>PWA installable</h3>
+                <p>Installe SwellSync sur ton téléphone comme une vraie app — fonctionne hors-ligne, rapide, sans App
+                    Store.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA FINAL ═══ -->
+    <section class="cta-section">
+        <div class="section-tag">🏄 Prêt à surfer ?</div>
+        <h2>Rejoins la communauté</h2>
+        <p>Des centaines de surfeurs utilisent déjà SwellSync pour ne plus jamais rater la bonne session.</p>
+        <div class="hero-buttons">
+            <a href="/pages/home.html" class="btn-primary" style="font-size:16px;padding:16px 40px">
+                <span class="material-symbols-outlined">surfing</span>
+                Lancer SwellSync — C'est gratuit
+            </a>
+        </div>
+        <div class="platforms" style="margin-top:20px">
+            <div class="platform-badge">✅ Pas besoin d'App Store</div>
+            <div class="platform-badge">✅ Fonctionne hors-ligne</div>
+            <div class="platform-badge">✅ 100% gratuit</div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+        <p>© 2026 <strong>SwellSync</strong> — Par <a href="#">Max Loviat</a> 🇫🇷</p>
+        <p style="margin-top:8px">
+            <a href="/privacy.html">Confidentialité</a> · <a href="/cgv.html">CGV</a> · <a
+                href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- PWA Install -->
+    <script>
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'inline-flex';
+        });
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(r => { deferredPrompt = null; });
+            } else {
+                // Fallback: show instructions
+                const ua = navigator.userAgent;
+                if (/iPhone|iPad/.test(ua)) {
+                    alert('Sur iPhone/iPad :\n1. Appuie sur le bouton Partager (⬆️)\n2. Choisis "Sur l\'écran d\'accueil"');
+                } else {
+                    window.location.href = '/pages/home.html';
                 }
             }
         }
+        // Register SW
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
     </script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
-
-    <!-- Meta-Tags Web App & PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f2123">
-
-    <!-- Optimisations Mobile pures Apple -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SwellSync">
-    <link rel="apple-touch-icon" href="assets/images/swellsync_icon.svg">
-    <link rel="icon" type="image/svg+xml" href="assets/images/swellsync_icon.svg">
-    <link rel="shortcut icon" href="assets/images/swellsync_icon.svg">
-
-    <!-- Nos styles personnels (Pour les Toasts Custom et variables) -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/light-mode.css">
-    <link rel="stylesheet" href="css/mobile.css">
-    <link rel="stylesheet" href="css/onboarding.css">
-
-    <!-- FontAwesome pour les logos de marques -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Leaflet JS & CSS pour la carte interactive -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
-    <!-- Librairies Officielles d'Authentification (Apple / Google) -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script type="text/javascript"
-        src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
-
-    <!-- Leaflet MarkerCluster CSS & JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" crossorigin="" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"
-        crossorigin="" />
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js" crossorigin=""></script>
-
-
-    <style>
-        body {
-            font-family: 'Lexend', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-            background-color: var(--bg-dark);
-            /* Fallback */
-        }
-
-        .glass {
-            background: rgba(15, 33, 35, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(to right, rgba(15, 33, 35, 0.9) 0%, rgba(15, 33, 35, 0.4) 50%, rgba(15, 33, 35, 0.1) 100%);
-        }
-
-        .glow-button {
-            box-shadow: 0 0 20px rgba(0, 186, 214, 0.4);
-        }
-
-        /* Styles spécifiques à la carte Leaflet Dark/Glass */
-        .leaflet-container {
-            background-color: var(--background-dark);
-            font-family: 'Lexend', sans-serif;
-        }
-
-        .leaflet-popup-content-wrapper,
-        .leaflet-popup-tip {
-            background: rgba(15, 33, 35, 0.95) !important;
-            backdrop-filter: blur(10px) !important;
-            color: #fff !important;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .leaflet-popup-content {
-            margin: 16px;
-        }
-
-        /* MarkerCluster Custom Theme */
-        .marker-cluster-small,
-        .marker-cluster-medium,
-        .marker-cluster-large {
-            background-color: rgba(0, 186, 214, 0.4);
-        }
-
-        .marker-cluster-small div,
-        .marker-cluster-medium div,
-        .marker-cluster-large div {
-            background-color: #00bad6;
-            color: white;
-            font-family: 'Lexend', sans-serif;
-            font-weight: 800;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 15px rgba(0, 186, 214, 0.8);
-        }
-    </style>
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://swellsync.surf/index.html">
-    <meta property="og:title" content="SwellSync — Prévisions Surf Live">
-    <meta property="og:description"
-        content="Conditions surf temps réel, webcams et alertes houle pour plus de 60 spots de surf en France.">
-    <meta property="og:image" content="https://swellsync.surf/assets/images/swellsync_og.jpg">
-    <meta property="og:site_name" content="SwellSync">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SwellSync — Prévisions Surf Live">
-    <meta name="twitter:description"
-        content="Conditions surf temps réel, webcams et alertes houle pour plus de 60 spots de surf en France.">
-    <meta name="twitter:image" content="https://swellsync.surf/assets/images/swellsync_og.jpg">
-</head>
-
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
-    <!-- Hero Section -->
-    <section class="relative min-h-screen w-full flex flex-col">
-        <!-- Background Image & Overlay -->
-        <div class="absolute inset-0 z-0">
-            <img alt="Surfer in a golden hour tube" class="w-full h-full object-cover"
-                src="assets/images/hero-home-new.jpg" / loading="lazy" decoding="async">
-            <div class="absolute inset-0 hero-gradient z-10"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent z-10">
-            </div>
-        </div>
-        <!-- NAVBAR -->
-        <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
-            <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 py-3 my-3 mx-4 lg:mx-auto rounded-full"
-                style="background: rgba(7,15,16,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06);">
-                <!-- Left: Logo -->
-                <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
-                    <div
-                        class="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center border border-primary/25">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync" class="w-5 h-5 object-contain"
-                            style="filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(2222%) hue-rotate(152deg) brightness(101%) contrast(106%);">
-                    </div>
-                    <span class="text-lg font-black text-white hidden sm:block tracking-tight">SwellSync</span>
-                </a>
-
-                <!-- Center: Nav Links -->
-                <div class="hidden md:flex items-center gap-1" id="nav-center-links">
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
-                        href="cotes.html">Côtes</a>
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
-                        href="spot_detail.html">Conditions</a>
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
-                        href="actu.html">Actualités</a>
-                    <div class="relative" id="nav-plus-wrapper">
-                        <button
-                            class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1"
-                            id="nav-plus-btn">
-                            Plus
-                            <svg class="w-3.5 h-3.5 transition-transform duration-200" id="nav-plus-chevron" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right: Auth -->
-                <div class="flex items-center gap-3 shrink-0">
-                    <button
-                        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
-                        id="btn-login" onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
-                        <span class="material-symbols-outlined text-[18px]" id="btn-login-avatar">person</span>
-                        <span id="nav-login-text">Connexion</span>
-                        <div class="w-2 h-2 rounded-full bg-red-500 shrink-0" id="login-status-icon"></div>
-                    </button>
-                    <button
-                        class="hidden md:flex bg-primary text-[#0a1516] font-bold text-[13px] px-5 py-2.5 rounded-full hover:brightness-110 hover:scale-[1.03] active:scale-[0.97] transition-all"
-                        onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
-                        S'inscrire
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white md:hidden"
-                        id="mobile-menu-btn">
-                        <span class="material-symbols-outlined text-[20px]">menu</span>
-                    </button>
-                </div>
-            </nav>
-        </header>
-
-
-
-        <!-- Main Hero Content -->
-        <main class="relative z-20 flex-grow flex items-center px-6 pt-20">
-            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Left Content -->
-                <div class="flex flex-col gap-8 max-w-2xl mt-12 lg:mt-0">
-                    <div class="space-y-4">
-                        <h1 class="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tight">
-                            <span data-i18n="hero.title_1">Surfez les Vagues.</span> <br />
-                            <span class="text-primary" data-i18n="hero.title_2">Saisissez l'Instant.</span>
-                        </h1>
-                        <p class="text-lg md:text-xl text-slate-300 font-light leading-relaxed max-w-lg"
-                            data-i18n="hero.desc">
-                            Prévisions de surf de pointe propulsées par l'intelligence océanique en temps réel et
-                            l'analyse avancée de la houle.
-                        </p>
-                    </div>
-                    <div class="flex flex-wrap gap-4 items-center">
-                        <button
-                            class="glow-button bg-primary text-background-dark font-bold px-8 py-4 rounded-full flex items-center gap-2 hover:scale-105 transition-transform"
-                            id="btn-demo-forecast">
-                            <span data-i18n="hero.cta_swell">Vérifier la Houle</span>
-                            <span class="material-symbols-outlined">trending_flat</span>
-                        </button>
-                        <a href="#spots"
-                            class="px-8 py-4 rounded-full border border-white/20 glass text-white font-medium hover:bg-white/10 transition-colors"
-                            data-i18n="hero.cta_spots">Explorer les Spots</a>
-                    </div>
-                </div>
-
-                <!-- Right Content: Floating Cards -->
-                <div class="flex flex-col gap-5 lg:pl-12">
-                    <!-- Swell Forecast Card -->
-                    <div
-                        class="glass p-6 rounded-[20px] shadow-2xl transform hover:-translate-y-1 transition-all flex items-center gap-5 max-w-sm ml-auto cursor-default">
-                        <div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined">psychology</span>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold text-lg" id="ai-score-label"
-                                data-i18n="home.swell_forecast">Swell Forecast</h3>
-                            <p class="text-slate-400 text-sm" id="ai-score-value" data-i18n="home.swell_reliability">
-                                Vérification de la fiabilité dynamique...</p>
-                        </div>
-                    </div>
-
-                    <!-- Spot Comparison Card -->
-                    <div
-                        class="glass p-6 rounded-[20px] shadow-2xl transform hover:-translate-y-1 transition-all flex items-center gap-5 max-w-sm mr-auto lg:mr-12">
-                        <div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined">compare_arrows</span>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold text-lg"><span data-i18n="home.spots_title">Top Spots de
-                                    Surf</span></h3>
-                            <p class="text-slate-400 text-sm" id="spot-detail-value" data-i18n="home.spots_live">Live ·
-                                Spots actifs</p>
-                        </div>
-                    </div>
-
-                    <!-- Multi-Sport Mode Card -->
-                    <div
-                        class="glass p-6 rounded-[20px] shadow-2xl transform hover:-translate-y-1 transition-all flex items-center gap-5 max-w-sm ml-auto lg:mr-4">
-                        <div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined">waves</span>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold text-lg"><span data-i18n="home.meteo_title">Météo en
-                                    Direct</span></h3>
-                            <p class="text-slate-400 text-sm" data-i18n="home.meteo_desc">Système de Météorologie Marine
-                                active.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Bottom Stats Bar (Highlighted HUD) -->
-        <footer class="relative z-20 px-6 py-10 mt-auto flex">
-            <div class="relative max-w-max mx-auto md:mx-0 flex flex-wrap gap-8 md:gap-12 items-center justify-center md:justify-start transition-opacity duration-300 glass px-8 py-5 rounded-3xl border border-primary/20 shadow-[0_10px_40px_rgba(0,186,214,0.15)] bg-background-dark/40 backdrop-blur-md"
-                id="stats-bar" style="opacity: 0;">
-                <div id="stat-spot-name"
-                    class="absolute -top-3 left-8 bg-primary text-background-dark text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-[0_0_10px_rgba(0,186,214,0.4)]">
-                    --</div>
-                <!-- Dynamisé par JS -->
-                <div class="flex items-center gap-4">
-                    <div
-                        class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 shadow-[0_0_10px_rgba(0,186,214,0.3)]">
-                        <span class="material-symbols-outlined text-primary text-[20px]">water</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span
-                            class="text-3xl font-black text-white leading-none tracking-tight drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]"
-                            id="stat-swell">--m</span>
-                        <span class="text-[10px] uppercase tracking-widest text-primary font-bold mt-1">Houle
-                            Moy.</span>
-                    </div>
-                </div>
-
-                <!-- Séparateur -->
-                <div class="w-px h-10 bg-white/10 hidden md:block"></div>
-
-                <div class="flex items-center gap-4">
-                    <div
-                        class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 shadow-[0_0_10px_rgba(0,186,214,0.3)]">
-                        <span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span
-                            class="text-3xl font-black text-white leading-none tracking-tight drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]"
-                            id="stat-period">--s</span>
-                        <span class="text-[10px] uppercase tracking-widest text-primary font-bold mt-1">Période</span>
-                    </div>
-                </div>
-
-                <!-- Séparateur -->
-                <div class="w-px h-10 bg-white/10 hidden md:block"></div>
-
-                <div class="flex items-center gap-4">
-                    <div
-                        class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 shadow-[0_0_10px_rgba(0,186,214,0.3)]">
-                        <span class="material-symbols-outlined text-primary text-[20px]">explore</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span
-                            class="text-3xl font-black text-white leading-none tracking-tight drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]"
-                            id="stat-wind">--°</span>
-                        <span class="text-[10px] uppercase tracking-widest text-primary font-bold mt-1">Direction</span>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </section>
-
-    <!-- Interactive Map & Live Spots Section -->
-    <section id="spots" class="relative w-full px-6 pt-8 pb-24 bg-background-dark relative z-20">
-        <!-- Dégradé de jonction propre -->
-        <div
-            class="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-background-dark pointer-events-none -translate-y-full">
-        </div>
-
-        <div class="max-w-7xl mx-auto flex flex-col gap-8">
-            <!-- Header -->
-            <div
-                class="flex flex-col items-center justify-center text-center gap-2.5 glass p-5 md:p-6 rounded-2xl max-w-xl mx-auto border border-primary/20 shadow-[0_10px_30px_rgba(0,186,214,0.1)] bg-background-dark/50 backdrop-blur-md relative overflow-hidden">
-                <!-- Effet lumineux au-dessus de l'encart p-2 -->
-                <div
-                    class="absolute -top-5 left-1/2 -translate-x-1/2 w-32 h-10 bg-primary/30 blur-[40px] rounded-full pointer-events-none">
-                </div>
-
-                <div
-                    class="flex items-center gap-1.5 bg-primary/10 px-3 py-1 rounded-full border border-primary/20 shadow-[0_0_10px_rgba(0,186,214,0.2)]">
-                    <div
-                        class="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                        <span class="material-symbols-outlined text-primary text-[12px]">public</span>
-                    </div>
-                    <span class="text-primary font-bold tracking-widest uppercase text-[10px]"
-                        data-i18n="home.map_title">Réseau Mondial</span>
-                </div>
-
-                <h2 class="text-2xl md:text-3xl font-black text-white leading-tight relative z-10">Carte <span
-                        class="text-primary">En Direct</span></h2>
-
-                <p class="text-slate-300 font-medium text-xs md:text-sm leading-relaxed max-w-md mx-auto relative z-10">
-                    Explorez notre liste de spots de surf premiums à travers le monde. Conditions en temps réel
-                    vérifiées et garanties à <span
-                        class="text-primary font-bold drop-shadow-[0_0_8px_rgba(0,186,214,0.5)]">100%</span> par nos 12
-                    modèles météorologiques.
-                </p>
-            </div>
-
-            <!-- Map & Widgets Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Map Container -->
-                <div
-                    class="lg:col-span-2 glass rounded-[2.5rem] p-3 relative overflow-hidden flex flex-col min-h-[550px] shadow-2xl">
-                    <div id="surf-map" class="w-full h-full rounded-[2rem] z-10 flex-grow border border-white/5"></div>
-                    <!-- Badge superposé -->
-                    <div
-                        class="absolute top-8 right-8 z-[400] glass px-4 py-2 rounded-full text-xs font-bold text-white flex items-center gap-2 shadow-lg">
-                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                        SYNCHRONISÉ
-                    </div>
-                </div>
-
-                <!-- Widgets Column (Top Spots) -->
-                <div
-                    class="glass rounded-[2.5rem] p-6 h-[550px] relative overflow-hidden flex flex-col shadow-2xl border border-white/5">
-
-                    <!-- En-tête Fixe -->
-                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-white/10 shrink-0">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary">dynamic_feed</span>
-                            <h3 class="text-xl font-black text-white uppercase tracking-widest">Nos 60 Spots</h3>
-                        </div>
-                        <span
-                            class="text-[10px] text-primary font-black uppercase tracking-widest bg-primary/10 px-2 py-1 rounded-full border border-primary/20 flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[14px]">swipe_up</span> Swipe
-                        </span>
-                    </div>
-
-                    <!-- Zone Défilante (Scroll/Swipe) -->
-                    <div class="flex flex-col gap-4 overflow-y-auto custom-scrollbar flex-grow pr-2 pb-12"
-                        id="spots-widgets-container">
-                        <!-- Le loader et les widgets générés par JS... -->
-                        <div
-                            class="glass p-8 rounded-[2rem] flex flex-col items-center justify-center text-slate-400 text-center gap-3 h-full">
-                            <span class="material-symbols-outlined text-4xl animate-spin text-primary">sync</span>
-                            <p class="text-xs font-bold uppercase tracking-widest">Synchronisation...<br /><span
-                                    class="font-normal opacity-50">Smart System</span></p>
-                        </div>
-                    </div>
-
-                    <!-- Ombre Dégradée + Flèche => Indique le contenu caché en bas -->
-                    <div
-                        class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-[rgba(15,33,35,0.95)] via-[rgba(15,33,35,0.7)] to-transparent pointer-events-none rounded-b-[2.5rem] flex items-end justify-center pb-3">
-                        <span class="material-symbols-outlined text-primary animate-bounce">keyboard_arrow_down</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SwellSync Mission Control (Plein de Widgets) -->
-    <section id="widgets-dashboard"
-        class="relative w-full px-6 py-20 bg-background-dark text-white z-20 border-t border-white/5">
-        <div class="max-w-7xl mx-auto flex flex-col gap-10">
-            <!-- Header du Dashboard -->
-            <div class="flex items-end justify-between border-b border-white/10 pb-6">
-                <div class="flex flex-col gap-2">
-                    <span class="text-primary font-bold tracking-widest uppercase text-sm flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[16px]">widgets</span>
-                        Centre de Contrôle
-                    </span>
-                    <h2 class="text-3xl font-black text-white">Tableau de Bord Météo</h2>
-                </div>
-                <!-- Mini-Widget "System Status" -->
-                <div class="hidden md:flex items-center gap-3 bg-white/5 rounded-full px-5 py-2 border border-white/10">
-                    <span
-                        class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)] animate-pulse"></span>
-                    <span class="text-[11px] font-bold uppercase tracking-widest text-slate-300">Tous Systèmes
-                        Opérationnels</span>
-                </div>
-            </div>
-
-            <!-- Grille de Widgets -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <!-- Widget 1: Phase Lunaire & Marée -->
-                <div class="glass p-6 rounded-[2rem] flex flex-col gap-4 relative overflow-hidden group">
-                    <div
-                        class="absolute -right-6 -top-6 text-white/5 transform group-hover:scale-110 transition-transform duration-700">
-                        <span class="material-symbols-outlined text-[120px]">dark_mode</span>
-                    </div>
-                    <div class="relative z-10 flex justify-between items-start">
-                        <h4 class="font-bold text-lg">Phase Lunaire</h4>
-                        <span class="material-symbols-outlined text-primary">nights_stay</span>
-                    </div>
-                    <div class="relative z-10 mt-auto">
-                        <div class="text-4xl font-black text-white mb-1">Croissante</div>
-                        <p class="text-slate-400 text-sm tracking-wide">Coefficient: 86 (Haut)</p>
-                        <!-- Barre de progression marée -->
-                        <div class="w-full h-2 bg-white/10 rounded-full mt-4 overflow-hidden">
-                            <div class="h-full bg-primary w-[80%] rounded-full shadow-[0_0_10px_rgba(0,186,214,0.6)]">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Widget 2: Alerte Tempête Globale -->
-                <div
-                    class="glass p-6 rounded-[2rem] flex flex-col gap-4 relative overflow-hidden group border-orange-500/30">
-                    <div class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent"></div>
-                    <div class="relative z-10 flex justify-between items-start">
-                        <h4 class="font-bold text-lg text-orange-400">Radar Alertes</h4>
-                        <span class="material-symbols-outlined text-orange-400">cyclone</span>
-                    </div>
-                    <div class="relative z-10 mt-auto">
-                        <div class="text-3xl font-black text-white mb-1">Typhon X-Ray</div>
-                        <p class="text-orange-200/60 text-sm tracking-wide flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[14px]">warning</span>
-                            Océan Pacifique (Code Rouge)
-                        </p>
-                        <div class="mt-4 flex gap-2">
-                            <span
-                                class="bg-orange-500/20 text-orange-400 text-[10px] font-bold px-2 py-1 rounded uppercase">Rafales
-                                80kt</span>
-                            <span
-                                class="bg-red-500/20 text-red-400 text-[10px] font-bold px-2 py-1 rounded uppercase">Houle
-                                8m</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-[2rem] flex flex-col gap-4 relative">
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold text-lg">Temp. Océan</h4>
-                        <span class="material-symbols-outlined text-blue-400">water_drop</span>
-                    </div>
-                    <!-- Cercle minimaliste -->
-                    <div class="flex items-center justify-center py-2 flex-grow">
-                        <div
-                            class="w-24 h-24 rounded-full border-4 border-white/10 flex items-center justify-center relative shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]">
-                            <!-- Arc de cercle coloré (simulé) -->
-                            <div
-                                class="absolute inset-0 rounded-full border-4 border-t-primary border-r-primary border-transparent rotate-45">
-                            </div>
-                            <span class="text-3xl font-black text-white">22<span
-                                    class="text-lg text-primary">°</span></span>
-                        </div>
-                    </div>
-                    <p class="text-center text-slate-400 text-xs font-bold tracking-widest uppercase mt-auto">Moy.
-                        Biarritz</p>
-                </div>
-
-                <!-- Widget 4: Compte un Rebours Swell (Épique) -->
-                <div class="glass p-6 rounded-[2rem] flex flex-col gap-4 relative bg-primary/5">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-bold text-lg leading-none">Prochain Swell Parfait</h4>
-                            <p class="text-[10px] text-primary/70 uppercase tracking-widest font-bold mt-1">Conditions
-                                Idéales</p>
-                        </div>
-                        <span class="material-symbols-outlined text-green-400 animate-bounce">rocket_launch</span>
-                    </div>
-                    <div class="flex gap-3 justify-center mt-auto mb-2">
-                        <div class="text-center">
-                            <div
-                                class="bg-background-dark/80 rounded-xl w-14 h-16 flex items-center justify-center border border-white/10 shadow-inner">
-                                <span class="text-3xl font-black text-white">02</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold mt-1 block">Jours</span>
-                        </div>
-                        <div class="text-center">
-                            <div
-                                class="bg-background-dark/80 rounded-xl w-14 h-16 flex items-center justify-center border border-white/10 shadow-inner">
-                                <span class="text-3xl font-black text-white">14</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 uppercase font-bold mt-1 block">Hres</span>
-                        </div>
-                    </div>
-                    <button
-                        class="w-full mt-2 py-2 rounded-full border border-primary/30 text-primary text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-background-dark transition-colors"
-                        onclick="window.location.href='dashboard.html'">
-                        Créer une Alerte
-                    </button>
-                </div>
-
-                <!-- Widget 5: Bulletin Météo Expert (remplace le graph de vagues) -->
-                <div
-                    class="lg:col-span-2 glass p-6 rounded-[2rem] flex flex-col gap-4 relative overflow-hidden flex-grow">
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <h4 class="font-bold text-lg flex items-center gap-2 leading-none">
-                                <span class="material-symbols-outlined text-primary">description</span>
-                                Bulletin Météo Expert
-                            </h4>
-                            <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-2 ml-1">📍 Basé
-                                sur <span class="text-white">Biarritz (Grande Plage)</span></p>
-                        </div>
-                        <span
-                            class="bg-primary/10 text-primary text-[10px] uppercase font-black px-3 py-1 rounded-full border border-primary/20 shadow-[0_0_10px_rgba(0,186,214,0.3)] shrink-0">Mis
-                            à jour</span>
-                    </div>
-                    <!-- Text Content -->
-                    <div class="flex-grow flex flex-col justify-center px-2 py-2">
-                        <p class="text-white text-sm leading-relaxed mb-4">
-                            <strong class="text-primary font-bold">Conditions Actuelles :</strong> La houle longue
-                            d'Ouest générée par la récente dépression atlantique touche nos côtes. Les périodes
-                            atteignent 14 secondes offrant de belles séries régulières, idéales pour le surf de haut
-                            niveau aujourd'hui.
-                        </p>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            <strong class="text-slate-300 font-bold">Prévision Soirée :</strong> Le vent offshore
-                            devrait faiblir d'ici la marée montante, créant des conditions "glassy" parfaites avant le
-                            crépuscule.
-                        </p>
-                    </div>
-                    <div
-                        class="flex items-center gap-4 text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-auto px-2 border-t border-white/5 pt-3">
-                        <span class="flex items-center gap-1.5"><span
-                                class="material-symbols-outlined text-[14px]">psychology</span> Modèle Neural</span>
-                        <span class="flex items-center gap-1.5"><span
-                                class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>
-                            Fiabilité 98%</span>
-                    </div>
-                </div>
-
-                <!-- Widget 6: Communauté / Photos (Prend 2 colonnes) -->
-                <div class="lg:col-span-2 glass p-6 rounded-[2rem] flex flex-col gap-4 relative">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-bold text-lg flex items-center gap-2">
-                            <span class="material-symbols-outlined text-pink-500">photo_camera</span>
-                            Captures Vidéo en Direct
-                        </h4>
-                        <a href="cotes.html" class="text-xs text-primary font-bold cursor-pointer hover:underline">Voir
-                            Toutes</a>
-                    </div>
-                    <div class="grid grid-cols-2 flex-grow gap-4">
-                        <!-- Cam 1: No Photo -->
-                        <div
-                            class="rounded-xl overflow-hidden relative group cursor-pointer border border-white/10 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center min-h-[140px] hover:border-primary/50 transition-colors">
-                            <span
-                                class="material-symbols-outlined text-4xl text-white/20 group-hover:text-primary transition-colors duration-300 transform group-hover:scale-110">play_circle</span>
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-background-dark/90 to-transparent pointer-events-none">
-                            </div>
-                            <div class="absolute bottom-3 left-4 flex items-center gap-2 pointer-events-none z-10">
-                                <span
-                                    class="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
-                                <span
-                                    class="text-[11px] text-white font-black tracking-widest uppercase mb-[-1px]">Biarritz
-                                    Océan</span>
-                            </div>
-                        </div>
-                        <!-- Cam 2: No Photo -->
-                        <div
-                            class="rounded-xl overflow-hidden relative group cursor-pointer border border-white/10 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center min-h-[140px] hover:border-primary/50 transition-colors">
-                            <span
-                                class="material-symbols-outlined text-4xl text-white/20 group-hover:text-primary transition-colors duration-300 transform group-hover:scale-110">play_circle</span>
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-background-dark/90 to-transparent pointer-events-none">
-                            </div>
-                            <div class="absolute bottom-3 left-4 flex items-center gap-2 pointer-events-none z-10">
-                                <span
-                                    class="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
-                                <span
-                                    class="text-[11px] text-white font-black tracking-widest uppercase mb-[-1px]">Hossegor
-                                    Cam</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Widget 7: Analyse Océanique Avancée (Master Widget Pleine Largeur) -->
-            <div
-                class="lg:col-span-4 glass p-8 rounded-[2.5rem] flex flex-col lg:flex-row gap-8 relative overflow-hidden items-center shadow-[0_15px_50px_rgba(0,186,214,0.05)] border border-white/10 mt-4 group">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                </div>
-
-                <!-- Colonne 1: Énergie Joules -->
-                <div
-                    class="flex-1 w-full relative z-10 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/10 pb-8 lg:pb-0 lg:pr-8">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-yellow-400">bolt</span>
-                                <h4 class="font-bold text-sm text-slate-400 uppercase tracking-widest">Énergie de la
-                                    Houle
-                                </h4>
-                            </div>
-                            <p
-                                class="text-[9px] text-slate-500 uppercase tracking-widest font-bold mt-2 ml-1 relative z-20">
-                                📍 Basé sur <span class="text-white">Biarritz (Grande Plage)</span></p>
-                        </div>
-                        <span
-                            class="bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest shadow-[0_0_10px_rgba(250,204,21,0.2)] shrink-0">Puissant</span>
-                    </div>
-                    <div class="flex items-end gap-2 mt-2">
-                        <span class="text-6xl font-black text-white leading-none tracking-tighter">2450</span>
-                        <span class="text-xl text-primary font-bold mb-1">kJ</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mt-3 font-medium">Condition musclée. Planche courte (Shortboard)
-                        recommandée.</p>
-
-                    <!-- VIP Bar -->
-                    <div class="w-full h-2 bg-background-dark rounded-full mt-6 flex overflow-hidden shadow-inner">
-                        <div class="h-full bg-green-500 w-1/3"></div>
-                        <div class="h-full bg-yellow-400 w-1/3 shadow-[0_0_10px_rgba(250,204,21,0.5)]"></div>
-                        <div class="h-full bg-red-500 w-1/6 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.8)]"></div>
-                    </div>
-                </div>
-
-                <!-- Colonne 2: Marée -->
-                <div
-                    class="flex-1 w-full relative z-10 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-white/10 pb-8 lg:pb-0 lg:px-8">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="material-symbols-outlined text-blue-400">water_lux</span>
-                        <h4 class="font-bold text-sm text-slate-400 uppercase tracking-widest">Cycle des Marées</h4>
-                    </div>
-                    <div class="text-3xl font-black text-white mt-1 flex items-center gap-3">
-                        <span
-                            class="material-symbols-outlined text-primary text-4xl animate-[bounce_2s_infinite]">arrow_upward</span>
-                        Montante
-                    </div>
-                    <!-- Ligne de temps Marée -->
-                    <div class="flex justify-between w-full mt-8 relative">
-                        <!-- Barre de liaison -->
-                        <div class="absolute top-[8px] left-8 right-8 h-px bg-white/10"></div>
-                        <div class="flex flex-col items-start relative z-10">
-                            <span class="w-4 h-4 rounded-full bg-background-dark border-2 border-slate-500 mb-2"></span>
-                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Basse
-                                Mer</span>
-                            <span class="text-lg text-slate-300 font-black">06:42</span>
-                        </div>
-                        <div class="flex flex-col items-end relative z-10">
-                            <span
-                                class="w-4 h-4 rounded-full bg-background-dark border-2 border-primary mb-2 shadow-[0_0_10px_rgba(0,186,214,0.5)]"></span>
-                            <span class="text-[10px] text-primary font-bold uppercase tracking-widest">Pleine Mer</span>
-                            <span class="text-lg text-white font-black">12:55</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Colonne 3: Vent Local -->
-                <div class="flex-1 w-full relative z-10 flex flex-col justify-center lg:pl-8">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-slate-300">air</span>
-                            <h4 class="font-bold text-sm text-slate-400 uppercase tracking-widest">État du Vent</h4>
-                        </div>
-                        <span
-                            class="bg-green-400/10 text-green-400 border border-green-400/20 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest shadow-[inset_0_0_10px_rgba(74,222,128,0.1)]">Offshore</span>
-                    </div>
-                    <div class="flex items-center gap-6 mt-2">
-                        <div
-                            class="w-24 h-24 rounded-full border-4 border-white/5 bg-background-dark/50 flex items-center justify-center relative shadow-inner">
-                            <span class="absolute top-1.5 text-[9px] font-black text-slate-600">N</span>
-                            <span class="absolute bottom-1.5 text-[9px] font-black text-slate-600">S</span>
-                            <span class="absolute right-1.5 text-[9px] font-black text-slate-600">E</span>
-                            <span class="absolute left-1.5 text-[9px] font-black text-slate-600">W</span>
-                            <!-- Flèche tournante directionnelle -->
-                            <span
-                                class="material-symbols-outlined text-primary text-5xl rotate-[55deg] drop-shadow-[0_0_15px_rgba(0,186,214,0.8)]">navigation</span>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-5xl font-black text-white leading-none tracking-tighter">12</span>
-                            <span class="text-sm font-bold text-slate-500 uppercase tracking-widest mt-1">Noeuds
-                                (Kts)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        </div>
-    </section>
-
-    <!-- Download App Section -->
-    <section id="download-app"
-        class="relative w-full py-24 bg-background-light dark:bg-background-dark text-slate-900 dark:text-white border-t border-slate-200 dark:border-white/5 overflow-hidden">
-        <!-- Background Elements -->
-        <div
-            class="absolute top-0 right-0 w-1/2 h-full bg-primary/5 blur-3xl rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none">
-        </div>
-        <div
-            class="absolute bottom-0 left-0 w-1/2 h-full bg-blue-500/5 blur-3xl rounded-full -translate-x-1/3 translate-y-1/3 pointer-events-none">
-        </div>
-
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div
-                class="glass p-10 md:p-16 rounded-[3rem] border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12 bg-gradient-to-r from-background-dark/80 to-background-dark/40">
-
-                <div class="flex-1 text-center lg:text-left">
-                    <span
-                        class="text-primary font-bold tracking-widest uppercase text-xs mb-4 block flex items-center justify-center lg:justify-start gap-2">
-                        <span class="material-symbols-outlined text-[16px]">install_mobile</span>
-                        Disponible Partout
-                    </span>
-                    <h2 class="text-4xl md:text-5xl font-black mb-6 leading-tight">Mettez l'Océan <br /><span
-                            class="text-primary">dans votre poche.</span></h2>
-                    <p class="text-slate-400 max-w-xl mx-auto lg:mx-0 font-light text-lg mb-8">
-                        Ne ratez plus jamais la session de l'année. Recevez des alertes push ultra-précises, consultez
-                        nos 12 modèles météo hors-ligne et connectez-vous aux caméras HD directement depuis votre
-                        smartphone.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <!-- Apple App Store Button -->
-                        <button
-                            class="flex items-center gap-3 bg-white hover:bg-slate-100 text-black px-6 py-3 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-[0_10px_30px_rgba(255,255,255,0.1)] w-full sm:w-auto"
-                            onclick="installApplePWA()">
-                            <span class="text-3xl"><i class="fa-brands fa-apple"></i></span>
-                            <div class="text-left flex flex-col">
-                                <span
-                                    class="text-[10px] font-bold uppercase tracking-widest text-slate-500 leading-none mb-1">Télécharger
-                                    sur</span>
-                                <span class="text-lg font-black leading-none">App Store</span>
-                            </div>
-                        </button>
-
-                        <!-- Google Play Button -->
-                        <button
-                            class="flex items-center gap-3 bg-transparent border border-white/20 hover:border-primary/50 hover:bg-white/5 px-6 py-3 rounded-2xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto"
-                            onclick="installAndroidPWA()">
-                            <span class="text-3xl text-primary"><i class="fa-brands fa-google-play"></i></span>
-                            <div class="text-left flex flex-col">
-                                <span
-                                    class="text-[10px] font-bold uppercase tracking-widest text-slate-400 leading-none mb-1">Disponible
-                                    sur</span>
-                                <span class="text-lg font-black leading-none text-white">Google Play</span>
-                            </div>
-                        </button>
-                    </div>
-
-                    <div
-                        class="mt-8 flex items-center justify-center lg:justify-start gap-4 text-xs font-bold text-slate-500">
-                        <div class="flex -space-x-3">
-                            <img src="https://i.pravatar.cc/100?img=1"
-                                class="w-8 h-8 rounded-full border-2 border-background-dark" alt="User" / loading="lazy"
-                                decoding="async">
-                            <img src="https://i.pravatar.cc/100?img=2"
-                                class="w-8 h-8 rounded-full border-2 border-background-dark" alt="User" / loading="lazy"
-                                decoding="async">
-                            <img src="https://i.pravatar.cc/100?img=3"
-                                class="w-8 h-8 rounded-full border-2 border-background-dark" alt="User" / loading="lazy"
-                                decoding="async">
-                            <div
-                                class="w-8 h-8 rounded-full border-2 border-background-dark bg-primary flex items-center justify-center text-white text-[10px]">
-                                +54k</div>
-                        </div>
-                        <span>Surfeurs connectés</span>
-                    </div>
-                </div>
-
-                <!-- Phone Mockup Mock -->
-                <div class="flex-1 relative flex justify-center lg:justify-end w-full max-w-sm lg:max-w-none">
-                    <div
-                        class="relative w-64 h-[500px] border-[8px] border-slate-800 rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,186,214,0.3)] bg-background-dark transform rotate-6 hover:rotate-0 transition-transform duration-700">
-                        <!-- Enoche iPhone -->
-                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-xl z-20">
-                        </div>
-
-                        <!-- Contenu du téléphone -->
-                        <div class="w-full h-full relative overflow-hidden bg-background-dark">
-                            <div class="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent z-10"></div>
-                            <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&q=80&w=400&h=800"
-                                alt="App Preview" class="w-full h-full object-cover mix-blend-overlay opacity-50" /
-                                loading="lazy" decoding="async">
-
-                            <!-- UI Fictive -->
-                            <div class="absolute inset-0 z-20 p-4 flex flex-col justify-end pb-8">
-                                <div class="glass p-4 rounded-3xl mb-4 border border-white/10 shadow-lg">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                                        <span class="text-xs font-bold uppercase tracking-widest text-primary">Alerte
-                                            Houle</span>
-                                    </div>
-                                    <h4 class="font-black text-xl text-white mb-1">Hossegor 3.5m</h4>
-                                    <p class="text-[10px] text-slate-300">Conditions épiques à La Gravière. Prenez votre
-                                        planche.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        </div>
-    </section>
-
-    <!-- Section Témoignages / Avis Premium -->
-    <section id="reviews-premium"
-        class="relative w-full py-24 bg-background-dark text-white border-t border-white/5 overflow-hidden">
-        <div
-            class="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row items-end justify-between gap-6 relative z-10">
-            <div class="flex flex-col gap-3">
-                <span class="text-primary font-bold tracking-widest uppercase text-sm flex items-center gap-2">
-                    <span class="material-symbols-outlined text-yellow-400 text-[18px]">workspace_premium</span>
-                    L'Élite Connectée
-                </span>
-                <h2 class="text-4xl md:text-5xl font-black text-white leading-tight">Même les pros<br>ne jurent que par
-                    <span class="text-primary">l'Abonnement.</span>
-                </h2>
-            </div>
-            <div class="text-right">
-                <div class="flex items-center gap-1 justify-end mb-2">
-                    <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
-                    <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
-                    <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
-                    <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
-                    <span class="material-symbols-outlined text-yellow-400 text-2xl">star</span>
-                </div>
-                <p class="text-slate-400 font-medium">4.9/5 sur plus de 10,000 surfeurs équipés</p>
-                <span
-                    class="text-[10px] text-primary font-black uppercase tracking-widest bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 mt-3 inline-flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[14px]">swipe</span> Swiper à l'horizontal
-                </span>
-            </div>
-        </div>
-
-        <!-- Slider Horizontal (Scroll/Swipe) -->
-        <div class="w-full overflow-x-auto pb-8 custom-scrollbar scroll-smooth pl-6 xl:pl-[calc((100vw-80rem)/2)]">
-            <div class="flex gap-6 w-max pr-6">
-                <!-- Avis 1 (Pro) -->
-                <div
-                    class="glass p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/10 flex flex-col gap-6 relative group transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 shadow-lg">
-                    <div
-                        class="absolute -top-4 right-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-background-dark text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-[0_0_15px_rgba(250,204,21,0.5)]">
-                        WCT Surfer
-                    </div>
-                    <p class="text-lg font-light italic text-slate-300">"Depuis que j'ai souscrit à l'abonnement
-                        SWELLSYNC, je ne loupe plus une seule session parfaite. Le radar d'alerte houle premium est
-                        lunaire
-                        de précision. Ça vaut 100 fois son prix."</p>
-                    <div class="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
-                        <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100"
-                                class="w-12 h-12 rounded-full border-2 border-primary" alt="User" loading="lazy"
-                                decoding="async">
-                            <div>
-                                <h4 class="font-black text-white text-sm">Jeremy F.</h4>
-                                <p class="text-primary text-[10px] font-bold uppercase tracking-widest">Hossegor, France
-                                </p>
-                            </div>
-                        </div>
-                        <span
-                            class="material-symbols-outlined text-white/10 text-4xl group-hover:text-primary/20 transition-colors">format_quote</span>
-                    </div>
-                </div>
-
-                <!-- Avis 2 -->
-                <div
-                    class="glass p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/10 flex flex-col gap-6 relative group transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 shadow-lg">
-                    <p class="text-lg font-light italic text-slate-300">"J'hésitais à prendre le pass Premium, mais
-                        l'accès instantané et en direct aux 60 caméras HD le long des côtes Atlantique m'économise des
-                        heures de route et d'essence !"</p>
-                    <div class="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
-                        <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100"
-                                class="w-12 h-12 rounded-full border-2 border-white/20" alt="User" loading="lazy"
-                                decoding="async">
-                            <div>
-                                <h4 class="font-black text-white text-sm">Léa Dupont</h4>
-                                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Biarritz,
-                                    France</p>
-                            </div>
-                        </div>
-                        <span
-                            class="material-symbols-outlined text-white/10 text-4xl group-hover:text-primary/20 transition-colors">format_quote</span>
-                    </div>
-                </div>
-
-                <!-- Avis 3 -->
-                <div
-                    class="glass p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/10 flex flex-col gap-6 relative group transition-all duration-300 hover:-translate-y-2 hover:border-primary/50 shadow-lg">
-                    <p class="text-lg font-light italic text-slate-300">"Le graphique 'énergie des vagues en joules'
-                        combiné au cycle de la marée m'a complètement fait abandonner les autres sites météo obsolètes.
-                        C'est l'outil ultime."</p>
-                    <div class="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
-                        <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100"
-                                class="w-12 h-12 rounded-full border-2 border-white/20" alt="User" loading="lazy"
-                                decoding="async">
-                            <div>
-                                <h4 class="font-black text-white text-sm">Thomas B.</h4>
-                                <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Lacanau,
-                                    France</p>
-                            </div>
-                        </div>
-                        <span
-                            class="material-symbols-outlined text-white/10 text-4xl group-hover:text-primary/20 transition-colors">format_quote</span>
-                    </div>
-                </div>
-
-                <!-- Avis 4 (Explication Benefices Abonnement) -->
-                <div
-                    class="bg-gradient-to-br from-primary to-blue-600 p-8 rounded-[2rem] w-[350px] md:w-[450px] border border-white/20 flex flex-col items-center justify-center text-center gap-4 relative group shadow-[0_15px_40px_rgba(0,186,214,0.3)] shrink-0">
-                    <span class="material-symbols-outlined text-white text-5xl mb-2">diamond</span>
-                    <h3 class="text-3xl font-black text-white leading-tight">Devenez Membre <br>Swell<span
-                            class="text-background-dark">Sync</span> PRO</h3>
-                    <ul class="text-left text-sm text-white/90 font-medium space-y-2 mt-2 w-full max-w-[250px]">
-                        <li class="flex items-center gap-2"><span
-                                class="material-symbols-outlined text-green-300 text-[16px]">check_circle</span> Alertes
-                            Push Personnalisées</li>
-                        <li class="flex items-center gap-2"><span
-                                class="material-symbols-outlined text-green-300 text-[16px]">check_circle</span> Cams HD
-                            100% Débloquées</li>
-                        <li class="flex items-center gap-2"><span
-                                class="material-symbols-outlined text-green-300 text-[16px]">check_circle</span> Analyse
-                            Prévision Avancée 15 Jours</li>
-                    </ul>
-                    <button
-                        class="mt-4 bg-background-dark text-white font-black uppercase tracking-widest px-6 py-3 rounded-full hover:bg-white hover:text-background-dark transition-colors border border-transparent hover:border-white w-full"
-                        onclick="window.location.href='abonnement.html'">
-                        Obtenir Premium
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Moteur Océanique Section -->
-    <section id="technology"
-        class="relative w-full py-24 bg-background-light dark:bg-background-dark text-slate-900 dark:text-white border-t border-slate-200 dark:border-white/5 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-16">
-            <div class="flex-1">
-                <span
-                    class="text-primary font-bold tracking-widest uppercase text-sm mb-4 block flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[16px]">memory</span>
-                    Sous le capot
-                </span>
-                <h2 class="text-4xl md:text-5xl font-black mb-6 leading-tight">12 Modèles Météo <br /><span
-                        class="text-primary">Avancés en réseau.</span></h2>
-                <p class="text-slate-400 font-light text-lg mb-8 leading-relaxed">
-                    SwellSync ne se contente pas de copier/coller les données de la NOAA ou de Météo France. Nous
-                    agrégeons en temps réel 12 modèles de prédictions climatiques (GFS, ECMWF, ICON...) que notre
-                    système d'analyse océanographique exclusif étudie et pondère avec une précision absolue.
-                </p>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="glass p-5 rounded-2xl border border-white/5 shadow-sm">
-                        <span class="text-3xl font-black text-white">99.8%</span>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">De Fiabilité
-                            Radar</p>
-                    </div>
-                    <div class="glass p-5 rounded-2xl border border-white/5 shadow-sm">
-                        <span class="text-3xl font-black text-primary">5ms</span>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Latence Serveur
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 w-full flex justify-center lg:justify-end relative">
-                <div
-                    class="w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full border border-white/10 flex items-center justify-center relative shadow-[0_0_50px_rgba(0,186,214,0.1)]">
-                    <!-- Rings -->
-                    <div
-                        class="absolute inset-4 rounded-full border border-primary/20 animate-[spin_10s_linear_infinite]">
-                    </div>
-                    <div
-                        class="absolute inset-12 rounded-full border border-primary/40 animate-[spin_15s_linear_infinite_reverse]">
-                    </div>
-                    <div
-                        class="absolute inset-20 rounded-full border border-white/10 border-dashed animate-[spin_20s_linear_infinite]">
-                    </div>
-                    <!-- Center core -->
-                    <div
-                        class="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,186,214,0.5)] backdrop-blur-md border border-primary/50 relative z-10">
-                        <span class="material-symbols-outlined text-primary text-4xl animate-pulse">hub</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter & Capture d'email -->
-    <section id="newsletter" class="relative w-full py-20 bg-primary">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
-        </div>
-        <div class="max-w-4xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-            <span class="material-symbols-outlined text-background-dark text-5xl mb-4">mail</span>
-            <h2 class="text-3xl md:text-5xl font-black text-background-dark mb-4">Ne laissez plus passer le swell
-                parfait.</h2>
-            <p class="text-background-dark/80 font-medium text-lg mb-8 max-w-2xl">
-                Inscrivez-vous à notre liste secrète. Recevez gratuitement nos rapports météo hebdos et soyez alerté
-                avant tout le monde des houles XXL (Code Rouge).
-            </p>
-            <form class="w-full max-w-md flex flex-col sm:flex-row gap-3"
-                onsubmit="event.preventDefault(); Toast.show('Bienvenue dans la communauté ! Vous recevrez bientôt notre premier rapport. 🌊', 'success')">
-                <input type="email" data-i18n-placeholder="contact.email_placeholder" placeholder="votre@email.com"
-                    required
-                    class="flex-1 bg-white/10 border border-background-dark/20 text-background-dark placeholder-background-dark/50 px-5 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-background-dark focus:bg-white/20 transition-all font-bold">
-                <button type="submit"
-                    class="bg-background-dark text-white font-black uppercase tracking-widest px-8 py-4 rounded-xl hover:bg-slate-800 transition-colors shadow-xl hover:-translate-y-1">
-                    S'Abonner
-                </button>
-            </form>
-        </div>
-    </section>
-
-    <!-- F.A.Q Section -->
-    <section id="faq"
-        class="relative w-full py-24 bg-background-light dark:bg-background-dark text-slate-900 dark:text-white">
-        <div class="max-w-3xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="text-primary font-bold tracking-widest uppercase text-sm mb-2 block">Assistance
-                    Rapide</span>
-                <h2 class="text-3xl md:text-4xl font-black">Questions Fréquentes</h2>
-            </div>
-
-            <div class="flex flex-col gap-4">
-                <!-- FAQ Item 1 -->
-                <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
-                    onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-lg">Quels sont les pays couverts par SwellSync ?</h4>
-                        <span
-                            class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
-                    </div>
-                    <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Actuellement, notre système avancé
-                        (Version Bêta) est entraîné spécifiquement sur la façade Atlantique Française (60 spots). Nous
-                        déploierons l'Europe entière d'ici le prochain trimestre.</p>
-                </div>
-
-                <!-- FAQ Item 2 -->
-                <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
-                    onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-lg">D'où proviennent vos caméras HD en direct ?</h4>
-                        <span
-                            class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
-                    </div>
-                    <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Nous avons notre propre réseau de
-                        caméras privatives installées sur les balcons et toits partenaires face aux spots, garantissant
-                        un flux privé, sans publicité, et en qualité 4K quand le réseau le permet.</p>
-                </div>
-
-                <!-- FAQ Item 3 -->
-                <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
-                    onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-lg">L'abonnement "PRO" est-il sans engagement ?</h4>
-                        <span
-                            class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
-                    </div>
-                    <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Oui, absolument. SWELLSYNC PRO est un
-                        pass mensuel. Vous pouvez l'annuler en un clic depuis votre espace membre, juste avant l'hiver
-                        par exemple, sans aucun frais caché ni préavis de plusieurs mois.</p>
-                </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
-                    onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-lg">Comment fonctionne le calcul d'Énergie de la Houle (en kJ) ?</h4>
-                        <span
-                            class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
-                    </div>
-                    <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Contrairement aux sites classiques qui
-                        ne vous donnent que la "Hauteur" de vague, notre algorithme calcule l'énergie brute en
-                        KiloJoules (kJ).
-                        Elle prend en compte la hauteur, la période spatiale et la force du vent offshore pour calculer
-                        la puissance réelle de l'impact sur le banc de sable. C'est l'indicateur ultime pour choisir sa
-                        planche : une vague de 1.5m à 1000kJ est molle (Longboard), à 3000kJ elle est creuse et
-                        tubulaire (Shortboard).</p>
-                </div>
-
-                <!-- FAQ Item 5 -->
-                <div class="glass p-6 rounded-2xl border border-white/5 cursor-pointer group hover:border-primary/30 transition-colors"
-                    onclick="this.lastElementChild.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-lg">Puis-je utiliser mon même compte sur le PC et sur mon Mobile ?
-                        </h4>
-                        <span
-                            class="material-symbols-outlined text-primary chevron transition-transform duration-300">expand_more</span>
-                    </div>
-                    <p class="text-slate-400 mt-4 leading-relaxed hidden text-sm">Bien sûr. SWELLSYNC PRO est une
-                        licence cross-platform. Une fois abonné, vous pouvez vous connecter sur le site web depuis votre
-                        bureau en semaine, et utiliser l'Application Mobile téléchargée en arrivant sur le parking de la
-                        plage le week-end, tant que vous restez le seul et unique utilisateur du compte sécurisé.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════
-         SECTION : ACTUS SURF EN DIRECT
-    ═══════════════════════════════════════════════════════ -->
-    <section id="actus-live" class="py-24 px-6 bg-[#070f10]">
-        <div class="max-w-7xl mx-auto">
-            <!-- Header -->
-            <div class="flex items-end justify-between mb-12">
-                <div>
-                    <p class="text-[10px] text-[#00bad6] font-black uppercase tracking-widest mb-2"
-                        data-i18n="actu.badge">📰 Actualités</p>
-                    <h2 class="text-4xl md:text-5xl font-black text-white leading-tight">
-                        Actu Surf<br />
-                        <span
-                            style="background:linear-gradient(90deg,#00bad6,#00e5c0);-webkit-background-clip:text;-webkit-text-fill-color:transparent">en
-                            Direct</span>
-                    </h2>
-                </div>
-                <a href="actu.html" style="text-decoration:none"
-                    class="hidden md:inline-flex items-center gap-2 text-[#00bad6] font-black text-sm uppercase tracking-widest hover:gap-3 transition-all">
-                    Tout voir
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                </a>
-            </div>
-
-            <!-- Grid actus -->
-            <div id="home-news-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Skeleton -->
-                <div class="lg:col-span-2 rounded-3xl overflow-hidden animate-pulse"
-                    style="background:#0f2123;height:420px"></div>
-                <div class="flex flex-col gap-4">
-                    <div class="rounded-2xl animate-pulse" style="background:#0f2123;height:196px"></div>
-                    <div class="rounded-2xl animate-pulse" style="background:#0f2123;height:196px"></div>
-                </div>
-            </div>
-
-            <!-- CTA Mobile -->
-            <div class="flex justify-center mt-10 md:hidden">
-                <a href="actu.html" style="text-decoration:none"
-                    class="inline-flex items-center gap-2 border border-[rgba(0,186,214,.4)] text-[#00bad6] font-black text-sm uppercase tracking-widest px-6 py-3 rounded-full hover:bg-[rgba(0,186,214,.08)] transition-all">
-                    Toutes les actus →
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <style>
-        /* Actus section - home */
-        .home-hero-card {
-            position: relative;
-            border-radius: 24px;
-            overflow: hidden;
-            cursor: pointer;
-            min-height: 420px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            background: #0f2123;
-            transition: transform .3s ease, box-shadow .3s ease;
-        }
-
-        .home-hero-card:hover {
-            transform: scale(1.01);
-            box-shadow: 0 24px 64px rgba(0, 186, 214, .15);
-        }
-
-        .home-hero-bg {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center top;
-            transition: transform .6s ease;
-        }
-
-        .home-hero-card:hover .home-hero-bg {
-            transform: scale(1.04);
-        }
-
-        .home-hero-content {
-            position: relative;
-            padding: 28px;
-            background: linear-gradient(to top, rgba(3, 10, 12, .98) 0%, rgba(3, 10, 12, .5) 60%, transparent 100%);
-        }
-
-        .home-mini-card {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            cursor: pointer;
-            display: flex;
-            background: #0f2123;
-            border: 1px solid rgba(255, 255, 255, .06);
-            transition: transform .25s, box-shadow .25s, border-color .25s;
-            flex: 1;
-            min-height: 190px;
-        }
-
-        .home-mini-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(0, 186, 214, .22);
-            box-shadow: 0 16px 48px rgba(0, 186, 214, .1);
-        }
-
-        .home-mini-img {
-            width: 130px;
-            flex-shrink: 0;
-            object-fit: cover;
-            background: #061a22;
-            opacity: 0;
-            transition: opacity .4s;
-        }
-
-        .home-mini-img.loaded {
-            opacity: 1;
-        }
-
-        .home-badge-new {
-            display: inline-block;
-            background: linear-gradient(135deg, #f43f5e, #e11d48);
-            color: #fff;
-            font-size: 8px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: .1em;
-            padding: 2px 7px;
-            border-radius: 999px;
-            margin-bottom: 8px;
-        }
-
-        .home-cat-pill {
-            display: inline-block;
-            font-size: 9px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: .07em;
-            color: #00bad6;
-            background: rgba(0, 186, 214, .12);
-            border: 1px solid rgba(0, 186, 214, .3);
-            padding: 2px 8px;
-            border-radius: 999px;
-            margin-bottom: 8px;
-        }
-
-        .home-read-time {
-            font-size: 9px;
-            color: #475569;
-            font-weight: 600;
-        }
-    </style>
-
-    <script>
-            (function () {
-                const CAT_ICONS_H = {
-                    'Compétition': '🏆', 'Houle': '🌊', 'Équipement': '🏄',
-                    'Environnement': '🌿', 'Voyage': '✈️', 'Culture': '🎥', 'Actu': '📰'
-                };
-                function readTimeH(desc) { return Math.max(1, Math.round((desc || '').split(/\s+/).length / 4)); }
-                function isNewH(pub) { return (Date.now() - new Date(pub).getTime()) < 86400000; }
-                function openActu(url) { window.open(url, '_blank'); }
-
-                async function loadHomeNews() {
-                    try {
-                        const r = await fetch('/api/surf-news');
-                        if (!r.ok) throw new Error();
-                        const data = await r.json();
-                        const arts = (data.articles || []).filter(a => a.image && !a.image.includes('aida-public'));
-                        if (!arts.length) return;
-                        renderHomeNews(arts);
-                    } catch (e) {
-                        document.getElementById('home-news-grid').innerHTML = '';
-                    }
-                }
-
-                function renderHomeNews(arts) {
-                    const grid = document.getElementById('home-news-grid');
-                    const hero = arts[0];
-                    const minis = arts.slice(1, 3);
-
-                    const newBadge = isNewH(hero.pubDate) ? '<span class="home-badge-new">✨ Nouveau</span>' : '';
-                    const heroHtml = `
-            <div class="home-hero-card lg:col-span-2" onclick="window.open('${hero.url}','_blank')">
-                <div class="home-hero-bg" style="background-image:url('${hero.image}')"></div>
-                <div class="home-hero-content">
-                    ${newBadge}
-                    <span class="home-cat-pill">${CAT_ICONS_H[hero.cat] || '📰'} ${hero.cat}</span>
-                    <h3 class="text-white font-black text-2xl leading-tight mb-2 mt-1">${hero.title}</h3>
-                    <div class="flex items-center justify-between mt-3">
-                        <span class="text-[#00bad6]/70 text-xs font-bold">${hero.source}</span>
-                        <span class="home-read-time">⏰ ${readTimeH(hero.description)} min · ${hero.pubDateDisplay}</span>
-                    </div>
-                </div>
-            </div>`;
-
-                    const minisHtml = `<div class="flex flex-col gap-4">
-                ${minis.map(a => `
-                <div class="home-mini-card" onclick="window.open('${a.url}','_blank')">
-                    <img class="home-mini-img" data-src="${a.image}" alt="" / loading="lazy" decoding="async">
-                    <div style="padding:16px;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
-                        <div>
-                            ${isNewH(a.pubDate) ? '<span class="home-badge-new">✨ Nouveau</span>' : ''}
-                            <span class="home-cat-pill">${CAT_ICONS_H[a.cat] || '📰'} ${a.cat}</span>
-                            <p class="text-white font-black text-sm leading-tight mt-1"
-                                style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${a.title}</p>
-                        </div>
-                        <div class="flex items-center justify-between mt-2">
-                            <span class="text-[#00bad6]/70 text-xs font-bold">${a.source}</span>
-                            <span class="home-read-time">⏰ ${readTimeH(a.description)}min</span>
-                        </div>
-                    </div>
-                </div>`).join('')}
-            </div>`;
-
-                    grid.innerHTML = heroHtml + minisHtml;
-
-                    // Lazy load mini images
-                    grid.querySelectorAll('img[data-src]').forEach(img => {
-                        const obs = new IntersectionObserver(([e]) => {
-                            if (!e.isIntersecting) return;
-                            img.src = img.dataset.src;
-                            img.onload = () => img.classList.add('loaded');
-                            obs.unobserve(img);
-                        }, { rootMargin: '80px' });
-                        obs.observe(img);
-                    });
-                }
-
-                loadHomeNews();
-            })();
-    </script>
-
-    <!-- Footer Professionnel -->
-    <footer class="bg-[#0a1516] text-slate-400 py-16 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
-
-                <!-- Colonne 1 : Marque -->
-                <div class="flex flex-col gap-4">
-                    <div class="flex items-center gap-2">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo"
-                            class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
-                        <span class="font-display font-black text-xl text-white tracking-tight">Swell<span
-                                class="text-primary">Sync</span></span>
-                    </div>
-                    <p class="text-sm leading-relaxed mt-2">La plateforme de prévision de surf la plus technologique du
-                        marché. Surf smart, ride hard.</p>
-                    <div class="flex gap-4 mt-4">
-                        <a href="reseaux.html"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-instagram"></i></a>
-                        <a href="reseaux.html"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-tiktok"></i></a>
-                        <a href="reseaux.html"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-x-twitter"></i></a>
-                    </div>
-                </div>
-
-                <!-- Colonne 2 : Liens Rapides -->
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">SwellSync</h4>
-                    <a href="cotes.html" class="text-sm hover:text-primary transition-colors">La Carte Interactive</a>
-                    <a href="#spots" class="text-sm hover:text-primary transition-colors">Spots Tendances</a>
-                    <a href="abonnement.html" class="text-sm hover:text-primary transition-colors">Abonnement PRO</a>
-                    <a href="#download-app" class="text-sm hover:text-primary transition-colors">Télécharger l'App</a>
-                </div>
-
-
-                <!-- Colonne 3 : Légal -->
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Légal</h4>
-                    <button onclick="openLegalModal('cgv')"
-                        class="text-left text-sm hover:text-primary transition-colors">Conditions Générales
-                        (CGV)</button>
-                    <button onclick="openLegalModal('privacy')"
-                        class="text-left text-sm hover:text-primary transition-colors">Politique de
-                        Confidentialité</button>
-                    <button onclick="openLegalModal('legal')"
-                        class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions
-                        Légales</button>
-                    <button onclick="openLegalModal('cookies')"
-                        class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
-                </div>
-                <!-- Colonne 4 : Support -->
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Assistance</h4>
-                    <p class="text-sm mb-2">Notre équipe est basée à Hossegor, France. Nous répondons en moins de 24h.
-                    </p>
-                    <a href="mailto:support@swellsync.com"
-                        class="text-primary font-bold hover:underline flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-[16px]">mail</span>
-                        support@swellsync.com
-                    </a>
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium">
-                <p>&copy; 2026 SwellSync Technology. Tous droits réservés.</p>
-                <div class="flex items-center gap-2 mt-4 md:mt-0">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    Serveurs Opérationnels (99.9% Uptime)
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Auth / Profile Modal Container -->
-    <div id="auth-modal-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
-        <div id="auth-modal-container"
-            class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-md relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col items-center">
-
-            <button onclick="closeAuthModal()"
-                class="absolute top-6 right-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white z-20">
-                <span class="material-symbols-outlined text-lg">close</span>
-            </button>
-
-            <!-- Auth Header -->
-            <div class="w-full pt-10 pb-6 px-8 flex flex-col items-center border-b border-white/5 bg-white/5">
-                <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-                    <span class="material-symbols-outlined text-primary text-3xl">lock_person</span>
-                </div>
-                <h3 class="text-3xl font-black text-white text-center">SwellSync<span class="text-primary">.ID</span>
-                </h3>
-                <p class="text-slate-400 text-sm mt-2 text-center">Sécurité A2F Requise (App non partagée)</p>
-            </div>
-
-            <!-- Auth Body -->
-            <div id="auth-step-1" class="p-8 w-full flex flex-col gap-4 bg-background-dark">
-
-                <!-- Option 1: Apple Sign In -->
-                <div id="appleid-signin" onclick="triggerAppleAuth()"
-                    class="w-full bg-[#111] border border-white/20 text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-white hover:text-black transition-colors cursor-pointer">
-                    <i class="fa-brands fa-apple text-xl"></i>
-                    Continuer avec Apple
-                </div>
-
-                <!-- Option 2: Google Sign In -->
-                <button onclick="triggerGoogleAuth()"
-                    class="w-full bg-white text-black border border-white/20 font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-200 transition-colors focus:outline-none shadow-md cursor-pointer">
-                    <i class="fa-brands fa-google text-xl text-blue-500"></i>
-                    Continuer avec Google
-                </button>
-
-                <div class="flex items-center gap-4 my-2 opacity-50">
-                    <div class="h-px bg-white/20 flex-1"></div>
-                    <span class="text-[10px] font-bold text-white uppercase tracking-widest">OU via Email</span>
-                    <div class="h-px bg-white/20 flex-1"></div>
-                </div>
-
-                <form class="flex flex-col gap-3" onsubmit="handleAuthForm(event)">
-                    <div class="relative">
-                        <span
-                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">mail</span>
-                        <input type="email" id="auth-identifier" placeholder="Votre Adresse Email" required
-                            class="w-full bg-white/5 border border-white/10 text-white placeholder-slate-500 pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-medium text-sm">
-                    </div>
-                    <button type="submit"
-                        class="w-full bg-primary text-background-dark font-black py-4 rounded-xl hover:bg-white transition-colors uppercase tracking-widest mt-2 shadow-[0_10px_20px_rgba(0,186,214,0.3)]">
-                        Recevoir un Code (A2F)
-                    </button>
-                </form>
-
-                <p class="text-center text-[10px] text-slate-500 mt-4 px-4">
-                    En vous connectant, vous acceptez que vos données de contact soient transmises sécuritairement à
-                    notre base de données.
-                </p>
-            </div>
-
-            <!-- Auth Body: Step 2 (Verification) -->
-            <div id="auth-step-2" class="p-8 w-full flex-col gap-4 bg-background-dark hidden">
-                <div class="text-center mb-6">
-                    <h4 class="text-xl font-bold text-white mb-2">Vérification Requise</h4>
-                    <p class="text-sm text-slate-400">Un code à 6 chiffres vient d'être envoyé au <br><strong
-                            id="auth-identifier-display" class="text-white"></strong></p>
-                </div>
-
-                <form class="flex flex-col gap-3" onsubmit="verifyAuthCode(event)">
-                    <div class="flex justify-between gap-2 mb-4">
-                        <input type="text" maxlength="1"
-                            class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            required autofocus>
-                        <input type="text" maxlength="1"
-                            class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            required>
-                        <input type="text" maxlength="1"
-                            class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            required>
-                        <input type="text" maxlength="1"
-                            class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            required>
-                        <input type="text" maxlength="1"
-                            class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            required>
-                        <input type="text" maxlength="1"
-                            class="code-input w-12 h-14 bg-white/5 border border-white/10 text-white text-center text-xl font-black rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            required>
-                    </div>
-                    <button type="submit"
-                        class="w-full bg-primary text-background-dark font-black py-4 rounded-xl hover:bg-white transition-colors uppercase tracking-widest shadow-[0_10px_20px_rgba(0,186,214,0.3)]">
-                        Valider le Code
-                    </button>
-                    <button type="button" onclick="resetAuthModal()"
-                        class="w-full text-slate-400 text-sm font-bold mt-2 hover:text-white transition-colors">
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- User Profile Modal -->
-    <div id="profile-modal-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[115] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
-        <div id="profile-modal-container"
-            class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-md relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col">
-            <button onclick="closeProfileModal()"
-                class="absolute top-6 right-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white z-20">
-                <span class="material-symbols-outlined text-lg">close</span>
-            </button>
-            <div class="p-8 pb-0 flex flex-col items-center relative z-10 mt-4">
-                <div id="profile-avatar-large"
-                    class="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center text-4xl font-black text-primary border-4 border-background-dark shadow-[0_0_20px_rgba(0,186,214,0.4)] relative mb-4">
-                    <span id="profile-avatar-letter">U</span>
-                    <div
-                        class="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-background-dark flex items-center justify-center">
-                        <i class="fa-solid fa-check text-[10px] text-white"></i>
-                    </div>
-                </div>
-                <h2 id="profile-name" class="text-2xl font-black text-white">Utilisateur</h2>
-                <p id="profile-email" class="text-sm text-slate-400 mt-1">email@example.com</p>
-                <div
-                    class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mt-4">
-                    Membre SWELLSYNC
-                </div>
-            </div>
-
-            <div id="profile-main-menu" class="p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
-                <button onclick="showProfileFavorites()"
-                    class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-slate-400">favorite</span>
-                        <span data-i18n="dashboard.my_spots">Mes Spots Favoris</span>
-                    </div>
-                    <span class="material-symbols-outlined text-slate-500">chevron_right</span>
-                </button>
-                <button onclick="showProfileAlerts()"
-                    class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors group">
-                    <div class="flex items-center gap-3">
-                        <span
-                            class="material-symbols-outlined text-yellow-400 group-hover:scale-110 transition-transform">workspace_premium</span>
-                        <span class="text-yellow-400">Alertes Surf PRO</span>
-                    </div>
-                    <span class="material-symbols-outlined text-slate-500">chevron_right</span>
-                </button>
-                <button onclick="showProfileAIPrefs()"
-                    class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-slate-400">settings</span>
-                        <span>Préférences Système</span>
-                    </div>
-                    <span class="material-symbols-outlined text-slate-500">chevron_right</span>
-                </button>
-
-                <button onclick="logoutProfile()"
-                    class="w-full mt-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-black py-4 rounded-xl transition-colors uppercase tracking-widest text-sm">
-                    Déconnexion
-                </button>
-            </div>
-
-            <!-- View: Favorites -->
-            <div id="profile-favorites-view" class="hidden p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
-                <div class="flex items-center mb-4">
-                    <button onclick="hideProfileViews()"
-                        class="text-slate-400 hover:text-white transition-colors flex items-center mr-3">
-                        <span class="material-symbols-outlined">arrow_back</span>
-                    </button>
-                    <h3 class="text-lg font-black text-white">Spots Favoris (3 Max)</h3>
-                </div>
-                <div id="profile-favorites-container" class="flex flex-col gap-3">
-                    <!-- Les spots favoris s'afficheront ici dynamiquement -->
-                </div>
-
-                <!-- Premium Upsell -->
-                <div
-                    class="mt-4 mt-2 p-1 rounded-2xl bg-gradient-to-r from-yellow-500/10 via-yellow-400/20 to-yellow-500/10">
-                    <a href="abonnement.html"
-                        class="flex items-center justify-between w-full p-4 bg-[#0a1516] rounded-xl border border-yellow-400/10 hover:border-yellow-400/30 transition-all group">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-8 h-8 rounded-full bg-yellow-400/10 flex items-center justify-center border border-yellow-400/20 group-hover:scale-110 transition-transform">
-                                <span
-                                    class="material-symbols-outlined text-yellow-400 text-[16px]">workspace_premium</span>
-                            </div>
-                            <div class="flex flex-col text-left">
-                                <span class="text-white font-bold text-sm tracking-wide">Débloquer la limite</span>
-                                <span
-                                    class="text-[9px] text-slate-400 font-medium uppercase tracking-widest mt-0.5">Spots
-                                    Favoris Illimités</span>
-                            </div>
-                        </div>
-                        <span
-                            class="material-symbols-outlined text-yellow-400/50 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all">arrow_forward</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- View: AI Prefs -->
-            <div id="profile-ai-view" class="hidden p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
-                <div class="flex items-center mb-4">
-                    <button onclick="hideProfileViews()"
-                        class="text-slate-400 hover:text-white transition-colors flex items-center mr-3">
-                        <span class="material-symbols-outlined">arrow_back</span>
-                    </button>
-                    <h3 class="text-lg font-black text-white">Configuration Assistant</h3>
-                </div>
-
-                <label
-                    class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
-                    <div>
-                        <h4 class="text-white font-bold text-sm">Swell Whisperer</h4>
-                        <p class="text-xs text-slate-400">Recommandations vocales</p>
-                    </div>
-                    <input type="checkbox" class="toggle toggle-primary" checked />
-                </label>
-
-                <label
-                    class="flex items-center justify-between bg-white/5 p-4 rounded-xl border border-white/10 cursor-pointer hover:bg-white/10 transition-colors">
-                    <div>
-                        <h4 class="text-white font-bold text-sm">Magic Quiver</h4>
-                        <p class="text-xs text-slate-400">Choix planche auto</p>
-                    </div>
-                    <input type="checkbox" class="toggle toggle-primary" checked />
-                </label>
-
-                <div class="mt-2 text-xs text-slate-500 leading-relaxed">
-                    Notre algorithme marin analyse en continu près de 12 variables météorologiques par spot pour
-                    optimiser automatiquement votre niveau de surf.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Légal Modals Container -->
-    <div id="legal-modal-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
-        <div id="legal-modal-container"
-            class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-full overflow-y-auto custom-scrollbar relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col">
-            <div
-                class="w-full flex justify-end p-6 border-b border-white/5 sticky top-0 bg-background-dark/90 backdrop-blur z-20">
-                <button onclick="closeLegalModal()"
-                    class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div id="legal-modal-content" class="p-8 md:p-12 w-full">
-                <!-- Injected via JS -->
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Global Search Modal -->
-    <div id="global-search-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
-        <div id="global-search-container"
-            class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
-
-            <!-- Search Input Area -->
-            <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
-                <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
-                <input type="text" id="global-search-input"
-                    class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
-                    placeholder="Chercher un spot, une page, une info..." autocomplete="off">
-                <button onclick="closeGlobalSearchModal()"
-                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-xl">close</span>
-                </button>
-            </div>
-
-            <!-- Search Results Area -->
-            <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
-                <!-- Les résultats seront injectés ici par global_search.js -->
-                <div class="text-center py-10 text-slate-500 text-sm font-medium">
-                    Que cherchez-vous aujourd'hui ? 🏄‍♂️
-                </div>
-            </div>
-
-            <!-- Footer Hints -->
-            <div
-                class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
-                <div class="flex items-center gap-2">
-                    <span class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
-                            class="font-sans mr-1">↑↓</span> Naviguer</span>
-                    <span
-                        class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entrée
-                        <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
-                </div>
-                <div>SwellSync Global Search</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="js/pwa.js"></script>
-    <script src="js/nav.js"></script>
-    <script src="js/auth_auto.js" defer></script>
-    <script src="js/i18n.js" defer></script>
-    <script src="js/toast.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/global_search.js"></script>
-    <script src="js/legal_modals.js?v=6"></script>
-    <script src="js/auth_modal.js?v=1"></script>
-    <script src="js/chatbot.js"></script>
-
-    <script src="js/geoloc.js" defer></script>
-    <script src="js/push_notifs.js" defer></script>
-    <script src="js/onboarding.js" defer></script>
 </body>
 
 </html>
