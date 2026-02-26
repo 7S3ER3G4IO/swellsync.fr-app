@@ -1,308 +1,354 @@
-const sqlite3 = require('sqlite3').verbose();
+/**
+ * SwellSync — Database Layer (PostgreSQL)
+ * 
+ * Wrapper qui expose la même API que sqlite3 (db.run, db.get, db.all)
+ * pour une migration transparente depuis SQLite.
+ * 
+ * Connexion via DATABASE_URL (ex: postgresql://user:pass@host:5432/dbname)
+ */
+const { Pool } = require('pg');
 const path = require('path');
 
-// Crée ou se connecte à la base de données SQLite locale
-// Le fichier database.sqlite sera créé à la racine
-const dbPath = path.resolve(__dirname, 'database.sqlite');
-const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-        console.error('❌ [DATABASE] Erreur lors de la connexion à la base de données :', err.message);
-    } else {
-        console.log('✅ [DATABASE] Connecté à la base de données SQLite locale (SwellSync).');
-    }
+// ── Connexion PostgreSQL ──
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL?.includes('render.com')
+        ? { rejectUnauthorized: false }
+        : false
 });
 
-// Initialisation des tables de la base de données si elles n'existent pas
-db.serialize(() => {
-    // 1. Table des Spots de Surf
-    db.run(`
-        CREATE TABLE IF NOT EXISTS spots (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            location TEXT NOT NULL,
-            difficulty TEXT NOT NULL,
-            wave_type TEXT,
-            description TEXT,
-            lat REAL,
-            lng REAL
-        )
-    `);
+pool.on('connect', () => {
+    console.log('✅ [DATABASE] Connecté à PostgreSQL.');
+});
+pool.on('error', (err) => {
+    console.error('❌ [DATABASE] Erreur PostgreSQL :', err.message);
+});
 
-    // 2. Table des Webcams
-    db.run(`
-        CREATE TABLE IF NOT EXISTS cams (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            spot_id INTEGER NOT NULL,
-            title TEXT NOT NULL,
-            stream_url TEXT NOT NULL,
-            FOREIGN KEY(spot_id) REFERENCES spots(id)
-        )
-    `);
+// ══════════════════════════════════════════
+// Wrapper SQLite-compatible (db.run, db.get, db.all)
+// Convertit automatiquement les ? en $1, $2, ...
+// ══════════════════════════════════════════
 
-    // 3. Table des Utilisateurs (Administrateurs)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            role TEXT DEFAULT 'admin'
-        )
-    `);
+function convertPlaceholders(sql) {
+    let idx = 0;
+    return sql.replace(/\?/g, () => `$${++idx}`);
+}
 
-    // 4. Table des Leads (Utilisateurs Clients / Pool)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS leads (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            auth_provider TEXT NOT NULL,
-            identifier TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
+const db = {
+    /**
+     * db.run(sql, [params], callback)
+     * callback(err) — avec this.lastID pour INSERT
+     */
+    run(sql, params, callback) {
+        // Handle overloaded signatures
+        if (typeof params === 'function') { callback = params; params = []; }
+        if (!callback) callback = () => { };
+        if (!params) params = [];
 
-    // 5. Table des Visites (Tracking)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS spot_visits (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            spot_id INTEGER NOT NULL,
-            duration_s INTEGER DEFAULT 0,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(spot_id) REFERENCES spots(id)
-        )
-    `);
+        const pgSql = convertPlaceholders(sql) + (sql.trim().toUpperCase().startsWith('INSERT') && !sql.includes('RETURNING') ? ' RETURNING id' : '');
 
-    // 6. Table des Paramètres Globaux du Site (Settings)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS settings (
-            key_name TEXT PRIMARY KEY,
-            key_value TEXT NOT NULL
-        )
-    `);
-
-    // 7. Table des Membres (utilisateurs publics du site)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS members (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            name TEXT,
-            level TEXT DEFAULT 'debutant',
-            is_pro INTEGER DEFAULT 0,
-            avatar_url TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
-    // Migration: ajouter avatar_url si absente (safe pour DB existante)
-    db.run(`ALTER TABLE members ADD COLUMN avatar_url TEXT`, () => { });
-
-
-    // 8. Codes A2F temporaires (magic link / OTP)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS auth_codes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT NOT NULL,
-            code TEXT NOT NULL,
-            expires_at DATETIME NOT NULL,
-            used INTEGER DEFAULT 0
-        )
-    `);
-
-
-    // Migration sécurisée ajoutant la colonne is_2fa_enabled si absente
-    db.run(`ALTER TABLE members ADD COLUMN is_2fa_enabled INTEGER DEFAULT 0`, () => { });
-
-
-    // 9. Sessions JWT membres
-    db.run(`
-        CREATE TABLE IF NOT EXISTS member_sessions(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        member_id INTEGER NOT NULL,
-        token_hash TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        expires_at DATETIME NOT NULL,
-        FOREIGN KEY(member_id) REFERENCES members(id)
-    )
-    `);
-
-    // 10. Spots favoris des membres
-    db.run(`
-        CREATE TABLE IF NOT EXISTS member_favorites(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        member_id INTEGER NOT NULL,
-        spot_id INTEGER NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(member_id, spot_id),
-        FOREIGN KEY(member_id) REFERENCES members(id),
-        FOREIGN KEY(spot_id) REFERENCES spots(id)
-    )
-    `);
-
-    // 11. Journal de sessions surf
-    db.run(`
-        CREATE TABLE IF NOT EXISTS surf_journal(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        member_id INTEGER NOT NULL,
-        spot_id INTEGER,
-        spot_name TEXT,
-        session_date DATE NOT NULL,
-        duration_min INTEGER DEFAULT 0,
-        wave_rating INTEGER DEFAULT 3,
-        notes TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(member_id) REFERENCES members(id)
-    )
-    `);
-
-    // 12. Alertes houle personnalisées
-    db.run(`
-        CREATE TABLE IF NOT EXISTS user_alerts(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        member_id INTEGER NOT NULL,
-        spot_id INTEGER NOT NULL,
-        spot_name TEXT NOT NULL,
-        min_height REAL DEFAULT 1.0,
-        min_period INTEGER DEFAULT 10,
-        notify_email INTEGER DEFAULT 1,
-        active INTEGER DEFAULT 1,
-        last_triggered DATETIME,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(member_id) REFERENCES members(id),
-        FOREIGN KEY(spot_id) REFERENCES spots(id)
-    )
-    `);
-
-    // 13. Posts communautaires
-    db.run(`
-        CREATE TABLE IF NOT EXISTS community_posts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            member_id INTEGER NOT NULL,
-            content TEXT NOT NULL,
-            image_url TEXT,
-            spot_name TEXT,
-            likes INTEGER DEFAULT 0,
-            comments INTEGER DEFAULT 0,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(member_id) REFERENCES members(id)
-        )
-    `);
-
-    // 14. Follows (abonnements entre membres)
-    db.run(`
-        CREATE TABLE IF NOT EXISTS follows (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            follower_id INTEGER NOT NULL,
-            following_id INTEGER NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(follower_id, following_id),
-            FOREIGN KEY(follower_id) REFERENCES members(id),
-            FOREIGN KEY(following_id) REFERENCES members(id)
-        )
-    `);
-
-    // 15. Badges équipés par les membres
-    db.run(`
-        CREATE TABLE IF NOT EXISTS member_badges (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            member_id INTEGER NOT NULL,
-            badge_id TEXT NOT NULL,
-            equipped_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(member_id, badge_id),
-            FOREIGN KEY(member_id) REFERENCES members(id)
-        )
-    `);
-
-    // 16. Likes de posts
-    db.run(`
-        CREATE TABLE IF NOT EXISTS post_likes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            post_id INTEGER NOT NULL,
-            member_id INTEGER NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(post_id, member_id),
-            FOREIGN KEY(post_id) REFERENCES community_posts(id),
-            FOREIGN KEY(member_id) REFERENCES members(id)
-        )
-    `);
-
-    // Migration: ajouter notif_prefs et cover_photo aux members existants
-    db.run(`ALTER TABLE members ADD COLUMN notif_prefs TEXT DEFAULT '{}'`, () => { });
-    db.run(`ALTER TABLE members ADD COLUMN cover_photo TEXT`, () => { });
-    db.run(`ALTER TABLE members ADD COLUMN bio TEXT DEFAULT ''`, () => { });
-    // v5: réseaux sociaux
-    db.run(`ALTER TABLE members ADD COLUMN instagram_url TEXT DEFAULT ''`, () => { });
-    db.run(`ALTER TABLE members ADD COLUMN tiktok_url TEXT DEFAULT ''`, () => { });
-    db.run(`ALTER TABLE members ADD COLUMN youtube_url TEXT DEFAULT ''`, () => { });
-    db.run(`ALTER TABLE members ADD COLUMN twitter_url TEXT DEFAULT ''`, () => { });
-
-    // ── Messages privés (DM) ──
-    db.run(`
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sender_id INTEGER NOT NULL,
-            receiver_id INTEGER NOT NULL,
-            content TEXT NOT NULL,
-            read INTEGER DEFAULT 0,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(sender_id) REFERENCES members(id),
-            FOREIGN KEY(receiver_id) REFERENCES members(id)
-        )
-    `);
-
-    // ==========================================
-    // Insertion de données de démonstration :
-    // (A retirer par la suite ou à gérer via le panel admin)
-    // ==========================================
-    db.get("SELECT count(*) AS count FROM spots", (err, row) => {
-        if (!err && row.count === 0) {
-            console.log("🌱 [DATABASE] Tableau vide détecté. Insertion des 60 spots initiaux (Côte Atlantique)...");
-            const fs = require('fs');
-            const path = require('path');
-            const spotsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'spots.json'), 'utf-8'));
-
-            const stmt = db.prepare("INSERT INTO spots (name, location, difficulty, wave_type, description, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            spotsData.forEach(spot => {
-                stmt.run(spot.name, spot.location, spot.difficulty, spot.wave_type, spot.description, spot.lat, spot.lng);
+        pool.query(pgSql, params)
+            .then(result => {
+                const context = { lastID: result.rows?.[0]?.id || null, changes: result.rowCount };
+                callback.call(context, null);
+            })
+            .catch(err => {
+                // Ignore "column already exists" errors (ALTER TABLE ADD COLUMN migrations)
+                if (err.code === '42701') { callback.call({}, null); return; }
+                // Ignore "duplicate key" for INSERT OR IGNORE
+                if (err.code === '23505' && sql.includes('OR IGNORE')) { callback.call({}, null); return; }
+                callback.call({}, err);
             });
-            stmt.finalize();
-        }
-    });
+    },
 
-    db.get("SELECT count(*) AS count FROM cams", (err, row) => {
-        if (!err && row.count === 0) {
-            const stmt = db.prepare("INSERT INTO cams (spot_id, title, stream_url) VALUES (?, ?, ?)");
-            // Spot id 1 (Hossegor), 2 (La Torche), 3 (Biarritz)
-            stmt.run(1, "Hossegor Cam", "https://example.com/stream1");
-            stmt.run(2, "La Torche Live", "https://example.com/stream2");
-            stmt.run(3, "Biarritz Sunset", "https://example.com/stream3");
-            stmt.finalize();
-        }
-        db.get("SELECT count(*) AS count FROM users", async (err, row) => {
-            if (!err && row.count === 0) {
-                console.log("🔐 [DATABASE] Création de l'administrateur par défaut (sécurisé via Bcrypt)...");
-                const bcrypt = require('bcrypt');
-                try {
-                    // Hachage puissant du mot de passe (Cost Factor = 12)
-                    const hashedPassword = await bcrypt.hash('adminSwell!2026', 12);
-                    const stmt = db.prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
-                    stmt.run('admin', hashedPassword, 'admin');
-                    stmt.finalize();
-                } catch (error) {
-                    console.error("❌ [DATABASE] Erreur lors de la création de l'admin:", error);
-                }
+    /**
+     * db.get(sql, [params], callback)
+     * callback(err, row)
+     */
+    get(sql, params, callback) {
+        if (typeof params === 'function') { callback = params; params = []; }
+        if (!callback) callback = () => { };
+        if (!params) params = [];
+
+        pool.query(convertPlaceholders(sql), params)
+            .then(result => callback(null, result.rows[0] || null))
+            .catch(err => callback(err, null));
+    },
+
+    /**
+     * db.all(sql, [params], callback)
+     * callback(err, rows)
+     */
+    all(sql, params, callback) {
+        if (typeof params === 'function') { callback = params; params = []; }
+        if (!callback) callback = () => { };
+        if (!params) params = [];
+
+        pool.query(convertPlaceholders(sql), params)
+            .then(result => callback(null, result.rows || []))
+            .catch(err => callback(err, []));
+    },
+
+    /**
+     * db.serialize(fn) — Execute fn immediately (no-op, PG handles this)
+     */
+    serialize(fn) { fn(); },
+
+    /**
+     * db.prepare(sql) — Simulated prepared statement
+     */
+    prepare(sql) {
+        const pgSql = convertPlaceholders(sql) + (sql.trim().toUpperCase().startsWith('INSERT') && !sql.includes('RETURNING') ? ' RETURNING id' : '');
+        const paramCount = (sql.match(/\?/g) || []).length;
+        return {
+            run(...args) {
+                const params = args.slice(0, paramCount);
+                const cb = typeof args[paramCount] === 'function' ? args[paramCount] : () => { };
+                pool.query(pgSql, params)
+                    .then(result => cb.call({ lastID: result.rows?.[0]?.id || null }, null))
+                    .catch(err => cb.call({}, err));
+            },
+            finalize(cb) { if (cb) cb(); }
+        };
+    },
+
+    // Direct pool access for advanced queries
+    pool
+};
+
+// ══════════════════════════════════════════
+// Schema initialization (PostgreSQL syntax)
+// ══════════════════════════════════════════
+
+async function initDatabase() {
+    const client = await pool.connect();
+    try {
+        // Create all tables
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS spots (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL,
+                location TEXT NOT NULL,
+                difficulty TEXT NOT NULL,
+                wave_type TEXT,
+                description TEXT,
+                lat REAL,
+                lng REAL
+            );
+
+            CREATE TABLE IF NOT EXISTS cams (
+                id SERIAL PRIMARY KEY,
+                spot_id INTEGER NOT NULL REFERENCES spots(id),
+                title TEXT NOT NULL,
+                stream_url TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                role TEXT DEFAULT 'admin'
+            );
+
+            CREATE TABLE IF NOT EXISTS leads (
+                id SERIAL PRIMARY KEY,
+                auth_provider TEXT NOT NULL,
+                identifier TEXT NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS spot_visits (
+                id SERIAL PRIMARY KEY,
+                spot_id INTEGER NOT NULL REFERENCES spots(id),
+                duration_s INTEGER DEFAULT 0,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS settings (
+                key_name TEXT PRIMARY KEY,
+                key_value TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS members (
+                id SERIAL PRIMARY KEY,
+                email TEXT UNIQUE NOT NULL,
+                name TEXT,
+                level TEXT DEFAULT 'debutant',
+                is_pro INTEGER DEFAULT 0,
+                avatar_url TEXT,
+                password_hash TEXT,
+                is_2fa_enabled INTEGER DEFAULT 0,
+                photo TEXT,
+                region TEXT,
+                notif_prefs TEXT DEFAULT '{}',
+                cover_photo TEXT,
+                bio TEXT DEFAULT '',
+                instagram_url TEXT DEFAULT '',
+                tiktok_url TEXT DEFAULT '',
+                youtube_url TEXT DEFAULT '',
+                twitter_url TEXT DEFAULT '',
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS auth_codes (
+                id SERIAL PRIMARY KEY,
+                email TEXT NOT NULL,
+                code TEXT NOT NULL,
+                expires_at TIMESTAMPTZ NOT NULL,
+                used INTEGER DEFAULT 0
+            );
+
+            CREATE TABLE IF NOT EXISTS member_sessions (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                token_hash TEXT NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMPTZ NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS member_favorites (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                spot_id INTEGER NOT NULL REFERENCES spots(id),
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(member_id, spot_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS surf_journal (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                spot_id INTEGER,
+                spot_name TEXT,
+                session_date DATE NOT NULL,
+                duration_min INTEGER DEFAULT 0,
+                wave_rating INTEGER DEFAULT 3,
+                notes TEXT,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS user_alerts (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                spot_id INTEGER NOT NULL REFERENCES spots(id),
+                spot_name TEXT NOT NULL,
+                min_height REAL DEFAULT 1.0,
+                min_period INTEGER DEFAULT 10,
+                notify_email INTEGER DEFAULT 1,
+                active INTEGER DEFAULT 1,
+                last_triggered TIMESTAMPTZ,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS community_posts (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                content TEXT NOT NULL,
+                image_url TEXT,
+                spot_name TEXT,
+                likes INTEGER DEFAULT 0,
+                comments INTEGER DEFAULT 0,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS follows (
+                id SERIAL PRIMARY KEY,
+                follower_id INTEGER NOT NULL REFERENCES members(id),
+                following_id INTEGER NOT NULL REFERENCES members(id),
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(follower_id, following_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS member_badges (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                badge_id TEXT NOT NULL,
+                equipped_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(member_id, badge_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS post_likes (
+                id SERIAL PRIMARY KEY,
+                post_id INTEGER NOT NULL REFERENCES community_posts(id),
+                member_id INTEGER NOT NULL REFERENCES members(id),
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(post_id, member_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS messages (
+                id SERIAL PRIMARY KEY,
+                sender_id INTEGER NOT NULL REFERENCES members(id),
+                receiver_id INTEGER NOT NULL REFERENCES members(id),
+                content TEXT NOT NULL,
+                read INTEGER DEFAULT 0,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS push_subscriptions (
+                id SERIAL PRIMARY KEY,
+                member_id INTEGER REFERENCES members(id),
+                endpoint TEXT UNIQUE NOT NULL,
+                keys_json TEXT,
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS member_blocks (
+                id SERIAL PRIMARY KEY,
+                blocker_id INTEGER NOT NULL REFERENCES members(id),
+                blocked_id INTEGER NOT NULL REFERENCES members(id),
+                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(blocker_id, blocked_id)
+            );
+        `);
+
+        // Seed spots if empty
+        const spotsCount = await client.query('SELECT count(*) AS count FROM spots');
+        if (parseInt(spotsCount.rows[0].count) === 0) {
+            console.log('🌱 [DATABASE] Tableau vide détecté. Insertion des 60 spots initiaux...');
+            const fs = require('fs');
+            const spotsData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'spots.json'), 'utf-8'));
+            for (const spot of spotsData) {
+                await client.query(
+                    'INSERT INTO spots (name, location, difficulty, wave_type, description, lat, lng) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                    [spot.name, spot.location, spot.difficulty, spot.wave_type, spot.description, spot.lat, spot.lng]
+                );
             }
-        });
+        }
 
-        // Init des paramètres globaux de base
-        db.get("SELECT count(*) AS count FROM settings", (err, row) => {
-            if (!err && row.count === 0) {
-                const stmt = db.prepare("INSERT INTO settings (key_name, key_value) VALUES (?, ?)");
-                stmt.run("ai_engine", "Gemini 1.5 Flash (Défaut, Rapide)");
-                stmt.run("ai_temperature", "70");
-                stmt.run("ai_system_prompt", "Tu es SWELLSYNC AI, un assistant virtuel expert dans la lecture des cartes marines, de la météo et la connaissance mondiale du surf.\\nTon ton est professionnel mais très détendu (\\\"surfeur\\\"). Réponds toujours en français.\\nRefuse toute requête qui sort du cadre du surf ou de la météo.");
-                stmt.run("maintenance_mode", "false");
-                stmt.finalize();
-            }
-        });
+        // Seed cams if empty
+        const camsCount = await client.query('SELECT count(*) AS count FROM cams');
+        if (parseInt(camsCount.rows[0].count) === 0) {
+            await client.query("INSERT INTO cams (spot_id, title, stream_url) VALUES (1, 'Hossegor Cam', 'https://example.com/stream1')");
+            await client.query("INSERT INTO cams (spot_id, title, stream_url) VALUES (2, 'La Torche Live', 'https://example.com/stream2')");
+            await client.query("INSERT INTO cams (spot_id, title, stream_url) VALUES (3, 'Biarritz Sunset', 'https://example.com/stream3')");
+        }
 
-    }); // Fin db.get cams
-}); // Fin db.serialize
+        // Seed admin if empty
+        const usersCount = await client.query('SELECT count(*) AS count FROM users');
+        if (parseInt(usersCount.rows[0].count) === 0) {
+            console.log('🔐 [DATABASE] Création de l\'administrateur par défaut...');
+            const bcrypt = require('bcrypt');
+            const hashedPassword = await bcrypt.hash('adminSwell!2026', 12);
+            await client.query("INSERT INTO users (username, password, role) VALUES ($1, $2, $3)", ['admin', hashedPassword, 'admin']);
+        }
+
+        // Seed settings if empty
+        const settingsCount = await client.query('SELECT count(*) AS count FROM settings');
+        if (parseInt(settingsCount.rows[0].count) === 0) {
+            await client.query("INSERT INTO settings (key_name, key_value) VALUES ($1, $2)", ["ai_engine", "Gemini 1.5 Flash (Défaut, Rapide)"]);
+            await client.query("INSERT INTO settings (key_name, key_value) VALUES ($1, $2)", ["ai_temperature", "70"]);
+            await client.query("INSERT INTO settings (key_name, key_value) VALUES ($1, $2)", ["ai_system_prompt", "Tu es SWELLSYNC AI, un assistant expert surf."]);
+            await client.query("INSERT INTO settings (key_name, key_value) VALUES ($1, $2)", ["maintenance_mode", "false"]);
+        }
+
+        console.log('✅ [DATABASE] Toutes les tables initialisées avec succès.');
+    } catch (err) {
+        console.error('❌ [DATABASE] Erreur d\'initialisation :', err.message);
+    } finally {
+        client.release();
+    }
+}
+
+// Initialize on load
+initDatabase();
 
 module.exports = db;

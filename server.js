@@ -34,10 +34,10 @@ try {
 
 // Table de subscriptions push (créée au démarrage si absente)
 db.run(`CREATE TABLE IF NOT EXISTS push_subscriptions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     member_id INTEGER,
     subscription TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 )`);
 
 
@@ -491,10 +491,10 @@ app.get('/api/members/blocked', requireAuth, (req, res) => {
             if (err) {
                 // Table might not exist yet — create it
                 db.run(`CREATE TABLE IF NOT EXISTS member_blocks (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id SERIAL PRIMARY KEY,
                     blocker_id INTEGER NOT NULL,
                     blocked_id INTEGER NOT NULL,
-                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
                     UNIQUE(blocker_id, blocked_id)
                 )`, () => res.json([]));
                 return;
@@ -508,10 +508,10 @@ app.post('/api/members/blocked', requireAuth, (req, res) => {
     const { blocked_id } = req.body;
     if (!blocked_id) return res.status(400).json({ error: 'blocked_id requis' });
     db.run(`CREATE TABLE IF NOT EXISTS member_blocks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, blocker_id INTEGER NOT NULL, blocked_id INTEGER NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(blocker_id, blocked_id)
+        id SERIAL PRIMARY KEY, blocker_id INTEGER NOT NULL, blocked_id INTEGER NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, UNIQUE(blocker_id, blocked_id)
     )`, () => {
-        db.run('INSERT OR IGNORE INTO member_blocks (blocker_id, blocked_id) VALUES (?, ?)',
+        db.run('INSERT INTO member_blocks (blocker_id, blocked_id) VALUES (?, ?) ON CONFLICT DO NOTHING',
             [req.member.id, blocked_id], (err) => {
                 if (err) return res.status(500).json({ error: err.message });
                 res.json({ success: true });
@@ -679,7 +679,7 @@ app.post('/api/members/favorites', requireAuth, (req, res) => {
     const { spot_id } = req.body;
     if (!spot_id) return res.status(400).json({ error: 'spot_id requis' });
     db.run(
-        'INSERT OR IGNORE INTO member_favorites (member_id, spot_id) VALUES (?, ?)',
+        'INSERT INTO member_favorites (member_id, spot_id) VALUES (?, ?) ON CONFLICT DO NOTHING',
         [req.member.id, spot_id],
         (err) => {
             if (err) return res.status(500).json({ error: err.message });
@@ -805,7 +805,7 @@ app.post('/api/members/push-subscribe', requireAuth, (req, res) => {
     const subStr = JSON.stringify(subscription);
     // Evite les doublons pour ce membre
     db.run(
-        'INSERT OR IGNORE INTO push_subscriptions (member_id, subscription) VALUES (?, ?)',
+        'INSERT INTO push_subscriptions (member_id, endpoint, keys_json) VALUES (?, ?, ?) ON CONFLICT DO NOTHING',
         [req.member.id, subStr],
         (err) => {
             if (err) return res.status(500).json({ error: err.message });
@@ -1906,7 +1906,7 @@ app.get('/api/health', (req, res) => {
 
 // I1 : Pool de leads (numéros téléphone collectés via formulaires)
 db.run(`CREATE TABLE IF NOT EXISTS leads (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name TEXT, email TEXT, phone TEXT,
     source TEXT DEFAULT 'contact',
     notes TEXT,
@@ -1946,7 +1946,7 @@ app.get('/api/admin/mails', (req, res) => {
 app.post('/api/admin/mails/:id/reply', (req, res) => {
     // Marquer comme traité (colonne handled)
     db.run('CREATE TABLE IF NOT EXISTS contact_leads_status (id INTEGER, handled INTEGER DEFAULT 0, reply TEXT)', [], () => {
-        db.run('INSERT OR REPLACE INTO contact_leads_status (id, handled, reply) VALUES (?,1,?)',
+        db.run('INSERT INTO contact_leads_status (id, handled, reply) VALUES (?,1,?) ON CONFLICT (id) DO UPDATE SET handled=1, reply=EXCLUDED.reply',
             [req.params.id, req.body.reply || ''], err => {
                 res.json({ ok: !err });
             }
@@ -2049,7 +2049,7 @@ app.post('/api/community/posts/:id/like', requireAuth, (req, res) => {
 app.post('/api/members/follow/:id', requireAuth, (req, res) => {
     const targetId = parseInt(req.params.id);
     if (targetId === req.member.id) return res.status(400).json({ error: 'Tu ne peux pas te suivre toi-même' });
-    db.run('INSERT OR IGNORE INTO follows (follower_id, following_id) VALUES (?, ?)',
+    db.run('INSERT INTO follows (follower_id, following_id) VALUES (?, ?) ON CONFLICT DO NOTHING',
         [req.member.id, targetId], function (err) {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ ok: true, following: true });
@@ -2083,7 +2083,7 @@ app.get('/api/members/:id/followers', (req, res) => {
 app.post('/api/members/badges/equip', requireAuth, (req, res) => {
     const { badge_id } = req.body;
     if (!badge_id) return res.status(400).json({ error: 'badge_id requis' });
-    db.run('INSERT OR REPLACE INTO member_badges (member_id, badge_id) VALUES (?, ?)',
+    db.run('INSERT INTO member_badges (member_id, badge_id) VALUES (?, ?) ON CONFLICT (member_id, badge_id) DO NOTHING',
         [req.member.id, badge_id], (err) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ ok: true, badge_id });
@@ -2333,7 +2333,7 @@ app.post('/api/contact', async (req, res) => {
         return res.status(400).json({ error: 'Champs manquants.' });
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
         return res.status(400).json({ error: 'Email invalide.' });
-    db.run('CREATE TABLE IF NOT EXISTS contact_leads (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, subject TEXT, message TEXT, created_at DATETIME DEFAULT (datetime(\'now\')))', [], () => {
+    db.run('CREATE TABLE IF NOT EXISTS contact_leads (id SERIAL PRIMARY KEY, name TEXT, email TEXT, phone TEXT, subject TEXT, message TEXT, created_at DATETIME DEFAULT (datetime(\'now\')))', [], () => {
         db.run('INSERT INTO contact_leads (name,email,phone,subject,message) VALUES (?,?,?,?,?)', [name, email, phone || '', subject, message]);
     });
     res.json({ ok: true });
@@ -2341,7 +2341,7 @@ app.post('/api/contact', async (req, res) => {
 
 // ── P3 : Push Notifications ───────────────────────────────────────────────
 db.run(`CREATE TABLE IF NOT EXISTS push_subscriptions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER,
     endpoint TEXT UNIQUE,
     p256dh TEXT,
