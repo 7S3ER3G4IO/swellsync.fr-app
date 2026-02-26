@@ -7,8 +7,8 @@
 (function () {
     'use strict';
 
-    const PUSH_KEY = 'swellsync_push_state';    // 'asked' | 'granted' | 'denied'
-    const DELAY_MS = 8000;                        // 8s avant de demander
+    const PUSH_KEY = 'swellsync_push_state';    // 'granted' | 'denied'
+    const DELAY_MS = 1500;                        // 1.5s — demande immédiate première visite
 
     function urlBase64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -172,14 +172,12 @@
     if (state === 'granted') {
         // Re-souscrire silencieusement pour s'assurer que la sub est à jour
         resubscribeIfGranted();
-    } else if (!state || state === '') {
-        // Première visite : demander après un délai
+    } else if (state === 'denied') {
+        // Ne rien faire — l'utilisateur a refusé
+    } else {
+        // Première visite : demander directement après chargement
         setTimeout(() => {
-            if (document.readyState === 'complete') {
-                showPushBanner();
-            } else {
-                window.addEventListener('load', showPushBanner, { once: true });
-            }
+            requestSystemPermission();
         }, DELAY_MS);
     }
 })();

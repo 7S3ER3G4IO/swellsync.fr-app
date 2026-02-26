@@ -5,7 +5,8 @@
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0" name="viewport" />
     <title>SwellSync - Découvrir les Spots</title>
-    <meta name="description" content="SwellSync Spots — Trouvez les meilleurs spots de surf sur la côte Atlantique avec conditions en temps réel.">
+    <meta name="description"
+        content="SwellSync Spots — Trouvez les meilleurs spots de surf sur la côte Atlantique avec conditions en temps réel.">
     <script src="js/theme.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
@@ -151,18 +152,67 @@
     </style>
 
     <style>
-      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
-      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
-      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
-      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
-      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
-      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
-      .light [class*="text-white"] { color: #0f172a !important; }
-      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
-      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
-      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
-      .light .section-label { color: #334155 !important; }
-      .light .setting-row:hover { background: #e2e8f0 !important; }
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
     </style>
 
     <link rel="manifest" href="/manifest.json">
@@ -243,12 +293,12 @@
     <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
         style="background: var(--nav-bg, rgba(8,15,26,0.95))">
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
-                class="material-symbols-outlined" >home</span><span
-                class="text-[10px]">Home</span>
-            
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+
         </a>
         <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="map.html"><span
-                class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">travel_explore</span><span class="text-[10px] font-bold">Spots</span>
+                class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">travel_explore</span><span
+                class="text-[10px] font-bold">Spots</span>
             <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
@@ -265,28 +315,44 @@
 
     <script src="js/api.js"></script>
     <script>
-        // Image dédiée par spot (lookup par nom/id, fallback si non trouvé)
-        const SPOT_IMGS = {
-            // Hossegor
-            hossegor: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80',
-            // La Torche
-            torche: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
-            // Biarritz & fallback
-            biarritz: 'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80',
-        };
+        // 12 images uniques pour les spots
+        const SPOT_IMAGES = [
+            'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80', // barrel wave
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80', // tropical beach
+            'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=600&q=80', // sunset surf
+            'https://images.unsplash.com/photo-1455729552457-5c322b29c789?w=600&q=80', // ocean wave
+            'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&q=80', // beach aerial
+            'https://images.unsplash.com/photo-1484291470158-b8f8d608850d?w=600&q=80', // big wave
+            'https://images.unsplash.com/photo-1509914398892-963f53e6e2f1?w=600&q=80', // surfer silhouette
+            'https://images.unsplash.com/photo-1416163785019-75f3889c56b0?w=600&q=80', // rocky coast
+            'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=80', // turquoise sea
+            'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600&q=80', // surfboard beach
+            'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80', // dawn surf
+            'https://images.unsplash.com/photo-1437719417032-8b217f069f31?w=600&q=80'  // wave closeup
+        ];
 
-        // Retourne l'image appropriée selon le nom/id du spot
         function getSpotImg(spot) {
-            if (!spot) return SPOT_IMGS.biarritz;
-            const key = (spot.id || spot.name || '').toString().toLowerCase();
-            const name = (spot.name || '').toLowerCase();
-            if (key.includes('hossegor') || name.includes('hossegor') || name.includes('graviere') || name.includes('landes')) return SPOT_IMGS.hossegor;
-            if (key.includes('torche') || name.includes('torche') || name.includes('bretagne') || name.includes('palue') || name.includes('quiberon') || name.includes('belle')) return SPOT_IMGS.torche;
-            // Fallback: utiliser le modulo pour toujours avoir une image
-            const imgs = [SPOT_IMGS.hossegor, SPOT_IMGS.torche, SPOT_IMGS.biarritz];
-            const idx = Math.abs((spot.id || 0) * 37 + 7) % 3;
-            return imgs[idx];
+            if (!spot) return SPOT_IMAGES[0];
+            // Hash-based distribution pour images uniques par spot
+            const hash = ((spot.id || 0) * 2654435761) >>> 0;
+            return SPOT_IMAGES[hash % SPOT_IMAGES.length];
         }
+
+        // Régions pour regroupement
+        function getRegion(spot) {
+            const loc = (spot.location || '').toLowerCase();
+            const name = (spot.name || '').toLowerCase();
+            if (loc.includes('landes') || name.includes('hossegor') || name.includes('seignosse') || name.includes('capbreton') || name.includes('graviere') || name.includes('moliets')) return 'Landes';
+            if (loc.includes('basque') || loc.includes('biarritz') || name.includes('biarritz') || name.includes('guethary') || name.includes('anglet') || name.includes('hendaye') || name.includes('saint-jean')) return 'Pays Basque';
+            if (loc.includes('bretagne') || name.includes('torche') || name.includes('palue') || name.includes('quiberon') || name.includes('crozon') || name.includes('presqu')) return 'Bretagne';
+            if (loc.includes('gironde') || name.includes('lacanau') || name.includes('arcachon') || name.includes('le porge') || name.includes('hourtin')) return 'Gironde';
+            if (loc.includes('charente') || name.includes('royan') || name.includes('oléron') || name.includes('ré')) return 'Charente-Maritime';
+            if (loc.includes('vendée') || name.includes('sables') || name.includes('brétignolles') || name.includes('jaunay')) return 'Vendée';
+            return 'Autres';
+        }
+
+        const REGION_EMOJIS = { 'Landes': '🌲', 'Pays Basque': '🏔️', 'Bretagne': '⚓', 'Gironde': '🍷', 'Charente-Maritime': '🦪', 'Vendée': '⛵', 'Autres': '🏖️' };
+        const REGION_ORDER = ['Pays Basque', 'Landes', 'Gironde', 'Charente-Maritime', 'Vendée', 'Bretagne', 'Autres'];
 
         const MAX_FAVS_FREE = 3;
         let allSpots = [], favIds = [], currentFilter = 'all', query = '', isPro = false;
@@ -338,9 +404,7 @@
             }
             const btn = e.currentTarget;
             const icon = btn.querySelector('.material-symbols-outlined');
-
             if (!isFav) {
-                // Add animation: scale bounce + float hearts
                 btn.style.background = 'rgba(239,68,68,.3)';
                 if (icon) {
                     icon.style.color = '#f87171';
@@ -351,33 +415,13 @@
                     setTimeout(() => { icon.style.transform = 'scale(1.25)'; }, 250);
                     setTimeout(() => { icon.style.transform = 'scale(1)'; }, 360);
                 }
-                // Float-up heart particles
-                const rect = btn.getBoundingClientRect();
-                for (let i = 0; i < 5; i++) {
-                    const h = document.createElement('div');
-                    h.textContent = '\u2764\ufe0f';
-                    const x = rect.left + rect.width * 0.5 + (Math.random() - 0.5) * 36;
-                    const y = rect.top + (Math.random() * 4);
-                    h.style.cssText = `position:fixed;font-size:${10 + Math.random() * 10}px;pointer-events:none;z-index:9999;left:${x}px;top:${y}px;transition:all ${0.6 + Math.random() * 0.4}s ease;opacity:1;transform:scale(1);`;
-                    document.body.appendChild(h);
-                    requestAnimationFrame(() => {
-                        h.style.transform = `translateY(-${45 + Math.random() * 35}px) scale(0.4) rotate(${(Math.random() - 0.5) * 30}deg)`;
-                        h.style.opacity = '0';
-                    });
-                    setTimeout(() => h.remove(), 1100);
-                }
             } else {
-                // Remove animation: dim
                 btn.style.background = 'rgba(0,0,0,.45)';
                 if (icon) {
                     icon.style.color = 'rgba(255,255,255,.6)';
                     icon.style.fontVariationSettings = "'FILL' 0";
-                    icon.style.transition = 'transform .15s';
-                    icon.style.transform = 'scale(0.8)';
-                    setTimeout(() => { icon.style.transform = 'scale(1)'; }, 200);
                 }
             }
-
             try {
                 if (isFav) {
                     await API.favorites.remove(spotId);
@@ -412,13 +456,20 @@
                 return;
             }
 
+            // Regrouper par région
+            const groups = {};
+            filtered.forEach(s => {
+                const r = getRegion(s);
+                if (!groups[r]) groups[r] = [];
+                groups[r].push(s);
+            });
+
             let html = '';
 
             // Card Hero (premier spot)
             const hero = filtered[0];
             const heroH = (1.2 + Math.abs(Math.sin(hero.id * 7)) * 2).toFixed(1);
             const herbCond = COND[hero.id % COND.length];
-            const isFavHero = favIds.includes(hero.id);
             html += `<a href="spot_detail.html?id=${hero.id}" class="card rounded-3xl overflow-hidden block active:scale-[.99] transition-transform relative">
               <div class="relative w-full" style="height:180px">
                 <img src="${getSpotImg(hero)}" class="w-full h-full object-cover"/>
@@ -434,22 +485,27 @@
                 <span class="text-xs font-bold px-2 py-1 rounded-full ${diffColor(hero.difficulty)}">${diffLabel(hero.difficulty)}</span>
                 <span class="text-white/40 text-xs">·</span>
                 <span class="text-[#00bad6] text-xs font-bold">${heroH}m</span>
-                <span class="ml-auto text-[10px] text-slate-500">${isFavHero ? '❤️ En favoris' : 'Appuyer ❤️ pour sauvegarder'}</span>
               </div>
             </a>`;
 
-            // Reste en grille 2 colonnes
-            const rest = filtered.slice(1);
-            if (rest.length) {
-                html += `<div class="grid grid-cols-2 gap-2.5">`;
-                rest.forEach(s => {
-                    const isFav = favIds.includes(s.id);
+            // Rendu par région
+            const restSpots = filtered.slice(1);
+            REGION_ORDER.forEach(region => {
+                const spotsInRegion = restSpots.filter(s => getRegion(s) === region);
+                if (!spotsInRegion.length) return;
+                html += `<div class="mt-4">
+                    <div class="flex items-center gap-2 mb-2 px-1">
+                        <span class="text-sm">${REGION_EMOJIS[region] || '🏖️'}</span>
+                        <h3 class="font-black text-sm">${region}</h3>
+                        <span class="text-[10px] text-slate-500 ml-1">${spotsInRegion.length} spots</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">`;
+                spotsInRegion.forEach(s => {
                     const h = (1.2 + Math.abs(Math.sin(s.id * 7)) * 2).toFixed(1);
-                    const cond = COND[s.id % COND.length];
                     html += `
                     <a href="spot_detail.html?id=${s.id}" class="card rounded-2xl overflow-hidden active:scale-[.98] transition-transform">
                       <div class="relative w-full" style="height:100px">
-                        <img src="${getSpotImg(s)}" class="w-full h-full object-cover"/>
+                        <img src="${getSpotImg(s)}" class="w-full h-full object-cover" loading="lazy"/>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         <div class="absolute bottom-1.5 left-2 right-2">
                           <p class="text-white font-bold text-sm leading-tight truncate">${s.name}</p>
@@ -463,12 +519,12 @@
                       </div>
                     </a>`;
                 });
-                html += `</div>`;
+                html += `</div></div>`;
+            });
 
-                // Mention limite favoris (si non pro)
-                if (!isPro) {
-                    html += `<p class="text-center text-[10px] text-slate-600 mt-1">❤️ ${favIds.length}/${MAX_FAVS_FREE} favoris utilisés${favIds.length >= MAX_FAVS_FREE ? ' — <a href="abonnement.html" class="text-amber-400 font-bold">Pro pour illimités →</a>' : ''}</p>`;
-                }
+            // Mention limite favoris
+            if (!isPro) {
+                html += `<p class="text-center text-[10px] text-slate-600 mt-2">❤️ ${favIds.length}/${MAX_FAVS_FREE} favoris utilisés${favIds.length >= MAX_FAVS_FREE ? ' — <a href="abonnement.html" class="text-amber-400 font-bold">Pro pour illimités →</a>' : ''}</p>`;
             }
 
             el.innerHTML = html;
@@ -487,13 +543,13 @@
         init();
     </script>
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
     </script>
-<script src="js/adsense.js"></script>
-<script src="js/share-social.js"></script>
-<script src="js/ui-components.js"></script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
     <script src="/js/push_notifs.js" defer></script>
 </body>

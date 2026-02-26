@@ -329,95 +329,84 @@
                         <span class="text-[9px] text-slate-400 uppercase tracking-wide">Eau °C</span>
                     </div>
                 </div>
-                <!-- Section Communauté -->
+                <!-- Section Communauté — REDESIGN -->
                 <section class="mt-2">
                     <div class="flex items-center gap-2 mb-3">
                         <span class="material-symbols-outlined text-[#00bad6] text-xl">groups</span>
                         <h2 class="font-bold text-base">Communauté</h2>
+                        <span id="onlineCount"
+                            class="text-[9px] bg-emerald-400/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold ml-1">●
+                            42 en ligne</span>
                         <a href="/pages/community.html"
                             class="ml-auto text-[10px] text-[#00bad6] font-semibold flex items-center gap-1">
                             Voir tout <span class="material-symbols-outlined text-sm">chevron_right</span>
                         </a>
                     </div>
-                    <!-- Feed preview -->
-                    <div class="rounded-2xl border border-[#00bad6]/15 bg-[#0f2438] overflow-hidden">
-                        <!-- Post preview rows -->
-                        <div id="communityFeed" class="divide-y divide-white/5">
-                            <!-- Post 1 — JerômeS -->
-                            <div class="flex items-start gap-3 p-3 hover:bg-[#00bad6]/5 transition-colors group cursor-pointer active:scale-95 transition-transform"
-                                onclick="window.location.href='community.html#post-1'">
-                                <div
-                                    class="w-8 h-8 rounded-full bg-[#00bad6]/20 flex items-center justify-center shrink-0 text-sm font-bold text-[#00bad6] active:scale-95 transition-transform">
-                                    J</div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold">JerômeS</span>
-                                        <span class="text-[9px] text-slate-500">2min</span>
-                                        <span
-                                            class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 rounded-full font-bold">⭐
-                                            Pro</span>
+                    <!-- Carte communauté attractive -->
+                    <a href="community.html"
+                        class="block rounded-2xl overflow-hidden border border-[#00bad6]/20 shadow-xl"
+                        style="background:linear-gradient(135deg,rgba(0,186,214,0.12),rgba(99,102,241,0.08),rgba(15,36,56,0.95));">
+                        <div class="p-4">
+                            <!-- Top bar -->
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="flex -space-x-2">
+                                    <div
+                                        class="w-7 h-7 rounded-full bg-[#00bad6]/30 border-2 border-[#0f2438] flex items-center justify-center text-[10px] font-bold text-[#00bad6]">
+                                        J</div>
+                                    <div
+                                        class="w-7 h-7 rounded-full bg-purple-500/30 border-2 border-[#0f2438] flex items-center justify-center text-[10px] font-bold text-purple-400">
+                                        M</div>
+                                    <div
+                                        class="w-7 h-7 rounded-full bg-amber-400/30 border-2 border-[#0f2438] flex items-center justify-center text-[10px] font-bold text-amber-400">
+                                        L</div>
+                                    <div
+                                        class="w-7 h-7 rounded-full bg-emerald-400/30 border-2 border-[#0f2438] flex items-center justify-center text-[10px] font-bold text-white">
+                                        +</div>
+                                </div>
+                                <span class="text-[10px] text-slate-400"><span id="memberCountHome"
+                                        class="font-bold text-white">1.2k</span> surfeurs actifs</span>
+                            </div>
+                            <!-- Trending posts -->
+                            <div class="space-y-2 mb-3">
+                                <div class="flex items-center gap-2 bg-[#080f1a]/50 rounded-xl p-2.5">
+                                    <span class="text-sm">🔥</span>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs text-white font-bold truncate">Session épique à Hossegor — 2m
+                                            offshore</p>
+                                        <p class="text-[9px] text-slate-500 mt-0.5">JerômeS · 12 ❤️ · 3 💬</p>
                                     </div>
-                                    <p class="text-xs text-slate-300 mt-0.5">Session incroyable à Hossegor ce matin 🔥
-                                        2m+ de houle, vent offshore parfait</p>
-                                    <div class="flex items-center gap-3 mt-1.5">
-                                        <button
-                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-red-400 hover:scale-110 active:scale-95"
-                                            onclick="event.stopPropagation();homeHeart(this,1)">
-                                            <span
-                                                class="material-symbols-outlined text-sm transition-all">favorite_border</span>12
-                                        </button>
-                                        <button
-                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-[#00bad6] hover:scale-110 active:scale-95"
-                                            onclick="event.stopPropagation();window.location.href='community.html#post-1'">
-                                            <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>3
-                                        </button>
-                                        <span
-                                            class="text-[10px] text-[#00bad6] ml-auto font-semibold group-hover:underline">Voir
-                                            →</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#080f1a]/50 rounded-xl p-2.5">
+                                    <span class="text-sm">📸</span>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs text-white font-bold truncate">Avis sur les combi 5/4 pour cet
+                                            hiver ?</p>
+                                        <p class="text-[9px] text-slate-500 mt-0.5">MarieLR · 5 ❤️ · 7 💬</p>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Post 2 — MarieLR -->
-                            <div class="flex items-start gap-3 p-3 hover:bg-purple-500/5 transition-colors group cursor-pointer"
-                                onclick="window.location.href='community.html#post-2'">
-                                <div
-                                    class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 text-sm font-bold text-purple-400">
-                                    M</div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold">MarieLR</span>
-                                        <span class="text-[9px] text-slate-500">18min</span>
-                                    </div>
-                                    <p class="text-xs text-slate-300 mt-0.5">Quelqu'un a des infos sur La Torche ce
-                                        week-end ? 🏄‍♀️</p>
-                                    <div class="flex items-center gap-3 mt-1.5">
-                                        <button
-                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-red-400 hover:scale-110 active:scale-95"
-                                            onclick="event.stopPropagation();homeHeart(this,2)">
-                                            <span class="material-symbols-outlined text-sm">favorite_border</span>5
-                                        </button>
-                                        <button
-                                            class="home-action-btn text-[10px] text-slate-400 flex items-center gap-1 transition-all duration-200 hover:text-[#00bad6] hover:scale-110 active:scale-95"
-                                            onclick="event.stopPropagation();window.location.href='community.html#post-2'">
-                                            <span class="material-symbols-outlined text-sm">chat_bubble_outline</span>7
-                                        </button>
-                                        <span
-                                            class="text-[10px] text-[#00bad6] ml-auto font-semibold group-hover:underline">Répondre
-                                            →</span>
-                                    </div>
-                                </div>
+                            <!-- Trending topics -->
+                            <div class="flex flex-wrap gap-1.5 mb-3">
+                                <span
+                                    class="text-[9px] px-2 py-0.5 rounded-full bg-[#00bad6]/15 text-[#00bad6] font-semibold">#hossegor</span>
+                                <span
+                                    class="text-[9px] px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-400 font-semibold">#biarritz</span>
+                                <span
+                                    class="text-[9px] px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-400 font-semibold">#latorche</span>
+                                <span
+                                    class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400 font-semibold">#conditions</span>
+                            </div>
+                            <!-- CTA -->
+                            <div
+                                class="flex items-center justify-center gap-2 p-3 rounded-xl bg-[#00bad6]/15 border border-[#00bad6]/30 active:scale-95 transition-transform">
+                                <span class="material-symbols-outlined text-[#00bad6] text-lg">chat</span>
+                                <span class="text-sm font-black text-white">Rejoindre la communauté</span>
+                                <span
+                                    class="material-symbols-outlined text-[#00bad6] text-sm ml-auto">arrow_forward</span>
                             </div>
                         </div>
-                        <!-- CTA -->
-                        <a href="community.html"
-                            class="flex items-center justify-center gap-2 p-3 border-t border-white/5 text-[#00bad6] text-xs font-semibold hover:bg-[#00bad6]/5 transition-colors active:scale-95 transition-transform">
-                            <span class="material-symbols-outlined text-sm">add_circle</span>
-                            Rejoindre la discussion
-                        </a>
-                    </div>
+                    </a>
                 </section>
-
-
 
 
                 <!-- 🏄 Widget — Mes Spots Favoris -->
@@ -520,6 +509,90 @@
                     <p class="text-[10px] text-slate-500 text-center mt-1.5">Carte météo interactive — glisse pour
                         explorer</p>
                 </section>
+
+                <!-- 🌅 Nouveau Widget — Conditions du Jour -->
+                <section class="mt-4 mb-2">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-amber-400 text-xl">wb_twilight</span>
+                        <h2 class="font-bold text-base">Conditions du Jour</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <!-- Marées -->
+                        <div class="rounded-2xl bg-[#0f2438] border border-[#00bad6]/10 p-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-[#00bad6] text-lg">water</span>
+                                <span class="text-xs font-bold">Marées</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-slate-400">↑ Pleine mer</span>
+                                    <span class="text-xs font-black text-emerald-400" id="tidePM">06:42</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-slate-400">↓ Basse mer</span>
+                                    <span class="text-xs font-black text-amber-400" id="tideBM">12:58</span>
+                                </div>
+                                <div class="h-1.5 rounded-full bg-[#080f1a] mt-1 overflow-hidden">
+                                    <div class="h-full rounded-full bg-gradient-to-r from-[#00bad6] to-emerald-400"
+                                        style="width:65%"></div>
+                                </div>
+                                <p class="text-[9px] text-slate-500 text-center">Coeff. <span
+                                        class="font-bold text-white">87</span></p>
+                            </div>
+                        </div>
+                        <!-- UV & Soleil -->
+                        <div class="rounded-2xl bg-[#0f2438] border border-[#00bad6]/10 p-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-amber-400 text-lg">wb_sunny</span>
+                                <span class="text-xs font-bold">Soleil & UV</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-slate-400">🌅 Lever</span>
+                                    <span class="text-xs font-black text-amber-400" id="sunrise">07:52</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-slate-400">🌇 Coucher</span>
+                                    <span class="text-xs font-black text-orange-400" id="sunset">19:14</span>
+                                </div>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[10px] text-slate-400">UV</span>
+                                    <div class="flex gap-0.5 flex-1">
+                                        <div class="h-2 flex-1 rounded-full bg-emerald-400"></div>
+                                        <div class="h-2 flex-1 rounded-full bg-emerald-400"></div>
+                                        <div class="h-2 flex-1 rounded-full bg-amber-400"></div>
+                                        <div class="h-2 flex-1 rounded-full bg-[#1e3a5f]"></div>
+                                        <div class="h-2 flex-1 rounded-full bg-[#1e3a5f]"></div>
+                                    </div>
+                                    <span class="text-xs font-black text-amber-400" id="uvIndex">3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Qualité de l'eau -->
+                        <div class="rounded-2xl bg-[#0f2438] border border-[#00bad6]/10 p-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-emerald-400 text-lg">water_drop</span>
+                                <span class="text-xs font-bold">Qualité Eau</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <p class="text-2xl font-black text-emerald-400">Bonne</p>
+                                <p class="text-[9px] text-slate-500 mt-1">Données Surfrider Foundation</p>
+                            </div>
+                        </div>
+                        <!-- Fréquentation -->
+                        <div class="rounded-2xl bg-[#0f2438] border border-[#00bad6]/10 p-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-purple-400 text-lg">groups</span>
+                                <span class="text-xs font-bold">Fréquentation</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <p class="text-2xl font-black text-amber-400">Moyenne</p>
+                                <p class="text-[9px] text-slate-500 mt-1">Estimée à cette heure</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </section>
 
     </main>
@@ -643,6 +716,14 @@
                 </div>
               </div>
             </a>`;
+
+            // Mettre à jour les widgets vent/houle/temp
+            const wWind = document.getElementById('wStatWind');
+            const wWave = document.getElementById('wStatWave');
+            const wTemp = document.getElementById('wStatTemp');
+            if (wWind) wWind.textContent = windSpeed !== '—' ? windSpeed : '15km/h';
+            if (wWave) wWave.textContent = waveH !== '—' ? waveH + 'm' : '1.5m';
+            if (wTemp) wTemp.textContent = waterTemp !== '—' ? waterTemp : '14°C';
         }
 
         function renderList(spots) {
