@@ -2411,7 +2411,7 @@ app.post('/api/push/send', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n=================================================`);
     console.log(`\uD83D\uDE80 [SwellSync] Serveur Démarré avec succès !`);
     console.log(`\uD83C\uDF0A [SwellSync] En écoute sur : http://localhost:${PORT}`);

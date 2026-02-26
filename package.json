@@ -153,7 +153,6 @@
     "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
     "pg": "^8.19.0",
-    "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "web-push": "^3.6.7",
