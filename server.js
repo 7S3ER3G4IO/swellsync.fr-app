@@ -2211,11 +2211,10 @@ try {
     console.log('💳 [STRIPE] Module stripe non installé — npm i stripe');
 }
 
-// POST /api/stripe/create-checkout-session
+// POST /api/stripe/create-checkout-session (abonnement Pro)
 app.post('/api/stripe/create-checkout-session', requireAuth, async (req, res) => {
     const { plan } = req.body; // 'monthly' ou 'yearly'
     if (!stripe) {
-        // Mode démo sans Stripe
         return res.json({
             demo: true,
             url: null,
@@ -2243,6 +2242,7 @@ app.post('/api/stripe/create-checkout-session', requireAuth, async (req, res) =>
             success_url: `${req.protocol}://${req.get('host')}/pages/abonnement.html?success=true`,
             cancel_url: `${req.protocol}://${req.get('host')}/pages/abonnement.html?canceled=true`,
             client_reference_id: String(req.member.id),
+            metadata: { type: 'pro_subscription', plan }
         });
         res.json({ url: session.url });
     } catch (err) {
@@ -2250,13 +2250,75 @@ app.post('/api/stripe/create-checkout-session', requireAuth, async (req, res) =>
     }
 });
 
+// POST /api/stripe/buy-badge — Achat d'un badge
+app.post('/api/stripe/buy-badge', requireAuth, async (req, res) => {
+    const { badge_id, badge_name, price } = req.body;
+    if (!badge_id || !badge_name || !price) {
+        return res.status(400).json({ error: 'badge_id, badge_name et price requis' });
+    }
+    if (!stripe) {
+        return res.json({
+            demo: true,
+            url: null,
+            message: 'Stripe non configuré — mode démo'
+        });
+    }
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [{
+                price_data: {
+                    currency: 'eur',
+                    product_data: {
+                        name: `Badge ${badge_name}`,
+                        description: `Badge SwellSync — ${badge_name}`,
+                    },
+                    unit_amount: Math.round(price * 100), // centimes
+                },
+                quantity: 1,
+            }],
+            mode: 'payment',
+            success_url: `${req.protocol}://${req.get('host')}/pages/community.html?badge_success=${badge_id}`,
+            cancel_url: `${req.protocol}://${req.get('host')}/pages/community.html?badge_canceled=true`,
+            client_reference_id: String(req.member.id),
+            metadata: { type: 'badge_purchase', badge_id, badge_name }
+        });
+        res.json({ url: session.url });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// GET /api/stripe/public-key — Retourne la clé publique Stripe
+app.get('/api/stripe/public-key', (req, res) => {
+    res.json({ publicKey: process.env.STRIPE_PUBLIC_KEY || null });
+});
+
 // POST /api/stripe/webhook — Webhook Stripe
 app.post('/api/stripe/webhook', (req, res) => {
     // En production, vérifier la signature avec stripe.webhooks.constructEvent
     const event = req.body;
     if (event.type === 'checkout.session.completed') {
-        const memberId = event.data?.object?.client_reference_id;
-        if (memberId) {
+        const session = event.data?.object;
+        const memberId = session?.client_reference_id;
+        const metadata = session?.metadata || {};
+
+        if (metadata.type === 'badge_purchase' && memberId) {
+            // Débloquer le badge pour le membre
+            db.run(`CREATE TABLE IF NOT EXISTS member_badges (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                member_id INTEGER NOT NULL,
+                badge_id TEXT NOT NULL,
+                badge_name TEXT,
+                purchased_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(member_id, badge_id)
+            )`, () => {
+                db.run('INSERT OR IGNORE INTO member_badges (member_id, badge_id, badge_name) VALUES (?, ?, ?)',
+                    [parseInt(memberId), metadata.badge_id, metadata.badge_name]);
+            });
+            console.log(`🏅 [STRIPE] Membre ${memberId} → Badge "${metadata.badge_name}" débloqué`);
+        } else if (memberId) {
+            // Abonnement Pro
             db.run('UPDATE members SET is_pro = 1 WHERE id = ?', [parseInt(memberId)]);
             console.log(`💳 [STRIPE] Membre ${memberId} → Pro activé`);
         }

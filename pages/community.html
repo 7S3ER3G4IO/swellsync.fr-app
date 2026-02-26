@@ -1041,17 +1041,48 @@
         function showBadgeShop() { document.getElementById('badgeShopModal').classList.replace('hidden', 'flex'); }
         function closeBadgeShop() { document.getElementById('badgeShopModal').classList.replace('flex', 'hidden'); }
         function buyBadge(name, price) {
-            const m = document.createElement('div');
-            m.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
-            m.innerHTML = `<div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-3xl text-[#080f1a]" style="font-variation-settings:'FILL' 1">shopping_bag</span></div>
-                <h3 class="text-xl font-black mb-2">Badge ` + name + `</h3>
-                <p class="text-2xl font-black text-[#00bad6] mb-2">` + price.toFixed(2) + `€</p>
-                <p class="text-sm text-slate-400 mb-4">Le paiement sera disponible très prochainement via Stripe.</p>
-                <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris !</button>
-            </div>`;
-            document.body.appendChild(m);
-            m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+            const btn = event.target;
+            const origText = btn.textContent;
+            btn.textContent = '⏳...';
+            btn.disabled = true;
+
+            fetch('/api/stripe/buy-badge', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    badge_id: name.toLowerCase().replace(/\s+/g, '_'),
+                    badge_name: name,
+                    price: price
+                })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.url) {
+                        // Rediriger vers Stripe Checkout
+                        window.location.href = data.url;
+                    } else if (data.demo) {
+                        // Mode démo — pas connecté ou pas de Stripe
+                        const m = document.createElement('div');
+                        m.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
+                        m.innerHTML = `<div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-3xl text-[#080f1a]" style="font-variation-settings:'FILL' 1">shopping_bag</span></div>
+                        <h3 class="text-xl font-black mb-2">Badge ${name}</h3>
+                        <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
+                        <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter ce badge via Stripe.</p>
+                        <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris !</button>
+                    </div>`;
+                        document.body.appendChild(m);
+                        m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+                    } else {
+                        showToast(data.error || 'Erreur paiement', 'error');
+                    }
+                })
+                .catch(() => showToast('Erreur réseau', 'error'))
+                .finally(() => {
+                    btn.textContent = origText;
+                    btn.disabled = false;
+                });
         }
         function unlockBadge() { showBadgeShop(); }
 
