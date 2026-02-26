@@ -2,131 +2,13 @@
   "name": "swellsync",
   "version": "1.0.0",
   "description": "SwellSync — App surf : houle, météo, spots en temps réel",
-  "main": "electron/main.js",
+  "main": "server.js",
   "author": "SwellSync",
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "electron": "electron .",
-    "electron:dev": "NODE_ENV=development electron .",
-    "build": "electron-builder --mac --win --linux",
-    "build:mac": "electron-builder --mac",
-    "build:win": "electron-builder --win",
-    "build:linux": "electron-builder --linux",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "build": {
-    "appId": "com.swellsync.app",
-    "productName": "SwellSync",
-    "copyright": "© 2025 SwellSync",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "electron/**/*",
-      "assets/**/*",
-      "css/**/*",
-      "js/**/*",
-      "locales/**/*",
-      "pages/**/*",
-      "services/**/*",
-      "utils/**/*",
-      "*.html",
-      "*.js",
-      "*.json",
-      "*.sqlite",
-      "robots.txt",
-      "manifest.json",
-      "sw.js",
-      "!landing/**/*",
-      "!node_modules/.cache/**/*",
-      "!dist/**/*",
-      "!*.log",
-      "!inject_i18n*.py",
-      "!fix_*.js",
-      "!convert_*.js",
-      "!update_*.js",
-      "!replace_*.js",
-      "!generate_*.js",
-      "!use_basic_*.js"
-    ],
-    "extraResources": [
-      {
-        "from": ".env",
-        "to": ".env",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ],
-    "mac": {
-      "category": "public.app-category.sports",
-      "icon": "assets/images/pwa_icon.png",
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
-      "darkModeSupport": true
-    },
-    "win": {
-      "icon": "assets/images/pwa_icon.png",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "requestedExecutionLevel": "asInvoker"
-    },
-    "linux": {
-      "icon": "assets/images/pwa_icon.png",
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "category": "Network"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "SwellSync"
-    },
-    "dmg": {
-      "title": "SwellSync",
-      "background": null,
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    }
   },
   "keywords": [
     "surf",
@@ -141,6 +23,8 @@
     "@capacitor/cli": "^8.1.0",
     "@capacitor/core": "^8.1.0",
     "@capacitor/ios": "^8.1.0",
+    "@simplewebauthn/server": "^10.0.1",
+    "@simplewebauthn/types": "^12.0.0",
     "axios": "^1.13.5",
     "bcrypt": "^6.0.0",
     "compression": "^1.8.1",
@@ -156,15 +40,14 @@
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
+    "otplib": "^13.3.0",
     "pg": "^8.19.0",
+    "qrcode": "^1.5.4",
     "stripe": "^20.4.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "web-push": "^3.6.7",
     "xss": "^1.0.15"
   },
-  "devDependencies": {
-    "electron": "^33.4.11",
-    "electron-builder": "^25.1.8"
-  }
+  "devDependencies": {}
 }

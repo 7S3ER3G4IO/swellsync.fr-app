@@ -900,46 +900,173 @@
         </div>
     </div>
 
-    <!-- 2FA Modal -->
+    <!-- 2FA Modal — Multi-méthode -->
     <div id="twoFASheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-amber-500/20 p-5">
+        <div
+            class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-amber-500/20 p-5 max-h-[85vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🔐 Authentification à 2 facteurs</h3>
                 <button onclick="closeSheet('twoFASheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
-            <!-- Step 1: Info + Send code -->
-            <div id="twoFA_step1">
-                <p class="text-sm text-slate-400 mb-4">Un code de vérification à 6 chiffres sera envoyé à ton adresse
-                    email pour activer ou désactiver le 2FA.</p>
-                <div id="twoFA_currentStatus" class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] mb-4">
-                    <span class="material-symbols-outlined text-amber-400">shield</span>
+
+            <!-- Statut actuel -->
+            <div id="twoFA_currentStatus" class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] mb-4">
+                <span class="material-symbols-outlined text-amber-400">shield</span>
+                <div class="flex-1">
+                    <p class="font-bold text-sm" id="twoFA_statusText">Statut : Chargement...</p>
+                    <p class="text-[10px] text-slate-500" id="twoFA_statusDesc">Vérification en cours</p>
+                </div>
+            </div>
+
+            <!-- Sélection de méthode -->
+            <div id="twoFA_methods" class="space-y-2 mb-4">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Choisir une méthode :</p>
+
+                <!-- Email -->
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-amber-500/30 transition-colors"
+                    onclick="select2FAMethod('email')" id="method_email">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center"><span
+                            class="material-symbols-outlined text-amber-400 text-xl">mail</span></div>
                     <div class="flex-1">
-                        <p class="font-bold text-sm" id="twoFA_statusText">Statut : Chargement...</p>
-                        <p class="text-[10px] text-slate-500" id="twoFA_statusDesc">Vérification en cours</p>
+                        <p class="font-bold text-sm">Email OTP</p>
+                        <p class="text-[10px] text-slate-500">Code à 6 chiffres par email</p>
+                    </div>
+                    <span class="method-badge text-[9px] font-bold px-2 py-0.5 rounded-full hidden">Actif</span>
+                </div>
+
+                <!-- TOTP -->
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-purple-500/30 transition-colors"
+                    onclick="select2FAMethod('totp')" id="method_totp">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center"><span
+                            class="material-symbols-outlined text-purple-400 text-xl">qr_code_2</span></div>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm">Google Authenticator</p>
+                        <p class="text-[10px] text-slate-500">Code TOTP via appli (le plus sécurisé)</p>
+                    </div>
+                    <span class="method-badge text-[9px] font-bold px-2 py-0.5 rounded-full hidden">Actif</span>
+                </div>
+
+                <!-- SMS -->
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-emerald-500/30 transition-colors"
+                    onclick="select2FAMethod('sms')" id="method_sms">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center"><span
+                            class="material-symbols-outlined text-emerald-400 text-xl">sms</span></div>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm">SMS</p>
+                        <p class="text-[10px] text-slate-500">Code à 6 chiffres par SMS</p>
+                    </div>
+                    <span class="method-badge text-[9px] font-bold px-2 py-0.5 rounded-full hidden">Actif</span>
+                </div>
+
+                <!-- Passkey -->
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-cyan-500/30 transition-colors"
+                    onclick="select2FAMethod('passkey')" id="method_passkey">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center"><span
+                            class="material-symbols-outlined text-cyan-400 text-xl">fingerprint</span></div>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm">Passkey / Biométrie</p>
+                        <p class="text-[10px] text-slate-500">Face ID, Touch ID, Windows Hello</p>
+                    </div>
+                    <span class="method-badge text-[9px] font-bold px-2 py-0.5 rounded-full hidden">Actif</span>
+                    <span id="passkey_count" class="text-[9px] text-cyan-400 font-bold hidden">0 clés</span>
+                </div>
+            </div>
+
+            <!-- Panel Email OTP -->
+            <div id="twoFA_panel_email" class="hidden">
+                <div class="bg-[#0f2438] rounded-xl p-4 border border-amber-500/10">
+                    <h4 class="font-bold text-sm mb-2">📧 Vérification par Email</h4>
+                    <p class="text-[11px] text-slate-400 mb-3">Un code sera envoyé à ton adresse email.</p>
+                    <button id="email_sendBtn" onclick="send2FACode()"
+                        class="w-full py-2.5 rounded-xl bg-amber-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Envoyer
+                        le code</button>
+                    <div id="email_codeInput" class="hidden mt-3">
+                        <input id="email_code" type="text" maxlength="6" inputmode="numeric"
+                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#080f1a] border border-white/10 rounded-xl text-white focus:outline-none focus:border-amber-500/50"
+                            placeholder="000000" />
+                        <p id="email_debug" class="text-[10px] text-emerald-400 text-center mt-2 hidden"></p>
+                        <p id="email_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
+                        <button onclick="verifyEmailCode()"
+                            class="w-full py-2.5 mt-3 rounded-xl bg-amber-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Vérifier</button>
                     </div>
                 </div>
-                <button id="twoFA_sendBtn" onclick="send2FACode()"
-                    class="w-full py-3 rounded-2xl bg-amber-500 font-black text-sm text-[#080f1a] flex items-center justify-center gap-2 hover:bg-amber-400 transition-colors">
-                    <span class="material-symbols-outlined text-sm">mail</span> Envoyer le code de vérification
-                </button>
+                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
             </div>
-            <!-- Step 2: Enter code -->
-            <div id="twoFA_step2" class="hidden">
-                <p class="text-sm text-slate-400 mb-3">Entre le code à 6 chiffres envoyé à ton email :</p>
-                <div class="flex gap-2 mb-4 justify-center">
-                    <input id="twoFA_code" type="text" maxlength="6" inputmode="numeric" pattern="[0-9]*"
-                        class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#0f2438] border border-white/10 rounded-xl text-white focus:outline-none focus:border-amber-500/50"
-                        placeholder="000000" />
+
+            <!-- Panel TOTP -->
+            <div id="twoFA_panel_totp" class="hidden">
+                <div class="bg-[#0f2438] rounded-xl p-4 border border-purple-500/10">
+                    <h4 class="font-bold text-sm mb-2">📱 Google Authenticator / Authy</h4>
+                    <p class="text-[11px] text-slate-400 mb-3">Scanne le QR code avec ton appli d'authentification.</p>
+                    <div id="totp_qr" class="flex justify-center mb-3"></div>
+                    <p id="totp_secret_display" class="text-[10px] text-center text-slate-500 font-mono mb-3"></p>
+                    <button id="totp_generateBtn" onclick="setupTOTP()"
+                        class="w-full py-2.5 rounded-xl bg-purple-500 font-black text-sm text-white active:scale-95 transition-transform">Générer
+                        le QR Code</button>
+                    <div id="totp_verifySection" class="hidden mt-3">
+                        <p class="text-[11px] text-slate-400 mb-2">Entre le code affiché dans ton appli :</p>
+                        <input id="totp_code" type="text" maxlength="6" inputmode="numeric"
+                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#080f1a] border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500/50"
+                            placeholder="000000" />
+                        <p id="totp_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
+                        <button onclick="verifyTOTP()"
+                            class="w-full py-2.5 mt-3 rounded-xl bg-purple-500 font-black text-sm text-white active:scale-95 transition-transform">Activer
+                            TOTP</button>
+                    </div>
                 </div>
-                <p id="twoFA_debugCode" class="text-[10px] text-emerald-400 text-center mb-3 hidden"></p>
-                <p id="twoFA_error" class="text-[10px] text-red-400 text-center mb-3 hidden"></p>
-                <button id="twoFA_verifyBtn" onclick="verify2FACode()"
-                    class="w-full py-3 rounded-2xl bg-amber-500 font-black text-sm text-[#080f1a] flex items-center justify-center gap-2 hover:bg-amber-400 transition-colors">
-                    <span class="material-symbols-outlined text-sm">verified</span> Vérifier et appliquer
+                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+            </div>
+
+            <!-- Panel SMS -->
+            <div id="twoFA_panel_sms" class="hidden">
+                <div class="bg-[#0f2438] rounded-xl p-4 border border-emerald-500/10">
+                    <h4 class="font-bold text-sm mb-2">📱 Vérification par SMS</h4>
+                    <div id="sms_phoneSection">
+                        <p class="text-[11px] text-slate-400 mb-2">Entre ton numéro de téléphone :</p>
+                        <input id="sms_phone" type="tel"
+                            class="w-full py-3 px-4 bg-[#080f1a] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500/50"
+                            placeholder="+33 6 12 34 56 78" />
+                        <button onclick="setupSMS()"
+                            class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Enregistrer
+                            & Envoyer le code</button>
+                    </div>
+                    <div id="sms_codeSection" class="hidden mt-3">
+                        <p class="text-[11px] text-slate-400 mb-2">Entre le code reçu par SMS :</p>
+                        <input id="sms_code" type="text" maxlength="6" inputmode="numeric"
+                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#080f1a] border border-white/10 rounded-xl text-white focus:outline-none focus:border-emerald-500/50"
+                            placeholder="000000" />
+                        <p id="sms_debug" class="text-[10px] text-emerald-400 text-center mt-2 hidden"></p>
+                        <p id="sms_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
+                        <button onclick="verifySMS()"
+                            class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Vérifier</button>
+                    </div>
+                </div>
+                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+            </div>
+
+            <!-- Panel Passkey -->
+            <div id="twoFA_panel_passkey" class="hidden">
+                <div class="bg-[#0f2438] rounded-xl p-4 border border-cyan-500/10">
+                    <h4 class="font-bold text-sm mb-2">🔑 Passkeys / Biométrie</h4>
+                    <p class="text-[11px] text-slate-400 mb-3">Utilise Face ID, Touch ID ou Windows Hello pour te
+                        connecter.</p>
+                    <div id="passkey_list" class="space-y-2 mb-3"></div>
+                    <button onclick="registerPasskey()"
+                        class="w-full py-2.5 rounded-xl bg-cyan-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-sm">add</span> Ajouter une Passkey
+                    </button>
+                    <p id="passkey_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
+                </div>
+                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+            </div>
+
+            <!-- Bouton désactiver (si activé) -->
+            <div id="twoFA_disableSection" class="hidden mt-3">
+                <button onclick="disable2FA()"
+                    class="w-full py-2.5 rounded-xl bg-red-500/15 text-red-400 font-bold text-sm border border-red-500/20 active:scale-95 transition-transform">
+                    Désactiver l'A2F
                 </button>
-                <button onclick="reset2FAModal()"
-                    class="w-full py-2 mt-2 text-slate-400 text-sm hover:text-white transition-colors">← Retour</button>
             </div>
         </div>
     </div>
@@ -1506,17 +1633,53 @@
         }
 
         function reset2FAModal() {
-            document.getElementById('twoFA_step1').classList.remove('hidden');
-            document.getElementById('twoFA_step2').classList.add('hidden');
-            document.getElementById('twoFA_code').value = '';
-            document.getElementById('twoFA_error').classList.add('hidden');
-            document.getElementById('twoFA_debugCode').classList.add('hidden');
+            hideAllPanels();
+            // Reset email panel
+            const sendBtn = document.getElementById('email_sendBtn');
+            if (sendBtn) { sendBtn.classList.remove('hidden'); sendBtn.innerHTML = 'Envoyer le code'; }
+            const codeInput = document.getElementById('email_codeInput');
+            if (codeInput) codeInput.classList.add('hidden');
+            const emailCode = document.getElementById('email_code');
+            if (emailCode) emailCode.value = '';
+            // Reset TOTP panel
+            const totpQr = document.getElementById('totp_qr');
+            if (totpQr) totpQr.innerHTML = '';
+            const totpSecret = document.getElementById('totp_secret_display');
+            if (totpSecret) totpSecret.textContent = '';
+            const totpVerify = document.getElementById('totp_verifySection');
+            if (totpVerify) totpVerify.classList.add('hidden');
+            const totpCode = document.getElementById('totp_code');
+            if (totpCode) totpCode.value = '';
+            const totpBtn = document.getElementById('totp_generateBtn');
+            if (totpBtn) totpBtn.textContent = 'Générer le QR Code';
+            // Reset SMS panel
+            const smsPhone = document.getElementById('sms_phoneSection');
+            if (smsPhone) smsPhone.classList.remove('hidden');
+            const smsCode = document.getElementById('sms_codeSection');
+            if (smsCode) smsCode.classList.add('hidden');
+            const smsInput = document.getElementById('sms_code');
+            if (smsInput) smsInput.value = '';
+            // Reset disable section visibility
+            const disableSection = document.getElementById('twoFA_disableSection');
+            if (disableSection) {
+                if (is2FAEnabled) disableSection.classList.remove('hidden');
+                else disableSection.classList.add('hidden');
+            }
+            // Hide all errors/debug
+            ['email_error', 'email_debug', 'totp_error', 'sms_error', 'sms_debug', 'passkey_error'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
         }
 
+        // ═══════════════════════════════════════════
+        // EMAIL SEND CODE
+        // ═══════════════════════════════════════════
+
         async function send2FACode() {
-            const btn = document.getElementById('twoFA_sendBtn');
+            const btn = document.getElementById('email_sendBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Envoi en cours...';
+            btn.innerHTML = '⏳ Envoi en cours...';
             try {
                 const r = await fetch('/api/auth/2fa-send-code', {
                     method: 'POST',
@@ -1524,38 +1687,81 @@
                     headers: { 'Content-Type': 'application/json' }
                 }).then(x => x.json());
                 if (r.success) {
-                    document.getElementById('twoFA_step1').classList.add('hidden');
-                    document.getElementById('twoFA_step2').classList.remove('hidden');
-                    // Show debug code in dev mode
+                    btn.classList.add('hidden');
+                    document.getElementById('email_codeInput').classList.remove('hidden');
                     if (r.debug_code) {
-                        const dbg = document.getElementById('twoFA_debugCode');
+                        const dbg = document.getElementById('email_debug');
                         dbg.textContent = `🔑 Code (dev) : ${r.debug_code}`;
                         dbg.classList.remove('hidden');
                     }
-                    document.getElementById('twoFA_code').focus();
+                    document.getElementById('email_code').focus();
                 }
             } catch (e) {
                 showToasty('❌ Erreur lors de l\'envoi du code');
             }
             btn.disabled = false;
-            update2FADisplay();
+            btn.innerHTML = 'Envoyer le code';
         }
 
-        async function verify2FACode() {
-            const code = document.getElementById('twoFA_code').value.trim();
+        // ═══════════════════════════════════════════
+        // 2FA METHOD SELECTION & PANEL MANAGEMENT
+        // ═══════════════════════════════════════════
+
+        function select2FAMethod(method) {
+            // Hide all panels first
+            hideAllPanels();
+            // Show selected panel
+            const panel = document.getElementById('twoFA_panel_' + method);
+            if (panel) panel.classList.remove('hidden');
+            // Highlight selected method
+            ['email', 'totp', 'sms', 'passkey'].forEach(m => {
+                const el = document.getElementById('method_' + m);
+                if (el) {
+                    if (m === method) {
+                        el.classList.add('border-[#00bad6]/40');
+                        el.classList.remove('border-transparent');
+                    } else {
+                        el.classList.remove('border-[#00bad6]/40');
+                        el.classList.add('border-transparent');
+                    }
+                }
+            });
+            // If passkey, load existing keys
+            if (method === 'passkey') loadPasskeyList();
+        }
+
+        function hideAllPanels() {
+            ['email', 'totp', 'sms', 'passkey'].forEach(m => {
+                const panel = document.getElementById('twoFA_panel_' + m);
+                if (panel) panel.classList.add('hidden');
+            });
+            // Reset method highlights
+            ['email', 'totp', 'sms', 'passkey'].forEach(m => {
+                const el = document.getElementById('method_' + m);
+                if (el) {
+                    el.classList.remove('border-[#00bad6]/40');
+                    el.classList.add('border-transparent');
+                }
+            });
+        }
+
+        // ═══════════════════════════════════════════
+        // EMAIL OTP (panel-specific verify)
+        // ═══════════════════════════════════════════
+
+        async function verifyEmailCode() {
+            const code = document.getElementById('email_code').value.trim();
+            const errorEl = document.getElementById('email_error');
+            errorEl.classList.add('hidden');
             if (code.length !== 6) {
-                document.getElementById('twoFA_error').textContent = 'Le code doit contenir 6 chiffres';
-                document.getElementById('twoFA_error').classList.remove('hidden');
+                errorEl.textContent = 'Le code doit contenir 6 chiffres';
+                errorEl.classList.remove('hidden');
                 return;
             }
-            const btn = document.getElementById('twoFA_verifyBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Vérification...';
             try {
                 const action = is2FAEnabled ? 'disable' : 'enable';
                 const r = await fetch('/api/auth/2fa-verify', {
-                    method: 'POST',
-                    credentials: 'include',
+                    method: 'POST', credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ code, action })
                 }).then(x => x.json());
@@ -1563,17 +1769,305 @@
                     is2FAEnabled = r.is_2fa_enabled;
                     update2FADisplay();
                     closeSheet('twoFASheet');
-                    showToasty(is2FAEnabled ? '🔐 2FA activé avec succès !' : '🔓 2FA désactivé');
+                    showToasty(is2FAEnabled ? '🔐 2FA Email activé !' : '🔓 2FA désactivé');
                 } else {
-                    document.getElementById('twoFA_error').textContent = r.error || 'Code incorrect';
-                    document.getElementById('twoFA_error').classList.remove('hidden');
+                    errorEl.textContent = r.error || 'Code incorrect';
+                    errorEl.classList.remove('hidden');
                 }
             } catch {
-                document.getElementById('twoFA_error').textContent = 'Erreur serveur';
-                document.getElementById('twoFA_error').classList.remove('hidden');
+                errorEl.textContent = 'Erreur serveur';
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // TOTP (Google Authenticator)
+        // ═══════════════════════════════════════════
+
+        async function setupTOTP() {
+            const btn = document.getElementById('totp_generateBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Génération...';
+            try {
+                const r = await fetch('/api/auth/totp-setup', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(x => x.json());
+                if (r.success) {
+                    // Display QR code
+                    document.getElementById('totp_qr').innerHTML =
+                        `<img src="${r.qrCode}" alt="QR Code" class="w-48 h-48 rounded-xl border border-white/10" />`;
+                    // Display secret key for manual entry
+                    document.getElementById('totp_secret_display').textContent =
+                        `Clé manuelle : ${r.secret}`;
+                    // Show verify section
+                    document.getElementById('totp_verifySection').classList.remove('hidden');
+                    btn.textContent = '✅ QR Code généré';
+                } else {
+                    showToasty('❌ ' + (r.error || 'Erreur'));
+                    btn.textContent = 'Générer le QR Code';
+                }
+            } catch {
+                showToasty('❌ Erreur serveur');
+                btn.textContent = 'Générer le QR Code';
             }
             btn.disabled = false;
-            btn.innerHTML = '<span class="material-symbols-outlined text-sm">verified</span> Vérifier et appliquer';
+        }
+
+        async function verifyTOTP() {
+            const code = document.getElementById('totp_code').value.trim();
+            const errorEl = document.getElementById('totp_error');
+            errorEl.classList.add('hidden');
+            if (code.length !== 6) {
+                errorEl.textContent = 'Le code doit contenir 6 chiffres';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            try {
+                const action = is2FAEnabled ? 'disable' : 'enable';
+                const r = await fetch('/api/auth/totp-verify', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, action })
+                }).then(x => x.json());
+                if (r.success) {
+                    is2FAEnabled = r.is_2fa_enabled;
+                    update2FADisplay();
+                    closeSheet('twoFASheet');
+                    showToasty(is2FAEnabled ? '🔐 TOTP activé avec succès !' : '🔓 TOTP désactivé');
+                } else {
+                    errorEl.textContent = r.error || 'Code TOTP invalide';
+                    errorEl.classList.remove('hidden');
+                }
+            } catch {
+                errorEl.textContent = 'Erreur serveur';
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // SMS OTP
+        // ═══════════════════════════════════════════
+
+        async function setupSMS() {
+            const phone = document.getElementById('sms_phone').value.trim();
+            if (!phone || phone.length < 8) {
+                showToasty('❌ Numéro de téléphone invalide');
+                return;
+            }
+            try {
+                // Step 1: Register phone number
+                const setup = await fetch('/api/auth/sms-setup', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                }).then(x => x.json());
+                if (!setup.success) {
+                    showToasty('❌ ' + (setup.error || 'Erreur enregistrement'));
+                    return;
+                }
+                // Step 2: Send verification code
+                const send = await fetch('/api/auth/sms-send-code', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(x => x.json());
+                if (send.success) {
+                    document.getElementById('sms_phoneSection').classList.add('hidden');
+                    document.getElementById('sms_codeSection').classList.remove('hidden');
+                    // Show debug code in dev
+                    if (send.debug_code) {
+                        const dbg = document.getElementById('sms_debug');
+                        dbg.textContent = `🔑 Code (dev) : ${send.debug_code}`;
+                        dbg.classList.remove('hidden');
+                    }
+                    showToasty('📱 Code envoyé !');
+                } else {
+                    showToasty('❌ ' + (send.error || 'Erreur envoi SMS'));
+                }
+            } catch {
+                showToasty('❌ Erreur serveur');
+            }
+        }
+
+        async function verifySMS() {
+            const code = document.getElementById('sms_code').value.trim();
+            const errorEl = document.getElementById('sms_error');
+            errorEl.classList.add('hidden');
+            if (code.length !== 6) {
+                errorEl.textContent = 'Le code doit contenir 6 chiffres';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            try {
+                const action = is2FAEnabled ? 'disable' : 'enable';
+                const r = await fetch('/api/auth/sms-verify', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, action })
+                }).then(x => x.json());
+                if (r.success) {
+                    is2FAEnabled = r.is_2fa_enabled;
+                    update2FADisplay();
+                    closeSheet('twoFASheet');
+                    showToasty(is2FAEnabled ? '🔐 2FA SMS activé !' : '🔓 2FA SMS désactivé');
+                } else {
+                    errorEl.textContent = r.error || 'Code incorrect';
+                    errorEl.classList.remove('hidden');
+                }
+            } catch {
+                errorEl.textContent = 'Erreur serveur';
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // PASSKEYS (WebAuthn)
+        // ═══════════════════════════════════════════
+
+        async function loadPasskeyList() {
+            const list = document.getElementById('passkey_list');
+            list.innerHTML = '<p class="text-slate-500 text-xs text-center py-2">Chargement…</p>';
+            try {
+                const r = await fetch('/api/auth/2fa-status', { credentials: 'include' }).then(x => x.json());
+                if (r.passkeys && r.passkeys.length > 0) {
+                    list.innerHTML = r.passkeys.map(pk => `
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-[#080f1a] border border-cyan-500/10">
+                            <span class="material-symbols-outlined text-cyan-400 text-lg">key</span>
+                            <div class="flex-1">
+                                <p class="font-bold text-xs">${pk.device_name || 'Passkey'}</p>
+                                <p class="text-[9px] text-slate-500">${new Date(pk.created_at).toLocaleDateString('fr-FR')}</p>
+                            </div>
+                            <button onclick="deletePasskey(${pk.id}, this)"
+                                class="text-[10px] text-red-400 border border-red-400/20 px-2 py-1 rounded-lg font-bold hover:bg-red-400/10">
+                                Supprimer
+                            </button>
+                        </div>`).join('');
+                    const countEl = document.getElementById('passkey_count');
+                    if (countEl) { countEl.textContent = r.passkeys.length + ' clé(s)'; countEl.classList.remove('hidden'); }
+                } else {
+                    list.innerHTML = '<p class="text-slate-500 text-xs text-center py-2">Aucune passkey enregistrée</p>';
+                }
+            } catch {
+                list.innerHTML = '<p class="text-red-400 text-xs text-center py-2">Erreur de chargement</p>';
+            }
+        }
+
+        async function registerPasskey() {
+            const errorEl = document.getElementById('passkey_error');
+            errorEl.classList.add('hidden');
+            try {
+                // Step 1: Get registration options from server
+                const optionsRes = await fetch('/api/auth/passkey-register-options', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(x => x.json());
+                if (optionsRes.error) {
+                    errorEl.textContent = optionsRes.error;
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                // Step 2: Create credential with browser WebAuthn API
+                const credential = await navigator.credentials.create({
+                    publicKey: {
+                        ...optionsRes,
+                        challenge: Uint8Array.from(atob(optionsRes.challenge.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)),
+                        user: {
+                            ...optionsRes.user,
+                            id: Uint8Array.from(atob(optionsRes.user.id.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
+                        },
+                        excludeCredentials: (optionsRes.excludeCredentials || []).map(c => ({
+                            ...c,
+                            id: Uint8Array.from(atob(c.id.replace(/-/g, '+').replace(/_/g, '/')), ch => ch.charCodeAt(0))
+                        }))
+                    }
+                });
+
+                // Step 3: Send credential to server for verification
+                const credData = {
+                    id: credential.id,
+                    rawId: btoa(String.fromCharCode(...new Uint8Array(credential.rawId))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, ''),
+                    type: credential.type,
+                    response: {
+                        attestationObject: btoa(String.fromCharCode(...new Uint8Array(credential.response.attestationObject))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, ''),
+                        clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(credential.response.clientDataJSON))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+                    }
+                };
+
+                const verify = await fetch('/api/auth/passkey-register-verify', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ credential: credData, deviceName: navigator.platform || 'Appareil' })
+                }).then(x => x.json());
+
+                if (verify.success) {
+                    is2FAEnabled = true;
+                    update2FADisplay();
+                    loadPasskeyList();
+                    showToasty('🔑 Passkey enregistrée avec succès !');
+                } else {
+                    errorEl.textContent = verify.error || 'Erreur de vérification';
+                    errorEl.classList.remove('hidden');
+                }
+            } catch (e) {
+                if (e.name === 'NotAllowedError') {
+                    errorEl.textContent = 'Enregistrement annulé par l\'utilisateur';
+                } else {
+                    errorEl.textContent = 'Erreur : ' + (e.message || 'WebAuthn non supporté');
+                }
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        async function deletePasskey(id, btn) {
+            btn.textContent = '⏳';
+            btn.disabled = true;
+            try {
+                const r = await fetch('/api/auth/passkey/' + id, {
+                    method: 'DELETE', credentials: 'include'
+                }).then(x => x.json());
+                if (r.success) {
+                    btn.closest('div.flex').remove();
+                    showToasty('🗑️ Passkey supprimée');
+                    // Reload status
+                    check2FAStatus();
+                    loadPasskeyList();
+                } else {
+                    btn.textContent = 'Supprimer';
+                    btn.disabled = false;
+                }
+            } catch {
+                btn.textContent = 'Supprimer';
+                btn.disabled = false;
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // DISABLE 2FA
+        // ═══════════════════════════════════════════
+
+        async function disable2FA() {
+            // Send email code first, then verify to disable
+            try {
+                const r = await fetch('/api/auth/2fa-send-code', {
+                    method: 'POST', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(x => x.json());
+                if (r.success) {
+                    // Show the email panel for verification
+                    select2FAMethod('email');
+                    document.getElementById('email_sendBtn').classList.add('hidden');
+                    document.getElementById('email_codeInput').classList.remove('hidden');
+                    if (r.debug_code) {
+                        const dbg = document.getElementById('email_debug');
+                        dbg.textContent = `🔑 Code (dev) : ${r.debug_code}`;
+                        dbg.classList.remove('hidden');
+                    }
+                    showToasty('📧 Code de vérification envoyé pour désactiver le 2FA');
+                }
+            } catch {
+                showToasty('❌ Erreur serveur');
+            }
         }
 
         // Init 2FA status on page load
@@ -1613,6 +2107,8 @@
     <script src="js/adsense.js"></script>
     <script src="js/share-social.js"></script>
     <script src="js/ui-components.js"></script>
+    <script src="js/notif-badge.js"></script>
+    <script src="/js/push_notifs.js" defer></script>
 </body>
 
 </html>

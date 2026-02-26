@@ -40,6 +40,64 @@ db.run(`CREATE TABLE IF NOT EXISTS push_subscriptions (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 )`);
 
+// Table notifications sociales
+db.run(`CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL,
+    from_member_id INTEGER,
+    type TEXT NOT NULL,
+    post_id INTEGER,
+    message TEXT,
+    is_read INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)`);
+
+// Table commentaires de posts
+db.run(`CREATE TABLE IF NOT EXISTS post_comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER NOT NULL,
+    member_id INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)`);
+
+// ── Helper : créer une notification + push ──
+function createNotification(memberId, fromMemberId, type, message, postId) {
+    // Ne pas notifier soi-même
+    if (memberId === fromMemberId) return;
+
+    // Vérifier les préférences de notification
+    const prefMap = { follow: 'notif_followers', like: 'notif_likes', comment: 'notif_comments' };
+    const prefCol = prefMap[type];
+
+    db.get(`SELECT ${prefCol || '1'} as pref FROM members WHERE id = ?`, [memberId], (err, row) => {
+        if (err) return;
+        if (prefCol && row && row.pref === 0) return; // Notif désactivée par l'utilisateur
+
+        // Insérer en BDD
+        db.run(
+            'INSERT INTO notifications (member_id, from_member_id, type, post_id, message) VALUES (?, ?, ?, ?, ?)',
+            [memberId, fromMemberId, type, postId || null, message]
+        );
+
+        // Envoyer push si web-push dispo
+        if (webPush) {
+            db.all('SELECT subscription FROM push_subscriptions WHERE member_id = ?', [memberId], async (e2, subs) => {
+                if (e2 || !subs?.length) return;
+                const payload = JSON.stringify({
+                    title: '🏄 SwellSync',
+                    body: message,
+                    icon: '/assets/images/swellsync_icon.svg',
+                    url: postId ? `/pages/community.html?post=${postId}` : '/pages/notifications.html'
+                });
+                for (const s of subs) {
+                    try { await webPush.sendNotification(JSON.parse(s.subscription), payload); }
+                    catch (pe) { if (pe.statusCode === 410) db.run('DELETE FROM push_subscriptions WHERE subscription = ?', [s.subscription]); }
+                }
+            });
+        }
+    });
+}
 
 
 const app = express();
@@ -529,66 +587,332 @@ app.delete('/api/members/blocked/:id', requireAuth, (req, res) => {
 // 2FA — AUTHENTIFICATION À DEUX FACTEURS
 // ==========================================
 
-// GET /api/auth/2fa-status — Statut actuel du 2FA
+// ==========================================
+// 2FA — AUTHENTIFICATION À DEUX FACTEURS (3 méthodes)
+// ==========================================
+
+// ── Imports A2F ──
+const { authenticator } = require('otplib');
+const QRCode = require('qrcode');
+
+// Créer la table 2FA au démarrage
+db.run(`CREATE TABLE IF NOT EXISTS member_2fa (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL UNIQUE,
+    method TEXT DEFAULT 'email',
+    totp_secret TEXT,
+    phone TEXT,
+    is_enabled INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)`);
+
+// Créer la table passkeys
+db.run(`CREATE TABLE IF NOT EXISTS member_passkeys (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL,
+    credential_id TEXT NOT NULL UNIQUE,
+    public_key TEXT NOT NULL,
+    counter INTEGER DEFAULT 0,
+    device_name TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)`);
+
+// GET /api/auth/2fa-status — Statut et méthode A2F
 app.get('/api/auth/2fa-status', requireAuth, (req, res) => {
-    db.get('SELECT is_2fa_enabled FROM members WHERE id = ?', [req.member.id], (err, row) => {
+    db.get('SELECT method, is_enabled, phone FROM member_2fa WHERE member_id = ?', [req.member.id], (err, row) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ is_2fa_enabled: row?.is_2fa_enabled === 1 });
+        // Aussi vérifier si des passkeys existent
+        db.all('SELECT id, device_name, created_at FROM member_passkeys WHERE member_id = ?', [req.member.id], (err2, passkeys) => {
+            res.json({
+                is_2fa_enabled: row?.is_enabled === 1,
+                method: row?.method || 'email',
+                phone: row?.phone ? row.phone.replace(/.(?=.{4})/g, '*') : null,
+                has_totp: !!(row?.totp_secret),
+                passkeys: passkeys || [],
+                available_methods: ['email', 'totp', 'sms', 'passkey']
+            });
+        });
     });
 });
 
-// POST /api/auth/2fa-send-code — Envoyer un code OTP au mail pour activer le 2FA
+// ─────────────────────────────────────────
+// MÉTHODE 1 : EMAIL OTP (existant)
+// ─────────────────────────────────────────
 app.post('/api/auth/2fa-send-code', requireAuth, async (req, res) => {
     const email = req.member.email;
-    // Générer un code à 6 chiffres
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // expiration 10 min
-    // Stocker le code dans auth_codes
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
     db.run('DELETE FROM auth_codes WHERE email = ?', [email]);
-    db.run(
-        'INSERT INTO auth_codes (email, code, expires_at, used) VALUES (?, ?, ?, 0)',
-        [email, code, expiresAt],
-        (err) => { if (err) return res.status(500).json({ error: err.message }); }
-    );
-    // Tenter l'envoi email si configuré
+    db.run('INSERT INTO auth_codes (email, code, expires_at, used) VALUES (?, ?, ?, 0)',
+        [email, code, expiresAt]);
     try {
-        if (process.env.EMAIL_FROM) {
+        if (process.env.SMTP_USER && !process.env.SMTP_USER.includes('votre.email')) {
             const nodemailer = require('nodemailer');
             const transporter = nodemailer.createTransport({
-                host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-                port: parseInt(process.env.EMAIL_PORT || '587'),
-                auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+                host: process.env.SMTP_SERVER || 'smtp.gmail.com',
+                port: parseInt(process.env.SMTP_PORT || '465'),
+                secure: true,
+                auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
             });
             await transporter.sendMail({
-                from: process.env.EMAIL_FROM,
+                from: process.env.SMTP_USER,
                 to: email,
-                subject: '🔐 Code de vérification SwellSync',
-                html: `<p>Ton code de vérification A2F est : <b style="font-size:24px">${code}</b></p><p>Il expire dans 10 minutes.</p>`
+                subject: '🔐 Code SwellSync A2F',
+                html: `<p>Ton code A2F : <b style="font-size:24px">${code}</b></p><p>Expire dans 10 minutes.</p>`
             });
         }
     } catch (e) { console.warn('Email non envoyé:', e.message); }
-    // Toujours retourner succès (code visible en dev si email non configuré)
     res.json({ success: true, debug_code: process.env.NODE_ENV !== 'production' ? code : undefined });
 });
 
-// POST /api/auth/2fa-verify — Vérifier le code et activer/désactiver le 2FA
+// POST /api/auth/2fa-verify — Vérifier code email et activer/désactiver
 app.post('/api/auth/2fa-verify', requireAuth, (req, res) => {
-    const { code, action } = req.body; // action: 'enable' | 'disable'
+    const { code, action } = req.body;
     const email = req.member.email;
-    db.get(
-        'SELECT * FROM auth_codes WHERE email = ? AND used = 0 AND expires_at > datetime("now") ORDER BY id DESC LIMIT 1',
-        [email],
-        (err, row) => {
+    db.get('SELECT * FROM auth_codes WHERE email = ? AND used = 0 AND expires_at > datetime("now") ORDER BY id DESC LIMIT 1',
+        [email], (err, row) => {
             if (err || !row) return res.status(400).json({ error: 'Code invalide ou expiré' });
             if (row.code !== code) return res.status(400).json({ error: 'Code incorrect' });
             db.run('UPDATE auth_codes SET used = 1 WHERE id = ?', [row.id]);
-            const newVal = action === 'enable' ? 1 : 0;
-            db.run('UPDATE members SET is_2fa_enabled = ? WHERE id = ?', [newVal, req.member.id], (err2) => {
+            const enabled = action === 'enable' ? 1 : 0;
+            db.run(`INSERT INTO member_2fa (member_id, method, is_enabled) VALUES (?, 'email', ?)
+                    ON CONFLICT(member_id) DO UPDATE SET method='email', is_enabled=?`,
+                [req.member.id, enabled, enabled], (err2) => {
+                    if (err2) return res.status(500).json({ error: err2.message });
+                    res.json({ success: true, is_2fa_enabled: enabled === 1, method: 'email' });
+                });
+        });
+});
+
+// ─────────────────────────────────────────
+// MÉTHODE 2 : TOTP (Google Authenticator)
+// ─────────────────────────────────────────
+
+// POST /api/auth/totp-setup — Générer un secret + QR code
+app.post('/api/auth/totp-setup', requireAuth, async (req, res) => {
+    try {
+        const secret = authenticator.generateSecret();
+        const otpauth = authenticator.keyuri(req.member.email, 'SwellSync', secret);
+        const qrDataUrl = await QRCode.toDataURL(otpauth);
+        // Stocker le secret temporairement (pas encore activé)
+        db.run(`INSERT INTO member_2fa (member_id, totp_secret) VALUES (?, ?)
+                ON CONFLICT(member_id) DO UPDATE SET totp_secret=?`,
+            [req.member.id, secret, secret]);
+        res.json({ success: true, secret, qrCode: qrDataUrl });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// POST /api/auth/totp-verify — Vérifier un code TOTP et activer
+app.post('/api/auth/totp-verify', requireAuth, (req, res) => {
+    const { code, action } = req.body;
+    db.get('SELECT totp_secret FROM member_2fa WHERE member_id = ?', [req.member.id], (err, row) => {
+        if (err || !row?.totp_secret) return res.status(400).json({ error: 'TOTP non configuré' });
+        const isValid = authenticator.verify({ token: code, secret: row.totp_secret });
+        if (!isValid) return res.status(400).json({ error: 'Code TOTP invalide' });
+        const enabled = action === 'disable' ? 0 : 1;
+        db.run('UPDATE member_2fa SET method = ?, is_enabled = ? WHERE member_id = ?',
+            ['totp', enabled, req.member.id], (err2) => {
                 if (err2) return res.status(500).json({ error: err2.message });
-                res.json({ success: true, is_2fa_enabled: newVal === 1 });
+                res.json({ success: true, is_2fa_enabled: enabled === 1, method: 'totp' });
             });
+    });
+});
+
+// ─────────────────────────────────────────
+// MÉTHODE 3 : SMS OTP
+// ─────────────────────────────────────────
+
+// POST /api/auth/sms-setup — Enregistrer un numéro de téléphone
+app.post('/api/auth/sms-setup', requireAuth, (req, res) => {
+    const { phone } = req.body;
+    if (!phone || phone.length < 8) return res.status(400).json({ error: 'Numéro invalide' });
+    db.run(`INSERT INTO member_2fa (member_id, phone) VALUES (?, ?)
+            ON CONFLICT(member_id) DO UPDATE SET phone=?`,
+        [req.member.id, phone, phone], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ success: true });
+        });
+});
+
+// POST /api/auth/sms-send-code — Envoyer un code par SMS
+app.post('/api/auth/sms-send-code', requireAuth, async (req, res) => {
+    db.get('SELECT phone FROM member_2fa WHERE member_id = ?', [req.member.id], async (err, row) => {
+        if (err || !row?.phone) return res.status(400).json({ error: 'Aucun numéro enregistré' });
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+        db.run('DELETE FROM auth_codes WHERE email = ?', [`sms_${req.member.id}`]);
+        db.run('INSERT INTO auth_codes (email, code, expires_at, used) VALUES (?, ?, ?, 0)',
+            [`sms_${req.member.id}`, code, expiresAt]);
+
+        // Twilio en prod
+        if (process.env.TWILIO_SID && process.env.TWILIO_AUTH_TOKEN) {
+            try {
+                const twilio = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+                await twilio.messages.create({
+                    body: `SwellSync — Ton code A2F : ${code}`,
+                    from: process.env.TWILIO_FROM,
+                    to: row.phone
+                });
+            } catch (e) { console.warn('SMS non envoyé:', e.message); }
+        } else {
+            console.log(`📱 [SMS DEV] Code pour ${row.phone} : \x1b[33m${code}\x1b[0m`);
         }
-    );
+        res.json({ success: true, debug_code: process.env.NODE_ENV !== 'production' ? code : undefined });
+    });
+});
+
+// POST /api/auth/sms-verify — Vérifier un code SMS et activer
+app.post('/api/auth/sms-verify', requireAuth, (req, res) => {
+    const { code, action } = req.body;
+    db.get('SELECT * FROM auth_codes WHERE email = ? AND used = 0 AND expires_at > datetime("now") ORDER BY id DESC LIMIT 1',
+        [`sms_${req.member.id}`], (err, row) => {
+            if (err || !row) return res.status(400).json({ error: 'Code invalide ou expiré' });
+            if (row.code !== code) return res.status(400).json({ error: 'Code incorrect' });
+            db.run('UPDATE auth_codes SET used = 1 WHERE id = ?', [row.id]);
+            const enabled = action === 'disable' ? 0 : 1;
+            db.run('UPDATE member_2fa SET method = ?, is_enabled = ? WHERE member_id = ?',
+                ['sms', enabled, req.member.id], (err2) => {
+                    if (err2) return res.status(500).json({ error: err2.message });
+                    res.json({ success: true, is_2fa_enabled: enabled === 1, method: 'sms' });
+                });
+        });
+});
+
+// ─────────────────────────────────────────
+// MÉTHODE 4 : PASSKEYS (WebAuthn)
+// ─────────────────────────────────────────
+const { generateRegistrationOptions, verifyRegistrationResponse,
+    generateAuthenticationOptions, verifyAuthenticationResponse } = require('@simplewebauthn/server');
+
+const RP_NAME = 'SwellSync';
+const RP_ID = process.env.NODE_ENV === 'production' ? 'swellsync.fr' : 'localhost';
+const ORIGIN = process.env.NODE_ENV === 'production' ? 'https://swellsync.fr' : 'http://localhost:3000';
+
+// Challenges temporaires en mémoire
+const passkeysChallenges = new Map();
+
+// POST /api/auth/passkey-register-options — Options d'enregistrement
+app.post('/api/auth/passkey-register-options', requireAuth, async (req, res) => {
+    try {
+        // Récupérer les passkeys existantes du membre
+        const existingKeys = await new Promise((resolve, reject) => {
+            db.all('SELECT credential_id FROM member_passkeys WHERE member_id = ?',
+                [req.member.id], (err, rows) => err ? reject(err) : resolve(rows || []));
+        });
+
+        const options = await generateRegistrationOptions({
+            rpName: RP_NAME,
+            rpID: RP_ID,
+            userID: new TextEncoder().encode(String(req.member.id)),
+            userName: req.member.email,
+            userDisplayName: req.member.name || req.member.email,
+            attestationType: 'none',
+            excludeCredentials: existingKeys.map(k => ({
+                id: k.credential_id,
+                type: 'public-key'
+            })),
+            authenticatorSelection: {
+                residentKey: 'preferred',
+                userVerification: 'preferred'
+            }
+        });
+
+        passkeysChallenges.set(req.member.id, options.challenge);
+        setTimeout(() => passkeysChallenges.delete(req.member.id), 5 * 60 * 1000);
+
+        res.json(options);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// POST /api/auth/passkey-register-verify — Vérification de l'enregistrement
+app.post('/api/auth/passkey-register-verify', requireAuth, async (req, res) => {
+    const challenge = passkeysChallenges.get(req.member.id);
+    if (!challenge) return res.status(400).json({ error: 'Challenge expiré' });
+
+    try {
+        const verification = await verifyRegistrationResponse({
+            response: req.body.credential,
+            expectedChallenge: challenge,
+            expectedOrigin: ORIGIN,
+            expectedRPID: RP_ID,
+        });
+
+        if (!verification.verified || !verification.registrationInfo) {
+            return res.status(400).json({ error: 'Vérification échouée' });
+        }
+
+        const { credential } = verification.registrationInfo;
+        const credIdBase64 = Buffer.from(credential.id).toString('base64url');
+        const pubKeyBase64 = Buffer.from(credential.publicKey).toString('base64url');
+
+        db.run('INSERT INTO member_passkeys (member_id, credential_id, public_key, counter, device_name) VALUES (?, ?, ?, ?, ?)',
+            [req.member.id, credIdBase64, pubKeyBase64, credential.counter || 0, req.body.deviceName || 'Passkey'],
+            (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                // Activer 2FA passkey
+                db.run(`INSERT INTO member_2fa (member_id, method, is_enabled) VALUES (?, 'passkey', 1)
+                        ON CONFLICT(member_id) DO UPDATE SET method='passkey', is_enabled=1`,
+                    [req.member.id]);
+                passkeysChallenges.delete(req.member.id);
+                res.json({ success: true, verified: true });
+            });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// POST /api/auth/passkey-auth-options — Options d'authentification
+app.post('/api/auth/passkey-auth-options', async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email requis' });
+
+    db.get('SELECT id FROM members WHERE email = ?', [email], async (err, member) => {
+        if (err || !member) return res.status(400).json({ error: 'Membre introuvable' });
+
+        const keys = await new Promise((resolve, reject) => {
+            db.all('SELECT credential_id FROM member_passkeys WHERE member_id = ?',
+                [member.id], (err2, rows) => err2 ? reject(err2) : resolve(rows || []));
+        });
+
+        if (!keys.length) return res.status(400).json({ error: 'Aucune passkey enregistrée' });
+
+        try {
+            const options = await generateAuthenticationOptions({
+                rpID: RP_ID,
+                allowCredentials: keys.map(k => ({
+                    id: k.credential_id,
+                    type: 'public-key'
+                })),
+                userVerification: 'preferred'
+            });
+            passkeysChallenges.set(`auth_${member.id}`, options.challenge);
+            setTimeout(() => passkeysChallenges.delete(`auth_${member.id}`), 5 * 60 * 1000);
+            res.json({ ...options, memberId: member.id });
+        } catch (e) {
+            res.status(500).json({ error: e.message });
+        }
+    });
+});
+
+// DELETE /api/auth/passkey/:id — Supprimer une passkey
+app.delete('/api/auth/passkey/:id', requireAuth, (req, res) => {
+    db.run('DELETE FROM member_passkeys WHERE id = ? AND member_id = ?',
+        [req.params.id, req.member.id], function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            if (this.changes === 0) return res.status(404).json({ error: 'Passkey introuvable' });
+            // Si plus aucune passkey, désactiver la méthode passkey
+            db.get('SELECT COUNT(*) as cnt FROM member_passkeys WHERE member_id = ?', [req.member.id], (err2, row) => {
+                if (row?.cnt === 0) {
+                    db.run('UPDATE member_2fa SET method = ?, is_enabled = 0 WHERE member_id = ? AND method = ?',
+                        ['email', req.member.id, 'passkey']);
+                }
+            });
+            res.json({ success: true });
+        });
 });
 
 // ==========================================
@@ -800,15 +1124,18 @@ app.post('/api/members/push-subscribe', requireAuth, (req, res) => {
     const { subscription } = req.body;
     if (!subscription) return res.status(400).json({ error: 'subscription requise' });
     const subStr = JSON.stringify(subscription);
-    // Evite les doublons pour ce membre
-    db.run(
-        'INSERT INTO push_subscriptions (member_id, endpoint, keys_json) VALUES (?, ?, ?) ON CONFLICT DO NOTHING',
-        [req.member.id, subStr],
-        (err) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ success: true });
-        }
-    );
+    // Vérifier si cette souscription existe déjà
+    db.get('SELECT id FROM push_subscriptions WHERE member_id = ? AND subscription = ?',
+        [req.member.id, subStr], (err, existing) => {
+            if (existing) return res.json({ success: true, note: 'Déjà enregistré' });
+            db.run('INSERT INTO push_subscriptions (member_id, subscription) VALUES (?, ?)',
+                [req.member.id, subStr],
+                (err2) => {
+                    if (err2) return res.status(500).json({ error: err2.message });
+                    res.json({ success: true });
+                }
+            );
+        });
 });
 
 // POST /api/push/test — envoie un push de test à l'utilisateur connecté
@@ -2037,6 +2364,14 @@ app.post('/api/community/posts/:id/like', requireAuth, (req, res) => {
             // Like
             db.run('INSERT INTO post_likes (post_id, member_id) VALUES (?, ?)', [postId, req.member.id]);
             db.run('UPDATE community_posts SET likes = likes + 1 WHERE id = ?', [postId]);
+            // Notifier l'auteur du post
+            db.get('SELECT member_id FROM community_posts WHERE id = ?', [postId], (e2, post) => {
+                if (post) {
+                    db.get('SELECT name FROM members WHERE id = ?', [req.member.id], (e3, me) => {
+                        createNotification(post.member_id, req.member.id, 'like', `${me?.name || 'Quelqu\'un'} a aimé ton post 🤙`, parseInt(postId));
+                    });
+                }
+            });
             res.json({ liked: true });
         }
     });
@@ -2049,6 +2384,12 @@ app.post('/api/members/follow/:id', requireAuth, (req, res) => {
     db.run('INSERT INTO follows (follower_id, following_id) VALUES (?, ?) ON CONFLICT DO NOTHING',
         [req.member.id, targetId], function (err) {
             if (err) return res.status(500).json({ error: err.message });
+            // Notifier la personne suivie
+            if (this.changes > 0) {
+                db.get('SELECT name FROM members WHERE id = ?', [req.member.id], (e2, me) => {
+                    createNotification(targetId, req.member.id, 'follow', `${me?.name || 'Quelqu\'un'} a commencé à te suivre 🏄`);
+                });
+            }
             res.json({ ok: true, following: true });
         });
 });
@@ -2074,6 +2415,112 @@ app.get('/api/members/:id/followers', (req, res) => {
             res.json({ followers: followers || [], following: following || [] });
         });
     });
+});
+
+// ==========================================
+// COMMENTAIRES DE POSTS
+// ==========================================
+
+// GET /api/community/posts/:id/comments — Lister les commentaires d'un post
+app.get('/api/community/posts/:id/comments', (req, res) => {
+    db.all(`SELECT c.*, m.name as author_name, m.avatar_url as author_avatar
+            FROM post_comments c
+            LEFT JOIN members m ON c.member_id = m.id
+            WHERE c.post_id = ?
+            ORDER BY c.created_at ASC`,
+        [req.params.id], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows || []);
+        });
+});
+
+// POST /api/community/posts/:id/comments — Ajouter un commentaire
+app.post('/api/community/posts/:id/comments', requireAuth, (req, res) => {
+    const { content } = req.body;
+    const postId = parseInt(req.params.id);
+    if (!content || content.trim().length === 0) return res.status(400).json({ error: 'Contenu requis' });
+    db.run('INSERT INTO post_comments (post_id, member_id, content) VALUES (?, ?, ?)',
+        [postId, req.member.id, content.trim()], function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            const commentId = this.lastID;
+            // Notifier l'auteur du post
+            db.get('SELECT member_id FROM community_posts WHERE id = ?', [postId], (e2, post) => {
+                if (post) {
+                    db.get('SELECT name FROM members WHERE id = ?', [req.member.id], (e3, me) => {
+                        const preview = content.trim().substring(0, 50) + (content.trim().length > 50 ? '…' : '');
+                        createNotification(post.member_id, req.member.id, 'comment', `${me?.name || 'Quelqu\'un'} a commenté : "${preview}"`, postId);
+                    });
+                }
+            });
+            res.json({ ok: true, id: commentId });
+        });
+});
+
+// DELETE /api/community/comments/:id — Supprimer son commentaire
+app.delete('/api/community/comments/:id', requireAuth, (req, res) => {
+    db.run('DELETE FROM post_comments WHERE id = ? AND member_id = ?',
+        [req.params.id, req.member.id], function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ ok: true, deleted: this.changes });
+        });
+});
+
+// ==========================================
+// NOTIFICATIONS SOCIALES — API
+// ==========================================
+
+// GET /api/members/notifications — Lister mes notifications (paginé)
+app.get('/api/members/notifications', requireAuth, (req, res) => {
+    const limit = parseInt(req.query.limit) || 50;
+    const offset = parseInt(req.query.offset) || 0;
+    db.all(`SELECT n.*, m.name as from_name, m.avatar_url as from_avatar
+            FROM notifications n
+            LEFT JOIN members m ON n.from_member_id = m.id
+            WHERE n.member_id = ?
+            ORDER BY n.created_at DESC
+            LIMIT ? OFFSET ?`,
+        [req.member.id, limit, offset], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows || []);
+        });
+});
+
+// GET /api/members/notifications/count — Nombre de non-lues
+app.get('/api/members/notifications/count', requireAuth, (req, res) => {
+    db.get('SELECT COUNT(*) as count FROM notifications WHERE member_id = ? AND is_read = 0',
+        [req.member.id], (err, row) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ count: row?.count || 0 });
+        });
+});
+
+// PUT /api/members/notifications/read — Marquer comme lues
+app.put('/api/members/notifications/read', requireAuth, (req, res) => {
+    const { ids } = req.body; // tableau d'IDs ou vide pour tout marquer
+    if (ids && Array.isArray(ids) && ids.length > 0) {
+        const placeholders = ids.map(() => '?').join(',');
+        db.run(`UPDATE notifications SET is_read = 1 WHERE member_id = ? AND id IN (${placeholders})`,
+            [req.member.id, ...ids], (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ success: true });
+            });
+    } else {
+        // Marquer toutes comme lues
+        db.run('UPDATE notifications SET is_read = 1 WHERE member_id = ? AND is_read = 0',
+            [req.member.id], (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ success: true });
+            });
+    }
+});
+
+// DELETE /api/members/notifications/:id — Supprimer une notification
+app.delete('/api/members/notifications/:id', requireAuth, (req, res) => {
+    db.run('DELETE FROM notifications WHERE id = ? AND member_id = ?',
+        [req.params.id, req.member.id], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ success: true });
+        });
 });
 
 // POST /api/members/badges/equip — Équiper un badge

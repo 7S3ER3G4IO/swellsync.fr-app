@@ -1,20 +1,14 @@
 /**
- * SwellSync — Push Notifications PWA (P1)
- * Gère la demande de permission pour les notifications push.
- * - Demande la permission de manière non-intrusive (avec délai)
- * - S'abonne au ServiceWorker si disponible
- * - Envoie l'abonnement à /api/push/subscribe
- * - Expose window.SwellPush pour les autres scripts
+ * SwellSync — Push Notifications PWA
+ * ─ Demande la permission push de manière non-intrusive
+ * ─ S'abonne au ServiceWorker + envoi au serveur
+ * ─ Fonctionne même quand l'app est fermée (via Service Worker)
  */
-
 (function () {
     'use strict';
 
     const PUSH_KEY = 'swellsync_push_state';    // 'asked' | 'granted' | 'denied'
-    const DELAY_MS = 8000;                        // Attendre 8s avant de demander
-
-    // Clé VAPID publique (à remplacer par la vraie clé générée côté serveur)
-    const VAPID_PUBLIC_KEY = 'BEl62iU__jMCLgz-SsSi_RFRb0cDnHoNZQoL0RBJbXFXVfwCOlgFDOkqQJa7nEkVALOUdUJhE-7iY0FJeyXi0M';
+    const DELAY_MS = 8000;                        // 8s avant de demander
 
     function urlBase64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -26,25 +20,64 @@
     function getPushState() { return localStorage.getItem(PUSH_KEY); }
     function setPushState(state) { localStorage.setItem(PUSH_KEY, state); }
 
-    async function subscribeToServer(subscription) {
+    // ── Récupérer la clé VAPID depuis le serveur ──
+    async function getVapidKey() {
         try {
-            await fetch('/api/push/subscribe', {
+            const r = await fetch('/api/push/vapid-public-key');
+            if (!r.ok) return null;
+            const data = await r.json();
+            return data.publicKey || null;
+        } catch { return null; }
+    }
+
+    // ── Souscrire au push et envoyer au serveur ──
+    async function subscribeToPush(vapidKey) {
+        try {
+            const reg = await navigator.serviceWorker.ready;
+            if (!reg.pushManager) return;
+
+            // Vérifier si déjà abonné
+            let sub = await reg.pushManager.getSubscription();
+            if (!sub) {
+                sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(vapidKey)
+                });
+            }
+
+            // Envoyer la souscription au backend
+            await fetch('/api/members/push-subscribe', {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subscription }),
-                signal: AbortSignal.timeout(5000)
+                body: JSON.stringify({ subscription: sub })
             });
-        } catch (e) { /* Silencieux si réseau down */ }
+            return true;
+        } catch (e) {
+            console.warn('Push subscribe error:', e);
+            return false;
+        }
     }
 
-    async function askPushPermission() {
-        if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
-        if (getPushState() === 'asked' || getPushState() === 'denied') return;
+    // ── Demander la permission ──
+    async function requestSystemPermission() {
+        try {
+            const permission = await Notification.requestPermission();
+            setPushState(permission === 'granted' ? 'granted' : 'denied');
 
-        // Afficher une mini-bannière non intrusive avant la vraie demande système
-        showPushBanner();
+            if (permission === 'granted') {
+                const vapidKey = await getVapidKey();
+                if (vapidKey) {
+                    await subscribeToPush(vapidKey);
+                }
+                showMiniToast('🔔 Notifications activées !', '#4ade80');
+            }
+        } catch (e) {
+            setPushState('denied');
+        }
     }
 
+    // ── Bannière non-intrusive ──
     function showPushBanner() {
         if (document.getElementById('push-banner')) return;
 
@@ -62,14 +95,14 @@
             <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
                 <div style="font-size:26px;flex-shrink:0;">🔔</div>
                 <div>
-                    <div style="font-size:13px;font-weight:900;color:#fff;margin-bottom:3px;">Alertes houle en temps réel</div>
-                    <div style="font-size:11px;color:#64748b;line-height:1.5;">Reçois une notification dès que tes spots favoris dépassent tes seuils.</div>
+                    <div style="font-size:13px;font-weight:900;color:#fff;margin-bottom:3px;">Ne manque aucune notification</div>
+                    <div style="font-size:11px;color:#64748b;line-height:1.5;">Reçois les likes, follows et commentaires même quand l'app est fermée.</div>
                 </div>
                 <button onclick="document.getElementById('push-banner').remove(); window.SwellPush.dismiss();" style="background:none;border:none;color:#475569;font-size:16px;cursor:pointer;padding:2px;flex-shrink:0;margin-left:auto;">✕</button>
             </div>
             <div style="display:flex;gap:8px;">
                 <button id="push-accept-btn" style="flex:1;padding:10px;border-radius:12px;background:linear-gradient(135deg,#00bad6,#0090a8);color:#fff;font-family:Lexend,sans-serif;font-weight:900;font-size:12px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,186,214,0.3)">
-                    Activer les alertes
+                    Activer les notifications
                 </button>
                 <button onclick="document.getElementById('push-banner').remove(); window.SwellPush.dismiss();" style="flex:1;padding:10px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#64748b;font-family:Lexend,sans-serif;font-weight:700;font-size:12px;cursor:pointer;">
                     Plus tard
@@ -98,30 +131,6 @@
         }, 12000);
     }
 
-    async function requestSystemPermission() {
-        try {
-            const permission = await Notification.requestPermission();
-            setPushState(permission === 'granted' ? 'granted' : 'denied');
-
-            if (permission === 'granted') {
-                // S'abonner au SW
-                const reg = await navigator.serviceWorker.ready;
-                if (reg.pushManager) {
-                    try {
-                        const sub = await reg.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-                        });
-                        await subscribeToServer(sub);
-                    } catch (e) { /* VAPID key placeholder, ignore */ }
-                }
-                showMiniToast('🔔 Alertes houle activées !', '#4ade80');
-            }
-        } catch (e) {
-            setPushState('denied');
-        }
-    }
-
     function showMiniToast(msg, color) {
         const t = document.createElement('div');
         t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9000;background:rgba(7,15,16,0.95);border:1px solid rgba(255,255,255,0.1);color:${color || '#f1f5f9'};font-family:Lexend,sans-serif;font-size:13px;font-weight:700;padding:10px 22px;border-radius:12px;backdrop-filter:blur(12px);opacity:0;transition:opacity 0.3s;white-space:nowrap;`;
@@ -131,33 +140,45 @@
         setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3500);
     }
 
-    // ── API publique ──────────────────────────────────────────────────────────
+    // ── Re-souscrire automatiquement si déjà autorisé ──
+    async function resubscribeIfGranted() {
+        if (Notification.permission === 'granted') {
+            setPushState('granted');
+            const vapidKey = await getVapidKey();
+            if (vapidKey) await subscribeToPush(vapidKey);
+        }
+    }
+
+    // ── API publique ──
     window.SwellPush = {
         isGranted: () => getPushState() === 'granted',
         isDenied: () => getPushState() === 'denied',
         ask: requestSystemPermission,
         dismiss: () => setPushState('asked'),
-
-        // Envoyer une notification locale (sans serveur)
+        resubscribe: resubscribeIfGranted,
         notify: (title, body, options = {}) => {
             if (Notification.permission !== 'granted') return;
             new Notification(title, {
                 body,
-                icon: '/assets/images/swellsync_icon.svg',
-                badge: '/assets/images/swellsync_icon.svg',
+                icon: '/assets/images/swellsync_logo.png',
+                badge: '/assets/images/swellsync_logo.png',
                 ...options
             });
         }
     };
 
-    // ── Lancer après délai si pas déjà décidé ────────────────────────────────
+    // ── Lancer ──
     const state = getPushState();
-    if (!state || state === '') {
+    if (state === 'granted') {
+        // Re-souscrire silencieusement pour s'assurer que la sub est à jour
+        resubscribeIfGranted();
+    } else if (!state || state === '') {
+        // Première visite : demander après un délai
         setTimeout(() => {
             if (document.readyState === 'complete') {
-                askPushPermission();
+                showPushBanner();
             } else {
-                window.addEventListener('load', askPushPermission, { once: true });
+                window.addEventListener('load', showPushBanner, { once: true });
             }
         }, DELAY_MS);
     }

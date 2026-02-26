@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Notifications</title>
+    <meta name="description" content="SwellSync — Tes notifications : likes, follows, commentaires et plus.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        .glass {
+            background: rgba(15, 36, 56, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1)
+        }
+
+        body {
+            min-height: max(884px, 100dvh)
+        }
+
+        .notif-card {
+            transition: all 0.3s ease;
+        }
+
+        .notif-card:active {
+            transform: scale(0.98);
+        }
+
+        .notif-card.unread {
+            border-left: 3px solid #00bad6;
+        }
+
+        .notif-card.read {
+            opacity: 0.7;
+            border-left: 3px solid transparent;
+        }
+
+        .notif-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notif-icon.like {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .notif-icon.follow {
+            background: rgba(0, 186, 214, 0.15);
+            color: #00bad6;
+        }
+
+        .notif-icon.comment {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+        }
+
+        .notif-icon.mention {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notif-card {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        /* Light mode */
+        html.light body {
+            background: linear-gradient(160deg, #f0f9ff, #e0f2fe);
+            color: #1e293b;
+        }
+
+        html.light .glass {
+            background: rgba(255, 255, 255, .8);
+            border-color: rgba(0, 186, 214, .15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .07);
+        }
+
+        html.light header.glass {
+            background: rgba(240, 249, 255, .9) !important;
+        }
+
+        html.light .bg-\[\#0f2438\] {
+            background: #fff !important;
+            border-color: #e2eaf4 !important;
+        }
+
+        html.light .text-slate-100 {
+            color: #1e293b;
+        }
+
+        html.light .text-slate-400,
+        html.light .text-slate-500 {
+            color: #64748b;
+        }
+
+        html.light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+    </style>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="bg-[#080f1a] font-display text-slate-100 flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-[#00bad6]/10">
+        <div class="flex items-center gap-3">
+            <a href="home.html" class="material-symbols-outlined text-[#00bad6] cursor-pointer">arrow_back</a>
+            <h1 class="text-xl font-bold tracking-tight">Notifications</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <span id="notifCountBadge"
+                class="px-2 py-0.5 bg-[#00bad6]/20 text-[#00bad6] text-xs font-bold rounded-full">0</span>
+            <button onclick="markAllRead()" id="markAllBtn"
+                class="text-[10px] font-bold text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full hover:text-[#00bad6] hover:border-[#00bad6]/30 transition-colors hidden">
+                Tout lire
+            </button>
+        </div>
+    </header>
+
+    <!-- Notifications List -->
+    <main class="flex-1 p-4 space-y-3 pb-36" id="notifList">
+        <div class="flex items-center justify-center py-20">
+            <div class="w-6 h-6 rounded-full border-2 border-[#00bad6] border-t-transparent animate-spin"></div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="notifications.html">
+            <span style="position:relative;display:inline-block;">
+                <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">notifications</span>
+                <span id="navBadge" class="hidden"
+                    style="position:absolute;top:-2px;right:-6px;font-size:9px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#ef4444;border-radius:50%;min-width:14px;height:14px;padding:0 3px;font-weight:900;color:#fff;"></span>
+            </span>
+            <span class="text-[10px] font-bold">Notifs</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+    <script>
+        const ICONS = { like: 'favorite', follow: 'person_add', comment: 'chat_bubble', mention: 'alternate_email' };
+        let notifications = [];
+
+        // ── Time ago helper ──
+        function timeAgo(dateStr) {
+            const diff = Date.now() - new Date(dateStr).getTime();
+            const s = Math.floor(diff / 1000);
+            if (s < 60) return 'à l\'instant';
+            const m = Math.floor(s / 60);
+            if (m < 60) return `il y a ${m} min`;
+            const h = Math.floor(m / 60);
+            if (h < 24) return `il y a ${h}h`;
+            const d = Math.floor(h / 24);
+            if (d < 7) return `il y a ${d}j`;
+            return new Date(dateStr).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+        }
+
+        // ── Group notifications by period ──
+        function groupByPeriod(notifs) {
+            const now = Date.now();
+            const today = [], week = [], older = [];
+            for (const n of notifs) {
+                const diff = now - new Date(n.created_at).getTime();
+                if (diff < 86400000) today.push(n);
+                else if (diff < 604800000) week.push(n);
+                else older.push(n);
+            }
+            return { today, week, older };
+        }
+
+        // ── Load notifications ──
+        async function loadNotifications() {
+            try {
+                const r = await fetch('/api/members/notifications', { credentials: 'include' });
+                if (!r.ok) throw new Error('Non connecté');
+                notifications = await r.json();
+                renderNotifications();
+                updateCount();
+            } catch {
+                document.getElementById('notifList').innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 gap-4 text-slate-500">
+                        <span class="material-symbols-outlined text-5xl">notifications_off</span>
+                        <p class="text-sm text-center">Connecte-toi pour voir tes notifications</p>
+                        <a href="home.html" class="px-6 py-3 bg-[#00bad6] text-[#080f1a] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
+                    </div>`;
+            }
+        }
+
+        // ── Render ──
+        function renderNotifications() {
+            const el = document.getElementById('notifList');
+            const unread = notifications.filter(n => !n.is_read).length;
+            document.getElementById('notifCountBadge').textContent = unread;
+            document.getElementById('markAllBtn').classList.toggle('hidden', unread === 0);
+
+            if (!notifications.length) {
+                el.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 gap-4">
+                        <div class="w-20 h-20 rounded-full bg-[#00bad6]/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-[#00bad6]">notifications_none</span>
+                        </div>
+                        <p class="text-sm text-slate-400">Aucune notification pour le moment</p>
+                        <p class="text-xs text-slate-500 text-center max-w-xs">Les likes, follows et commentaires sur tes posts apparaîtront ici</p>
+                    </div>`;
+                return;
+            }
+
+            const { today, week, older } = groupByPeriod(notifications);
+            let html = '';
+
+            if (today.length) {
+                html += `<p class="text-xs font-bold text-[#00bad6] uppercase tracking-widest mt-2 mb-1">Aujourd'hui</p>`;
+                html += today.map((n, i) => renderCard(n, i * 50)).join('');
+            }
+            if (week.length) {
+                html += `<p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-4 mb-1">Cette semaine</p>`;
+                html += week.map((n, i) => renderCard(n, i * 50)).join('');
+            }
+            if (older.length) {
+                html += `<p class="text-xs font-bold text-slate-600 uppercase tracking-widest mt-4 mb-1">Plus ancien</p>`;
+                html += older.map((n, i) => renderCard(n, i * 50)).join('');
+            }
+            el.innerHTML = html;
+        }
+
+        function renderCard(n, delay) {
+            const icon = ICONS[n.type] || 'notifications';
+            const avatar = n.from_avatar
+                ? `<img src="${n.from_avatar}" class="w-8 h-8 rounded-full object-cover" alt="" />`
+                : `<div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300">${(n.from_name || '?')[0].toUpperCase()}</div>`;
+            const link = n.post_id ? `community.html?post=${n.post_id}` : (n.type === 'follow' && n.from_member_id ? `user-profile.html?id=${n.from_member_id}` : '#');
+
+            return `
+            <a href="${link}" class="notif-card ${n.is_read ? 'read' : 'unread'} block rounded-xl bg-[#0f2438] p-3.5 border border-white/5 hover:border-[#00bad6]/20 transition-all"
+               style="animation-delay:${delay}ms" onclick="markRead(${n.id})">
+                <div class="flex items-start gap-3">
+                    <div class="notif-icon ${n.type}">
+                        <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">${icon}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                ${avatar}
+                                <p class="text-sm ${n.is_read ? 'text-slate-400' : 'text-white font-semibold'} leading-snug truncate">${n.message || 'Nouvelle notification'}</p>
+                            </div>
+                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                <span class="text-[10px] text-slate-500 whitespace-nowrap">${timeAgo(n.created_at)}</span>
+                                ${!n.is_read ? '<div class="w-2 h-2 rounded-full bg-[#00bad6] flex-shrink-0"></div>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>`;
+        }
+
+        // ── Mark read ──
+        async function markRead(id) {
+            try {
+                await fetch('/api/members/notifications/read', {
+                    method: 'PUT', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids: [id] })
+                });
+                const n = notifications.find(x => x.id === id);
+                if (n) n.is_read = 1;
+            } catch { }
+        }
+
+        async function markAllRead() {
+            try {
+                await fetch('/api/members/notifications/read', {
+                    method: 'PUT', credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                notifications.forEach(n => n.is_read = 1);
+                renderNotifications();
+                showToast('✅ Toutes les notifications marquées comme lues');
+            } catch { }
+        }
+
+        // ── Update count badge ──
+        async function updateCount() {
+            try {
+                const r = await fetch('/api/members/notifications/count', { credentials: 'include' });
+                const data = await r.json();
+                const badge = document.getElementById('navBadge');
+                if (data.count > 0) {
+                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            } catch { }
+        }
+
+        // ── Toast ──
+        function showToast(msg) {
+            let t = document.getElementById('notifToast');
+            if (!t) {
+                t = document.createElement('div');
+                t.id = 'notifToast';
+                t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:#f1f5f9;border:1px solid rgba(0,186,214,.3);border-radius:16px;padding:10px 18px;font-size:12px;font-weight:700;z-index:9999;transition:opacity .3s;white-space:nowrap;';
+                document.body.appendChild(t);
+            }
+            t.textContent = msg; t.style.opacity = '1';
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3000);
+        }
+
+        // ── Init ──
+        loadNotifications();
+
+        // Refresh every 30s
+        setInterval(() => {
+            loadNotifications();
+        }, 30000);
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/notif-badge.js"></script>
+    <script src="/js/push_notifs.js" defer></script>
+</body>
+
+</html>
