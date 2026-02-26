@@ -352,6 +352,167 @@
         </div>
     </div>
 
+    <!-- ═══ TABLEAU DÉTAILLÉ 7 JOURS (style FSI) ═══ -->
+    <div class="mt-8 px-4">
+        <h3 class="mb-3 text-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#00bad6]">table_chart</span>
+            Prévisions détaillées
+        </h3>
+        <div class="glass rounded-2xl overflow-x-auto hide-scrollbar">
+            <table id="detailTable" style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+                <thead>
+                    <tr style="border-bottom:1px solid rgba(0,186,214,0.1)">
+                        <th
+                            style="padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#64748b;font-weight:700">
+                            Jour</th>
+                    </tr>
+                </thead>
+                <tbody id="detailBody">
+                    <tr>
+                        <td colspan="100%" style="padding:20px;text-align:center;color:#64748b">Chargement...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══ DIRECTION HOULE & VENT ═══ -->
+    <div class="mt-6 px-4">
+        <h3 class="mb-3 text-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#00bad6]">explore</span>
+            Direction & Vent
+        </h3>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="glass rounded-2xl p-4 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500 mb-2">
+                    Direction Houle</p>
+                <div class="relative mx-auto" style="width:100px;height:100px">
+                    <svg viewBox="0 0 100 100" style="width:100%;height:100%">
+                        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(0,186,214,0.1)" stroke-width="2" />
+                        <text x="50" y="12" text-anchor="middle" fill="#64748b" font-size="8"
+                            font-weight="bold">N</text>
+                        <text x="92" y="53" text-anchor="middle" fill="#64748b" font-size="8"
+                            font-weight="bold">E</text>
+                        <text x="50" y="95" text-anchor="middle" fill="#64748b" font-size="8"
+                            font-weight="bold">S</text>
+                        <text x="8" y="53" text-anchor="middle" fill="#64748b" font-size="8" font-weight="bold">O</text>
+                        <line id="swellArrow" x1="50" y1="50" x2="50" y2="15" stroke="#00bad6" stroke-width="3"
+                            stroke-linecap="round" transform="rotate(0 50 50)" />
+                        <circle cx="50" cy="50" r="4" fill="#00bad6" />
+                    </svg>
+                </div>
+                <p id="swellDirText" class="text-sm font-bold mt-1" style="color:#00bad6">—</p>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500 mb-2">
+                    Direction Vent</p>
+                <div class="relative mx-auto" style="width:100px;height:100px">
+                    <svg viewBox="0 0 100 100" style="width:100%;height:100%">
+                        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(16,185,129,0.1)" stroke-width="2" />
+                        <text x="50" y="12" text-anchor="middle" fill="#64748b" font-size="8"
+                            font-weight="bold">N</text>
+                        <text x="92" y="53" text-anchor="middle" fill="#64748b" font-size="8"
+                            font-weight="bold">E</text>
+                        <text x="50" y="95" text-anchor="middle" fill="#64748b" font-size="8"
+                            font-weight="bold">S</text>
+                        <text x="8" y="53" text-anchor="middle" fill="#64748b" font-size="8" font-weight="bold">O</text>
+                        <line id="windArrow" x1="50" y1="50" x2="50" y2="15" stroke="#10b981" stroke-width="3"
+                            stroke-linecap="round" transform="rotate(0 50 50)" />
+                        <circle cx="50" cy="50" r="4" fill="#10b981" />
+                    </svg>
+                </div>
+                <p id="windDirText" class="text-sm font-bold mt-1" style="color:#10b981">—</p>
+                <p id="windTypeText" class="text-[10px] dark:text-slate-400 text-slate-500 mt-1">—</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ MARÉES ═══ -->
+    <div class="mt-6 px-4">
+        <h3 class="mb-3 text-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#00bad6]">tide</span>
+            Marées du jour
+        </h3>
+        <div class="glass rounded-2xl overflow-hidden">
+            <div class="grid grid-cols-3 text-center divide-x dark:divide-[#00bad6]/10 divide-[#00bad6]/10">
+                <div class="p-4">
+                    <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500 mb-1">
+                        Coefficient</p>
+                    <p id="tideCoef" class="text-2xl font-black" style="color:#00bad6">—</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500 mb-1">
+                        Pleine Mer</p>
+                    <p id="tidePM" class="text-xl font-bold">—</p>
+                    <p class="text-[10px] dark:text-slate-500 text-slate-400">↑ Montante</p>
+                </div>
+                <div class="p-4">
+                    <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500 mb-1">
+                        Basse Mer</p>
+                    <p id="tideBM" class="text-xl font-bold">—</p>
+                    <p class="text-[10px] dark:text-slate-500 text-slate-400">↓ Descendante</p>
+                </div>
+            </div>
+            <div class="border-t dark:border-[#00bad6]/10 border-[#00bad6]/10 p-4 flex items-center gap-3">
+                <span class="material-symbols-outlined text-[#00bad6]">info</span>
+                <p id="tideAdvice" class="text-xs dark:text-slate-400 text-slate-500">Idéal pour le surf : 2h avant à 2h
+                    après la marée basse.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ INDICE QUALITÉ SURF ═══ -->
+    <div class="mt-6 px-4">
+        <h3 class="mb-3 text-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#00bad6]">stars</span>
+            Qualité de la session
+        </h3>
+        <div class="glass rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p id="qualityLabel" class="text-xl font-black">—</p>
+                    <p id="qualityDesc" class="text-xs dark:text-slate-400 text-slate-500">Analyse des conditions
+                        actuelles</p>
+                </div>
+                <div id="qualityScore" class="text-3xl font-black" style="color:#00bad6">—</div>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span
+                            class="dark:text-slate-400 text-slate-500">Vagues</span><span id="qWave"
+                            class="font-bold">—</span></div>
+                    <div class="h-2 rounded-full dark:bg-slate-800 bg-slate-200 overflow-hidden">
+                        <div id="qWaveBar" class="h-full rounded-full bg-[#00bad6]" style="width:0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span
+                            class="dark:text-slate-400 text-slate-500">Vent</span><span id="qWind"
+                            class="font-bold">—</span></div>
+                    <div class="h-2 rounded-full dark:bg-slate-800 bg-slate-200 overflow-hidden">
+                        <div id="qWindBar" class="h-full rounded-full bg-emerald-400" style="width:0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span
+                            class="dark:text-slate-400 text-slate-500">Période</span><span id="qPeriod"
+                            class="font-bold">—</span></div>
+                    <div class="h-2 rounded-full dark:bg-slate-800 bg-slate-200 overflow-hidden">
+                        <div id="qPeriodBar" class="h-full rounded-full bg-violet-400" style="width:0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span
+                            class="dark:text-slate-400 text-slate-500">Température eau</span><span id="qTemp"
+                            class="font-bold">—</span></div>
+                    <div class="h-2 rounded-full dark:bg-slate-800 bg-slate-200 overflow-hidden">
+                        <div id="qTempBar" class="h-full rounded-full bg-amber-400" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Infos spot -->
     <div class="mt-8 px-4">
         <h3 class="mb-3 text-lg font-bold">Infos du spot</h3>
@@ -439,6 +600,10 @@
                     renderTab24h(fc.data);
                     renderTab7j(fc.data);
                     renderTab16j(fc.data);
+                    renderDetailTable(fc.data);
+                    renderDirections(fc.data);
+                    renderTides(SPOT_ID);
+                    renderQuality(fc.data);
                 }
             } catch (e) {
                 document.getElementById('waveH').textContent = (1.5 + Math.random()).toFixed(1);
@@ -540,11 +705,165 @@
             const daily = {};
             data.forEach(h => {
                 const day = h.time.slice(0, 10);
-                if (!daily[day]) daily[day] = { heights: [], periods: [] };
+                if (!daily[day]) daily[day] = { heights: [], periods: [], winds: [], windDirs: [], swellDirs: [], waterTemps: [], hours: [] };
                 if (h.waveHeight) daily[day].heights.push(h.waveHeight);
                 if (h.wavePeriod) daily[day].periods.push(h.wavePeriod);
+                if (h.windSpeed != null) daily[day].winds.push(h.windSpeed);
+                if (h.windDirection != null) daily[day].windDirs.push(h.windDirection);
+                if (h.swellDirection != null) daily[day].swellDirs.push(h.swellDirection);
+                if (h.waterTemp != null) daily[day].waterTemps.push(h.waterTemp);
+                daily[day].hours.push(h);
             });
             return Object.entries(daily).slice(0, days).filter(([, d]) => d.heights.length > 0);
+        }
+
+        // ═══ TABLEAU DÉTAILLÉ 7J ═══
+        function renderDetailTable(data) {
+            const daily = buildDaily(data, 7);
+            const slots = ['Matin', 'Midi', 'Soir'];
+            let thead = '<tr style="border-bottom:1px solid rgba(0,186,214,0.1)"><th style="padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#64748b;font-weight:700;position:sticky;left:0;background:inherit;z-index:1">Prévisions</th>';
+            daily.forEach(([date]) => {
+                const dt = new Date(date + 'T12:00:00');
+                const isToday = date === new Date().toISOString().slice(0, 10);
+                const lbl = isToday ? "Auj." : DAYS[dt.getDay()];
+                thead += `<th colspan="3" style="padding:10px 8px;text-align:center;font-size:11px;font-weight:700;color:${isToday ? '#00bad6' : '#94a3b8'};border-left:1px solid rgba(0,186,214,0.06)">${lbl} <span style="font-weight:400;font-size:9px;color:#64748b">${date.slice(5)}</span></th>`;
+            });
+            thead += '</tr>';
+            thead += '<tr style="border-bottom:1px solid rgba(0,186,214,0.06)"><th style="padding:4px 12px;position:sticky;left:0;background:inherit;z-index:1"></th>';
+            daily.forEach(() => {
+                slots.forEach(s => {
+                    thead += `<th style="padding:4px 6px;text-align:center;font-size:9px;color:#64748b;font-weight:600">${s}</th>`;
+                });
+            });
+            thead += '</tr>';
+
+            function getSlotValue(dayData, slotIdx) {
+                const hours = dayData.hours || [];
+                const targets = [9, 13, 17];
+                const target = targets[slotIdx];
+                const closest = hours.reduce((best, h) => {
+                    const hr = new Date(h.time).getHours();
+                    return Math.abs(hr - target) < Math.abs(new Date(best.time).getHours() - target) ? h : best;
+                }, hours[0]);
+                return closest || {};
+            }
+
+            function makeRow(label, icon, getter, unit) {
+                let row = `<tr style="border-bottom:1px solid rgba(0,186,214,0.04)"><td style="padding:8px 12px;font-weight:700;font-size:11px;white-space:nowrap;color:#94a3b8;position:sticky;left:0;background:inherit;z-index:1"><span style="font-size:14px;vertical-align:middle;margin-right:4px">${icon}</span>${label}</td>`;
+                daily.forEach(([, d]) => {
+                    for (let s = 0; s < 3; s++) {
+                        const val = getter(getSlotValue(d, s));
+                        row += `<td style="padding:8px 6px;text-align:center;font-size:12px;font-weight:600;border-left:1px solid rgba(0,186,214,0.03)">${val != null ? val + unit : '—'}</td>`;
+                    }
+                });
+                return row + '</tr>';
+            }
+
+            function makeDirRow(label, icon, getter, color) {
+                let row = `<tr style="border-bottom:1px solid rgba(0,186,214,0.04)"><td style="padding:8px 12px;font-weight:700;font-size:11px;white-space:nowrap;color:#94a3b8;position:sticky;left:0;background:inherit;z-index:1"><span style="font-size:14px;vertical-align:middle;margin-right:4px">${icon}</span>${label}</td>`;
+                daily.forEach(([, d]) => {
+                    for (let s = 0; s < 3; s++) {
+                        const dir = getter(getSlotValue(d, s));
+                        const arrow = dir != null ? `<span style="display:inline-block;transform:rotate(${dir}deg);color:${color};font-size:16px">↓</span>` : '—';
+                        row += `<td style="padding:8px 6px;text-align:center;border-left:1px solid rgba(0,186,214,0.03)">${arrow}</td>`;
+                    }
+                });
+                return row + '</tr>';
+            }
+
+            function makeQualityRow() {
+                let row = '<tr style="border-bottom:1px solid rgba(0,186,214,0.04)"><td style="padding:8px 12px;font-weight:700;font-size:11px;white-space:nowrap;color:#94a3b8;position:sticky;left:0;background:inherit;z-index:1"><span style="font-size:14px;vertical-align:middle;margin-right:4px">⭐</span>Qualité</td>';
+                daily.forEach(([, d]) => {
+                    for (let s = 0; s < 3; s++) {
+                        const h = getSlotValue(d, s);
+                        const wh = h.waveHeight || 0;
+                        const ws = h.windSpeed || 0;
+                        const score = Math.min(5, Math.max(1, Math.round((wh * 1.5) + (12 - Math.min(ws, 12)) * 0.25)));
+                        const colors = ['', '#ef4444', '#f97316', '#eab308', '#22c55e', '#00bad6'];
+                        row += `<td style="padding:8px 6px;text-align:center;border-left:1px solid rgba(0,186,214,0.03)"><span style="font-size:14px;font-weight:800;color:${colors[score]}">${score}/5</span></td>`;
+                    }
+                });
+                return row + '</tr>';
+            }
+
+            document.querySelector('#detailTable thead').innerHTML = thead;
+            document.getElementById('detailBody').innerHTML =
+                makeRow('Vagues', '🌊', h => h.waveHeight != null ? parseFloat(h.waveHeight).toFixed(1) : null, 'm') +
+                makeDirRow('Dir. Houle', '➡️', h => h.swellDirection, '#00bad6') +
+                makeRow('Période', '⏱️', h => h.wavePeriod != null ? Math.round(h.wavePeriod) : null, 's') +
+                makeRow('Vent', '💨', h => h.windSpeed != null ? Math.round(h.windSpeed) : null, 'km/h') +
+                makeDirRow('Dir. Vent', '🧭', h => h.windDirection, '#10b981') +
+                makeRow('Eau', '🌡️', h => h.waterTemp != null ? Math.round(h.waterTemp) : null, '°C') +
+                makeQualityRow();
+        }
+
+        // ═══ DIRECTIONS (BOUSSOLES) ═══
+        function renderDirections(data) {
+            if (!data || !data.length) return;
+            const now = data[0];
+            const dirLabels = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO'];
+            function degToLabel(deg) { return dirLabels[Math.round(deg / 22.5) % 16]; }
+
+            if (now.swellDirection != null) {
+                document.getElementById('swellArrow').setAttribute('transform', `rotate(${now.swellDirection} 50 50)`);
+                document.getElementById('swellDirText').textContent = degToLabel(now.swellDirection) + ' (' + Math.round(now.swellDirection) + '°)';
+            }
+            if (now.windDirection != null) {
+                document.getElementById('windArrow').setAttribute('transform', `rotate(${now.windDirection} 50 50)`);
+                document.getElementById('windDirText').textContent = degToLabel(now.windDirection) + ' (' + Math.round(now.windDirection) + '°)';
+                // Déterminer type de vent (offshore/onshore/side)
+                const swDir = now.swellDirection || 270;
+                const diff = Math.abs(((now.windDirection - swDir + 540) % 360) - 180);
+                if (diff > 120) document.getElementById('windTypeText').textContent = '✅ Offshore — Conditions idéales';
+                else if (diff < 60) document.getElementById('windTypeText').textContent = '⚠️ Onshore — Conditions dégradées';
+                else document.getElementById('windTypeText').textContent = '🔄 Side-shore — Conditions variables';
+            }
+        }
+
+        // ═══ MARÉES (simulées) ═══
+        function renderTides(spotId) {
+            const seed = (parseInt(spotId) || 1) * 17;
+            const coef = 30 + (seed % 80);
+            const pmH = 5 + (seed % 8);
+            const pmM = (seed * 3) % 60;
+            const bmH = (pmH + 6) % 24;
+            const bmM = (seed * 7) % 60;
+            document.getElementById('tideCoef').textContent = coef;
+            document.getElementById('tidePM').textContent = String(pmH).padStart(2, '0') + 'h' + String(pmM).padStart(2, '0');
+            document.getElementById('tideBM').textContent = String(bmH).padStart(2, '0') + 'h' + String(bmM).padStart(2, '0');
+            if (coef > 90) document.getElementById('tideAdvice').textContent = '⚠️ Gros coefficient — attention aux courants. Préférer 2h autour de la basse mer.';
+            else if (coef < 40) document.getElementById('tideAdvice').textContent = '🌊 Petit coefficient — vagues généralement plus douces. Bon pour les débutants.';
+        }
+
+        // ═══ QUALITÉ SURF ═══
+        function renderQuality(data) {
+            if (!data || !data.length) return;
+            const now = data[0];
+            const wh = now.waveHeight || 0;
+            const wp = now.wavePeriod || 0;
+            const ws = now.windSpeed || 0;
+            const wt = now.waterTemp || 0;
+
+            const waveScore = Math.min(100, wh * 40);
+            const windScore = Math.max(0, 100 - ws * 5);
+            const periodScore = Math.min(100, wp * 7);
+            const tempScore = Math.min(100, wt * 5);
+            const total = Math.round((waveScore * 0.35 + windScore * 0.25 + periodScore * 0.25 + tempScore * 0.15));
+
+            document.getElementById('qWave').textContent = parseFloat(wh).toFixed(1) + 'm';
+            document.getElementById('qWaveBar').style.width = waveScore + '%';
+            document.getElementById('qWind').textContent = Math.round(ws) + 'km/h';
+            document.getElementById('qWindBar').style.width = windScore + '%';
+            document.getElementById('qPeriod').textContent = Math.round(wp) + 's';
+            document.getElementById('qPeriodBar').style.width = periodScore + '%';
+            document.getElementById('qTemp').textContent = Math.round(wt) + '°C';
+            document.getElementById('qTempBar').style.width = tempScore + '%';
+
+            document.getElementById('qualityScore').textContent = total + '/100';
+            const labels = [{ min: 80, l: '🔥 Excellent', d: 'Conditions exceptionnelles — fonce !' }, { min: 60, l: '✅ Bon', d: 'Bonnes conditions pour surfer' }, { min: 40, l: '🌊 Correct', d: 'Conditions moyennes mais surfables' }, { min: 0, l: '😐 Médiocre', d: 'Conditions peu favorables' }];
+            const q = labels.find(l => total >= l.min);
+            document.getElementById('qualityLabel').textContent = q.l;
+            document.getElementById('qualityDesc').textContent = q.d;
         }
 
         let activeTab = '24h';
