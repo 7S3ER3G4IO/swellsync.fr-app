@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>60+ Spots de Surf — SwellSync</title>
+    <meta name="description"
+        content="Découvrez plus de 60 spots de surf sur la côte Atlantique française avec SwellSync. De la Bretagne au Pays Basque.">
+    <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/site/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="nav-logo">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
+            <span>Swell<span class="accent">Sync</span></span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="/">Accueil</a>
+            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html" class="active">Spots</a>
+            <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/faq.html">FAQ</a>
+        </div>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
+            <span class="material-symbols-outlined" style="font-size:18px">download</span>
+            Télécharger
+        </a>
+        <button class="nav-menu-btn"
+            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </nav>
+
+    <section class="section spots-section" style="padding-top:140px">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📍 Spots</div>
+                <h2>60+ spots sur <em>la côte Atlantique</em></h2>
+                <p>De la Bretagne au Pays Basque, chaque spot avec ses prévisions et conditions en temps réel.</p>
+            </div>
+            <div class="spots-scroll" id="spotsGrid">
+                <div style="text-align:center;padding:40px;color:var(--text3)">Chargement des spots...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-final">
+        <h2>Explore tous les spots <em
+                style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">en
+                temps réel</em></h2>
+        <p>Télécharge l'app pour accéder aux prévisions détaillées de chaque spot.</p>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px" download>
+            <span class="material-symbols-outlined">download</span>
+            Télécharger SwellSync
+        </a>
+    </section>
+
+    <footer>
+        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
+        <p>
+            <a href="/privacy.html">Confidentialité</a> ·
+            <a href="/cgv.html">Conditions générales</a> ·
+            <a href="/contact.html">Contact</a> ·
+            <a href="/legal.html">Mentions légales</a>
+        </p>
+    </footer>
+
+    <script>
+        fetch('/api/spots').then(r => r.json()).then(spots => {
+            const grid = document.getElementById('spotsGrid');
+            const diffEmoji = { 'Débutant': '🟢', 'Intermédiaire': '🟡', 'Avancé': '🔴', 'Expert': '⚫' };
+            grid.innerHTML = spots.map(s => `
+                <div class="spot-chip">
+                    <span class="emoji">${diffEmoji[s.difficulty] || '🏄'}</span>
+                    <div class="info">
+                        <span class="name">${s.name}</span>
+                        <span class="loc">${s.location}</span>
+                    </div>
+                </div>
+            `).join('');
+        }).catch(() => {
+            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots.</p>';
+        });
+    </script>
+</body>
+
+</html>
