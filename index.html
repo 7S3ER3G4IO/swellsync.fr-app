@@ -1184,6 +1184,11 @@
             });
         });
 
+        // ── Auto-redirect si mode standalone (app installée) ──
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            window.location.replace('/pages/home.html');
+        }
+
         // ── Register SW ──
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => { });
     </script>

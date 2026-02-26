@@ -2,9 +2,14 @@
     "name": "SwellSync",
     "short_name": "SwellSync",
     "description": "Prévisions surf en temps réel — spots, houle & communauté.",
+    "id": "swellsync-app",
     "start_url": "/pages/home.html",
-    "scope": "/",
+    "scope": "/pages/",
     "display": "standalone",
+    "display_override": [
+        "standalone",
+        "minimal-ui"
+    ],
     "orientation": "portrait",
     "lang": "fr",
     "background_color": "#080f1a",
