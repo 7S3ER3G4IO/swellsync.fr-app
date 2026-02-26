@@ -177,7 +177,8 @@ const apiLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: 'Trop de requêtes — réessayez dans 1 minute.' },
-    skip: (req) => req.path.startsWith('/assets') || req.path === '/favicon.ico'
+    skip: (req) => req.path.startsWith('/assets') || req.path === '/favicon.ico',
+    validate: { xForwardedForHeader: false }
 });
 app.use('/api', apiLimiter);
 
@@ -186,7 +187,7 @@ const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 min
     max: 10,
     message: { error: 'Trop de tentatives de connexion. Attendez 15 min.' },
-    keyGenerator: (req) => req.ip + ':login'
+    validate: { xForwardedForHeader: false }
 });
 app.use('/api/auth/send-code', loginLimiter);
 app.use('/api/auth/verify-code', loginLimiter);
