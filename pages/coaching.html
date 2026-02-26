@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Coaching & Tips</title>
+    <meta name="description" content="SwellSync Coaching — Conseils de pros pour améliorer ton surf.">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        .glass {
+            background: rgba(15, 36, 56, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 186, 214, 0.1)
+        }
+
+        body {
+            min-height: max(884px, 100dvh)
+        }
+    </style>
+    <style>
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+    </style>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+</head>
+
+<body class="bg-[#080f1a] font-display text-slate-100 min-h-screen pb-24">
+
+    <header class="flex items-center justify-between p-6 sticky top-0 z-10 glass">
+        <a href="home.html" class="material-symbols-outlined text-slate-400 cursor-pointer">chevron_left</a>
+        <h1 class="text-xl font-bold">Coaching & Tips</h1>
+        <div class="w-6"></div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 py-6 space-y-6">
+
+        <!-- Intro -->
+        <section class="text-center space-y-2">
+            <div
+                class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-3xl text-[#080f1a]">school</span>
+            </div>
+            <h2 class="text-2xl font-black">Deviens meilleur surfeur</h2>
+            <p class="text-sm text-slate-400">Conseils de pros, techniques et astuces pour progresser rapidement 🏄</p>
+        </section>
+
+        <!-- Tips List -->
+        <section class="space-y-3">
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">🌊</span>
+                    <h3 class="font-bold text-sm">Lire les vagues</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Débutant</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Apprends à identifier les séries, les sets et les
+                    channels. Observer pendant 15 minutes avant d'entrer dans l'eau te fera gagner 80% de tes vagues.
+                </p>
+            </div>
+
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">🏄</span>
+                    <h3 class="font-bold text-sm">Le take-off parfait</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Débutant</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Place tes mains au niveau de la poitrine, pousse et
+                    pivote les pieds d'un coup. Regarde là où tu veux aller, pas la planche.</p>
+            </div>
+
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">💨</span>
+                    <h3 class="font-bold text-sm">Comprendre le vent</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full font-bold">Intermédiaire</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Le vent offshore (de la terre vers la mer) lisse les
+                    vagues et les creuse. Le vent onshore fait l'inverse. Surfe tôt le matin quand le vent est faible.
+                </p>
+            </div>
+
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">⚡</span>
+                    <h3 class="font-bold text-sm">Le bottom turn</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full font-bold">Intermédiaire</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Le bottom turn est LA manœuvre clé. En bas de la
+                    vague, appuie sur ton rail intérieur et regarde vers la lèvre. Plie les genoux et projette ton
+                    corps.</p>
+            </div>
+
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">🔥</span>
+                    <h3 class="font-bold text-sm">Le tube</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-bold">Avancé</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Pour te mettre au tube, prends la vague tard,
+                    positionne-toi derrière la section qui creuse. Baisse-toi, regarde la sortie, et laisse la vague te
+                    couvrir.</p>
+            </div>
+
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">🧘</span>
+                    <h3 class="font-bold text-sm">La préparation physique</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-[#00bad6]/20 text-[#00bad6] px-2 py-0.5 rounded-full font-bold">Tous
+                        niveaux</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Travaille ta rame (natation, ramage), ta souplesse
+                    (yoga), et tes jambes (squats, fentes). 20 minutes par jour améliorent ta session de 200%.</p>
+            </div>
+
+            <div class="glass rounded-2xl p-4 space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">🛡️</span>
+                    <h3 class="font-bold text-sm">Sécurité en mer</h3>
+                    <span
+                        class="ml-auto text-[9px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full font-bold">Essentiel</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Surfe toujours avec les autres en vue. Connaît les
+                    courants, les rochers, et les drapeaux. Ne surfe jamais seul dans des conditions au-dessus de ton
+                    niveau.</p>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <a href="community.html"
+            class="block w-full py-4 text-center rounded-2xl bg-[#00bad6] text-[#080f1a] font-black text-sm active:scale-95 transition-transform">
+            💬 Poser une question à la Communauté
+        </a>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+    <script src="js/api.js"></script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/notif-badge.js"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/push_notifs.js" defer></script>
+</body>
+
+</html>

@@ -573,66 +573,316 @@
         </div>
     </div>
 
-    <!-- Badge Shop Modal -->
-    <div id="badgeShopModal" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
+    <!-- Badge Shop Modal (Full Boutique) -->
+    <div id="badgeShopModal" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm"
+        style="overflow-y:auto">
+        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3"
+            style="max-height:85vh;overflow-y:auto">
             <div class="flex items-center justify-between">
-                <h3 class="font-black text-base">🏅 Boutique Badges</h3>
+                <div>
+                    <h3 class="font-black text-base">🏪 Boutique SwellSync</h3>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Personnalise ton profil et tes interactions 🤙</p>
+                </div>
                 <button onclick="closeBadgeShop()" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
-            <p class="text-xs text-slate-400">Obtiens ton badge régional ou de compétition pour afficher ton
-                appartenance dans la communauté 🤙</p>
-            <div class="space-y-2.5">
-                <div class="flex items-center gap-3 card rounded-xl p-3">
-                    <img src="/assets/images/badges/basque.png" alt="Pays Basque" style="width:36px;height:36px">
-                    <div class="flex-1">
-                        <p class="text-xs font-bold">Badge Pays Basque</p>
-                        <p class="text-[10px] text-slate-500">Surfer sur les côtes basques</p>
+
+            <!-- Shop Tabs -->
+            <div class="flex gap-1 bg-[#080f1a] rounded-xl p-1">
+                <button onclick="shopTab('badges')" id="shopTabBadges"
+                    class="flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#080f1a]">🏅 Badges</button>
+                <button onclick="shopTab('stickers')" id="shopTabStickers"
+                    class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400">💬 Stickers</button>
+                <button onclick="shopTab('profil')" id="shopTabProfil"
+                    class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400">✨ Profil</button>
+            </div>
+
+            <!-- TAB: Badges -->
+            <div id="shopPanelBadges" class="space-y-2">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Régionaux</p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <img src="/assets/images/badges/basque.png" alt="Pays Basque" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold">Badge Pays Basque</p>
+                            <p class="text-[10px] text-slate-500">Représente la côte basque 🏄</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyBadge('Pays Basque',0.99)">0,99€</button>
                     </div>
-                    <button
-                        class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-                        onclick="buyBadge('Pays Basque',0.99)">0,99€</button>
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <img src="/assets/images/badges/landes.png" alt="Landes" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold">Badge Landes</p>
+                            <p class="text-[10px] text-slate-500">Surfeur des Landes 🌲</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyBadge('Landes',0.99)">0,99€</button>
+                    </div>
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <img src="/assets/images/badges/bretagne.png" alt="Bretagne" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold">Badge Bretagne</p>
+                            <p class="text-[10px] text-slate-500">Surfeur breton ⚓</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyBadge('Bretagne',0.99)">0,99€</button>
+                    </div>
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <img src="/assets/images/badges/reunion.png" alt="Réunion" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold">Badge La Réunion</p>
+                            <p class="text-[10px] text-slate-500">Surfeur réunionnais 🌴</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyBadge('Réunion',0.99)">0,99€</button>
+                    </div>
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <img src="/assets/images/badges/guadeloupe.png" alt="Guadeloupe" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold">Badge Guadeloupe</p>
+                            <p class="text-[10px] text-slate-500">Surfeur caribéen 🏝️</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyBadge('Guadeloupe',0.99)">0,99€</button>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3 card rounded-xl p-3">
-                    <img src="/assets/images/badges/landes.png" alt="Landes" style="width:36px;height:36px">
-                    <div class="flex-1">
-                        <p class="text-xs font-bold">Badge Landes</p>
-                        <p class="text-[10px] text-slate-500">Surfeur des Landes</p>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pt-2">Compétition & Style</p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <img src="/assets/images/badges/shortboard.png" alt="Shortboard" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold">Badge Shortboard</p>
+                            <p class="text-[10px] text-slate-500">Specialist shortboard 🏄‍♂️</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyBadge('Shortboard',0.99)">0,99€</button>
                     </div>
-                    <button
-                        class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-                        onclick="buyBadge('Landes',0.99)">0,99€</button>
+                    <div class="flex items-center gap-3 card rounded-xl p-3" style="border-color:rgba(245,158,11,.3)">
+                        <img src="/assets/images/badges/elite.png" alt="Elite" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold text-amber-300">Badge Elite</p>
+                            <p class="text-[10px] text-slate-500">Exclusif — Surfeur d'élite ⚡</p>
+                        </div>
+                        <button
+                            class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-black"
+                            style="background:linear-gradient(135deg,#f59e0b,#d97706)"
+                            onclick="buyBadge('Elite',1.99)">1,99€</button>
+                    </div>
+                    <div class="flex items-center gap-3 card rounded-xl p-3" style="border-color:rgba(168,85,247,.3)">
+                        <img src="/assets/images/badges/prostar.png" alt="Pro Star" style="width:40px;height:40px">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold text-purple-300">Badge Pro Star ⭐</p>
+                            <p class="text-[10px] text-slate-500">Badge Pro officiel SwellSync</p>
+                        </div>
+                        <button
+                            class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-white"
+                            style="background:linear-gradient(135deg,#7c3aed,#a855f7)"
+                            onclick="buyBadge('Pro Star',2.99)">2,99€</button>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3 card rounded-xl p-3">
-                    <img src="/assets/images/badges/bretagne.png" alt="Bretagne" style="width:36px;height:36px">
-                    <div class="flex-1">
-                        <p class="text-xs font-bold">Badge Bretagne</p>
-                        <p class="text-[10px] text-slate-500">Surfeur breton</p>
-                    </div>
-                    <button
-                        class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-                        onclick="buyBadge('Bretagne',0.99)">0,99€</button>
+            </div>
+
+            <!-- TAB: Stickers (quick reactions for posts) -->
+            <div id="shopPanelStickers" class="hidden space-y-3">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Réactions rapides pour les
+                    posts</p>
+                <p class="text-[10px] text-slate-400">Ajoute des réactions uniques sur les posts de la communauté</p>
+
+                <p class="text-[9px] text-[#00bad6] font-bold uppercase mt-2">🏄 Surf</p>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="buySticker('🤙','Shaka')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🤙</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Shaka</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('🏄','Surfeur')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🏄</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Surfeur</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('🌊','Big Wave')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🌊</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Big Wave</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('🔥','En Feu')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🔥</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">En Feu</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
                 </div>
-                <div class="flex items-center gap-3 card rounded-xl p-3">
-                    <img src="/assets/images/badges/elite.png" alt="Elite" style="width:36px;height:36px">
-                    <div class="flex-1">
-                        <p class="text-xs font-bold">Badge Elite</p>
-                        <p class="text-[10px] text-slate-500">Surfeur d'élite</p>
-                    </div>
-                    <button
-                        class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-                        onclick="buyBadge('Elite',1.99)">1,99€</button>
+
+                <p class="text-[9px] text-[#00bad6] font-bold uppercase mt-2">☀️ Météo & Conditions</p>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="buySticker('☀️','Soleil')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">☀️</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Soleil</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('💨','Offshore')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">💨</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Offshore</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('🌅','Sunset')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🌅</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Sunset</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('🦈','Shark!')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🦈</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Shark!</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
                 </div>
-                <div class="flex items-center gap-3 card rounded-xl p-3">
-                    <img src="/assets/images/badges/prostar.png" alt="Pro Star" style="width:36px;height:36px">
+
+                <p class="text-[9px] text-[#00bad6] font-bold uppercase mt-2">🎉 Célébration</p>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="buySticker('🏆','Champ')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🏆</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Champ</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('💪','Strong')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">💪</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Strong</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('😍','Love It')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">😍</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Love It</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                    <button onclick="buySticker('🎯','Précis')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <span class="text-2xl block">🎯</span>
+                        <span class="text-[9px] text-slate-400 block mt-1">Précis</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,49€</span>
+                    </button>
+                </div>
+
+                <!-- Pack promo -->
+                <div class="card rounded-xl p-3 flex items-center gap-3 mt-2" style="border-color:rgba(0,186,214,.3)">
+                    <div class="text-xl">📦</div>
                     <div class="flex-1">
-                        <p class="text-xs font-bold">Badge Pro Star</p>
-                        <p class="text-[10px] text-slate-500">Badge Pro officiel SwellSync</p>
+                        <p class="text-xs font-bold text-[#00bad6]">Pack 12 Stickers</p>
+                        <p class="text-[10px] text-slate-500">Tous les stickers d'un coup !</p>
                     </div>
-                    <button
-                        class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-                        onclick="buyBadge('Pro Star',2.99)">2,99€</button>
+                    <div class="text-right">
+                        <span class="text-[10px] text-slate-500 line-through">5,88€</span>
+                        <button
+                            class="block bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform mt-0.5"
+                            onclick="buySticker('all','Pack')">2,99€</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Profil (frames, auras, effects) -->
+            <div id="shopPanelProfil" class="hidden space-y-3">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Cadres de profil</p>
+                <p class="text-[10px] text-slate-400">Un cadre autour de ton avatar dans la communauté</p>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="buyFrame('ocean')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
+                            style="border:3px solid #00bad6;background:rgba(0,186,214,.15)">S</div>
+                        <span class="text-[9px] text-slate-300 font-bold block">Ocean</span>
+                        <span class="text-[9px] text-[#00bad6] font-bold block">0,99€</span>
+                    </button>
+                    <button onclick="buyFrame('fire')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
+                            style="border:3px solid #f97316;background:rgba(249,115,22,.15)">S</div>
+                        <span class="text-[9px] text-slate-300 font-bold block">Fire</span>
+                        <span class="text-[9px] text-orange-400 font-bold block">0,99€</span>
+                    </button>
+                    <button onclick="buyFrame('gold')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
+                            style="border:3px solid #f59e0b;background:rgba(245,158,11,.15)">S</div>
+                        <span class="text-[9px] text-slate-300 font-bold block">Gold</span>
+                        <span class="text-[9px] text-amber-400 font-bold block">1,49€</span>
+                    </button>
+                    <button onclick="buyFrame('rainbow')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
+                            style="border:3px solid;border-image:linear-gradient(135deg,#f43f5e,#8b5cf6,#00bad6) 1;border-radius:50%;background:rgba(139,92,246,.1)">
+                            S</div>
+                        <span class="text-[9px] text-slate-300 font-bold block">Rainbow</span>
+                        <span class="text-[9px] text-purple-400 font-bold block">1,99€</span>
+                    </button>
+                    <button onclick="buyFrame('neon')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
+                            style="border:3px solid #22d3ee;box-shadow:0 0 8px rgba(34,211,238,.5);background:rgba(34,211,238,.1)">
+                            S</div>
+                        <span class="text-[9px] text-slate-300 font-bold block">Neon</span>
+                        <span class="text-[9px] text-cyan-400 font-bold block">1,99€</span>
+                    </button>
+                    <button onclick="buyFrame('diamond')"
+                        class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
+                        <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
+                            style="border:3px solid #e2e8f0;box-shadow:0 0 12px rgba(226,232,240,.4);background:rgba(226,232,240,.08)">
+                            S</div>
+                        <span class="text-[9px] text-slate-300 font-bold block">Diamond 💎</span>
+                        <span class="text-[9px] text-slate-200 font-bold block">2,99€</span>
+                    </button>
+                </div>
+
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest pt-2">Effets de nom</p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <span class="text-sm font-black"
+                            style="background:linear-gradient(90deg,#00bad6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SwellSurfer</span>
+                        <div class="flex-1">
+                            <p class="text-[10px] text-slate-500">Nom en dégradé ocean</p>
+                        </div>
+                        <button
+                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            onclick="buyEffect('gradient')">0,99€</button>
+                    </div>
+                    <div class="flex items-center gap-3 card rounded-xl p-3">
+                        <span class="text-sm font-black"
+                            style="background:linear-gradient(90deg,#f59e0b,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SwellSurfer</span>
+                        <div class="flex-1">
+                            <p class="text-[10px] text-slate-500">Nom en dégradé fire</p>
+                        </div>
+                        <button
+                            class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-black"
+                            style="background:linear-gradient(135deg,#f59e0b,#f97316)"
+                            onclick="buyEffect('fire')">0,99€</button>
+                    </div>
+                    <div class="flex items-center gap-3 card rounded-xl p-3" style="border-color:rgba(168,85,247,.2)">
+                        <span class="text-sm font-black"
+                            style="background:linear-gradient(90deg,#a855f7,#ec4899,#f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SwellSurfer
+                            ✨</span>
+                        <div class="flex-1">
+                            <p class="text-[10px] text-slate-500">Nom arc-en-ciel + sparkle</p>
+                        </div>
+                        <button
+                            class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-white"
+                            style="background:linear-gradient(135deg,#a855f7,#ec4899)"
+                            onclick="buyEffect('rainbow')">1,99€</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1086,6 +1336,41 @@
         }
         function unlockBadge() { showBadgeShop(); }
 
+        function shopTab(tab) {
+            ['badges', 'stickers', 'profil'].forEach(t => {
+                document.getElementById('shopPanel' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
+                const btn = document.getElementById('shopTab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (t === tab) { btn.className = 'flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#080f1a]'; }
+                else { btn.className = 'flex-1 py-2 rounded-lg text-xs font-bold text-slate-400'; }
+            });
+        }
+
+        function buySticker(emoji, name) {
+            const price = emoji === 'all' ? 2.99 : 0.49;
+            showPurchaseModal('Sticker ' + name, emoji === 'all' ? '📦' : emoji, price);
+        }
+        function buyFrame(type) {
+            const prices = { ocean: 0.99, fire: 0.99, gold: 1.49, rainbow: 1.99, neon: 1.99, diamond: 2.99 };
+            showPurchaseModal('Cadre ' + type.charAt(0).toUpperCase() + type.slice(1), '🖼️', prices[type] || 0.99);
+        }
+        function buyEffect(type) {
+            const prices = { gradient: 0.99, fire: 0.99, rainbow: 1.99 };
+            showPurchaseModal('Effet ' + type.charAt(0).toUpperCase() + type.slice(1), '✨', prices[type] || 0.99);
+        }
+        function showPurchaseModal(name, icon, price) {
+            const m = document.createElement('div');
+            m.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
+            m.innerHTML = `<div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
+                <div class="text-5xl mb-4">${icon}</div>
+                <h3 class="text-xl font-black mb-2">${name}</h3>
+                <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
+                <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter cet article via Stripe.</p>
+                <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris !</button>
+            </div>`;
+            document.body.appendChild(m);
+            m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+        }
+
         function showSearch() { window.location.href = 'search.html'; }
 
         // Init
@@ -1211,6 +1496,7 @@
     <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
     <script src="js/stories.js"></script>
+    <script src="/js/i18n.js"></script>
     <script src="/js/push_notifs.js" defer></script>
 </body>
 
