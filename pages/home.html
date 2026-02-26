@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport" />
     <title>SwellSync - Home</title>
     <meta name="description"
         content="SwellSync — Prévisions surf en direct, conditions des spots et communauté de surfeurs sur la côte Atlantique.">
@@ -17,7 +17,8 @@
     <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
     <style>
         body {
-            min-height: max(884px, 100dvh)
+            min-height: max(884px, 100dvh);
+            padding-top: env(safe-area-inset-top);
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -909,7 +910,7 @@
     </script>
     <script src="js/adsense.js"></script>
     <script src="js/share-social.js"></script>
-<script src="js/ui-components.js"></script>
+    <script src="js/ui-components.js"></script>
 </body>
 
 </html>
