@@ -57,8 +57,7 @@ app.use(compression({
 
 
 // ==========================================
-// 🔧 MODE DÉVELOPPEMENT — Sécurités en pause
-// Pour réactiver : décommenter les blocs marqués [SÉCURITÉ]
+// 🔒 SÉCURITÉS ACTIVÉES
 // ==========================================
 
 // Logging des requêtes
@@ -68,54 +67,51 @@ if (process.env.NODE_ENV === 'production') {
     app.use(morgan('⚡ [HTTP] :method :url :status :response-time ms'));
 }
 
-// [SÉCURITÉ — PAUSE] Helmet + HSTS
-// app.use((req, res, next) => {
-//     res.setHeader('Strict-Transport-Security', 'max-age=0; includeSubDomains');
-//     next();
-// });
-// app.use(helmet({
-//     crossOriginEmbedderPolicy: false,
-//     crossOriginResourcePolicy: { policy: "cross-origin" },
-//     hsts: false,
-//     contentSecurityPolicy: false
-// }));
+// Helmet + HSTS
+app.use(helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    hsts: process.env.NODE_ENV === 'production' ? { maxAge: 31536000, includeSubDomains: true } : false,
+    contentSecurityPolicy: false
+}));
 
-// [SÉCURITÉ — PAUSE] Rate Limiting (anti brute-force)
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     max: 500,
-//     message: "Trop de requêtes depuis cette IP."
-// });
-// app.use('/api', limiter);
+// Rate Limiting global (anti brute-force)
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 500,
+    message: { error: "Trop de requêtes depuis cette IP." },
+    validate: { xForwardedForHeader: false }
+});
+app.use('/api', globalLimiter);
 
-// [SÉCURITÉ — PAUSE] CORS strict
-// app.use(cors({
-//     origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'http://localhost:3005',
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization']
-// }));
+// CORS strict (FRONTEND_URL en prod, localhost en dev)
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production'
+        ? (process.env.FRONTEND_URL || 'https://swellsync.fr')
+        : true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
-// CORS ouvert en dev (remplace le CORS strict ci-dessus)
-app.use(cors());
+// HPP (HTTP Parameter Pollution)
+app.use(hpp());
 
-// [SÉCURITÉ — PAUSE] HPP (HTTP Parameter Pollution)
-// app.use(hpp());
+// Parsers de body (limites raisonnables)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Parsers de body (taille généreuse en dev)
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-
-// [SÉCURITÉ — PAUSE] Nettoyage XSS des payloads
-// app.use((req, res, next) => {
-//     if (req.body) {
-//         for (let key in req.body) {
-//             if (typeof req.body[key] === 'string') {
-//                 req.body[key] = xss(req.body[key]);
-//             }
-//         }
-//     }
-//     next();
-// });
+// Nettoyage XSS des payloads
+app.use((req, res, next) => {
+    if (req.body) {
+        for (let key in req.body) {
+            if (typeof req.body[key] === 'string') {
+                req.body[key] = xss(req.body[key]);
+            }
+        }
+    }
+    next();
+});
 
 // ── Anti-cache global : force no-store sur tout fichier web ──────────────────
 app.use((req, res, next) => {
