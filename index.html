@@ -4,144 +4,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwellSync — Prévisions Surf en Temps Réel | Télécharger l'App</title>
+    <title>SwellSync — Prévisions Surf en Temps Réel | Télécharger Gratuitement</title>
     <meta name="description"
-        content="SwellSync est l'app de prévisions surf en temps réel pour la côte Atlantique. 60+ spots, messagerie entre surfeurs, communauté, alertes houle. Gratuit.">
+        content="SwellSync : l'app de prévisions surf pour la côte Atlantique. 60+ spots, messagerie, communauté, alertes houle. Gratuit sur iOS, Android, Windows, macOS.">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#00bad6">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet">
     <style>
+        :root {
+            --bg: #f8fafc;
+            --bg2: #ffffff;
+            --bg3: #f1f5f9;
+            --text: #0f172a;
+            --text2: #475569;
+            --text3: #94a3b8;
+            --accent: #00bad6;
+            --accent2: #00d696;
+            --accent-dark: #0891b2;
+            --gradient: linear-gradient(135deg, #00bad6, #00d696);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: #040a14;
-            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
         }
 
-        /* ═══ HERO ═══ */
-        .hero {
-            min-height: 100vh;
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ═══ NAVBAR ═══ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 0 24px;
+            height: 64px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 20px;
-            position: relative;
-            overflow: hidden;
+            justify-content: space-between;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(0, 186, 214, 0.15) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 80%, rgba(0, 214, 150, 0.08) 0%, transparent 50%);
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
         }
 
-        .hero-badge {
+        .nav-logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .nav-logo span {
+            font-family: 'Space Grotesk';
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .nav-logo .accent {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text2);
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+        .nav-links a:hover {
+            background: var(--bg3);
+            color: var(--text);
+        }
+
+        .nav-links a.active {
+            background: rgba(0, 186, 214, 0.08);
+            color: var(--accent-dark);
+            font-weight: 600;
+        }
+
+        .nav-cta {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 16px;
-            border-radius: 100px;
-            background: rgba(0, 186, 214, 0.1);
-            border: 1px solid rgba(0, 186, 214, 0.2);
-            font-size: 12px;
-            color: #00bad6;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 24px;
-            animation: fadeInUp .8s ease;
-        }
-
-        .hero-badge .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #00bad6;
-            animation: pulse 2s infinite;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            background: linear-gradient(135deg, #fff 0%, #00bad6 50%, #00d696 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            animation: fadeInUp .8s ease .1s both;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: #94a3b8;
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 36px;
-            animation: fadeInUp .8s ease .2s both;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeInUp .8s ease .3s both;
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 32px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #00bad6, #00d696);
-            color: #040a14;
-            font-weight: 800;
-            font-size: 15px;
+            padding: 8px 20px;
+            border-radius: 12px;
+            background: var(--gradient);
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
             text-decoration: none;
             border: none;
             cursor: pointer;
             transition: all .3s;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0, 186, 214, 0.3);
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0, 186, 214, 0.25);
         }
 
-        .btn-primary:active {
-            transform: scale(0.97);
+        .nav-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 24px;
         }
 
-        .btn-secondary {
+        /* ═══ HERO ═══ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            background: linear-gradient(180deg, rgba(0, 186, 214, 0.03) 0%, transparent 40%);
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 540px;
+        }
+
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 14px 32px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: rgba(0, 186, 214, 0.08);
+            border: 1px solid rgba(0, 186, 214, 0.15);
+            font-size: 12px;
+            color: var(--accent-dark);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 18px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 30px;
+            border-radius: 14px;
+            background: var(--gradient);
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all .3s;
+            box-shadow: 0 4px 16px rgba(0, 186, 214, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 186, 214, 0.3);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 30px;
+            border-radius: 14px;
+            background: transparent;
+            border: 1.5px solid rgba(0, 0, 0, 0.12);
+            color: var(--text);
             font-weight: 700;
             font-size: 15px;
             text-decoration: none;
@@ -149,35 +271,49 @@
             transition: all .3s;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+        .btn-outline:hover {
+            background: var(--bg3);
+            border-color: var(--accent);
         }
 
-        /* ═══ PHONE MOCKUP ═══ */
-        .phone-wrapper {
-            margin-top: 60px;
+        .platforms {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .platform {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--text3);
+            font-weight: 600;
+        }
+
+        /* Phone Mockup */
+        .hero-phone {
+            display: flex;
+            justify-content: center;
             position: relative;
-            z-index: 1;
-            animation: fadeInUp 1s ease .5s both;
         }
 
-        .phone-frame {
-            width: 280px;
-            height: 560px;
-            border-radius: 40px;
+        .phone-mock {
+            width: 300px;
+            height: 600px;
+            border-radius: 44px;
             overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 30px 100px rgba(0, 186, 214, 0.15), 0 0 0 1px rgba(0, 186, 214, 0.1);
+            border: 4px solid #e2e8f0;
+            background: var(--bg2);
+            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 0, 0, 0.04);
             position: relative;
-            background: #080f1a;
         }
 
-        .phone-frame iframe {
+        .phone-mock iframe {
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 37px;
+            border-radius: 40px;
         }
 
         .phone-notch {
@@ -185,57 +321,29 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 28px;
-            background: #040a14;
+            width: 130px;
+            height: 30px;
+            background: #e2e8f0;
             border-radius: 0 0 20px 20px;
             z-index: 10;
         }
 
         .phone-glow {
             position: absolute;
-            inset: -40px;
-            border-radius: 60px;
-            background: radial-gradient(ellipse, rgba(0, 186, 214, 0.1) 0%, transparent 70%);
+            inset: -50px;
+            border-radius: 80px;
             z-index: -1;
-            filter: blur(20px);
+            background: radial-gradient(ellipse, rgba(0, 186, 214, 0.08) 0%, transparent 70%);
         }
 
-        /* ═══ STATS BAR ═══ */
-        .stats-bar {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 60px 20px;
-            animation: fadeInUp .8s ease .6s both;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-num {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #00bad6;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
-        /* ═══ FEATURES ═══ */
+        /* ═══ SECTION COMMON ═══ */
         .section {
-            padding: 80px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
         }
 
         .section-tag {
@@ -244,53 +352,92 @@
             gap: 6px;
             padding: 5px 14px;
             border-radius: 100px;
-            background: rgba(0, 186, 214, 0.08);
-            border: 1px solid rgba(0, 186, 214, 0.15);
+            background: rgba(0, 186, 214, 0.06);
+            border: 1px solid rgba(0, 186, 214, 0.12);
             font-size: 11px;
-            color: #00bad6;
+            color: var(--accent-dark);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
-        .section h2 {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
+        .section-header h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
             font-weight: 800;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
-        .section h2 span {
-            color: #00bad6;
+        .section-header h2 em {
+            font-style: normal;
+            color: var(--accent);
         }
 
-        .section>p {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 48px;
+        .section-header p {
+            font-size: 1.05rem;
+            color: var(--text2);
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.7;
         }
 
+        /* ═══ STATS ═══ */
+        .stats {
+            background: var(--bg2);
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .stats .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 32px;
+            padding: 48px 24px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Space Grotesk';
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        /* ═══ FEATURES ═══ */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--bg2);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             padding: 28px;
-            transition: all .4s;
+            transition: all .3s;
             cursor: default;
         }
 
         .feature-card:hover {
-            background: rgba(0, 186, 214, 0.04);
-            border-color: rgba(0, 186, 214, 0.15);
             transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(0, 186, 214, 0.2);
         }
 
         .feature-icon {
@@ -305,84 +452,284 @@
         }
 
         .feature-card h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .feature-card p {
             font-size: 13px;
-            color: #94a3b8;
-            line-height: 1.5;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        /* ═══ SPOTS PREVIEW ═══ */
+        .spots-section {
+            background: var(--bg2);
+        }
+
+        .spots-scroll {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 4px;
+            border-radius: var(--radius);
+        }
+
+        .spots-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .spots-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .spot-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: var(--bg);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all .3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .spot-chip:hover {
+            border-color: var(--accent);
+            background: rgba(0, 186, 214, 0.03);
+        }
+
+        .spot-chip .emoji {
+            font-size: 20px;
+        }
+
+        .spot-chip .info {
+            flex: 1;
+        }
+
+        .spot-chip .name {
+            font-size: 13px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .spot-chip .loc {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        /* ═══ PRICING ═══ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: var(--bg2);
+            border: 1.5px solid rgba(0, 0, 0, 0.06);
+            border-radius: 24px;
+            padding: 36px;
+            text-align: center;
+            transition: all .3s;
+        }
+
+        .price-card.pro {
+            border-color: var(--accent);
+            background: linear-gradient(180deg, rgba(0, 186, 214, 0.02), var(--bg2));
+            position: relative;
+        }
+
+        .price-card.pro::before {
+            content: '⭐ Populaire';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 16px;
+            border-radius: 100px;
+            background: var(--gradient);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .price-name {
+            font-family: 'Space Grotesk';
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .price-amount {
+            font-family: 'Space Grotesk';
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin: 16px 0 4px;
+        }
+
+        .price-amount span {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text3);
+        }
+
+        .price-desc {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 24px;
+        }
+
+        .price-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 28px;
+        }
+
+        .price-features li {
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-features li::before {
+            content: '✅';
+            font-size: 14px;
+        }
+
+        .price-features li.no::before {
+            content: '—';
+            color: var(--text3);
+        }
+
+        /* ═══ FAQ ═══ */
+        .faq-list {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: var(--bg2);
+            transition: all .3s;
+        }
+
+        .faq-q {
+            padding: 18px 24px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-q::after {
+            content: '+';
+            font-size: 20px;
+            color: var(--accent);
+            transition: transform .3s;
+        }
+
+        .faq-item.open .faq-q::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-a {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all .3s;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 300px;
+            padding: 0 24px 18px;
+        }
+
+        .faq-a p {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.7;
         }
 
         /* ═══ CTA ═══ */
-        .cta-section {
+        .cta-final {
             text-align: center;
-            padding: 100px 20px;
-            position: relative;
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 186, 214, 0.04) 50%, transparent 100%);
+            padding: 100px 24px;
+            background: linear-gradient(180deg, var(--bg) 0%, rgba(0, 186, 214, 0.04) 50%, var(--bg) 100%);
         }
 
-        .cta-section h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
+        .cta-final h2 {
+            font-family: 'Space Grotesk';
+            font-size: clamp(2rem, 4vw, 2.8rem);
             font-weight: 800;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
-        .cta-section p {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            margin-bottom: 36px;
+        .cta-final p {
+            font-size: 1.05rem;
+            color: var(--text2);
+            margin-bottom: 28px;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* ═══ PLATFORMS ═══ */
-        .platforms {
+        .cta-tags {
             display: flex;
             gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 24px;
+            margin-top: 20px;
         }
 
-        .platform-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .cta-tag {
+            padding: 6px 14px;
+            border-radius: 100px;
+            background: rgba(0, 186, 214, 0.06);
             font-size: 12px;
-            color: #94a3b8;
+            color: var(--accent-dark);
             font-weight: 600;
-        }
-
-        .platform-badge svg {
-            width: 18px;
-            height: 18px;
-            fill: #94a3b8;
         }
 
         /* ═══ FOOTER ═══ */
         footer {
             text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: #475569;
+            padding: 40px 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            color: var(--text3);
             font-size: 13px;
         }
 
         footer a {
-            color: #00bad6;
+            color: var(--accent);
             text-decoration: none;
         }
 
+        footer a:hover {
+            text-decoration: underline;
+        }
+
         /* ═══ ANIMATIONS ═══ */
-        @keyframes fadeInUp {
+        @keyframes fadeUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -398,11 +745,11 @@
 
             0%,
             100% {
-                opacity: 1;
+                opacity: 1
             }
 
             50% {
-                opacity: .3;
+                opacity: .3
             }
         }
 
@@ -410,36 +757,72 @@
 
             0%,
             100% {
-                transform: translateY(0);
+                transform: translateY(0)
             }
 
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-12px)
             }
         }
 
+        .animate {
+            animation: fadeUp .7s ease both;
+        }
+
         .float {
-            animation: float 4s ease-in-out infinite;
+            animation: float 5s ease-in-out infinite;
         }
 
         /* ═══ RESPONSIVE ═══ */
+        @media(max-width:900px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-buttons,
+            .platforms {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-menu-btn {
+                display: block;
+            }
+        }
+
         @media(max-width:640px) {
-            .stats-bar {
-                gap: 24px;
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .phone-mock {
+                width: 250px;
+                height: 500px;
+            }
+
+            .stats .container {
+                gap: 20px;
             }
 
             .stat-num {
                 font-size: 2rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .phone-frame {
-                width: 240px;
-                height: 480px;
             }
         }
     </style>
@@ -447,197 +830,362 @@
 
 <body>
 
-    <!-- ═══ NAV ═══ -->
-    <nav
-        style="position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(20px);background:rgba(4,10,20,0.8);border-bottom:1px solid rgba(255,255,255,0.05);padding:12px 24px;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync"
-                style="width:32px;height:32px;border-radius:8px">
-            <span style="font-weight:800;font-size:18px">Swell<span style="color:#00bad6">Sync</span></span>
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar">
+        <a href="#" class="nav-logo">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
+            <span>Swell<span class="accent">Sync</span></span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="#accueil" class="active">Accueil</a>
+            <a href="#fonctionnalites">Fonctionnalités</a>
+            <a href="#spots">Spots</a>
+            <a href="#tarifs">Tarifs</a>
+            <a href="#faq">FAQ</a>
         </div>
-        <a href="/pages/home.html" class="btn-primary" style="padding:8px 20px;font-size:13px;border-radius:10px">
+        <a href="/pages/home.html" class="nav-cta">
+            <span class="material-symbols-outlined" style="font-size:18px">surfing</span>
             Ouvrir l'app
         </a>
+        <button class="nav-menu-btn"
+            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
     </nav>
 
     <!-- ═══ HERO ═══ -->
-    <section class="hero">
-        <div class="hero-badge"><span class="dot"></span> Disponible maintenant — Gratuit</div>
-        <h1>Surfe les meilleures<br>vagues de France</h1>
-        <p>Prévisions surf en temps réel, 60+ spots sur la côte Atlantique, messagerie entre surfeurs et communauté
-            active. Tout dans une seule app. 🏄</p>
+    <section class="hero" id="accueil">
+        <div class="container">
+            <div class="hero-content animate">
+                <div class="hero-badge"><span class="dot"
+                        style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite"></span>
+                    Disponible maintenant — 100% Gratuit</div>
+                <h1>La meilleure app de <em>prévisions surf</em> en France</h1>
+                <p class="hero-desc">60+ spots sur la côte Atlantique, prévisions 7 jours, messagerie entre surfeurs,
+                    communauté active et alertes houle personnalisées. Tout dans une seule app installable.</p>
+                <div class="hero-buttons">
+                    <a href="/pages/home.html" class="btn-primary">
+                        <span class="material-symbols-outlined" style="font-size:20px">surfing</span>
+                        Lancer SwellSync
+                    </a>
+                    <button onclick="installPWA()" class="btn-outline" id="installBtn">
+                        <span class="material-symbols-outlined" style="font-size:20px">download</span>
+                        Installer l'app
+                    </button>
+                </div>
+                <div class="platforms">
+                    <div class="platform">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
+                        </svg>
+                        iOS
+                    </div>
+                    <div class="platform">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V7H6v11zM3.5 7C2.67 7 2 7.67 2 8.5v7c0 .83.67 1.5 1.5 1.5S5 16.33 5 15.5v-7C5 7.67 4.33 7 3.5 7zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0012 0c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 006 6h12c0-1.98-.96-3.74-2.47-4.84zM10 4H9V3h1v1zm5 0h-1V3h1v1z" />
+                        </svg>
+                        Android
+                    </div>
+                    <div class="platform">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+                        </svg>
+                        Windows
+                    </div>
+                    <div class="platform">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
+                        </svg>
+                        macOS
+                    </div>
+                </div>
+            </div>
 
-        <div class="hero-buttons">
-            <a href="/pages/home.html" class="btn-primary">
-                <span class="material-symbols-outlined" style="font-size:20px">surfing</span>
-                Lancer SwellSync
-            </a>
-            <button onclick="installPWA()" class="btn-secondary" id="installBtn">
-                <span class="material-symbols-outlined" style="font-size:20px">download</span>
-                Installer l'app
-            </button>
-        </div>
-
-        <div class="platforms">
-            <div class="platform-badge">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
-                    <path
-                        d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11" />
-                </svg>
-                iOS
-            </div>
-            <div class="platform-badge">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M17.523 2.236l-2.141 3.707a9.575 9.575 0 00-3.382-.608 9.575 9.575 0 00-3.382.608L6.477 2.236A.39.39 0 005.8 2.236L3.66 5.943a.39.39 0 00.337.584h1.09A9.531 9.531 0 002 13.49v.546a.39.39 0 00.39.39h19.22a.39.39 0 00.39-.39v-.546a9.531 9.531 0 00-3.087-6.963h1.09a.39.39 0 00.337-.584l-2.14-3.707a.39.39 0 00-.677 0zM8.5 11a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm7 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM2 16.39a.39.39 0 01.39-.39h19.22a.39.39 0 01.39.39v4.22A1.39 1.39 0 0120.61 22H3.39A1.39 1.39 0 012 20.61v-4.22z" />
-                </svg>
-                Android
-            </div>
-            <div class="platform-badge">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
-                </svg>
-                Windows
-            </div>
-            <div class="platform-badge">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
-                </svg>
-                macOS
-            </div>
-        </div>
-
-        <!-- Phone mockup -->
-        <div class="phone-wrapper float">
-            <div class="phone-glow"></div>
-            <div class="phone-frame">
-                <div class="phone-notch"></div>
-                <iframe src="/pages/home.html" loading="lazy"></iframe>
+            <div class="hero-phone animate float" style="animation-delay:.3s">
+                <div class="phone-glow"></div>
+                <div class="phone-mock">
+                    <div class="phone-notch"></div>
+                    <iframe src="/pages/home.html" loading="lazy" title="SwellSync App"></iframe>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- ═══ STATS ═══ -->
-    <div class="stats-bar">
-        <div class="stat">
-            <div class="stat-num">60+</div>
-            <div class="stat-label">Spots de surf</div>
+    <section class="stats">
+        <div class="container">
+            <div class="stat animate">
+                <div class="stat-num">60+</div>
+                <div class="stat-label">Spots de surf</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">7 jours</div>
+                <div class="stat-label">De prévisions</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">24/7</div>
+                <div class="stat-label">Données live</div>
+            </div>
+            <div class="stat animate">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Gratuit</div>
+            </div>
         </div>
-        <div class="stat">
-            <div class="stat-num">7j</div>
-            <div class="stat-label">Prévisions</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">24/7</div>
-            <div class="stat-label">Données live</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">100%</div>
-            <div class="stat-label">Gratuit</div>
-        </div>
-    </div>
+    </section>
 
-    <!-- ═══ FEATURES ═══ -->
-    <section class="section">
-        <div class="section-tag">✨ Fonctionnalités</div>
-        <h2>Tout ce dont un surfeur <span>a besoin</span></h2>
-        <p>SwellSync concentre prévisions, communauté et outils dans une app élégante et rapide.</p>
+    <!-- ═══ FONCTIONNALITÉS ═══ -->
+    <section class="section" id="fonctionnalites">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">✨ Fonctionnalités</div>
+                <h2>Tout ce qu'un surfeur <em>a besoin</em></h2>
+                <p>SwellSync concentre prévisions météo, communauté sociale et outils de surf dans une seule app
+                    élégante.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(0,186,214,0.08)">🌊</div>
+                    <h3>Prévisions 7 jours</h3>
+                    <p>Hauteur des vagues, période, vent, température de l'eau — données StormGlass mises à jour toutes
+                        les 4 heures.</p>
+                </div>
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(16,185,129,0.08)">🗺️</div>
+                    <h3>Carte interactive</h3>
+                    <p>Visualise les conditions de chaque spot en un coup d'œil. Zoom, clique, explore la côte
+                        Atlantique.</p>
+                </div>
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(139,92,246,0.08)">💬</div>
+                    <h3>Messagerie privée</h3>
+                    <p>Discute avec d'autres surfeurs, organise des sessions et partage tes meilleurs spots dans le
+                        chat.</p>
+                </div>
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(245,158,11,0.08)">👥</div>
+                    <h3>Communauté</h3>
+                    <p>Publie tes sessions, partage des photos, suis tes riders préférés et collecte des badges uniques.
+                    </p>
+                </div>
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(239,68,68,0.08)">🔔</div>
+                    <h3>Alertes houle</h3>
+                    <p>Configure des alertes par spot avec des seuils de vague et période — ne rate plus jamais la bonne
+                        session.</p>
+                </div>
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(6,182,212,0.08)">📱</div>
+                    <h3>App installable</h3>
+                    <p>Installe SwellSync sur ton téléphone comme une vraie app. Fonctionne hors-ligne, rapide, sans App
+                        Store.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(0,186,214,0.1)">🌊</div>
-                <h3>Prévisions 7 jours</h3>
-                <p>Hauteur des vagues, période, direction du vent, température de l'eau — toutes les données StormGlass
-                    en temps réel.</p>
+    <!-- ═══ SPOTS ═══ -->
+    <section class="section spots-section" id="spots">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📍 Spots</div>
+                <h2>60+ spots sur <em>la côte Atlantique</em></h2>
+                <p>De la Bretagne au Pays Basque, chaque spot avec ses prévisions et conditions en temps réel.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(16,185,129,0.1)">🗺️</div>
-                <h3>Carte interactive</h3>
-                <p>60+ spots sur la côte Atlantique avec conditions live, webcams et infos détaillées pour chaque spot.
-                </p>
+            <div class="spots-scroll" id="spotsGrid">
+                <!-- Filled dynamically -->
+                <div style="text-align:center;padding:40px;color:var(--text3)">Chargement des spots...</div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(139,92,246,0.1)">💬</div>
-                <h3>Messagerie privée</h3>
-                <p>Discute avec d'autres surfeurs, partage des sessions et organise des sorties directement dans l'app.
-                </p>
+        </div>
+    </section>
+
+    <!-- ═══ TARIFS ═══ -->
+    <section class="section" id="tarifs">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">💎 Tarifs</div>
+                <h2>Gratuit, <em>pour toujours</em></h2>
+                <p>SwellSync est gratuit avec toutes les fonctionnalités essentielles. Le Pro débloque l'expérience
+                    complète.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(245,158,11,0.1)">👥</div>
-                <h3>Communauté</h3>
-                <p>Publie tes sessions, partage des photos, suis tes surfeurs préférés et collecte des badges.</p>
+            <div class="pricing-grid">
+                <div class="price-card animate">
+                    <div class="price-name">Gratuit</div>
+                    <div class="price-desc">Pour commencer à surfer</div>
+                    <div class="price-amount">0€ <span>/ mois</span></div>
+                    <ul class="price-features">
+                        <li>60+ spots de surf</li>
+                        <li>Prévisions 7 jours</li>
+                        <li>Carte interactive</li>
+                        <li>Communauté (posts, follows)</li>
+                        <li>Messagerie privée</li>
+                        <li>Journal de sessions</li>
+                        <li class="no" style="opacity:.5">Alertes houle (max 2)</li>
+                        <li class="no" style="opacity:.5">Pas de publicités</li>
+                    </ul>
+                    <a href="/pages/home.html" class="btn-outline" style="width:100%;justify-content:center">Commencer —
+                        Gratuit</a>
+                </div>
+                <div class="price-card pro animate">
+                    <div class="price-name">Pro</div>
+                    <div class="price-desc">Pour les riders sérieux</div>
+                    <div class="price-amount">4.99€ <span>/ mois</span></div>
+                    <ul class="price-features">
+                        <li>Tout du plan Gratuit</li>
+                        <li>Prévisions 16 jours</li>
+                        <li>Alertes houle illimitées</li>
+                        <li>Zéro publicité</li>
+                        <li>Badge Pro exclusif</li>
+                        <li>Accès anticipé aux nouveautés</li>
+                        <li>Support prioritaire</li>
+                        <li>Statistiques avancées</li>
+                    </ul>
+                    <a href="/pages/abonnement.html" class="btn-primary"
+                        style="width:100%;justify-content:center">Passer Pro</a>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(239,68,68,0.1)">🔔</div>
-                <h3>Alertes houle</h3>
-                <p>Configure des alertes personnalisées par spot — sois notifié quand les conditions sont parfaites.</p>
+        </div>
+    </section>
+
+    <!-- ═══ FAQ ═══ -->
+    <section class="section" id="faq" style="background:var(--bg3)">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">❓ FAQ</div>
+                <h2>Questions <em>fréquentes</em></h2>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(6,182,212,0.1)">📱</div>
-                <h3>PWA installable</h3>
-                <p>Installe SwellSync sur ton téléphone comme une vraie app — fonctionne hors-ligne, rapide, sans App
-                    Store.</p>
+            <div class="faq-list">
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">SwellSync est-il vraiment gratuit ?</div>
+                    <div class="faq-a">
+                        <p>Oui ! L'app est 100% gratuite avec toutes les fonctionnalités de base : prévisions, carte,
+                            communauté, messagerie. Le plan Pro (4.99€/mois) ajoute des fonctionnalités premium comme
+                            les prévisions 16 jours et la suppression des pubs.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment installer l'app sur mon téléphone ?</div>
+                    <div class="faq-a">
+                        <p><strong>iPhone/iPad :</strong> Ouvre swellsync.fr dans Safari → appuie sur le bouton Partager
+                            (⬆️) → "Sur l'écran d'accueil".<br><strong>Android :</strong> Ouvre dans Chrome → appuie sur
+                            les ⋮ → "Installer l'application".<br><strong>PC/Mac :</strong> Clique sur l'icône
+                            d'installation dans la barre d'adresse de Chrome.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Quels spots de surf sont disponibles ?</div>
+                    <div class="faq-a">
+                        <p>Plus de 60 spots sur toute la côte Atlantique française : Hossegor, Biarritz, La Torche,
+                            Lacanau, Capbreton, Anglet, Hendaye, et bien plus. De la Bretagne au Pays Basque en passant
+                            par les Landes et la Gironde.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">D'où viennent les données de prévisions ?</div>
+                    <div class="faq-a">
+                        <p>Les prévisions proviennent de StormGlass, l'une des sources les plus fiables au monde pour
+                            les données marines. Elles incluent la hauteur des vagues, la période, la direction du vent,
+                            la température de l'eau et le niveau de marée.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">L'app fonctionne-t-elle hors-ligne ?</div>
+                    <div class="faq-a">
+                        <p>Oui ! SwellSync est une Progressive Web App (PWA) qui cache les données pour une utilisation
+                            hors-ligne. Les dernières prévisions consultées restent accessibles même sans connexion.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment fonctionne la messagerie ?</div>
+                    <div class="faq-a">
+                        <p>Tu peux envoyer des messages privés à n'importe quel surfeur inscrit sur SwellSync. Trouve un
+                            profil, clique sur "Message" et commence à discuter. Les messages sont mis à jour en temps
+                            réel.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- ═══ CTA FINAL ═══ -->
-    <section class="cta-section">
-        <div class="section-tag">🏄 Prêt à surfer ?</div>
-        <h2>Rejoins la communauté</h2>
-        <p>Des centaines de surfeurs utilisent déjà SwellSync pour ne plus jamais rater la bonne session.</p>
-        <div class="hero-buttons">
-            <a href="/pages/home.html" class="btn-primary" style="font-size:16px;padding:16px 40px">
-                <span class="material-symbols-outlined">surfing</span>
-                Lancer SwellSync — C'est gratuit
-            </a>
-        </div>
-        <div class="platforms" style="margin-top:20px">
-            <div class="platform-badge">✅ Pas besoin d'App Store</div>
-            <div class="platform-badge">✅ Fonctionne hors-ligne</div>
-            <div class="platform-badge">✅ 100% gratuit</div>
+    <section class="cta-final">
+        <h2>Prêt à trouver ta <em
+                style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent">prochaine
+                session</em> ?</h2>
+        <p>Rejoins des centaines de surfeurs qui utilisent SwellSync pour ne plus jamais rater la bonne vague.</p>
+        <a href="/pages/home.html" class="btn-primary" style="font-size:16px;padding:16px 40px">
+            <span class="material-symbols-outlined">surfing</span>
+            Lancer SwellSync — C'est gratuit
+        </a>
+        <div class="cta-tags">
+            <span class="cta-tag">✅ Pas besoin d'App Store</span>
+            <span class="cta-tag">✅ Fonctionne hors-ligne</span>
+            <span class="cta-tag">✅ 100% gratuit</span>
         </div>
     </section>
 
     <!-- ═══ FOOTER ═══ -->
     <footer>
-        <p>© 2026 <strong>SwellSync</strong> — Par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p style="margin-top:8px">
-            <a href="/privacy.html">Confidentialité</a> · <a href="/cgv.html">CGV</a> · <a
-                href="/contact.html">Contact</a>
+        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
+        <p>
+            <a href="/privacy.html">Confidentialité</a> ·
+            <a href="/cgv.html">Conditions générales</a> ·
+            <a href="/contact.html">Contact</a> ·
+            <a href="/legal.html">Mentions légales</a>
         </p>
     </footer>
 
-    <!-- PWA Install -->
     <script>
+        // ── PWA Install ──
         let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'inline-flex';
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault(); deferredPrompt = e;
         });
         function installPWA() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(r => { deferredPrompt = null; });
+                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
             } else {
-                // Fallback: show instructions
                 const ua = navigator.userAgent;
                 if (/iPhone|iPad/.test(ua)) {
                     alert('Sur iPhone/iPad :\n1. Appuie sur le bouton Partager (⬆️)\n2. Choisis "Sur l\'écran d\'accueil"');
-                } else {
-                    window.location.href = '/pages/home.html';
-                }
+                } else { window.location.href = '/pages/home.html'; }
             }
         }
-        // Register SW
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(() => { });
-        }
+
+        // ── Load spots dynamically ──
+        fetch('/api/spots').then(r => r.json()).then(spots => {
+            const grid = document.getElementById('spotsGrid');
+            const diffEmoji = { 'Débutant': '🟢', 'Intermédiaire': '🟡', 'Avancé': '🔴', 'Expert': '⚫' };
+            grid.innerHTML = spots.map(s => `
+                <a class="spot-chip" href="/pages/spot_detail.html?id=${s.id}">
+                    <span class="emoji">${diffEmoji[s.difficulty] || '🏄'}</span>
+                    <div class="info">
+                        <span class="name">${s.name}</span>
+                        <span class="loc">${s.location}</span>
+                    </div>
+                </a>
+            `).join('');
+        }).catch(() => {
+            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots. <a href="/pages/home.html">Ouvrir l\'app</a></p>';
+        });
+
+        // ── Nav active on scroll ──
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY + 100;
+            sections.forEach(s => {
+                const top = s.offsetTop, h = s.offsetHeight, id = s.id;
+                const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+                if (link) { link.classList.toggle('active', scrollY >= top && scrollY < top + h); }
+            });
+        });
+
+        // ── Register SW ──
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => { });
     </script>
 </body>
 
