@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — SwellSync</title>
+    <meta name="description"
+        content="Contactez l'équipe SwellSync. Envoyez-nous un message, signalez un bug ou proposez une fonctionnalité.">
+    <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/site/style.css">
+    <style>
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .contact-form label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: -10px;
+        }
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--bg3);
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+            resize: vertical;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            border-color: var(--accent);
+        }
+
+        .contact-form select option {
+            background: var(--bg2);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: var(--bg2);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all .3s;
+        }
+
+        .contact-card:hover {
+            border-color: rgba(0, 186, 214, 0.2);
+            box-shadow: 0 0 20px rgba(0, 186, 214, 0.08);
+        }
+
+        .contact-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-card p {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+
+        .contact-card a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            background: rgba(0, 186, 214, 0.06);
+            border: 1px solid rgba(0, 186, 214, 0.1);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+        .social-link:hover {
+            background: rgba(0, 186, 214, 0.12);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 214, 150, 0.06);
+            border: 1px solid rgba(0, 214, 150, 0.15);
+            border-radius: 20px;
+        }
+
+        .form-success .check-icon {
+            font-size: 48px;
+            color: var(--accent2);
+            margin-bottom: 12px;
+        }
+
+        @media(max-width:768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/" class="nav-logo">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
+            <span>Swell<span class="accent">Sync</span></span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="/">Accueil</a>
+            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a>
+            <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/faq.html">FAQ</a>
+        </div>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
+            <span class="material-symbols-outlined" style="font-size:18px">download</span>
+            Télécharger
+        </a>
+        <button class="nav-menu-btn"
+            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </nav>
+
+    <section class="section" style="padding-top:140px">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📞 Contact</div>
+                <h2>Parle-nous <em>directement</em></h2>
+                <p>Une question, un bug, une idée ? On répond à tout et en général assez vite.</p>
+            </div>
+            <div class="contact-grid">
+                <div id="contactForm">
+                    <form class="contact-form" onsubmit="submitContact(event)">
+                        <label>Nom</label>
+                        <input type="text" placeholder="Ton nom" required>
+                        <label>Email</label>
+                        <input type="email" placeholder="ton@email.com" required>
+                        <label>Sujet</label>
+                        <select required>
+                            <option value="">— Choisis un sujet —</option>
+                            <option>Question générale</option>
+                            <option>Signaler un bug</option>
+                            <option>Proposer une fonctionnalité</option>
+                            <option>Partenariat</option>
+                            <option>Autre</option>
+                        </select>
+                        <label>Message</label>
+                        <textarea rows="5" placeholder="Ton message..." required></textarea>
+                        <button type="submit" class="btn-primary" style="justify-content:center">
+                            <span class="material-symbols-outlined">send</span>
+                            Envoyer
+                        </button>
+                    </form>
+                </div>
+                <div id="formSuccess" class="form-success">
+                    <div class="check-icon">✅</div>
+                    <h3 style="font-size:1.2rem;margin-bottom:8px;color:var(--text)">Message envoyé !</h3>
+                    <p style="color:var(--text2);font-size:14px">Merci pour ton message. On te répond au plus vite 🤙
+                    </p>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3>📧 Email</h3>
+                        <p><a href="mailto:contact@swellsync.fr">contact@swellsync.fr</a></p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>💬 Réponse</h3>
+                        <p>On répond en général sous 24h. Pour les bugs urgents, signale-les directement dans l'app.</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>🌐 Réseaux</h3>
+                        <p>Suis-nous pour les actus, les conditions et les shots du jour.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-link">📸 Instagram</a>
+                            <a href="#" class="social-link">🎵 TikTok</a>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <h3>🗺️ Localisation</h3>
+                        <p>Quelque part entre Hossegor et Biarritz 🏄‍♂️<br>Côte Basque, France 🇫🇷</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
+        <p>
+            <a href="/privacy.html">Confidentialité</a> ·
+            <a href="/cgv.html">Conditions générales</a> ·
+            <a href="/site/contact.html">Contact</a> ·
+            <a href="/legal.html">Mentions légales</a>
+        </p>
+    </footer>
+    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
+    <script>
+        function submitContact(e) {
+            e.preventDefault();
+            document.getElementById('contactForm').style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

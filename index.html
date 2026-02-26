@@ -118,6 +118,102 @@
         </div>
     </section>
 
+    <!-- ═══ CONDITIONS LIVE ═══ -->
+    <section class="section section-gradient-1 reveal">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">🌊 Conditions en direct</div>
+                <h2>Spots populaires <em>en ce moment</em></h2>
+                <p>Données actualisées toutes les 4 heures via StormGlass.</p>
+            </div>
+            <div class="live-grid" id="liveSpots">
+                <div class="live-card">
+                    <div class="live-badge">Live</div>
+                    <div class="live-spot-name">Hossegor — La Gravière</div>
+                    <div class="live-spot-loc">Landes, Nouvelle-Aquitaine</div>
+                    <div class="live-stats">
+                        <div class="live-stat">
+                            <div class="val" id="liveWave1">—</div>
+                            <div class="lbl">Vagues</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="liveWind1">—</div>
+                            <div class="lbl">Vent</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="livePeriod1">—</div>
+                            <div class="lbl">Période</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="liveTemp1">—</div>
+                            <div class="lbl">Eau</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="live-card">
+                    <div class="live-badge">Live</div>
+                    <div class="live-spot-name">Biarritz — Grande Plage</div>
+                    <div class="live-spot-loc">Pays Basque, Nouvelle-Aquitaine</div>
+                    <div class="live-stats">
+                        <div class="live-stat">
+                            <div class="val" id="liveWave2">—</div>
+                            <div class="lbl">Vagues</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="liveWind2">—</div>
+                            <div class="lbl">Vent</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="livePeriod2">—</div>
+                            <div class="lbl">Période</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="liveTemp2">—</div>
+                            <div class="lbl">Eau</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="live-card">
+                    <div class="live-badge">Live</div>
+                    <div class="live-spot-name">La Torche</div>
+                    <div class="live-spot-loc">Bretagne, Finistère</div>
+                    <div class="live-stats">
+                        <div class="live-stat">
+                            <div class="val" id="liveWave3">—</div>
+                            <div class="lbl">Vagues</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="liveWind3">—</div>
+                            <div class="lbl">Vent</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="livePeriod3">—</div>
+                            <div class="lbl">Période</div>
+                        </div>
+                        <div class="live-stat">
+                            <div class="val" id="liveTemp3">—</div>
+                            <div class="lbl">Eau</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ LOGOS DE CONFIANCE ═══ -->
+    <section class="stats" style="padding:24px 0">
+        <div class="container" style="justify-content:center">
+            <div class="logos-strip">
+                <div class="logo-item"><span>🌊</span> StormGlass</div>
+                <div class="logo-item"><span>🗺️</span> Leaflet</div>
+                <div class="logo-item"><span>💨</span> Windy</div>
+                <div class="logo-item"><span>☁️</span> Render</div>
+                <div class="logo-item"><span>🐘</span> PostgreSQL</div>
+                <div class="logo-item"><span>⚡</span> Node.js</div>
+            </div>
+        </div>
+    </section>
+
     <!-- ═══ LIVE TICKER ═══ -->
     <div class="ticker">
         <div class="ticker-track">
@@ -180,6 +276,64 @@
                     <p>Consulte les prévisions, reçois des alertes houle, et connecte-toi avec la communauté de
                         surfeurs.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SCREENSHOTS DE L'APP ═══ -->
+    <section class="section section-dark reveal">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📱 L'app en action</div>
+                <h2>Découvre <em>SwellSync</em> de l'intérieur</h2>
+                <p>Navigue entre les écrans de l'app et vois ce qui t'attend.</p>
+            </div>
+            <div class="carousel" id="appCarousel">
+                <button class="carousel-nav prev" onclick="moveCarousel(-1)">‹</button>
+                <button class="carousel-nav next" onclick="moveCarousel(1)">›</button>
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <div class="phone-frame active-frame"><iframe src="/pages/home.html" loading="lazy"
+                                style="background:#080f1a"></iframe></div>
+                        <div class="carousel-caption">
+                            <h3>🏠 Accueil</h3>
+                            <p>Spot le plus proche, conditions live, accès rapide à tout</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="phone-frame active-frame"><iframe src="/pages/spots.html" loading="lazy"
+                                style="background:#080f1a"></iframe></div>
+                        <div class="carousel-caption">
+                            <h3>🗺️ Carte des spots</h3>
+                            <p>60+ spots sur la côte Atlantique avec carte interactive</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="phone-frame active-frame"><iframe src="/pages/alertes.html" loading="lazy"
+                                style="background:#080f1a"></iframe></div>
+                        <div class="carousel-caption">
+                            <h3>🔔 Alertes houle</h3>
+                            <p>Configure tes seuils et reçois des notifications personnalisées</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="phone-frame active-frame"><iframe src="/pages/communaute.html" loading="lazy"
+                                style="background:#080f1a"></iframe></div>
+                        <div class="carousel-caption">
+                            <h3>👥 Communauté</h3>
+                            <p>Partage tes sessions, suis des riders, collecte des badges</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="phone-frame active-frame"><iframe src="/pages/profil.html" loading="lazy"
+                                style="background:#080f1a"></iframe></div>
+                        <div class="carousel-caption">
+                            <h3>👤 Profil</h3>
+                            <p>Tes stats, badges, historique de sessions et paramètres</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-dots" id="carouselDots"></div>
             </div>
         </div>
     </section>
@@ -457,17 +611,130 @@
         </p>
     </footer>
 
+    <!-- ═══ BOUTON RETOUR EN HAUT ═══ -->
+    <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+
+    <!-- ═══ BANDEAU COOKIES ═══ -->
+    <div class="cookie-banner" id="cookieBanner" style="display:none">
+        <p>🍪 Ce site utilise des cookies pour améliorer votre expérience. <a href="/privacy.html">En savoir plus</a>
+        </p>
+        <div class="cookie-btns">
+            <button class="cookie-btn accept" onclick="acceptCookies()">Accepter</button>
+            <button class="cookie-btn reject" onclick="rejectCookies()">Refuser</button>
+        </div>
+    </div>
+
     <script>
         // ── Auto-redirect si mode standalone (app installée) ──
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
             window.location.replace('/pages/home.html');
         }
+
         // ── Instructions iOS ──
         function showIosInstall() {
             alert('🍎 Sur iPhone / iPad :\n\n1. Ouvre swellsync.fr dans Safari\n2. Appuie sur le bouton Partager ⬆️\n3. Choisis "Sur l\'écran d\'accueil"\n\nL\'app sera installée comme une vraie app !');
         }
+
         // ── Register SW ──
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => { });
+
+        // ═══ SCROLL REVEAL ═══
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ═══ COMPTEURS ANIMÉS ═══
+        function animateCount(el, target, suffix = '') {
+            let current = 0;
+            const step = target / 60;
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) { current = target; clearInterval(timer); }
+                el.textContent = Math.floor(current) + suffix;
+            }, 25);
+        }
+        const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const text = el.textContent.trim();
+                    let num, suffix;
+                    if (text.includes('K+')) { num = parseFloat(text) * 1000; suffix = 'K+'; animateCount(el, parseFloat(text), 'K+'); }
+                    else if (text.includes('%')) { num = parseInt(text); animateCount(el, num, '%'); }
+                    else if (text.includes('+')) { num = parseInt(text); animateCount(el, num, '+'); }
+                    countObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-num').forEach(el => {
+            if (/\d/.test(el.textContent)) countObserver.observe(el);
+        });
+
+        // ═══ CAROUSEL ═══
+        let carouselIdx = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('carouselDots');
+        if (slides.length > 0 && dotsContainer) {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            });
+        }
+        function goToSlide(idx) {
+            carouselIdx = idx;
+            if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+            document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+        function moveCarousel(dir) {
+            let next = carouselIdx + dir;
+            if (next < 0) next = slides.length - 1;
+            if (next >= slides.length) next = 0;
+            goToSlide(next);
+        }
+        // Auto-play carousel
+        setInterval(() => { if (slides.length > 0) moveCarousel(1); }, 5000);
+
+        // ═══ DONNÉES LIVE ═══
+        fetch('/api/spots').then(r => r.json()).then(spots => {
+            const targets = ['Hossegor', 'Biarritz', 'La Torche'];
+            targets.forEach((name, i) => {
+                const spot = spots.find(s => s.name.includes(name));
+                if (spot && spot.forecast && spot.forecast.length > 0) {
+                    const f = spot.forecast[0];
+                    const idx = i + 1;
+                    document.getElementById('liveWave' + idx).textContent = (f.waveHeight || '—') + 'm';
+                    document.getElementById('liveWind' + idx).textContent = (f.windSpeed || '—') + 'km/h';
+                    document.getElementById('livePeriod' + idx).textContent = (f.wavePeriod || '—') + 's';
+                    document.getElementById('liveTemp' + idx).textContent = (f.waterTemp || '—') + '°C';
+                }
+            });
+        }).catch(() => { });
+
+        // ═══ BOUTON RETOUR EN HAUT ═══
+        const backTop = document.getElementById('backTop');
+        window.addEventListener('scroll', () => {
+            if (backTop) backTop.classList.toggle('visible', window.scrollY > 400);
+        });
+
+        // ═══ COOKIES RGPD ═══
+        function acceptCookies() { localStorage.setItem('cookies', 'accepted'); hideCookieBanner(); }
+        function rejectCookies() { localStorage.setItem('cookies', 'rejected'); hideCookieBanner(); }
+        function hideCookieBanner() { const b = document.getElementById('cookieBanner'); if (b) b.style.display = 'none'; }
+        if (!localStorage.getItem('cookies')) {
+            const b = document.getElementById('cookieBanner');
+            if (b) b.style.display = 'flex';
+        }
     </script>
 </body>
 
