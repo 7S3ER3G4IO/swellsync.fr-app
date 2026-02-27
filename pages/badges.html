@@ -217,8 +217,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/api.js"></script>
 </head>
 
 <body class="min-h-screen pb-10">
@@ -255,7 +255,7 @@
         <button class="tab-btn active" onclick="switchCategory('region', this)">Régions</button>
         <button class="tab-btn" onclick="switchCategory('style', this)">Style</button>
         <button class="tab-btn" onclick="switchCategory('achievement', this)">Succès</button>
-        <button class="tab-btn" onclick="switchCategory('pro', this)">Pro ⭐</button>
+        <button class="tab-btn" onclick="switchCategory('pro', this)">🋏️ Cosmétiques</button>
     </div>
 
     <!-- Badges grid -->
@@ -397,12 +397,65 @@
             }, { confirmText: 'Voir les offres Pro', cancelText: 'Plus tard' });
         }
 
+        // Vérification auto-déblocage depuis surf_sessions
+        async function checkAutoUnlocks() {
+            try {
+                const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+                const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+                const sbClient = window.supabase?.createClient?.(SB_URL, SB_KEY);
+                const { data: { session } } = sbClient ? await sbClient.auth.getSession() : { data: {} };
+                const token = session?.access_token || SB_KEY;
+                const res = await fetch(
+                    `${SB_URL}/rest/v1/surf_sessions?select=id,started_at&order=started_at.asc`,
+                    { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token } }
+                );
+                if (!res.ok) return;
+                const sessions = await res.json();
+                const count = sessions.length;
+                let changed = false;
+
+                // Badge 'OG Member' — 1ère session
+                if (count >= 1 && !equipped.includes('kook')) {
+                    equipped.push('kook');
+                    changed = true;
+                    showAutoUnlock('🪝 Tu as débloqué le badge OG Member !');
+                }
+                // Badge 'Early Bird' — 10 sessions
+                if (count >= 10 && !equipped.includes('earlybird')) {
+                    equipped.push('earlybird');
+                    changed = true;
+                    showAutoUnlock('🌅 Badge Early Bird débloqué !');
+                }
+                // Badge 'Tube Rider' — total waves >= 50
+                const totalWaves = sessions.reduce((s, r) => s + (r.waves || 0), 0);
+                if (totalWaves >= 50 && !equipped.includes('tuberider')) {
+                    equipped.push('tuberider');
+                    changed = true;
+                    showAutoUnlock('🌀 Badge Tube Rider débloqué !');
+                }
+
+                if (changed) {
+                    localStorage.setItem('sw_badges', JSON.stringify(equipped));
+                    renderGrid();
+                }
+            } catch { }
+        }
+
+        function showAutoUnlock(msg) {
+            const t = document.createElement('div');
+            t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#00bad6,#10b981);color:#000;font-weight:900;padding:12px 24px;border-radius:16px;z-index:999;font-size:13px;white-space:nowrap';
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
         // Init main badge display
         const mainBadge = JSON.parse(localStorage.getItem('sw_main_badge') || '{"id":"libre","icon":"🤙","name":"Surfeur Libre"}');
         document.getElementById('currentBadgeIcon').textContent = mainBadge.icon;
         document.getElementById('currentBadgeName').textContent = `${mainBadge.icon} ${mainBadge.name}`;
 
         renderGrid();
+        checkAutoUnlocks();
     </script>
 
     <!-- Bottom Nav -->
@@ -415,10 +468,7 @@
                 class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
-                style="position:relative;display:inline-block;"><span
-                    class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
-                class="text-[10px]">Alertes</span>
+                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
