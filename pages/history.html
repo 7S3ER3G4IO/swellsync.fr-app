@@ -97,18 +97,67 @@
     <script src="js/theme.js"></script>
 
     <style>
-      :root { --bg-primary: #000; --bg-card: #111; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
-      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
-      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
-      .light .card, .light [class*="bg-[#111]"] { background: var(--bg-card) !important; }
-      .light [class*="bg-[#000]"] { background: var(--bg-primary) !important; }
-      .light [class*="bg-[#111]"] { background: #f8fafc !important; }
-      .light [class*="text-white"] { color: #0f172a !important; }
-      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
-      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
-      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
-      .light .section-label { color: #334155 !important; }
-      .light .setting-row:hover { background: #e2e8f0 !important; }
+        :root {
+            --bg-primary: #000;
+            --bg-card: #111;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#111]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#000]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#111]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
     </style>
 
     <link rel="manifest" href="/manifest.json">
@@ -128,7 +177,8 @@
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         </a>
         <h1 class="font-black text-base flex-1">Historique d'activité</h1>
-        <div class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
+        <div
+            class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
             <span class="material-symbols-outlined text-[#00bad6] text-[18px]">history</span>
         </div>
     </header>
@@ -161,8 +211,10 @@
     <div class="px-4" id="historyContent"></div>
 
     <script>
-        const API = '/api';
-        let sessions = []; // From journal API (if available)
+        const API_URL = '/api';
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+        let sessions = [];
 
         // ── Data from localStorage & API ──
         const likeHistory = JSON.parse(localStorage.getItem('sw_likeHistory') || '[]');
@@ -180,14 +232,6 @@
             icon: '❤️'
         }));
 
-        // Mock session history
-        const mockSessions = [
-            { spot: 'Hossegor — La Gravière', date: '25 fév. 2026', duration: '2h30', score: 8, conditions: 'Excellent' },
-            { spot: 'La Torche', date: '22 fév. 2026', duration: '1h45', score: 6, conditions: 'Bon' },
-            { spot: 'Biarritz — Grande Plage', date: '18 fév. 2026', duration: '2h00', score: 7, conditions: 'Correct' },
-            { spot: 'Lacanau', date: '15 fév. 2026', duration: '3h00', score: 9, conditions: 'Epic !' },
-        ];
-
         // Mock viewed profiles
         const mockVues = [
             { user: 'SurfGuide64', region: 'Landes', time: 'Il y a 2h', avatar: 'S', color: 'bg-amber-400/20 text-amber-400' },
@@ -195,22 +239,33 @@
             { user: 'MarieLR', region: 'Bretagne', time: 'Il y a 3j', avatar: 'M', color: 'bg-purple-500/20 text-purple-400' },
         ];
 
-        // ── Update stats ──
-        document.getElementById('statsLikes').textContent = likeEntries.length + (likeHistory.length);
-        document.getElementById('statsSessions').textContent = mockSessions.length;
-        document.getElementById('statsFollows').textContent = followed.length;
-
-        // ── Fetch real sessions from API ──
+        // ── Fetch real sessions from Supabase ──
         async function fetchSessions() {
             try {
-                const r = await fetch(`${API}/members/journal`, { credentials: 'include' });
-                if (r.ok) {
-                    const data = await r.json();
-                    sessions = data.sessions || data || [];
-                    document.getElementById('statsSessions').textContent = Math.max(sessions.length, mockSessions.length);
+                // Récupérer le token Supabase depuis la session active
+                const sbClient = window.supabase?.createClient?.(SB_URL, SB_KEY);
+                const { data: { session } } = sbClient ? await sbClient.auth.getSession() : { data: {} };
+                const token = session?.access_token || SB_KEY;
+
+                const res = await fetch(
+                    `${SB_URL}/rest/v1/surf_sessions?select=*&order=started_at.desc&limit=50`,
+                    { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token } }
+                );
+                if (res.ok) {
+                    sessions = await res.json();
+                    document.getElementById('statsSessions').textContent = sessions.length;
+                    // Si on est sur l'onglet sessions, re-render
+                    const activeTab = document.querySelector('.tab-btn.active');
+                    if (activeTab?.id === 'tabSessions') renderTab('sessions');
                 }
             } catch { }
         }
+
+        // ── Update stats ──
+        document.getElementById('statsLikes').textContent = likeEntries.length + likeHistory.length;
+        document.getElementById('statsSessions').textContent = '…';
+        document.getElementById('statsFollows').textContent = followed.length;
+
         fetchSessions();
 
         function switchTab(tab) {
@@ -243,13 +298,17 @@
                 </div>`
                     ).join('') + `</div>`;
             } else if (tab === 'sessions') {
-                const slist = sessions.length > 0 ? sessions.map(s => ({
-                    spot: s.spot_name || s.spot || 'Spot',
-                    date: new Date(s.created_at || s.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
-                    duration: s.duration || '—',
-                    score: s.score || s.rating || '—',
-                    conditions: s.conditions || '—'
-                })) : mockSessions;
+                if (sessions.length === 0) {
+                    c.innerHTML = emptyState('🏄', 'Aucune session enregistrée', 'Lance une session depuis l\'app pour la voir ici !');
+                    return;
+                }
+                const slist = sessions.map(s => ({
+                    spot: s.spot_name || 'Spot',
+                    date: s.started_at ? new Date(s.started_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—',
+                    duration: s.duration ? (Math.floor(s.duration / 60) + 'min') : '—',
+                    score: s.score ?? '—',
+                    waves: s.waves ?? '—'
+                }));
                 c.innerHTML = `<div class="card rounded-2xl overflow-hidden">` +
                     slist.map((s, i) => `
                 <div class="activity-row fade-up" style="animation-delay:${i * .04}s">
@@ -258,8 +317,8 @@
                         <p class="text-xs font-bold">${s.spot}</p>
                         <div class="flex items-center gap-2 mt-0.5">
                             <span class="text-[10px] text-slate-400">⏱️ ${s.duration}</span>
-                            <span class="text-[10px] text-amber-400 font-bold">★ ${s.score}/10</span>
-                            <span class="text-[10px] text-emerald-400">${s.conditions}</span>
+                            <span class="text-[10px] text-emerald-400">🌊 ${s.waves} vagues</span>
+                            <span class="text-[10px] text-amber-400 font-bold">Score ${s.score}</span>
                         </div>
                         <p class="activity-time mt-0.5">${s.date}</p>
                     </div>
@@ -298,8 +357,7 @@
                     </div>
                     <span class="material-symbols-outlined text-slate-600 text-[16px]">chevron_right</span>
                 </div>`
-                    ).join('') + `</div>` +
-                    `<p class="text-center text-[10px] text-slate-600 mt-3">L'historique complet est disponible avec SwellSync Badges ⭐</p>`;
+                    ).join('') + `</div>`;
             }
         }
 
@@ -310,13 +368,13 @@
         renderTab('likes');
     </script>
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
     </script>
-<script src="js/adsense.js"></script>
-<script src="js/share-social.js"></script>
-<script src="js/ui-components.js"></script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
 </body>
 

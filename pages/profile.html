@@ -329,8 +329,8 @@
                     </div>
                     <div id="themeToggle"
                         class="w-12 h-6 bg-[#00bad6] rounded-full relative p-1 cursor-pointer transition-all active:scale-95 transition-transform">
-                        <div id="themeThumb"
-                            class="w-4 h-4 bg-[#000] rounded-full translate-x-6 transition-transform"></div>
+                        <div id="themeThumb" class="w-4 h-4 bg-[#000] rounded-full translate-x-6 transition-transform">
+                        </div>
                     </div>
                 </div>
 
@@ -462,10 +462,7 @@
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
                 class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
-                style="position:relative;display:inline-block;"><span
-                    class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
-                class="text-[10px]">Alertes</span></a>
+                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span></a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
         <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
@@ -679,10 +676,80 @@
             if (e.target === document.getElementById('editModal')) document.getElementById('editModal').classList.remove('open');
         });
 
-        // Push Notifications
+        // Push Notifications — Flow VAPID complet
         async function enablePush() {
-            toast('🔔 Les notifications push seront bientôt disponibles !');
+            const statusEl = document.getElementById('pushStatus');
+            if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+                statusEl.textContent = 'Non supporté';
+                return;
+            }
+
+            // Vérifier si déjà actif
+            const existing = await navigator.serviceWorker.ready.then(sw =>
+                sw.pushManager.getSubscription()
+            ).catch(() => null);
+            if (existing) {
+                statusEl.textContent = 'Actif ✅';
+                statusEl.className = 'text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400';
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                statusEl.textContent = 'Refusé';
+                return;
+            }
+
+            try {
+                const sw = await navigator.serviceWorker.ready;
+                // Clé VAPID publique (dev)
+                const VAPID_PUBLIC = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjZJlg0efkiAzE9O7-bACEA1yvXMA';
+                function urlBase64ToUint8Array(b64) {
+                    const pad = '='.repeat((4 - b64.length % 4) % 4);
+                    const base64 = (b64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+                    return Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+                }
+                const sub = await sw.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
+                });
+
+                // Sauvegarder dans Supabase push_subscriptions
+                await fetch('https://bxudysseskfpmlpagoid.supabase.co/rest/v1/push_subscriptions', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU',
+                        'Authorization': 'Bearer sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU',
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        user_id: me?.id || null,
+                        subscription: sub.toJSON()
+                    })
+                });
+
+                statusEl.textContent = 'Actif ✅';
+                statusEl.className = 'text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400';
+                toast('🔔 Notifications activées !');
+            } catch (e) {
+                statusEl.textContent = 'Erreur';
+                toast('Erreur lors de l\'activation', 'err');
+            }
         }
+
+        // Vérifier l'état du push au chargement
+        (async () => {
+            const statusEl = document.getElementById('pushStatus');
+            if (!statusEl || !('serviceWorker' in navigator)) return;
+            try {
+                const sub = await (await navigator.serviceWorker.ready).pushManager.getSubscription();
+                if (sub) {
+                    statusEl.textContent = 'Actif ✅';
+                    statusEl.className = 'text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400';
+                }
+            } catch { }
+        })();
 
         function urlBase64ToUint8Array(base64String) {
             const padding = '='.repeat((4 - base64String.length % 4) % 4);

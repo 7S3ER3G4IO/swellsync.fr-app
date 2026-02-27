@@ -137,11 +137,11 @@
 
         <div class="grid grid-cols-2 gap-2">
             <div class="stat-card">
-                <p class="text-lg font-bold">15°C</p>
+                <p class="text-lg font-bold" id="waterTempDisplay">—</p>
                 <p class="text-[10px] text-white/50 mt-1">🌡️ Eau</p>
             </div>
             <div class="stat-card">
-                <p class="text-lg font-bold">2.1m</p>
+                <p class="text-lg font-bold" id="waveDisplay">—</p>
                 <p class="text-[10px] text-white/50 mt-1">🌊 Houle</p>
             </div>
         </div>
@@ -189,8 +189,79 @@
                 class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
     </nav>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/api.js"></script>
     <script>
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+        const SPOTS = [
+            { id: 1, name: 'La Gravière', lat: 43.664, lng: -1.448 },
+            { id: 2, name: 'La Nord', lat: 43.670, lng: -1.450 },
+            { id: 16, name: 'Côte des Basques', lat: 43.476, lng: -1.568 },
+            { id: 17, name: 'Grande Plage Biarritz', lat: 43.483, lng: -1.558 },
+            { id: 36, name: 'La Torche', lat: 47.842, lng: -4.348 },
+            { id: 29, name: 'Lacanau Océan', lat: 45.002, lng: -1.197 },
+            { id: 58, name: 'Biscarrosse Plage', lat: 44.454, lng: -1.268 },
+            { id: 15, name: 'Mimizan Plage', lat: 44.201, lng: -1.306 },
+        ];
+
         let running = false, seconds = 0, interval = null, waves = 0;
+        let detectedSpot = null, currentForecast = null;
+
+        // Distance en km entre 2 points GPS
+        function distKm(lat1, lng1, lat2, lng2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        // Trouver le spot le plus proche
+        function nearestSpot(lat, lng) {
+            return SPOTS.reduce((best, s) => {
+                const d = distKm(lat, lng, s.lat, s.lng);
+                return d < best.dist ? { spot: s, dist: d } : best;
+            }, { spot: SPOTS[0], dist: Infinity }).spot;
+        }
+
+        // Charger les données météo du spot
+        async function loadWeather(spotId) {
+            try {
+                const fc = await API.spots.forecast(spotId);
+                currentForecast = fc;
+                const now = new Date();
+                const current = fc?.data?.find(h => new Date(h.time) >= now) || fc?.data?.[0];
+                if (current) {
+                    const wh = parseFloat(current.waveHeight)?.toFixed(1) || '—';
+                    const wt = current.waterTemp != null ? Math.round(current.waterTemp) + '°C' : '—';
+                    document.getElementById('waveDisplay').textContent = wh !== 'NaN' ? wh + 'm' : '—';
+                    document.getElementById('waterTempDisplay').textContent = wt;
+                }
+            } catch { }
+        }
+
+        // Géolocalisation réelle
+        function detectSpot() {
+            if (!navigator.geolocation) {
+                document.getElementById('spotName').textContent = 'GPS non disponible';
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const { latitude: lat, longitude: lng } = pos.coords;
+                    document.getElementById('coords').textContent = lat.toFixed(4) + '° N, ' + Math.abs(lng).toFixed(4) + '° W';
+                    detectedSpot = nearestSpot(lat, lng);
+                    document.getElementById('spotName').textContent = detectedSpot.name;
+                    loadWeather(detectedSpot.id);
+                },
+                () => {
+                    document.getElementById('spotName').textContent = 'Localisation refusée';
+                    document.getElementById('coords').textContent = 'Active le GPS pour détecter ton spot';
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        }
 
         function toggleSession() {
             if (!running) {
@@ -198,25 +269,19 @@
                 document.getElementById('startBtn').innerHTML = '<span class="material-symbols-outlined">pause</span>Pause';
                 document.getElementById('endBtn').classList.remove('hidden');
                 document.getElementById('liveLabel').textContent = 'EN DIRECT';
+                detectSpot(); // GPS réel
                 interval = setInterval(() => {
                     seconds++;
                     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
                     const s = String(seconds % 60).padStart(2, '0');
                     document.getElementById('timer').textContent = m + ':' + s;
-                    // Simulate distance
                     document.getElementById('distance').textContent = Math.floor(seconds * 1.2);
-                    // Simulate max speed
                     if (seconds % 15 === 0) {
                         const spd = Math.floor(12 + Math.random() * 10);
                         const cur = parseInt(document.getElementById('maxSpeed').textContent);
                         if (spd > cur) document.getElementById('maxSpeed').textContent = spd;
                     }
                 }, 1000);
-                // Simulate GPS
-                setTimeout(() => {
-                    document.getElementById('spotName').textContent = 'La Gravière, Hossegor';
-                    document.getElementById('coords').textContent = '43.6615° N, 1.4445° W';
-                }, 1500);
             } else {
                 running = false;
                 clearInterval(interval);
@@ -240,7 +305,7 @@
             const s = String(seconds % 60).padStart(2, '0');
             const rating = ['🔥 Tube!', '💪 Bonne', '🤙 Nice', '✨ Clean'][Math.floor(Math.random() * 4)];
             const entry = document.createElement('div');
-            entry.className = 'flex items-center justify-between py-1.5 border-b border-white/5 fade-in';
+            entry.className = 'flex items-center justify-between py-1.5 border-b border-white/5';
             entry.innerHTML = `
             <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-[#00bad6]">#${waves}</span>
@@ -248,44 +313,69 @@
             </div>
             <span class="text-xs font-bold">${rating}</span>`;
             log.prepend(entry);
-
-            // Easter egg: 10 waves combo!
-            if (waves === 10) {
-                showCombo('🔥 10 VAGUES COMBO !');
-            } else if (waves === 25) {
-                showCombo('⚡ 25 VAGUES — MACHINE !');
-            } else if (waves === 50) {
-                showCombo('🏆 50 VAGUES — LÉGENDE !');
-            }
+            if (waves === 10) showCombo('🔥 10 VAGUES COMBO !');
+            else if (waves === 25) showCombo('⚡ 25 VAGUES — MACHINE !');
+            else if (waves === 50) showCombo('🏆 50 VAGUES — LÉGENDE !');
         }
 
         function showCombo(text) {
             const toast = document.createElement('div');
-            toast.className = 'toast';
+            toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#00bad6;color:#000;font-weight:900;padding:12px 24px;border-radius:16px;z-index:999;font-size:14px';
             toast.textContent = text;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.classList.add('out'); setTimeout(() => toast.remove(), 300); }, 2500);
+            setTimeout(() => toast.remove(), 2500);
         }
 
-        function endSession() {
+        async function endSession() {
             running = false;
             clearInterval(interval);
-            const m = Math.floor(seconds / 60);
-            const dist = document.getElementById('distance').textContent;
-            const spd = document.getElementById('maxSpeed').textContent;
-            // Save session
-            const sessions = JSON.parse(localStorage.getItem('sw_sessions') || '[]');
-            sessions.push({
-                date: new Date().toISOString(),
-                spot: document.getElementById('spotName').textContent,
-                duration: m,
-                waves: waves,
-                distance: dist,
-                maxSpeed: spd
-            });
-            localStorage.setItem('sw_sessions', JSON.stringify(sessions));
-            showCombo(`✅ Session sauvegardée ! ${waves} vagues en ${m}min`);
-            setTimeout(() => { window.location.href = 'home.html'; }, 2000);
+            const duration = seconds;
+            const spotName = document.getElementById('spotName').textContent;
+            const waveH = parseFloat(document.getElementById('waveDisplay').textContent) || null;
+            const windSpd = parseInt(document.getElementById('maxSpeed').textContent) || null;
+            const score = Math.min(100, Math.round((waves * 3) + (duration / 60)));
+
+            const sessionData = {
+                spot_id: detectedSpot?.id || null,
+                spot_name: spotName,
+                duration,
+                waves,
+                wave_height: waveH,
+                wind_speed: windSpd,
+                score,
+                started_at: new Date(Date.now() - duration * 1000).toISOString(),
+                ended_at: new Date().toISOString()
+            };
+
+            // Sauvegarder en Supabase
+            let saved = false;
+            try {
+                const user = await API.auth.me();
+                if (user?.id) {
+                    const res = await fetch(`${SB_URL}/rest/v1/surf_sessions`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SB_KEY,
+                            'Authorization': 'Bearer ' + SB_KEY,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({ ...sessionData, user_id: user.id })
+                    });
+                    saved = res.ok;
+                }
+            } catch { }
+
+            // Fallback localStorage
+            const local = JSON.parse(localStorage.getItem('sw_sessions') || '[]');
+            local.push(sessionData);
+            localStorage.setItem('sw_sessions', JSON.stringify(local));
+
+            const msg = saved
+                ? `✅ Session sauvegardée ! ${waves} vagues en ${Math.floor(duration / 60)}min`
+                : `💾 Session locale — connecte-toi pour la sync`;
+            showCombo(msg);
+            setTimeout(() => { window.location.href = 'home.html'; }, 2500);
         }
     </script>
 </body>
