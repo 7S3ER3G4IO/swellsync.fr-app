@@ -22,16 +22,16 @@ export default function middleware(request) {
     // Détecter mobile
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(ua);
 
-    // Détecter PWA (Referer ou sec-fetch-dest)
+    // Détecter PWA ou iframe (preview-mobile.html, même origine)
     const secFetchDest = request.headers.get('sec-fetch-dest');
     const secFetchMode = request.headers.get('sec-fetch-mode');
-    const isPWA = secFetchMode === 'navigate' && (
-        request.headers.get('referer')?.includes('/pages/') ||
-        request.headers.get('sec-fetch-site') === 'same-origin'
-    );
+    const referer = request.headers.get('referer') || '';
+    const isIframe = secFetchDest === 'iframe';
+    const isSameOriginNav = referer.includes('/pages/') || referer.includes('/preview-mobile');
+    const isPWA = isIframe || isSameOriginNav;
 
-    // Si desktop et pas PWA → rediriger vers vitrine
-    if (!isMobile) {
+    // Si desktop et pas PWA/iframe → rediriger vers vitrine
+    if (!isMobile && !isPWA) {
         return Response.redirect(new URL('/', request.url), 302);
     }
 
