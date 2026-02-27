@@ -1,0 +1,36 @@
+name: 🌊 Refresh Previsions Surf (toutes les 4h)
+
+on:
+  schedule:
+    # Toutes les 4 heures : 0h, 4h, 8h, 12h, 16h, 20h UTC
+    - cron: '0 0,4,8,12,16,20 * * *'
+  # Permet de déclencher manuellement depuis GitHub → Actions → Run workflow
+  workflow_dispatch:
+
+jobs:
+  refresh-forecast:
+    name: Refresh StormGlass Cache
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 🌊 Appel API Refresh Forecast
+        run: |
+          echo "Démarrage du refresh des prévisions surf..."
+          
+          RESPONSE=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -X GET "https://swellsync.fr/api/cron/refresh-forecast" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --max-time 300)
+          
+          echo "HTTP Status: $RESPONSE"
+          echo "Réponse:"
+          cat /tmp/response.json | python3 -m json.tool 2>/dev/null || cat /tmp/response.json
+          
+          if [ "$RESPONSE" != "200" ]; then
+            echo "❌ Erreur : HTTP $RESPONSE"
+            exit 1
+          fi
+          
+          echo "✅ Refresh terminé avec succès !"
