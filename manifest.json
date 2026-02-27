@@ -4,7 +4,7 @@
     "description": "Prévisions surf en temps réel — spots, houle & communauté.",
     "id": "swellsync-app",
     "start_url": "/pages/home.html",
-    "scope": "/pages/",
+    "scope": "/",
     "display": "standalone",
     "display_override": [
         "standalone",
@@ -33,6 +33,7 @@
             "purpose": "any maskable"
         }
     ],
+    "prefer_related_applications": false,
     "shortcuts": [
         {
             "name": "Carte des Spots",
