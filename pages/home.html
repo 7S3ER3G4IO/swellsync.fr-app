@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <script src="js/app-guard.js"></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <title>SwellSync - Accueil</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SwellSync — Accueil">
+    <meta property="og:description" content="Prévisions surf en temps réel pour 60+ spots de la côte Atlantique.">
+    <meta property="og:image" content="https://swellsync.fr/assets/images/swellsync_logo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <style>
+        .dark body {
+            background: #080f1a;
+            color: #f1f5f9
+        }
+
+        .dark .card {
+            background: rgba(15, 36, 56, 0.8);
+            border: 1px solid rgba(0, 186, 214, 0.12)
+        }
+
+        .dark .hdr {
+            background: rgba(8, 15, 26, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 186, 214, 0.1)
+        }
+
+        .dark .nav-bar {
+            background: #080f1a;
+            border-top: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .light body {
+            background: #f0f6ff;
+            color: #1e293b
+        }
+
+        .light .card {
+            background: #fff;
+            border: 1px solid #e2eaf4;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .06)
+        }
+
+        .light .hdr {
+            background: rgba(240, 246, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #e2eaf4
+        }
+
+        .light .nav-bar {
+            background: #fff;
+            border-top: 1px solid #e2eaf4
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100dvh
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, rgba(0, 186, 214, .06) 25%, rgba(0, 186, 214, .12) 50%, rgba(0, 186, 214, .06) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0
+            }
+
+            100% {
+                background-position: -200% 0
+            }
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none
+        }
+    </style>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00bad6">
+</head>
+
+<body class="font-display pb-28">
+
+    <!-- Header -->
+    <header class="hdr sticky top-0 z-30 px-4 py-3">
+        <div class="flex items-center gap-3">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync" class="w-8 h-8 rounded-xl">
+            <h1 class="text-xl font-bold flex-1">Swell<span class="text-[#00bad6]">Sync</span></h1>
+            <a href="notifications.html" class="relative">
+                <span class="material-symbols-outlined text-slate-400">notifications</span>
+                <span
+                    class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#080f1a]"></span>
+            </a>
+            <a href="settings.html">
+                <span class="material-symbols-outlined text-slate-400">settings</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="px-4 py-4 space-y-5 max-w-lg mx-auto">
+
+        <!-- Greeting -->
+        <div class="space-y-1">
+            <p class="text-sm text-slate-500" id="greeting">Bonjour 🌊</p>
+            <h2 class="text-2xl font-black">Les conditions du jour</h2>
+        </div>
+
+        <!-- Weather summary card -->
+        <div class="card rounded-3xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-[#00bad6]/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[#00bad6] text-2xl">waves</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm">Côte Atlantique</p>
+                        <p class="text-xs text-slate-400" id="todayDate">—</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-black text-[#00bad6]" id="swellHeight">1.5m</p>
+                    <p class="text-[10px] text-slate-500">houle dominante</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="bg-white/5 rounded-xl py-2.5">
+                    <span class="material-symbols-outlined text-[#00bad6] text-lg">air</span>
+                    <p class="text-xs font-bold mt-1" id="windVal">15 km/h</p>
+                    <p class="text-[9px] text-slate-500">Vent</p>
+                </div>
+                <div class="bg-white/5 rounded-xl py-2.5">
+                    <span class="material-symbols-outlined text-amber-400 text-lg">thermostat</span>
+                    <p class="text-xs font-bold mt-1" id="tempVal">18°C</p>
+                    <p class="text-[9px] text-slate-500">Eau</p>
+                </div>
+                <div class="bg-white/5 rounded-xl py-2.5">
+                    <span class="material-symbols-outlined text-emerald-400 text-lg">tide</span>
+                    <p class="text-xs font-bold mt-1" id="tideVal">Montante</p>
+                    <p class="text-[9px] text-slate-500">Marée</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="grid grid-cols-2 gap-3">
+            <a href="map.html"
+                class="card rounded-2xl p-4 flex items-center gap-3 active:scale-[.97] transition-transform">
+                <div class="w-10 h-10 rounded-2xl bg-[#00bad6]/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-[#00bad6]">travel_explore</span>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Spots</p>
+                    <p class="text-[10px] text-slate-500">60+ spots</p>
+                </div>
+            </a>
+            <a href="alerts.html"
+                class="card rounded-2xl p-4 flex items-center gap-3 active:scale-[.97] transition-transform">
+                <div class="w-10 h-10 rounded-2xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-amber-400">notifications_active</span>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Alertes</p>
+                    <p class="text-[10px] text-slate-500">Mes alertes</p>
+                </div>
+            </a>
+            <a href="community.html"
+                class="card rounded-2xl p-4 flex items-center gap-3 active:scale-[.97] transition-transform">
+                <div class="w-10 h-10 rounded-2xl bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-purple-400">groups</span>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Communauté</p>
+                    <p class="text-[10px] text-slate-500">Sessions</p>
+                </div>
+            </a>
+            <a href="messages.html"
+                class="card rounded-2xl p-4 flex items-center gap-3 active:scale-[.97] transition-transform">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-emerald-400">chat</span>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Messages</p>
+                    <p class="text-[10px] text-slate-500">Discussions</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Top spots section -->
+        <div>
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-black text-base">🏄 Meilleurs spots du jour</h3>
+                <a href="map.html" class="text-xs text-[#00bad6] font-bold">Voir tout →</a>
+            </div>
+            <div id="topSpots" class="space-y-2">
+                <div class="skeleton h-16 rounded-2xl"></div>
+                <div class="skeleton h-16 rounded-2xl"></div>
+                <div class="skeleton h-16 rounded-2xl"></div>
+            </div>
+        </div>
+
+        <!-- Pro banner -->
+        <a href="abonnement.html"
+            class="block card rounded-3xl p-5 border-amber-400/30 active:scale-[.98] transition-transform"
+            style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(217,119,6,.05))">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-amber-400/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-amber-400 text-2xl"
+                        style="font-variation-settings:'FILL' 1">star</span>
+                </div>
+                <div class="flex-1">
+                    <p class="font-black text-sm text-amber-300">Passe à Pro</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Caméras HD · Prévisions 15j · Favoris illimités</p>
+                </div>
+                <span class="material-symbols-outlined text-amber-400">chevron_right</span>
+            </div>
+        </a>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+        style="background: var(--nav-bg, rgba(8,15,26,0.95))">
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="home.html"><span
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">home</span><span
+                class="text-[10px] font-bold">Home</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5"></div>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
+                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Date
+        const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        const now = new Date();
+        document.getElementById('todayDate').textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
+
+        // Greeting
+        const h = now.getHours();
+        const greet = h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir';
+        document.getElementById('greeting').textContent = greet + ' 🌊';
+
+        // Random conditions
+        const heights = ['0.8m', '1.2m', '1.5m', '1.8m', '2.1m', '2.5m'];
+        const winds = ['5 km/h', '10 km/h', '12 km/h', '15 km/h', '18 km/h', '22 km/h'];
+        const temps = ['14°C', '15°C', '16°C', '17°C', '18°C', '19°C'];
+        const tides = ['Montante', 'Descendante', 'Basse', 'Haute', 'Montante', 'Étale'];
+        const idx = now.getDate() % heights.length;
+        document.getElementById('swellHeight').textContent = heights[idx];
+        document.getElementById('windVal').textContent = winds[idx];
+        document.getElementById('tempVal').textContent = temps[idx];
+        document.getElementById('tideVal').textContent = tides[idx];
+
+        // Load top spots
+        async function loadTopSpots() {
+            try {
+                const spots = await API.spots.list();
+                const top = spots.slice(0, 5);
+                const COND = ['Excellent', 'Très bon', 'Bon', 'Excellent', 'Très bon'];
+                const condColor = c => ({ 'Excellent': 'text-[#00bad6]', 'Très bon': 'text-emerald-400', 'Bon': 'text-green-400' }[c] || 'text-slate-400');
+                let html = '';
+                top.forEach((s, i) => {
+                    const h = (1.2 + Math.abs(Math.sin(s.id * 7)) * 2).toFixed(1);
+                    const c = COND[i % COND.length];
+                    html += `<a href="spot_detail.html?id=${s.id}" class="card rounded-2xl p-3 flex items-center gap-3 active:scale-[.98] transition-transform">
+                        <div class="w-10 h-10 rounded-xl bg-[#00bad6]/10 flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-black text-[#00bad6]">${h}m</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-bold text-sm truncate">${s.name}</p>
+                            <p class="text-[10px] text-slate-500 truncate">${s.location}</p>
+                        </div>
+                        <span class="text-[10px] font-bold ${condColor(c)} flex-shrink-0">${c}</span>
+                    </a>`;
+                });
+                document.getElementById('topSpots').innerHTML = html;
+            } catch {
+                document.getElementById('topSpots').innerHTML = '<p class="text-slate-500 text-xs text-center py-4">Connexion au serveur...</p>';
+            }
+        }
+        loadTopSpots();
+    </script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/notif-badge.js"></script>
+    <script src="/js/i18n.js"></script>
+</body>
+
+</html>
