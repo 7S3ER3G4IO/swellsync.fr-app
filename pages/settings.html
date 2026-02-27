@@ -13,6 +13,9 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
     <meta name="description"
         content="SwellSync Paramètres — Personnalisez votre expérience, notifications et préférences.">
@@ -1096,7 +1099,7 @@
             overlay.className = 'sw-confirm-overlay';
             overlay.innerHTML = `
                 <div class="sw-confirm-box" style="text-align:center">
-                    <img src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync" style="width:64px;height:64px;border-radius:16px;margin:0 auto 12px">
+                    <img loading="lazy" src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync" style="width:64px;height:64px;border-radius:16px;margin:0 auto 12px">
                     <div class="sw-confirm-title">Évaluer SwellSync</div>
                     <div class="sw-confirm-msg">Merci de ta confiance ! 🏄<br>Chaque avis compte pour une app indépendante.</div>
                     <div style="display:flex;gap:8px;justify-content:center;font-size:32px;margin-bottom:16px;cursor:pointer" id="rateStars">
@@ -1123,7 +1126,7 @@
             overlay.className = 'sw-confirm-overlay';
             overlay.innerHTML = `
                 <div class="sw-confirm-box" style="text-align:center">
-                    <img src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync" style="width:72px;height:72px;border-radius:18px;margin:0 auto 12px;box-shadow:0 4px 20px rgba(0,186,214,0.3)">
+                    <img loading="lazy" src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync" style="width:72px;height:72px;border-radius:18px;margin:0 auto 12px;box-shadow:0 4px 20px rgba(0,186,214,0.3)">
                     <div class="sw-confirm-title">SwellSync</div>
                     <div style="display:inline-block;background:rgba(0,186,214,0.15);color:#00bad6;font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;margin-bottom:12px">v2.1.0</div>
                     <div class="sw-confirm-msg">
@@ -1788,7 +1791,7 @@
                 if (r.success) {
                     // Display QR code
                     document.getElementById('totp_qr').innerHTML =
-                        `<img src="${r.qrCode}" alt="QR Code" class="w-48 h-48 rounded-xl border border-white/10" />`;
+                        `<img loading="lazy" src="${r.qrCode}" alt="QR Code" class="w-48 h-48 rounded-xl border border-white/10" />`;
                     // Display secret key for manual entry
                     document.getElementById('totp_secret_display').textContent =
                         `Clé manuelle : ${r.secret}`;
@@ -2099,6 +2102,8 @@
     <script src="js/notif-badge.js"></script>
     <script src="/js/i18n.js"></script>
     <script src="/js/push_notifs.js" defer></script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
 </body>
 
 </html>

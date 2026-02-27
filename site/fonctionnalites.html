@@ -7,6 +7,9 @@
     <title>Fonctionnalités — SwellSync</title>
     <meta name="description"
         content="Prévisions 7j, carte interactive, communauté surf, alertes houle, messagerie et app installable. Découvrez tout ce que SwellSync vous offre.">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png?v=3">
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
@@ -14,12 +17,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
+    <link rel="canonical" href="https://swellsync.fr/site/fonctionnalites.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@swellsync">
+    <meta name="twitter:title" content="SwellSync">
+    <meta name="twitter:description" content="Prévisions surf en temps réel">
+    <meta name="twitter:image" content="https://swellsync.fr/assets/images/swellsync_logo.png">
 </head>
 
 <body>
 
     <nav class="navbar" id="navbar">
-        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span>Swell<span
+        <a href="/" class="nav-logo"><img loading="lazy" src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span>Swell<span
                     class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
             <a href="/">Accueil</a>
@@ -456,7 +465,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img src="/assets/images/swellsync_logo.png?v=3"
+                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img loading="lazy" src="/assets/images/swellsync_logo.png?v=3"
                             alt="SwellSync"><span style="color:#fff">Swell<span
                                 style="color:var(--accent)">Sync</span></span></a>
                     <p>La prévision surf la plus précise de France. Conçu par des surfeurs, pour des surfeurs.</p>
@@ -490,6 +499,9 @@
         document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
         if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <script src="/js/structured-data.js"></script>
 </body>
 
 </html>

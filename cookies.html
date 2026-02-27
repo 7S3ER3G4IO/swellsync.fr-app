@@ -7,6 +7,9 @@
     <title>Gestion des Cookies — SwellSync</title>
     <meta name="description"
         content="Contrôlez les cookies et traceurs utilisés sur SwellSync. Privacy by Design, aucun traceur publicitaire.">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png?v=3">
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
@@ -128,6 +131,7 @@
             transform: translateX(24px);
         }
     </style>
+    <link rel="canonical" href="https://swellsync.fr/cookies.html">
 </head>
 
 <body>
@@ -254,6 +258,9 @@
         try { const p = JSON.parse(localStorage.getItem('cookie_pref')); if (p) { document.getElementById('perfCookie').checked = p.perf; document.getElementById('funcCookie').checked = p.func; } } catch { }
         if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <script src="/js/structured-data.js"></script>
 </body>
 
 </html>

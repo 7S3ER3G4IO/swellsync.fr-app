@@ -7,6 +7,9 @@
     <title>SwellSync — Prévisions Surf en Temps Réel</title>
     <meta name="description"
         content="SwellSync : l'app de prévisions surf pour la côte Atlantique. 60+ spots, messagerie, communauté, alertes houle. Gratuit sur iOS et Android.">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="canonical" href="https://swellsync.fr/">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://swellsync.fr/">
@@ -493,7 +496,7 @@
 
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
-        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span>Swell<span
+        <a href="/" class="nav-logo"><img loading="lazy" src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span>Swell<span
                     class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
             <a href="/" class="active">Accueil</a>
@@ -1193,7 +1196,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img src="/assets/images/swellsync_logo.png?v=3"
+                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img loading="lazy" src="/assets/images/swellsync_logo.png?v=3"
                             alt="SwellSync"><span style="color:#fff">Swell<span
                                 style="color:var(--accent)">Sync</span></span></a>
                     <p>La prévision surf la plus précise de France. Conçu par des surfeurs, pour des surfeurs.</p>
@@ -1288,6 +1291,9 @@
         function rejectCookies() { localStorage.setItem('cookiesAccepted', 'false'); document.getElementById('cookieBanner').style.display = 'none'; }
         if (!localStorage.getItem('cookiesAccepted')) { setTimeout(() => { document.getElementById('cookieBanner').style.display = 'flex'; }, 1500); }
     </script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <script src="/js/structured-data.js"></script>
 </body>
 
 </html>

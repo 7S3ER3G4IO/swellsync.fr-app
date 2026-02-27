@@ -13,6 +13,9 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
     <meta name="description"
         content="SwellSync Spots — Trouvez les meilleurs spots de surf sur la côte Atlantique avec conditions en temps réel.">
@@ -479,7 +482,7 @@
             const herbCond = COND[hero.id % COND.length];
             html += `<a href="spot_detail.html?id=${hero.id}" class="card rounded-3xl overflow-hidden block active:scale-[.99] transition-transform relative">
               <div class="relative w-full" style="height:180px">
-                <img src="${getSpotImg(hero)}" class="w-full h-full object-cover"/>
+                <img loading="lazy" src="${getSpotImg(hero)}" class="w-full h-full object-cover"/>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                 <div class="absolute top-3 right-3">${favBtn(hero.id)}</div>
                 <div class="absolute bottom-3 left-4 right-14">
@@ -560,6 +563,15 @@
     <script src="js/notif-badge.js"></script>
     <script src="/js/i18n.js"></script>
     <script src="/js/push_notifs.js" defer></script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <!-- Footer légal requis RGPD -->
+    <div style="text-align:center;padding:8px 16px 100px;font-size:10px;color:#334155">
+        <a href="/legal.html" style="color:#334155;text-decoration:none;margin:0 6px">Mentions légales</a>·
+        <a href="/privacy.html" style="color:#334155;text-decoration:none;margin:0 6px">Confidentialité</a>·
+        <a href="/cgv.html" style="color:#334155;text-decoration:none;margin:0 6px">CGU</a>·
+        <a href="/cookies.html" style="color:#334155;text-decoration:none;margin:0 6px">Cookies</a>
+    </div>
 </body>
 
 </html>

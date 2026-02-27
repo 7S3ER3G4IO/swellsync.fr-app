@@ -13,6 +13,9 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
     <meta name="description" content="SwellSync — Messagerie privée entre surfeurs.">
     <script src="js/theme.js"></script>
@@ -263,7 +266,7 @@
         <header
             class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/92 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
             <button onclick="closeChat()" class="material-symbols-outlined text-slate-400">arrow_back</button>
-            <img id="chatAvatar" class="w-9 h-9 rounded-full object-cover border border-[#00bad6]/20" src="" alt="">
+            <img loading="lazy" id="chatAvatar" class="w-9 h-9 rounded-full object-cover border border-[#00bad6]/20" src="" alt="">
             <div class="flex-1 min-w-0">
                 <h2 id="chatName" class="font-bold text-sm truncate">—</h2>
                 <p class="text-[10px] text-emerald-400 flex items-center gap-1">
@@ -365,7 +368,7 @@
                 const time = c.last_time ? timeAgo(c.last_time) : '';
                 const avatar = c.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.name)}&background=0f2438&color=00bad6&bold=true`;
                 return `<div class="conv-item" onclick="openChat(${c.id}, '${c.name.replace(/'/g, "\\'")}', '${avatar.replace(/'/g, "\\'")}')">
-                    <img class="conv-avatar" src="${avatar}" alt="${c.name}">
+                    <img loading="lazy" class="conv-avatar" src="${avatar}" alt="${c.name}">
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
                             <h3 class="font-bold text-sm truncate">${c.name}</h3>
@@ -482,7 +485,7 @@
                 document.getElementById('dmUserResults').innerHTML = users.filter(u => u.id !== myId).map(u => {
                     const av = u.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=0f2438&color=00bad6`;
                     return `<div class="conv-item rounded-xl" onclick="closeNewDM();openChat(${u.id},'${u.name.replace(/'/g, "\\'")}','${av.replace(/'/g, "\\'")}')">
-                        <img class="conv-avatar" style="width:36px;height:36px" src="${av}" alt="">
+                        <img loading="lazy" class="conv-avatar" style="width:36px;height:36px" src="${av}" alt="">
                         <div><p class="font-bold text-sm">${u.name}</p><p class="text-[10px] text-slate-500">${u.region || 'Surfeur'}</p></div>
                     </div>`;
                 }).join('') || '<p class="text-slate-500 text-sm text-center py-4">Aucun résultat</p>';
@@ -513,6 +516,15 @@
     <script src="js/share-social.js"></script>
     <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <!-- Footer légal requis RGPD -->
+    <div style="text-align:center;padding:8px 16px 100px;font-size:10px;color:#334155">
+        <a href="/legal.html" style="color:#334155;text-decoration:none;margin:0 6px">Mentions légales</a>·
+        <a href="/privacy.html" style="color:#334155;text-decoration:none;margin:0 6px">Confidentialité</a>·
+        <a href="/cgv.html" style="color:#334155;text-decoration:none;margin:0 6px">CGU</a>·
+        <a href="/cookies.html" style="color:#334155;text-decoration:none;margin:0 6px">Cookies</a>
+    </div>
 </body>
 
 </html>

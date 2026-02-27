@@ -7,6 +7,9 @@
     <title>60+ Spots de Surf — SwellSync</title>
     <meta name="description"
         content="Explorez plus de 60 spots de surf sur la côte Atlantique française. Bretagne, Vendée, Gironde, Landes, Pays Basque — conditions en temps réel.">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png?v=3">
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
@@ -14,12 +17,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
+    <link rel="canonical" href="https://swellsync.fr/site/spots.html">
 </head>
 
 <body>
 
     <nav class="navbar" id="navbar">
-        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span>Swell<span
+        <a href="/" class="nav-logo"><img loading="lazy" src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span>Swell<span
                     class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
             <a href="/">Accueil</a>
@@ -202,7 +206,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img src="/assets/images/swellsync_logo.png?v=3"
+                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img loading="lazy" src="/assets/images/swellsync_logo.png?v=3"
                             alt="SwellSync"><span style="color:#fff">Swell<span
                                 style="color:var(--accent)">Sync</span></span></a>
                     <p>La prévision surf la plus précise de France. Conçu par des surfeurs, pour des surfeurs.</p>
@@ -278,6 +282,9 @@
 
         if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <script src="/js/structured-data.js"></script>
 </body>
 
 </html>

@@ -13,6 +13,9 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
     <meta name="description" content="SwellSync Recherche — Trouvez des spots, des surfeurs et des conditions.">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -269,7 +272,7 @@
                     <div class="result-row" onclick="fillSearch('Hossegor')">
                         <div
                             class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
-                            <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80"
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80"
                                 class="w-full h-full object-cover" alt="Hossegor" />
                         </div>
                         <div class="flex-1">
@@ -281,7 +284,7 @@
                     <div class="result-row" onclick="fillSearch('La Torche')">
                         <div
                             class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
-                            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
                                 class="w-full h-full object-cover" alt="La Torche" />
                         </div>
                         <div class="flex-1">
@@ -293,7 +296,7 @@
                     <div class="result-row" onclick="fillSearch('Biarritz')">
                         <div
                             class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
-                            <img src="https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80"
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80"
                                 class="w-full h-full object-cover" alt="Biarritz" />
                         </div>
                         <div class="flex-1">
@@ -565,7 +568,7 @@
             if (spots.length) {
                 html += `<div class="px-4 pt-3 pb-1"><p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">📍 Spots (${spots.length})</p></div>`;
                 html += spots.map(s => `<div class="result-row anim" onclick="window.location.href='map.html'">
-            <div class="w-10 h-10 rounded-xl shrink-0 overflow-hidden"><img src="${spotImg(s)}" class="w-full h-full object-cover" alt="${s.name}"/></div>
+            <div class="w-10 h-10 rounded-xl shrink-0 overflow-hidden"><img loading="lazy" src="${spotImg(s)}" class="w-full h-full object-cover" alt="${s.name}"/></div>
             <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${s.name}</p><p class="text-[10px] text-slate-400">${s.location || ''} · ${diffLabel(s.difficulty)}</p></div>
             <span class="text-[10px] font-bold ${condColor(s.cond || 'Bon')} shrink-0">${s.cond || 'Bon'}</span>
         </div>`).join('');
@@ -634,6 +637,15 @@
     <script src="js/notif-badge.js"></script>
     <script src="/js/i18n.js"></script>
     <script src="/js/push_notifs.js" defer></script>
+    <script src="/js/cookie-consent.js"></script>
+    <script src="/js/monitoring.js"></script>
+    <!-- Footer légal requis RGPD -->
+    <div style="text-align:center;padding:8px 16px 100px;font-size:10px;color:#334155">
+        <a href="/legal.html" style="color:#334155;text-decoration:none;margin:0 6px">Mentions légales</a>·
+        <a href="/privacy.html" style="color:#334155;text-decoration:none;margin:0 6px">Confidentialité</a>·
+        <a href="/cgv.html" style="color:#334155;text-decoration:none;margin:0 6px">CGU</a>·
+        <a href="/cookies.html" style="color:#334155;text-decoration:none;margin:0 6px">Cookies</a>
+    </div>
 </body>
 
 </html>
