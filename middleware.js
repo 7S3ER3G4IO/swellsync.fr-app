@@ -9,6 +9,11 @@ export default function middleware(request) {
     const ua = request.headers.get('user-agent') || '';
     const url = new URL(request.url);
 
+    // Ne JAMAIS rediriger les fichiers statiques (JS, CSS, images, fonts, etc.)
+    if (/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|mp4|webm|json|xml|txt|map)$/i.test(url.pathname)) {
+        return;
+    }
+
     // Autoriser les bots/crawlers (SEO)
     if (/bot|crawler|spider|googlebot|bingbot|yandex|duckduck/i.test(ua)) {
         return;
