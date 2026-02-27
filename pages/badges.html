@@ -27,17 +27,17 @@
         }
 
         body {
-            background: #080f1a;
+            background: #000;
             color: #f1f5f9;
         }
 
         .card {
-            background: #0f2438;
+            background: #111;
             border: 1px solid rgba(0, 186, 214, .12);
         }
 
         .badge-card {
-            background: #0f2438;
+            background: #111;
             border: 2px solid rgba(255, 255, 255, .06);
             border-radius: 16px;
             padding: 16px;
@@ -150,8 +150,8 @@
 
     <style>
         :root {
-            --bg-primary: #080f1a;
-            --bg-card: #0f2438;
+            --bg-primary: #000;
+            --bg-card: #111;
             --bg-nav: rgba(8, 15, 26, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
@@ -173,15 +173,15 @@
         }
 
         .light .card,
-        .light [class*="bg-[#0f2438]"] {
+        .light [class*="bg-[#111]"] {
             background: var(--bg-card) !important;
         }
 
-        .light [class*="bg-[#080f1a]"] {
+        .light [class*="bg-[#000]"] {
             background: var(--bg-primary) !important;
         }
 
-        .light [class*="bg-[#0b1929]"] {
+        .light [class*="bg-[#111]"] {
             background: #f8fafc !important;
         }
 
@@ -225,7 +225,7 @@
 
     <!-- Header -->
     <header
-        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
         <a href="javascript:history.back()"
             class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
@@ -343,7 +343,7 @@
             ${iconHtml}
             <div class="badge-name">${b.name}</div>
             <div class="badge-desc">${b.desc}</div>
-            <div class="equip-btn ${isEquipped ? 'bg-[#00bad6] text-[#080f1a]' : 'bg-white/8 text-slate-400'} active:scale-95 transition-transform">
+            <div class="equip-btn ${isEquipped ? 'bg-[#00bad6] text-[#000]' : 'bg-white/8 text-slate-400'} active:scale-95 transition-transform">
                 ${isEquipped ? '✓ Équipé' : proLocked ? '⭐ Pro' : 'Équiper'}
             </div>
         </div>`;
@@ -417,7 +417,7 @@
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
                 style="position:relative;display:inline-block;"><span
                     class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
                 class="text-[10px]">Alertes</span>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span

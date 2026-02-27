@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport" />
+    <title>SwellSync - Prévisions 7 jours</title>
+    <script src="js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="css/transitions.css">
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100dvh;
+            padding-bottom: 100px
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 16px
+        }
+
+        .hdr {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08)
+        }
+
+        .graph-bar {
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease
+        }
+
+        .tab-active {
+            border-bottom: 2px solid #00bad6;
+            color: #00bad6;
+            font-weight: 700
+        }
+
+        .tab {
+            padding: 10px 0;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="hdr sticky top-0 z-30 px-4 py-3">
+        <div class="flex items-center gap-3">
+            <a href="home.html" class="tap"><span class="material-symbols-outlined text-white">arrow_back</span></a>
+            <h1 class="text-lg font-bold flex-1">Prévisions <span class="text-[#00bad6]">7 jours</span></h1>
+            <span class="material-symbols-outlined text-white">tune</span>
+        </div>
+        <!-- Tabs -->
+        <div class="flex mt-2" id="tabs">
+            <div class="tab tab-active" data-tab="swell">Houle</div>
+            <div class="tab" data-tab="wind">Vent</div>
+            <div class="tab" data-tab="tide">Marée</div>
+            <div class="tab" data-tab="temp">Température</div>
+        </div>
+    </header>
+
+    <main class="px-4 py-4 space-y-4 max-w-lg mx-auto page-enter">
+
+        <!-- Current conditions -->
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <p class="text-xs text-white/50">Maintenant · Hossegor</p>
+                    <p class="text-2xl font-bold mt-1">2.6m <span class="text-sm text-white/50">@ 12s</span></p>
+                </div>
+                <div class="text-right">
+                    <p class="text-3xl">🌊</p>
+                    <p class="text-xs text-[#00bad6] font-bold">Bonnes conditions</p>
+                </div>
+            </div>
+            <div class="flex gap-4 text-xs text-white/60">
+                <span>🧭 W (270°)</span>
+                <span>💨 12 km/h NE</span>
+                <span>🌡️ 15°C eau</span>
+            </div>
+        </div>
+
+        <!-- Swell Chart -->
+        <div class="card" id="swellChart">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-sm">Hauteur de houle</h2>
+                <span class="text-xs text-[#00bad6]">7 jours</span>
+            </div>
+            <div class="flex items-end justify-between gap-1" style="height:140px" id="chartBars">
+            </div>
+            <div class="flex justify-between mt-2 text-[9px] text-white/40" id="chartLabels">
+            </div>
+        </div>
+
+        <!-- 7 Day Forecast Table -->
+        <div class="card">
+            <h2 class="font-bold text-sm mb-3">Détail jour par jour</h2>
+            <div class="space-y-2" id="forecastTable">
+            </div>
+        </div>
+
+        <!-- Wind Rose -->
+        <div class="card">
+            <h2 class="font-bold text-sm mb-3">Direction du vent</h2>
+            <div class="flex items-center justify-center" style="height:160px">
+                <svg viewBox="0 0 200 200" width="160" height="160">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                    <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                    <circle cx="100" cy="100" r="30" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                    <text x="100" y="15" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10">N</text>
+                    <text x="190" y="104" text-anchor="end" fill="rgba(255,255,255,0.4)" font-size="10">E</text>
+                    <text x="100" y="195" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10">S</text>
+                    <text x="15" y="104" fill="rgba(255,255,255,0.4)" font-size="10">O</text>
+                    <!-- Wind arrow pointing NE -->
+                    <line x1="100" y1="100" x2="140" y2="40" stroke="#00bad6" stroke-width="3" stroke-linecap="round" />
+                    <polygon points="140,40 130,55 148,50" fill="#00bad6" />
+                    <circle cx="100" cy="100" r="5" fill="#00bad6" />
+                </svg>
+            </div>
+            <p class="text-center text-xs text-white/50 mt-2">Vent dominant: <span class="text-white font-bold">NE 12
+                    km/h</span></p>
+        </div>
+
+        <!-- Tide Chart -->
+        <div class="card">
+            <h2 class="font-bold text-sm mb-3">Marées aujourd'hui</h2>
+            <svg viewBox="0 0 300 80" width="100%" height="80" style="display:block">
+                <defs>
+                    <linearGradient id="tideGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#00bad6" stop-opacity="0.3" />
+                        <stop offset="100%" stop-color="#00bad6" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+                <path d="M0,60 Q37,10 75,40 Q112,70 150,20 Q187,70 225,40 Q262,10 300,50" fill="none" stroke="#00bad6"
+                    stroke-width="2" />
+                <path d="M0,60 Q37,10 75,40 Q112,70 150,20 Q187,70 225,40 Q262,10 300,50 L300,80 L0,80Z"
+                    fill="url(#tideGrad)" />
+                <circle cx="75" cy="40" r="4" fill="#00bad6" />
+                <circle cx="150" cy="20" r="4" fill="#fff" />
+                <circle cx="225" cy="40" r="4" fill="#00bad6" />
+            </svg>
+            <div class="flex justify-between text-[10px] text-white/40 mt-2">
+                <div>
+                    <p class="text-white/70 font-bold">03:42</p>
+                    <p>Basse mer</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-white/70 font-bold">09:18</p>
+                    <p>Pleine mer</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-white/70 font-bold">15:54</p>
+                    <p>Basse mer</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-white/70 font-bold">21:36</p>
+                    <p>Pleine mer</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-white/10 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg"
+        style="background:rgba(0,0,0,0.95)">
+        <a class="flex flex-col items-center gap-1 text-white flex-1" href="home.html"><span
+                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span></a>
+        <a class="flex flex-col items-center gap-1 text-white flex-1" href="map.html"><span
+                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
+        <a class="flex flex-col items-center gap-1 text-white flex-1" href="alerts.html"><span
+                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span></a>
+        <a class="flex flex-col items-center gap-1 text-white flex-1" href="community.html"><span
+                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
+        <a class="flex flex-col items-center gap-1 text-white flex-1" href="profile.html"><span
+                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+    </nav>
+
+    <script>
+        // Forecast data
+        const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+        const SWELL = [2.1, 2.6, 1.8, 3.2, 2.9, 2.5, 3.0];
+        const PERIOD = [11, 12, 10, 14, 13, 11, 12];
+        const WIND = [12, 8, 15, 10, 18, 14, 9];
+        const WIND_DIR = ['NE', 'NE', 'NO', 'NE', 'SO', 'NO', 'NE'];
+        const TEMP = [15, 16, 14, 15, 14, 16, 17];
+        const WEATHER = ['☀️', '🌤️', '⛅', '🌊', '💨', '🌤️', '☀️'];
+        const RATING = ['⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐', '⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐'];
+
+        // Render chart
+        const maxH = Math.max(...SWELL);
+        const bars = document.getElementById('chartBars');
+        const labels = document.getElementById('chartLabels');
+        DAYS.forEach((d, i) => {
+            const pct = (SWELL[i] / maxH) * 100;
+            const bar = document.createElement('div');
+            bar.className = 'flex-1 flex flex-col items-center justify-end';
+            const isToday = i === 1;
+            bar.innerHTML = `
+            <span class="text-[10px] ${isToday ? 'text-[#00bad6] font-bold' : 'text-white/50'} mb-1">${SWELL[i]}m</span>
+            <div class="w-full graph-bar ${isToday ? 'bg-[#00bad6]' : 'bg-white/10'}" style="height:${pct}%;min-height:8px"></div>`;
+            bars.appendChild(bar);
+            const lbl = document.createElement('span');
+            lbl.className = isToday ? 'text-[#00bad6] font-bold' : '';
+            lbl.textContent = isToday ? 'Auj.' : d;
+            labels.appendChild(lbl);
+        });
+
+        // Render forecast table
+        const table = document.getElementById('forecastTable');
+        DAYS.forEach((d, i) => {
+            const isToday = i === 1;
+            const row = document.createElement('div');
+            row.className = `flex items-center gap-3 py-2 ${i < 6 ? 'border-b border-white/5' : ''}`;
+            row.innerHTML = `
+            <span class="w-8 text-xs ${isToday ? 'text-[#00bad6] font-bold' : 'text-white/60'}">${isToday ? 'Auj.' : d}</span>
+            <span class="text-lg">${WEATHER[i]}</span>
+            <div class="flex-1">
+                <p class="text-sm font-bold">${SWELL[i]}m <span class="text-white/40 font-normal">@ ${PERIOD[i]}s</span></p>
+                <p class="text-[10px] text-white/40">💨 ${WIND[i]}km/h ${WIND_DIR[i]} · 🌡️ ${TEMP[i]}°C</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px]">${RATING[i]}</p>
+            </div>`;
+            table.appendChild(row);
+        });
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
+                tab.classList.add('tab-active');
+            });
+        });
+    </script>
+</body>
+
+</html>

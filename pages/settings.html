@@ -27,12 +27,12 @@
         }
 
         body {
-            background: #080f1a;
+            background: #000;
             color: #f1f5f9;
         }
 
         .card {
-            background: #0f2438;
+            background: #111;
             border: 1px solid rgba(0, 186, 214, .12);
         }
 
@@ -138,7 +138,7 @@
         }
 
         .search-box {
-            background: #0f2438;
+            background: #111;
             border: 1px solid rgba(0, 186, 214, .2);
             border-radius: 14px;
             padding: 10px 14px;
@@ -161,8 +161,8 @@
 
     <style>
         :root {
-            --bg-primary: #080f1a;
-            --bg-card: #0f2438;
+            --bg-primary: #000;
+            --bg-card: #111;
             --bg-nav: rgba(8, 15, 26, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
@@ -184,15 +184,15 @@
         }
 
         .light .card,
-        .light [class*="bg-[#0f2438]"] {
+        .light [class*="bg-[#111]"] {
             background: var(--bg-card) !important;
         }
 
-        .light [class*="bg-[#080f1a]"] {
+        .light [class*="bg-[#000]"] {
             background: var(--bg-primary) !important;
         }
 
-        .light [class*="bg-[#0b1929]"] {
+        .light [class*="bg-[#111]"] {
             background: #f8fafc !important;
         }
 
@@ -236,7 +236,7 @@
 
     <!-- Header -->
     <header
-        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/95 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
         <a href="javascript:history.back()"
             class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
@@ -717,7 +717,7 @@
 
     <!-- Archive sheet -->
     <div id="infoSheet" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 id="infoSheetTitle" class="font-black text-base"></h3>
                 <button onclick="closeSheet('infoSheet')" class="text-slate-400"><span
@@ -731,7 +731,7 @@
 
     <!-- Archive sheet -->
     <div id="archiveSheet" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">📁 Archive</h3>
                 <button onclick="closeSheet('archiveSheet')" class="text-slate-400"><span
@@ -750,7 +750,7 @@
 
     <!-- Password Change Sheet -->
     <div id="pwdSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🔑 Changer le mot de passe</h3>
                 <button onclick="closeSheet('pwdSheet')" class="text-slate-400"><span
@@ -761,26 +761,26 @@
                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Mot de passe
                         actuel</label>
                     <input id="pwdCurrent" type="password" placeholder="Ton mot de passe actuel"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
                         required />
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Nouveau mot de
                         passe</label>
                     <input id="pwdNew" type="password" placeholder="8 caractères minimum"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
                         required minlength="8" />
                 </div>
                 <div>
                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Confirmer le nouveau
                         MDP</label>
                     <input id="pwdConfirm" type="password" placeholder="Répète le nouveau mot de passe"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-sm text-slate-200 outline-none mt-1 focus:border-[#00bad6]"
                         required />
                 </div>
                 <p id="pwdError" class="text-red-400 text-xs min-h-[16px]"></p>
                 <button id="pwdSubmitBtn" type="submit"
-                    class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">✅
+                    class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">✅
                     Confirmer</button>
             </form>
         </div>
@@ -788,13 +788,13 @@
 
     <!-- Blocked Accounts Sheet -->
     <div id="blockedSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-red-500/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-red-500/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🚫 Comptes bloqués</h3>
                 <button onclick="closeSheet('blockedSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
-            <div id="blockedList" class="max-h-64 overflow-y-auto rounded-xl bg-[#080f1a]"></div>
+            <div id="blockedList" class="max-h-64 overflow-y-auto rounded-xl bg-[#000]"></div>
             <p class="text-[10px] text-slate-600 text-center mt-3">Pour bloquer un utilisateur, allez sur son profil
                 dans la Communauté.</p>
         </div>
@@ -802,30 +802,30 @@
 
     <!-- Language Sheet -->
     <div id="langSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🌐 Langue / Language</h3>
                 <button onclick="closeSheet('langSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <div class="space-y-2 mb-4">
-                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer">
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer">
                     <input type="radio" id="langFR" name="lang" value="fr" class="accent-[#00bad6]" checked />
                     <span class="font-bold text-sm">🇫🇷 Français</span>
                 </label>
-                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer">
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer">
                     <input type="radio" id="langEN" name="lang" value="en" class="accent-[#00bad6]" />
                     <span class="font-bold text-sm">🇬🇧 English</span>
                 </label>
             </div>
             <button onclick="applyLanguage()"
-                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Appliquer</button>
+                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Appliquer</button>
         </div>
     </div>
 
     <!-- Units Sheet -->
     <div id="unitsSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">📏 Unités de mesure</h3>
                 <button onclick="closeSheet('unitsSheet')" class="text-slate-400"><span
@@ -834,52 +834,52 @@
             <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Hauteur des vagues</p>
             <div class="flex gap-2 mb-4">
                 <label
-                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    class="flex-1 text-center p-3 rounded-xl bg-[#111] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
                     <input type="radio" id="unitWaveM" name="unitWave" value="m" checked class="sr-only" />🌊 Mètres (m)
                 </label>
                 <label
-                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    class="flex-1 text-center p-3 rounded-xl bg-[#111] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
                     <input type="radio" id="unitWaveFt" name="unitWave" value="ft" class="sr-only" />📐 Pieds (ft)
                 </label>
             </div>
             <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Vitesse du vent</p>
             <div class="flex gap-2 mb-4">
                 <label
-                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    class="flex-1 text-center p-3 rounded-xl bg-[#111] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
                     <input type="radio" id="unitWindKmh" name="unitWind" value="kmh" checked class="sr-only" />💨 km/h
                 </label>
                 <label
-                    class="flex-1 text-center p-3 rounded-xl bg-[#0f2438] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
+                    class="flex-1 text-center p-3 rounded-xl bg-[#111] cursor-pointer border border-transparent has-[:checked]:border-[#00bad6]">
                     <input type="radio" id="unitWindKts" name="unitWind" value="kts" class="sr-only" />⚓ Nœuds (kts)
                 </label>
             </div>
             <button onclick="applyUnits()"
-                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">✅
+                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">✅
                 Appliquer</button>
         </div>
     </div>
 
     <!-- Level Sheet -->
     <div id="levelSheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🏄 Niveau de surf</h3>
                 <button onclick="closeSheet('levelSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <div class="space-y-2 mb-4">
-                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer"><input type="radio"
                         name="surfLevel" value="debutant" class="accent-[#00bad6]" /> �� Débutant</label>
-                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer"><input type="radio"
                         name="surfLevel" value="intermediaire" checked class="accent-[#00bad6]" /> 🏄
                     Intermédiaire</label>
-                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer"><input type="radio"
                         name="surfLevel" value="avance" class="accent-[#00bad6]" /> ⚡ Avancé</label>
-                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] cursor-pointer"><input type="radio"
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer"><input type="radio"
                         name="surfLevel" value="expert" class="accent-[#00bad6]" /> 🔥 Expert</label>
             </div>
             <button onclick="applyLevel()"
-                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">✅
+                class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">✅
                 Confirmer</button>
         </div>
     </div>
@@ -887,13 +887,13 @@
     <!-- Default Spot Sheet -->
     <div id="defaultSpotSheet"
         class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-emerald-500/20 p-5">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-emerald-500/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">📍 Spot par défaut</h3>
                 <button onclick="closeSheet('defaultSpotSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
-            <div id="defaultSpotList" class="max-h-64 overflow-y-auto rounded-xl bg-[#080f1a] mb-4"></div>
+            <div id="defaultSpotList" class="max-h-64 overflow-y-auto rounded-xl bg-[#000] mb-4"></div>
             <button onclick="applyDefaultSpot()"
                 class="w-full py-3 rounded-2xl bg-emerald-500 font-black text-sm text-white">✅ Confirmer</button>
         </div>
@@ -901,7 +901,7 @@
 
     <!-- Logout confirm -->
     <div id="logoutSheet" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-red-500/20 p-5 text-center">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-red-500/20 p-5 text-center">
             <h3 class="font-black text-base text-red-400 mb-2">Se déconnecter ?</h3>
             <p class="text-slate-400 text-sm mb-5">Tu devras te reconnecter avec tes identifiants SwellSync.</p>
             <button onclick="window.location.href='home.html'"
@@ -914,7 +914,7 @@
     <!-- 2FA Modal — Multi-méthode -->
     <div id="twoFASheet" class="fixed inset-0 z-[300] hidden items-end justify-center bg-black/70 backdrop-blur-sm">
         <div
-            class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-amber-500/20 p-5 max-h-[85vh] overflow-y-auto">
+            class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-amber-500/20 p-5 max-h-[85vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🔐 Authentification à 2 facteurs</h3>
                 <button onclick="closeSheet('twoFASheet')" class="text-slate-400"><span
@@ -922,7 +922,7 @@
             </div>
 
             <!-- Statut actuel -->
-            <div id="twoFA_currentStatus" class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] mb-4">
+            <div id="twoFA_currentStatus" class="flex items-center gap-3 p-3 rounded-xl bg-[#111] mb-4">
                 <span class="material-symbols-outlined text-amber-400">shield</span>
                 <div class="flex-1">
                     <p class="font-bold text-sm" id="twoFA_statusText">Statut : Chargement...</p>
@@ -935,7 +935,7 @@
                 <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Choisir une méthode :</p>
 
                 <!-- Email -->
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-amber-500/30 transition-colors"
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#111] border border-transparent cursor-pointer hover:border-amber-500/30 transition-colors"
                     onclick="select2FAMethod('email')" id="method_email">
                     <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center"><span
                             class="material-symbols-outlined text-amber-400 text-xl">mail</span></div>
@@ -947,7 +947,7 @@
                 </div>
 
                 <!-- TOTP -->
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-purple-500/30 transition-colors"
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#111] border border-transparent cursor-pointer hover:border-purple-500/30 transition-colors"
                     onclick="select2FAMethod('totp')" id="method_totp">
                     <div class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center"><span
                             class="material-symbols-outlined text-purple-400 text-xl">qr_code_2</span></div>
@@ -959,7 +959,7 @@
                 </div>
 
                 <!-- SMS -->
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-emerald-500/30 transition-colors"
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#111] border border-transparent cursor-pointer hover:border-emerald-500/30 transition-colors"
                     onclick="select2FAMethod('sms')" id="method_sms">
                     <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center"><span
                             class="material-symbols-outlined text-emerald-400 text-xl">sms</span></div>
@@ -971,7 +971,7 @@
                 </div>
 
                 <!-- Passkey -->
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#0f2438] border border-transparent cursor-pointer hover:border-cyan-500/30 transition-colors"
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-[#111] border border-transparent cursor-pointer hover:border-cyan-500/30 transition-colors"
                     onclick="select2FAMethod('passkey')" id="method_passkey">
                     <div class="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center"><span
                             class="material-symbols-outlined text-cyan-400 text-xl">fingerprint</span></div>
@@ -986,20 +986,20 @@
 
             <!-- Panel Email OTP -->
             <div id="twoFA_panel_email" class="hidden">
-                <div class="bg-[#0f2438] rounded-xl p-4 border border-amber-500/10">
+                <div class="bg-[#111] rounded-xl p-4 border border-amber-500/10">
                     <h4 class="font-bold text-sm mb-2">📧 Vérification par Email</h4>
                     <p class="text-[11px] text-slate-400 mb-3">Un code sera envoyé à ton adresse email.</p>
                     <button id="email_sendBtn" onclick="send2FACode()"
-                        class="w-full py-2.5 rounded-xl bg-amber-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Envoyer
+                        class="w-full py-2.5 rounded-xl bg-amber-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Envoyer
                         le code</button>
                     <div id="email_codeInput" class="hidden mt-3">
                         <input id="email_code" type="text" maxlength="6" inputmode="numeric"
-                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#080f1a] border border-white/10 rounded-xl text-white focus:outline-none focus:border-amber-500/50"
+                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#000] border border-white/10 rounded-xl text-white focus:outline-none focus:border-amber-500/50"
                             placeholder="000000" />
                         <p id="email_debug" class="text-[10px] text-emerald-400 text-center mt-2 hidden"></p>
                         <p id="email_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
                         <button onclick="verifyEmailCode()"
-                            class="w-full py-2.5 mt-3 rounded-xl bg-amber-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Vérifier</button>
+                            class="w-full py-2.5 mt-3 rounded-xl bg-amber-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Vérifier</button>
                     </div>
                 </div>
                 <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
@@ -1007,7 +1007,7 @@
 
             <!-- Panel TOTP -->
             <div id="twoFA_panel_totp" class="hidden">
-                <div class="bg-[#0f2438] rounded-xl p-4 border border-purple-500/10">
+                <div class="bg-[#111] rounded-xl p-4 border border-purple-500/10">
                     <h4 class="font-bold text-sm mb-2">📱 Google Authenticator / Authy</h4>
                     <p class="text-[11px] text-slate-400 mb-3">Scanne le QR code avec ton appli d'authentification.</p>
                     <div id="totp_qr" class="flex justify-center mb-3"></div>
@@ -1018,7 +1018,7 @@
                     <div id="totp_verifySection" class="hidden mt-3">
                         <p class="text-[11px] text-slate-400 mb-2">Entre le code affiché dans ton appli :</p>
                         <input id="totp_code" type="text" maxlength="6" inputmode="numeric"
-                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#080f1a] border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500/50"
+                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#000] border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500/50"
                             placeholder="000000" />
                         <p id="totp_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
                         <button onclick="verifyTOTP()"
@@ -1031,26 +1031,26 @@
 
             <!-- Panel SMS -->
             <div id="twoFA_panel_sms" class="hidden">
-                <div class="bg-[#0f2438] rounded-xl p-4 border border-emerald-500/10">
+                <div class="bg-[#111] rounded-xl p-4 border border-emerald-500/10">
                     <h4 class="font-bold text-sm mb-2">📱 Vérification par SMS</h4>
                     <div id="sms_phoneSection">
                         <p class="text-[11px] text-slate-400 mb-2">Entre ton numéro de téléphone :</p>
                         <input id="sms_phone" type="tel"
-                            class="w-full py-3 px-4 bg-[#080f1a] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500/50"
+                            class="w-full py-3 px-4 bg-[#000] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500/50"
                             placeholder="+33 6 12 34 56 78" />
                         <button onclick="setupSMS()"
-                            class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Enregistrer
+                            class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Enregistrer
                             & Envoyer le code</button>
                     </div>
                     <div id="sms_codeSection" class="hidden mt-3">
                         <p class="text-[11px] text-slate-400 mb-2">Entre le code reçu par SMS :</p>
                         <input id="sms_code" type="text" maxlength="6" inputmode="numeric"
-                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#080f1a] border border-white/10 rounded-xl text-white focus:outline-none focus:border-emerald-500/50"
+                            class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#000] border border-white/10 rounded-xl text-white focus:outline-none focus:border-emerald-500/50"
                             placeholder="000000" />
                         <p id="sms_debug" class="text-[10px] text-emerald-400 text-center mt-2 hidden"></p>
                         <p id="sms_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
                         <button onclick="verifySMS()"
-                            class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Vérifier</button>
+                            class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Vérifier</button>
                     </div>
                 </div>
                 <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
@@ -1058,13 +1058,13 @@
 
             <!-- Panel Passkey -->
             <div id="twoFA_panel_passkey" class="hidden">
-                <div class="bg-[#0f2438] rounded-xl p-4 border border-cyan-500/10">
+                <div class="bg-[#111] rounded-xl p-4 border border-cyan-500/10">
                     <h4 class="font-bold text-sm mb-2">🔑 Passkeys / Biométrie</h4>
                     <p class="text-[11px] text-slate-400 mb-3">Utilise Face ID, Touch ID ou Windows Hello pour te
                         connecter.</p>
                     <div id="passkey_list" class="space-y-2 mb-3"></div>
                     <button onclick="registerPasskey()"
-                        class="w-full py-2.5 rounded-xl bg-cyan-500 font-black text-sm text-[#080f1a] active:scale-95 transition-transform flex items-center justify-center gap-2">
+                        class="w-full py-2.5 rounded-xl bg-cyan-500 font-black text-sm text-[#000] active:scale-95 transition-transform flex items-center justify-center gap-2">
                         <span class="material-symbols-outlined text-sm">add</span> Ajouter une Passkey
                     </button>
                     <p id="passkey_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
@@ -1204,13 +1204,13 @@
             const modal = document.createElement('div');
             modal.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
             modal.innerHTML = `
-                <div class="bg-[#0f2438] rounded-3xl border border-amber-500/20 p-6 max-w-sm mx-4 text-center shadow-2xl">
+                <div class="bg-[#111] rounded-3xl border border-amber-500/20 p-6 max-w-sm mx-4 text-center shadow-2xl">
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-4">
                         <span class="material-symbols-outlined text-2xl text-white" style="font-variation-settings:'FILL' 1">workspace_premium</span>
                     </div>
                     <h3 class="text-lg font-black mb-2">SwellSync Pro ⭐</h3>
                     <p class="text-sm text-slate-400 mb-5">${msg}</p>
-                    <button onclick="window.location.href='abonnement.html'" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 font-black text-sm text-[#080f1a] mb-2 active:scale-95 transition-transform">Passer à Pro</button>
+                    <button onclick="window.location.href='abonnement.html'" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 font-black text-sm text-[#000] mb-2 active:scale-95 transition-transform">Passer à Pro</button>
                     <button onclick="this.closest('.fixed').remove()" class="w-full py-2 text-slate-400 text-sm">Plus tard</button>
                 </div>`;
             document.body.appendChild(modal);
@@ -1438,7 +1438,7 @@
             sheet.id = 'textSizeSheet';
             const current = localStorage.getItem('sw_text_size') || 'normal';
             sheet.innerHTML = `
-                <div class="w-full max-w-md bg-[#0f2438] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
+                <div class="w-full max-w-md bg-[#111] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-black text-base">🔤 Taille du texte</h3>
                         <button onclick="closeSheet('textSizeSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
@@ -1446,7 +1446,7 @@
                     <div class="space-y-2">
                         ${['small|Petit|text-xs', 'normal|Normal|text-sm', 'large|Grand|text-base'].map(s => {
                 const [val, label, cls] = s.split('|');
-                return `<label class="flex items-center gap-3 p-3 rounded-xl bg-[#080f1a] border border-[#00bad6]/10 cursor-pointer hover:bg-[#0b1a2e]">
+                return `<label class="flex items-center gap-3 p-3 rounded-xl bg-[#000] border border-[#00bad6]/10 cursor-pointer hover:bg-[#111]">
                                 <input type="radio" name="textSize" value="${val}" class="accent-[#00bad6]" ${current === val ? 'checked' : ''} onchange="setTextSize('${val}')" />
                                 <span class="${cls} font-semibold">${label}</span>
                             </label>`;
@@ -1473,20 +1473,20 @@
             const contrast = localStorage.getItem('sw_high_contrast') === '1';
             const reducedMotion = localStorage.getItem('sw_reduced_motion') === '1';
             sheet.innerHTML = `
-                <div class="w-full max-w-md bg-[#0f2438] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
+                <div class="w-full max-w-md bg-[#111] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-black text-base">♿ Accessibilité</h3>
                         <button onclick="closeSheet('accessSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
                     </div>
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#080f1a] border border-[#00bad6]/10">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#000] border border-[#00bad6]/10">
                             <div>
                                 <p class="font-semibold text-sm">Contraste élevé</p>
                                 <p class="text-[10px] text-slate-500">Améliore la lisibilité</p>
                             </div>
                             <div class="toggle-switch ${contrast ? 'on' : ''}" onclick="toggleAccessibility(this, 'sw_high_contrast')"></div>
                         </div>
-                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#080f1a] border border-[#00bad6]/10">
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-[#000] border border-[#00bad6]/10">
                             <div>
                                 <p class="font-semibold text-sm">Réduire les animations</p>
                                 <p class="text-[10px] text-slate-500">Moins de transitions et effets</p>
@@ -1923,7 +1923,7 @@
                 const r = await fetch('/api/auth/2fa-status', { credentials: 'include' }).then(x => x.json());
                 if (r.passkeys && r.passkeys.length > 0) {
                     list.innerHTML = r.passkeys.map(pk => `
-                        <div class="flex items-center gap-3 p-3 rounded-xl bg-[#080f1a] border border-cyan-500/10">
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-[#000] border border-cyan-500/10">
                             <span class="material-symbols-outlined text-cyan-400 text-lg">key</span>
                             <div class="flex-1">
                                 <p class="font-bold text-xs">${pk.device_name || 'Passkey'}</p>
@@ -2078,7 +2078,7 @@
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
                 style="position:relative;display:inline-block;"><span
                     class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
                 class="text-[10px]">Alertes</span>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span

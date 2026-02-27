@@ -30,7 +30,7 @@
         }
 
         body {
-            background: #080f1a;
+            background: #000;
             color: #f1f5f9;
             overscroll-behavior: none;
         }
@@ -41,7 +41,7 @@
         }
 
         .card {
-            background: #0f2438;
+            background: #111;
             border: 1px solid rgba(0, 186, 214, .12);
         }
 
@@ -59,7 +59,7 @@
 
         .chip.active {
             background: #00bad6;
-            color: #080f1a;
+            color: #000;
             border-color: #00bad6;
         }
 
@@ -118,7 +118,7 @@
         @keyframes postHighlight {
             0% {
                 box-shadow: 0 0 0 0 rgba(0, 186, 214, 0);
-                background: #0f2438;
+                background: #111;
             }
 
             15% {
@@ -133,7 +133,7 @@
 
             100% {
                 box-shadow: none;
-                background: #0f2438;
+                background: #111;
             }
         }
 
@@ -168,7 +168,7 @@
 
         .tab-btn.active {
             background: #00bad6;
-            color: #080f1a;
+            color: #000;
         }
 
         .reply-box {
@@ -216,8 +216,8 @@
 
     <style>
         :root {
-            --bg-primary: #080f1a;
-            --bg-card: #0f2438;
+            --bg-primary: #000;
+            --bg-card: #111;
             --bg-nav: rgba(8, 15, 26, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
@@ -239,15 +239,15 @@
         }
 
         .light .card,
-        .light [class*="bg-[#0f2438]"] {
+        .light [class*="bg-[#111]"] {
             background: var(--bg-card) !important;
         }
 
-        .light [class*="bg-[#080f1a]"] {
+        .light [class*="bg-[#000]"] {
             background: var(--bg-primary) !important;
         }
 
-        .light [class*="bg-[#0b1929]"] {
+        .light [class*="bg-[#111]"] {
             background: #f8fafc !important;
         }
 
@@ -289,7 +289,7 @@
 
     <!-- Header sticky -->
     <header
-        class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/92 border-b border-[#00bad6]/15 px-4 py-2.5 flex items-center gap-3">
+        class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/92 border-b border-[#00bad6]/15 px-4 py-2.5 flex items-center gap-3">
         <div class="flex items-center gap-2 flex-1 min-w-0">
             <div
                 class="w-7 h-7 rounded-full bg-[#00bad6]/20 flex items-center justify-center border border-[#00bad6]/30 shrink-0 active:scale-95 transition-transform">
@@ -314,7 +314,7 @@
     </header>
 
     <!-- Tabs principaux -->
-    <div class="px-3 py-3 sticky top-[49px] z-40 bg-[#080f1a]/90 backdrop-blur-lg border-b border-white/5">
+    <div class="px-3 py-3 sticky top-[49px] z-40 bg-[#000]/90 backdrop-blur-lg border-b border-white/5">
         <div class="tab-bar" id="mainTabs">
             <div class="tab-btn active" onclick="switchTab('feed', this)"><span
                     class="material-symbols-outlined text-[14px]">forum</span>Feed</div>
@@ -369,7 +369,7 @@
                         class="w-8 h-8 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-bold text-[#00bad6] text-sm shrink-0 active:scale-95 transition-transform">
                         S</div>
                     <textarea id="postText" rows="2" placeholder="Partage ta session, une houle, un spot…"
-                        class="flex-1 bg-[#080f1a] rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 border border-[#00bad6]/10 resize-none"></textarea>
+                        class="flex-1 bg-[#000] rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 border border-[#00bad6]/10 resize-none"></textarea>
                 </div>
                 <!-- Photo preview (hidden until image selected) -->
                 <div id="photoPreview" class="hidden mt-2 relative inline-block">
@@ -403,7 +403,7 @@
                             onchange="previewPhoto(event)" />
                     </div>
                     <button onclick="submitPost()"
-                        class="ml-auto bg-[#00bad6] text-[#080f1a] font-bold text-xs px-4 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition-transform">
+                        class="ml-auto bg-[#00bad6] text-[#000] font-bold text-xs px-4 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition-transform">
                         <span class="material-symbols-outlined text-sm">send</span>Publier
                     </button>
                 </div>
@@ -516,7 +516,7 @@
             <div class="flex items-center justify-between mb-1">
                 <h2 class="font-black text-base">📓 Journal de Sessions</h2>
                 <button onclick="openLogSession()"
-                    class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition-transform">
+                    class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-sm">add</span>Loguer
                 </button>
             </div>
@@ -533,14 +533,14 @@
 
     <!-- Log Session Modal -->
     <div id="logModal" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
             <div class="flex items-center justify-between mb-1">
                 <h3 class="font-black text-base">📓 Logger une session</h3>
                 <button onclick="closeLogSession()" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <select id="logSpot"
-                class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00bad6]/50">
+                class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#00bad6]/50">
                 <option value="">📍 Sélectionner un spot...</option>
                 <option>Hossegor — La Gravière</option>
                 <option>Biarritz — La Côte des Basques</option>
@@ -552,7 +552,7 @@
                 <div>
                     <label class="text-[10px] text-slate-400 font-bold mb-1 block">HAUTEUR VAGUES</label>
                     <select id="logWave"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
                         <option>
                             < 0.5m</option>
                         <option>0.5m — 1m</option>
@@ -565,7 +565,7 @@
                 <div>
                     <label class="text-[10px] text-slate-400 font-bold mb-1 block">NOTE</label>
                     <select id="logScore"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
                         <option>⭐⭐⭐⭐⭐ 5/5</option>
                         <option selected>⭐⭐⭐⭐ 4/5</option>
                         <option>⭐⭐⭐ 3/5</option>
@@ -575,9 +575,9 @@
                 </div>
             </div>
             <textarea id="logNote" rows="2" placeholder="Note de session (vent, foule, fond…)"
-                class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 resize-none"></textarea>
+                class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 resize-none"></textarea>
             <button onclick="submitSession()"
-                class="w-full bg-[#00bad6] text-[#080f1a] font-black py-3 rounded-xl text-sm active:scale-95 transition-transform">Enregistrer
+                class="w-full bg-[#00bad6] text-[#000] font-black py-3 rounded-xl text-sm active:scale-95 transition-transform">Enregistrer
                 la
                 session</button>
         </div>
@@ -586,7 +586,7 @@
     <!-- Badge Shop Modal (Full Boutique) -->
     <div id="badgeShopModal" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm"
         style="overflow-y:auto">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3"
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3"
             style="max-height:85vh;overflow-y:auto">
             <div class="flex items-center justify-between">
                 <div>
@@ -598,9 +598,9 @@
             </div>
 
             <!-- Shop Tabs -->
-            <div class="flex gap-1 bg-[#080f1a] rounded-xl p-1">
+            <div class="flex gap-1 bg-[#000] rounded-xl p-1">
                 <button onclick="shopTab('badges')" id="shopTabBadges"
-                    class="flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#080f1a]">🏅 Badges</button>
+                    class="flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#000]">🏅 Badges</button>
                 <button onclick="shopTab('stickers')" id="shopTabStickers"
                     class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400">💬 Stickers</button>
                 <button onclick="shopTab('profil')" id="shopTabProfil"
@@ -622,7 +622,7 @@
                             <p class="text-[10px] text-slate-500">Représente la côte basque 🏄</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyBadge('Pays Basque',0.99)">0,99€</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3">
@@ -636,7 +636,7 @@
                             <p class="text-[10px] text-slate-500">Surfeur des Landes 🌲</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyBadge('Landes',0.99)">0,99€</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3">
@@ -650,7 +650,7 @@
                             <p class="text-[10px] text-slate-500">Surfeur breton ⚓</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyBadge('Bretagne',0.99)">0,99€</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3">
@@ -664,7 +664,7 @@
                             <p class="text-[10px] text-slate-500">Surfeur réunionnais 🌴</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyBadge('Réunion',0.99)">0,99€</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3">
@@ -678,7 +678,7 @@
                             <p class="text-[10px] text-slate-500">Surfeur caribéen 🏝️</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyBadge('Guadeloupe',0.99)">0,99€</button>
                     </div>
                 </div>
@@ -695,13 +695,13 @@
                             <p class="text-[10px] text-slate-500">Specialist shortboard 🏄‍♂️</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyBadge('Shortboard',0.99)">0,99€</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3" style="border-color:rgba(245,158,11,.3)">
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center"
                             style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                            <span class="material-symbols-outlined text-[#080f1a] text-xl"
+                            <span class="material-symbols-outlined text-[#000] text-xl"
                                 style="font-variation-settings:'FILL' 1">military_tech</span>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -831,7 +831,7 @@
                     <div class="text-right">
                         <span class="text-[10px] text-slate-500 line-through">5,88€</span>
                         <button
-                            class="block bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform mt-0.5"
+                            class="block bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform mt-0.5"
                             onclick="buySticker('all','Pack')">2,99€</button>
                     </div>
                 </div>
@@ -899,7 +899,7 @@
                             <p class="text-[10px] text-slate-500">Nom en dégradé ocean</p>
                         </div>
                         <button
-                            class="bg-[#00bad6] text-[#080f1a] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
+                            class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyEffect('gradient')">0,99€</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3">
@@ -932,7 +932,7 @@
 
     <!-- Reply Modal -->
     <div id="replyModal" class="fixed inset-0 z-[200] hidden items-end justify-center bg-black/60 backdrop-blur-sm">
-        <div class="w-full max-w-lg bg-[#0b1929] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
+        <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
             <div class="flex items-center justify-between">
                 <h3 class="font-black text-sm">💬 Répondre</h3>
                 <button onclick="closeReplyModal()" class="text-slate-400"><span
@@ -944,10 +944,10 @@
                     class="w-8 h-8 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-bold text-[#00bad6] text-sm shrink-0 active:scale-95 transition-transform">
                     S</div>
                 <textarea id="replyText" rows="3" placeholder="Ta réponse…"
-                    class="flex-1 bg-[#080f1a] rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 border border-[#00bad6]/10 resize-none"></textarea>
+                    class="flex-1 bg-[#000] rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 border border-[#00bad6]/10 resize-none"></textarea>
             </div>
             <button onclick="submitReply()"
-                class="w-full bg-[#00bad6] text-[#080f1a] font-black py-3 rounded-xl text-sm active:scale-95 transition-transform">Publier
+                class="w-full bg-[#00bad6] text-[#000] font-black py-3 rounded-xl text-sm active:scale-95 transition-transform">Publier
                 la
                 réponse</button>
         </div>
@@ -965,7 +965,7 @@
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
                 style="position:relative;display:inline-block;"><span
                     class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
                 class="text-[10px]">Alertes</span></a>
         <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="community.html"><span
                 class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1">groups</span><span
@@ -1357,12 +1357,12 @@
                         // Mode démo — pas connecté ou pas de Stripe
                         const m = document.createElement('div');
                         m.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
-                        m.innerHTML = `<div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-3xl text-[#080f1a]" style="font-variation-settings:'FILL' 1">shopping_bag</span></div>
+                        m.innerHTML = `<div class="bg-[#111] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-3xl text-[#000]" style="font-variation-settings:'FILL' 1">shopping_bag</span></div>
                         <h3 class="text-xl font-black mb-2">Badge ${name}</h3>
                         <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
                         <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter ce badge via Stripe.</p>
-                        <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris !</button>
+                        <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
                     </div>`;
                         document.body.appendChild(m);
                         m.addEventListener('click', e => { if (e.target === m) m.remove(); });
@@ -1382,7 +1382,7 @@
             ['badges', 'stickers', 'profil'].forEach(t => {
                 document.getElementById('shopPanel' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
                 const btn = document.getElementById('shopTab' + t.charAt(0).toUpperCase() + t.slice(1));
-                if (t === tab) { btn.className = 'flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#080f1a]'; }
+                if (t === tab) { btn.className = 'flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#000]'; }
                 else { btn.className = 'flex-1 py-2 rounded-lg text-xs font-bold text-slate-400'; }
             });
         }
@@ -1402,12 +1402,12 @@
         function showPurchaseModal(name, icon, price) {
             const m = document.createElement('div');
             m.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
-            m.innerHTML = `<div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
+            m.innerHTML = `<div class="bg-[#111] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
                 <div class="text-5xl mb-4">${icon}</div>
                 <h3 class="text-xl font-black mb-2">${name}</h3>
                 <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
                 <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter cet article via Stripe.</p>
-                <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris !</button>
+                <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
             </div>`;
             document.body.appendChild(m);
             m.addEventListener('click', e => { if (e.target === m) m.remove(); });
@@ -1473,7 +1473,7 @@
     <!-- FAB Ajouter Post -->
     <div class="fixed bottom-24 right-6 z-40">
         <button onclick="openNewPostModal()"
-            class="w-14 h-14 bg-[#00bad6] text-[#080f1a] rounded-full flex items-center justify-center shadow-lg shadow-[#00bad6]/30 hover:scale-105 active:scale-95 transition-transform">
+            class="w-14 h-14 bg-[#00bad6] text-[#000] rounded-full flex items-center justify-center shadow-lg shadow-[#00bad6]/30 hover:scale-105 active:scale-95 transition-transform">
             <span class="material-symbols-outlined text-[28px]">add</span>
         </button>
     </div>
@@ -1481,7 +1481,7 @@
     <!-- Modale Nouveau Post -->
     <div id="newPostModal"
         class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="w-full max-w-md bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-5 shadow-2xl relative">
+        <div class="w-full max-w-md bg-[#111] rounded-3xl border border-[#00bad6]/20 p-5 shadow-2xl relative">
             <button onclick="closeNewPostModal()"
                 class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
                 <span class="material-symbols-outlined">close</span>
@@ -1503,7 +1503,7 @@
                     </button>
                 </div>
                 <button id="submitPostBtn" onclick="submitNewPost()"
-                    class="px-6 py-2.5 bg-[#00bad6] text-[#080f1a] font-bold rounded-xl flex items-center gap-2 hover:opacity-90 transition-opacity active:scale-95 transition-transform">
+                    class="px-6 py-2.5 bg-[#00bad6] text-[#000] font-bold rounded-xl flex items-center gap-2 hover:opacity-90 transition-opacity active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-sm">send</span> Publier
                 </button>
             </div>

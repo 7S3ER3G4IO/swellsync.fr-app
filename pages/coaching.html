@@ -19,10 +19,10 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#000", "card-dark": "#111" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
     <style>
         .dark body {
-            background: #080f1a;
+            background: #000;
             color: #f1f5f9
         }
 
@@ -112,7 +112,7 @@
         }
 
         :root {
-            --bg-primary: #080f1a;
+            --bg-primary: #000;
             --text-primary: #f1f5f9
         }
 
@@ -147,7 +147,7 @@
         <div class="relative rounded-3xl overflow-hidden" style="min-height:160px">
             <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80"
                 class="w-full h-full object-cover absolute inset-0">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#080f1a] via-[#080f1a]/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#000] via-[#000]/60 to-transparent"></div>
             <div class="relative z-2 p-5 flex flex-col justify-end" style="min-height:160px">
                 <span class="text-[10px] font-bold text-[#00bad6] uppercase tracking-wider mb-1">Coaching
                     personnalisé</span>
@@ -207,7 +207,7 @@
                                     inclus</span></div>
                         </div>
                         <button onclick="bookCoaching('initiation')"
-                            class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
+                            class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
                             Réserver — 79€
                         </button>
                     </div>
@@ -339,7 +339,7 @@
                             </div>
                         </div>
                         <button onclick="bookCoaching('video')"
-                            class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
+                            class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
                             Commander — 59€
                         </button>
                     </div>
@@ -569,7 +569,7 @@
                 <option value="16h">16h00 — 18h00</option>
             </select>
             <button onclick="confirmBooking()"
-                class="w-full py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
+                class="w-full py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
                 Confirmer la réservation
             </button>
             <button onclick="closeModal()" class="w-full py-2 text-slate-500 text-xs">Annuler</button>

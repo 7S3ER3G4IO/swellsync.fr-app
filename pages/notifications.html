@@ -21,7 +21,7 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#000", "card-dark": "#111" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
     <style>
         .glass {
             background: rgba(15, 36, 56, 0.7);
@@ -112,7 +112,7 @@
             background: rgba(240, 249, 255, .9) !important;
         }
 
-        html.light .bg-\[\#0f2438\] {
+        html.light .bg-\[\#111\] {
             background: #fff !important;
             border-color: #e2eaf4 !important;
         }
@@ -140,7 +140,7 @@
     <script src="js/api.js"></script>
 </head>
 
-<body class="bg-[#080f1a] font-display text-slate-100 flex flex-col">
+<body class="bg-[#000] font-display text-slate-100 flex flex-col">
 
     <!-- Header -->
     <header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-[#00bad6]/10">
@@ -229,7 +229,7 @@
                     <div class="flex flex-col items-center justify-center py-20 gap-4 text-slate-500">
                         <span class="material-symbols-outlined text-5xl">notifications_off</span>
                         <p class="text-sm text-center">Connecte-toi pour voir tes notifications</p>
-                        <a href="home.html" class="px-6 py-3 bg-[#00bad6] text-[#080f1a] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
+                        <a href="home.html" class="px-6 py-3 bg-[#00bad6] text-[#000] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
                     </div>`;
             }
         }
@@ -279,7 +279,7 @@
             const link = n.post_id ? `community.html?post=${n.post_id}` : (n.type === 'follow' && n.from_member_id ? `user-profile.html?id=${n.from_member_id}` : '#');
 
             return `
-            <a href="${link}" class="notif-card ${n.is_read ? 'read' : 'unread'} block rounded-xl bg-[#0f2438] p-3.5 border border-white/5 hover:border-[#00bad6]/20 transition-all"
+            <a href="${link}" class="notif-card ${n.is_read ? 'read' : 'unread'} block rounded-xl bg-[#111] p-3.5 border border-white/5 hover:border-[#00bad6]/20 transition-all"
                style="animation-delay:${delay}ms" onclick="markRead(${n.id})">
                 <div class="flex items-start gap-3">
                     <div class="notif-icon ${n.type}">

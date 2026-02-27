@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwellSync — iPhone Simulator</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=SF+Pro+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #12121a;
+            --bg3: #1a1a24;
+            --border: rgba(255, 255, 255, .06);
+            --text: #f0f4ff;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --accent: #0096C7;
+            --accent2: #00d4aa;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column
+        }
+
+        /* ═══ TOP BAR ═══ */
+        .topbar {
+            height: 52px;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 14px;
+            flex-shrink: 0;
+            -webkit-app-region: drag
+        }
+
+        .topbar-logo {
+            font-weight: 900;
+            font-size: 15px;
+            letter-spacing: -.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .topbar-logo .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent)
+        }
+
+        .topbar-logo em {
+            font-style: normal;
+            color: var(--accent)
+        }
+
+        .topbar-sep {
+            width: 1px;
+            height: 24px;
+            background: var(--border)
+        }
+
+        .topbar-device {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 10px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            -webkit-app-region: no-drag;
+            transition: all .2s
+        }
+
+        .topbar-device:hover {
+            border-color: var(--accent);
+            background: rgba(0, 150, 199, .08)
+        }
+
+        .topbar-device select {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+            -webkit-appearance: none;
+            padding-right: 16px
+        }
+
+        .topbar-device option {
+            background: var(--bg2);
+            color: var(--text)
+        }
+
+        .url-bar {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0 14px;
+            height: 34px;
+            -webkit-app-region: no-drag;
+            transition: border-color .2s
+        }
+
+        .url-bar:focus-within {
+            border-color: var(--accent)
+        }
+
+        .url-bar svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--text3);
+            flex-shrink: 0
+        }
+
+        .url-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            outline: none
+        }
+
+        .url-bar input::placeholder {
+            color: var(--text3)
+        }
+
+        .url-bar .go-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--accent);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+            flex-shrink: 0
+        }
+
+        .url-bar .go-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.15)
+        }
+
+        .url-bar .go-btn svg {
+            fill: #fff;
+            width: 14px;
+            height: 14px
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 6px;
+            -webkit-app-region: no-drag
+        }
+
+        .topbar-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+            font-size: 18px
+        }
+
+        .topbar-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 150, 199, .08)
+        }
+
+        .topbar-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 150, 199, .15)
+        }
+
+        /* ═══ MAIN AREA ═══ */
+        .workspace {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, rgba(0, 150, 199, .04) 0%, transparent 60%);
+            position: relative
+        }
+
+        /* ═══ iPHONE FRAME ═══ */
+        .iphone-wrap {
+            position: relative;
+            transition: all .4s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .iphone-frame {
+            position: relative;
+            background: #1c1c1e;
+            border: 3px solid #3a3a3c;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, .03),
+                0 40px 100px -20px rgba(0, 0, 0, .7),
+                0 0 60px rgba(0, 150, 199, .08),
+                inset 0 0 0 1px rgba(255, 255, 255, .04);
+            transition: all .4s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        /* Device sizes */
+        .iphone-frame[data-device="iphone16pro"] {
+            width: 393px;
+            height: 852px;
+            border-radius: 55px
+        }
+
+        .iphone-frame[data-device="iphone16promax"] {
+            width: 430px;
+            height: 932px;
+            border-radius: 60px
+        }
+
+        .iphone-frame[data-device="iphone16"] {
+            width: 390px;
+            height: 844px;
+            border-radius: 50px
+        }
+
+        .iphone-frame[data-device="iphoneSE"] {
+            width: 375px;
+            height: 667px;
+            border-radius: 40px
+        }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 22px;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dynamic-island .cam {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, #1a1a3a, #0a0a1a);
+            box-shadow: inset 0 0 2px rgba(0, 100, 200, .3)
+        }
+
+        .iphone-frame[data-device="iphoneSE"] .dynamic-island {
+            display: none
+        }
+
+        /* Home bar */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: rgba(255, 255, 255, .25);
+            border-radius: 99px;
+            z-index: 20
+        }
+
+        .iphone-frame[data-device="iphoneSE"] .home-indicator {
+            display: none
+        }
+
+        /* Home button (SE) */
+        .home-button {
+            display: none;
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid #3a3a3c;
+            background: transparent;
+            z-index: 20
+        }
+
+        .iphone-frame[data-device="iphoneSE"] .home-button {
+            display: block
+        }
+
+        /* Side buttons */
+        .btn-side {
+            position: absolute;
+            background: #2a2a2c;
+            border-radius: 2px;
+            z-index: 20
+        }
+
+        .btn-power {
+            right: -4px;
+            top: 180px;
+            width: 4px;
+            height: 80px
+        }
+
+        .btn-vol-up {
+            left: -4px;
+            top: 160px;
+            width: 4px;
+            height: 52px
+        }
+
+        .btn-vol-down {
+            left: -4px;
+            top: 224px;
+            width: 4px;
+            height: 52px
+        }
+
+        .btn-silent {
+            left: -4px;
+            top: 120px;
+            width: 4px;
+            height: 28px;
+            border-radius: 3px
+        }
+
+        /* iframe content */
+        .iphone-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #080f1a;
+            border-radius: inherit;
+        }
+
+        /* Landscape mode */
+        .iphone-wrap.landscape {
+            transform: rotate(90deg)
+        }
+
+        /* ═══ STATUS BAR OVERLAY ═══ */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 54px;
+            z-index: 15;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 32px 8px;
+            pointer-events: none;
+        }
+
+        .iphone-frame[data-device="iphoneSE"] .status-bar {
+            height: 20px;
+            padding: 0 16px 2px
+        }
+
+        .status-bar .time {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -.2px
+        }
+
+        .status-bar .icons {
+            display: flex;
+            align-items: center;
+            gap: 5px
+        }
+
+        .status-bar .icons svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff
+        }
+
+        /* ═══ BOTTOM STATUS ═══ */
+        .statusbar-bottom {
+            height: 28px;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            flex-shrink: 0
+        }
+
+        .statusbar-bottom span {
+            font-size: 11px;
+            color: var(--text3);
+            font-weight: 500
+        }
+
+        .statusbar-bottom .dot-live {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            margin-right: 6px;
+            display: inline-block;
+            animation: blink 2s infinite
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        /* ═══ SCALE WHEN TOO BIG ═══ */
+        @media (max-height:950px) {
+            .iphone-frame[data-device="iphone16promax"] {
+                transform: scale(.82)
+            }
+
+            .iphone-frame[data-device="iphone16pro"] {
+                transform: scale(.88)
+            }
+
+            .iphone-frame[data-device="iphone16"] {
+                transform: scale(.88)
+            }
+        }
+
+        @media (max-height:800px) {
+            .iphone-frame {
+                transform: scale(.75) !important
+            }
+        }
+
+        /* ═══ SCREENSHOT FLASH ═══ */
+        .flash {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 9999;
+            pointer-events: none;
+            animation: flashAnim .3s forwards
+        }
+
+        @keyframes flashAnim {
+            0% {
+                opacity: .8
+            }
+
+            100% {
+                opacity: 0
+            }
+        }
+
+        /* ═══ DARK SCROLLBAR ═══ */
+        ::-webkit-scrollbar {
+            width: 6px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg3);
+            border-radius: 3px
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div class="topbar-logo"><span class="dot"></span> Swell<em>Sync</em> Simulator</div>
+        <div class="topbar-sep"></div>
+
+        <div class="topbar-device">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M7 2C5.34 2 4 3.34 4 5v14c0 1.66 1.34 3 3 3h10c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3H7zm5 20c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-4H7V4h10v14z" />
+            </svg>
+            <select id="deviceSelect" onchange="changeDevice(this.value)">
+                <option value="iphone16pro">iPhone 16 Pro</option>
+                <option value="iphone16promax">iPhone 16 Pro Max</option>
+                <option value="iphone16">iPhone 16</option>
+                <option value="iphoneSE">iPhone SE</option>
+            </select>
+        </div>
+
+        <div class="url-bar">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+            </svg>
+            <input type="text" id="urlInput" placeholder="Entrer une URL..." value="/index.html"
+                onkeydown="if(event.key==='Enter')loadUrl()">
+            <button class="go-btn" onclick="loadUrl()" title="Charger">
+                <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="topbar-actions">
+            <button class="topbar-btn" onclick="goBack()" title="Retour">←</button>
+            <button class="topbar-btn" onclick="goForward()" title="Avancer">→</button>
+            <button class="topbar-btn" onclick="reloadFrame()" title="Recharger">↻</button>
+            <button class="topbar-btn" id="rotateBtn" onclick="toggleRotate()" title="Orientation">⟳</button>
+            <button class="topbar-btn" onclick="toggleDark()" title="Fond clair/sombre" id="darkBtn">◐</button>
+            <button class="topbar-btn" onclick="takeScreenshot()" title="Screenshot">📷</button>
+        </div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="workspace" id="workspace">
+        <div class="iphone-wrap" id="iphoneWrap">
+            <div class="iphone-frame" id="iphoneFrame" data-device="iphone16pro">
+                <!-- Dynamic Island -->
+                <div class="dynamic-island">
+                    <div class="cam"></div>
+                </div>
+
+                <!-- Side buttons -->
+                <div class="btn-side btn-power"></div>
+                <div class="btn-side btn-vol-up"></div>
+                <div class="btn-side btn-vol-down"></div>
+                <div class="btn-side btn-silent"></div>
+
+                <!-- Status bar -->
+                <div class="status-bar">
+                    <span class="time" id="statusTime">9:41</span>
+                    <div class="icons">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+                        </svg>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Home indicator -->
+                <div class="home-indicator"></div>
+                <div class="home-button"></div>
+
+                <!-- App content -->
+                <iframe id="appFrame" src="/index.html"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM STATUS -->
+    <div class="statusbar-bottom">
+        <span><span class="dot-live"></span>Connecté — <span id="currentDevice">iPhone 16 Pro (393×852)</span></span>
+        <span id="currentUrl">/index.html</span>
+    </div>
+
+    <script>
+        // ═══ DEVICE CONFIGS ═══
+        const devices = {
+            iphone16pro: { name: 'iPhone 16 Pro', w: 393, h: 852 },
+            iphone16promax: { name: 'iPhone 16 Pro Max', w: 430, h: 932 },
+            iphone16: { name: 'iPhone 16', w: 390, h: 844 },
+            iphoneSE: { name: 'iPhone SE', w: 375, h: 667 }
+        };
+
+        const frame = document.getElementById('iphoneFrame');
+        const wrap = document.getElementById('iphoneWrap');
+        const urlInput = document.getElementById('urlInput');
+        const appFrame = document.getElementById('appFrame');
+        let isLandscape = false;
+        let isDark = true;
+
+        function changeDevice(id) {
+            frame.setAttribute('data-device', id);
+            const d = devices[id];
+            document.getElementById('currentDevice').textContent = `${d.name} (${d.w}×${d.h})`;
+        }
+
+        function loadUrl() {
+            let url = urlInput.value.trim();
+            if (!url) return;
+            if (!url.startsWith('http') && !url.startsWith('/')) url = '/' + url;
+            urlInput.value = url;
+            appFrame.src = url;
+            document.getElementById('currentUrl').textContent = url.replace(/^https?:\/\//, '');
+        }
+
+        function reloadFrame() {
+            appFrame.src = appFrame.src;
+        }
+
+        function goBack() {
+            try { appFrame.contentWindow.history.back(); } catch (e) { }
+        }
+
+        function goForward() {
+            try { appFrame.contentWindow.history.forward(); } catch (e) { }
+        }
+
+        function toggleRotate() {
+            isLandscape = !isLandscape;
+            wrap.classList.toggle('landscape', isLandscape);
+            document.getElementById('rotateBtn').classList.toggle('active', isLandscape);
+        }
+
+        function toggleDark() {
+            isDark = !isDark;
+            const ws = document.getElementById('workspace');
+            if (isDark) {
+                document.body.style.background = '#0a0a0f';
+                ws.style.background = 'radial-gradient(ellipse at center,rgba(0,150,199,.04) 0%,transparent 60%)';
+                document.querySelector('.topbar').style.background = '#12121a';
+                document.querySelector('.statusbar-bottom').style.background = '#12121a';
+            } else {
+                document.body.style.background = '#e8ecf0';
+                ws.style.background = 'radial-gradient(ellipse at center,rgba(0,150,199,.06) 0%,#e8ecf0 60%)';
+                document.querySelector('.topbar').style.background = '#f0f2f5';
+                document.querySelector('.statusbar-bottom').style.background = '#f0f2f5';
+            }
+            document.getElementById('darkBtn').classList.toggle('active', !isDark);
+        }
+
+        function takeScreenshot() {
+            const flash = document.createElement('div');
+            flash.className = 'flash';
+            document.body.appendChild(flash);
+            setTimeout(() => flash.remove(), 400);
+            // Note: real screenshot needs html2canvas or server-side
+            alert('📸 Flash! Pour un vrai screenshot, utilise Cmd+Shift+4 sur la zone du téléphone.');
+        }
+
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('statusTime').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+        updateClock();
+        setInterval(updateClock, 30000);
+
+        // Quick nav shortcuts
+        const shortcuts = [
+            { label: 'Home', url: 'https://swellsync.fr/pages/home.html' },
+            { label: 'Spots', url: 'https://swellsync.fr/pages/spots.html' },
+            { label: 'Map', url: 'https://swellsync.fr/pages/map.html' },
+            { label: 'Alertes', url: 'https://swellsync.fr/pages/alerts.html' },
+            { label: 'Profil', url: 'https://swellsync.fr/pages/profil.html' },
+            { label: 'Site Vitrine', url: 'https://swellsync.fr/' },
+        ];
+    </script>
+</body>
+
+</html>

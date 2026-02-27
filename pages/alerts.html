@@ -22,7 +22,7 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#000", "card-dark": "#111" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
     <style>
         .glass {
             background: rgba(15, 36, 56, 0.7);
@@ -68,11 +68,11 @@
             border-top-color: rgba(0, 186, 214, .15) !important;
         }
 
-        html.light .bg-\[\#080f1a\] {
+        html.light .bg-\[\#000\] {
             background: transparent;
         }
 
-        html.light .bg-\[\#0f2438\] {
+        html.light .bg-\[\#111\] {
             background: #fff !important;
             border-color: #e2eaf4 !important;
         }
@@ -89,8 +89,8 @@
 
     <style>
         :root {
-            --bg-primary: #080f1a;
-            --bg-card: #0f2438;
+            --bg-primary: #000;
+            --bg-card: #111;
             --bg-nav: rgba(8, 15, 26, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
@@ -112,15 +112,15 @@
         }
 
         .light .card,
-        .light [class*="bg-[#0f2438]"] {
+        .light [class*="bg-[#111]"] {
             background: var(--bg-card) !important;
         }
 
-        .light [class*="bg-[#080f1a]"] {
+        .light [class*="bg-[#000]"] {
             background: var(--bg-primary) !important;
         }
 
-        .light [class*="bg-[#0b1929]"] {
+        .light [class*="bg-[#111]"] {
             background: #f8fafc !important;
         }
 
@@ -158,7 +158,7 @@
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
 </head>
 
-<body class="bg-[#080f1a] font-display text-slate-100 flex flex-col">
+<body class="bg-[#000] font-display text-slate-100 flex flex-col">
 
     <header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-[#00bad6]/10">
         <div class="flex items-center gap-3">
@@ -226,7 +226,7 @@
     <!-- FAB Ajouter -->
     <div class="fixed bottom-24 right-6 z-30" id="alertsFab">
         <button onclick="openModal()"
-            class="bg-[#00bad6] glow-primary text-[#080f1a] w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all font-bold">
+            class="bg-[#00bad6] glow-primary text-[#000] w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all font-bold">
             <span class="material-symbols-outlined">add</span>
         </button>
     </div>
@@ -240,7 +240,7 @@
             <div>
                 <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Spot</label>
                 <select id="newSpotSel"
-                    class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
+                    class="w-full bg-[#111] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
                     <option value="">Chargement…</option>
                 </select>
             </div>
@@ -249,12 +249,12 @@
                 <div>
                     <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Hauteur min (m)</label>
                     <input id="newHeight" type="number" value="1.5" step="0.5" min="0.5" max="10"
-                        class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                        class="w-full bg-[#111] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
                 </div>
                 <div>
                     <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Période min (s)</label>
                     <input id="newPeriod" type="number" value="10" step="1" min="5" max="25"
-                        class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                        class="w-full bg-[#111] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
                 </div>
             </div>
 
@@ -262,7 +262,7 @@
                 <button onclick="closeModal()"
                     class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 font-semibold hover:bg-slate-800 transition-colors">Annuler</button>
                 <button onclick="createAlert()"
-                    class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold hover:opacity-90 transition-opacity active:scale-95 transition-transform">Créer</button>
+                    class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold hover:opacity-90 transition-opacity active:scale-95 transition-transform">Créer</button>
             </div>
         </div>
     </div>
@@ -279,7 +279,7 @@
         <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="alerts.html"><span
                 style="position:relative;display:inline-block;"><span class="material-symbols-outlined"
                     style="font-variation-settings:\'FILL\' 1">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
                 class="text-[10px] font-bold">Alertes</span>
             <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
         </a>
@@ -308,7 +308,7 @@
       <div class="flex flex-col items-center justify-center py-16 gap-3 text-slate-500">
         <span class="material-symbols-outlined text-5xl">notifications_off</span>
         <p class="text-sm text-center">Connecte-toi pour voir tes alertes</p>
-        <a href="home.html" class="mt-2 px-6 py-3 bg-[#00bad6] text-[#080f1a] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
+        <a href="home.html" class="mt-2 px-6 py-3 bg-[#00bad6] text-[#000] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
       </div>`;
                 return;
             }
@@ -317,7 +317,7 @@
                 document.getElementById('alertsList').innerHTML = `
       <div class="flex flex-col items-center gap-5 py-10 px-4 text-center">
         <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center shadow-xl shadow-[#00bad6]/30">
-          <span class="material-symbols-outlined text-4xl text-[#080f1a]">notifications_active</span>
+          <span class="material-symbols-outlined text-4xl text-[#000]">notifications_active</span>
         </div>
         <h2 class="text-2xl font-black">Alertes Houle</h2>
         <p class="dark:text-slate-400 text-slate-500 text-sm leading-relaxed max-w-xs">
@@ -330,7 +330,7 @@
           <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Critères personnalisés (hauteur, période)</div>
           <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>16 jours de prévisions</div>
         </div>
-        <a href="abonnement.html" class="w-full max-w-xs py-4 rounded-2xl bg-gradient-to-r from-[#00bad6] to-emerald-400 text-[#080f1a] font-black text-center hover:opacity-90 transition-opacity block">
+        <a href="abonnement.html" class="w-full max-w-xs py-4 rounded-2xl bg-gradient-to-r from-[#00bad6] to-emerald-400 text-[#000] font-black text-center hover:opacity-90 transition-opacity block">
           Passer Pro — 4,99€/mois
         </a>
         <p class="text-xs dark:text-slate-500 text-slate-400">Engagement mensuel · Résiliable à tout moment</p>

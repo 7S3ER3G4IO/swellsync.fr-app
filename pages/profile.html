@@ -23,7 +23,7 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
+    <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#000", "card-dark": "#111" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
     <style>
         .glass {
             background: rgba(15, 36, 56, 0.7);
@@ -47,8 +47,8 @@
 
     <style>
         :root {
-            --bg-primary: #080f1a;
-            --bg-card: #0f2438;
+            --bg-primary: #000;
+            --bg-card: #111;
             --bg-nav: rgba(8, 15, 26, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
@@ -70,15 +70,15 @@
         }
 
         .light .card,
-        .light [class*="bg-[#0f2438]"] {
+        .light [class*="bg-[#111]"] {
             background: var(--bg-card) !important;
         }
 
-        .light [class*="bg-[#080f1a]"] {
+        .light [class*="bg-[#000]"] {
             background: var(--bg-primary) !important;
         }
 
-        .light [class*="bg-[#0b1929]"] {
+        .light [class*="bg-[#111]"] {
             background: #f8fafc !important;
         }
 
@@ -116,7 +116,7 @@
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
 </head>
 
-<body class="bg-[#080f1a] font-display text-slate-100 min-h-screen pb-24">
+<body class="bg-[#000] font-display text-slate-100 min-h-screen pb-24">
 
     <header class="flex items-center justify-between p-6 sticky top-0 z-10 glass">
         <a href="home.html" class="material-symbols-outlined text-slate-400 cursor-pointer">chevron_left</a>
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <div
-                            class="absolute bottom-0 right-0 bg-[#00bad6] text-[#080f1a] w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#080f1a] shadow-lg">
+                            class="absolute bottom-0 right-0 bg-[#00bad6] text-[#000] w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#000] shadow-lg">
                             <span class="material-symbols-outlined text-[10px]">add</span>
                         </div>
                     </label>
@@ -185,15 +185,15 @@
             <!-- Action buttons -->
             <div class="flex gap-2 mt-3">
                 <button onclick="document.getElementById('editModal').classList.add('open')"
-                    class="flex-1 py-2 rounded-lg bg-[#0f2438] border border-[#00bad6]/20 text-white font-bold text-xs active:scale-95 transition-transform">
+                    class="flex-1 py-2 rounded-lg bg-[#111] border border-[#00bad6]/20 text-white font-bold text-xs active:scale-95 transition-transform">
                     Modifier le profil
                 </button>
                 <button onclick="shareProfile(document.getElementById('profileName').textContent)"
-                    class="flex-1 py-2 rounded-lg bg-[#0f2438] border border-[#00bad6]/20 text-white font-bold text-xs active:scale-95 transition-transform">
+                    class="flex-1 py-2 rounded-lg bg-[#111] border border-[#00bad6]/20 text-white font-bold text-xs active:scale-95 transition-transform">
                     Partager le profil
                 </button>
                 <a href="settings.html"
-                    class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#0f2438] border border-[#00bad6]/20 active:scale-95 transition-transform">
+                    class="w-9 h-9 flex items-center justify-center rounded-lg bg-[#111] border border-[#00bad6]/20 active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-white text-lg">settings</span>
                 </a>
             </div>
@@ -219,7 +219,7 @@
         <div id="panelPosts" class="">
             <div id="postsGrid" class="grid grid-cols-3 gap-0.5 px-0">
                 <!-- Filled dynamically -->
-                <div class="aspect-square bg-[#0f2438] flex items-center justify-center">
+                <div class="aspect-square bg-[#111] flex items-center justify-center">
                     <span class="material-symbols-outlined text-slate-600 text-2xl">photo_camera</span>
                 </div>
             </div>
@@ -263,15 +263,15 @@
                 </div>
                 <!-- Stats communauté -->
                 <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-[#080f1a] rounded-xl p-3 text-center">
+                    <div class="bg-[#000] rounded-xl p-3 text-center">
                         <span class="text-lg font-black text-[#00bad6]" id="statPosts">0</span>
                         <p class="text-[9px] text-slate-500 uppercase tracking-wide mt-0.5">Posts</p>
                     </div>
-                    <div class="bg-[#080f1a] rounded-xl p-3 text-center">
+                    <div class="bg-[#000] rounded-xl p-3 text-center">
                         <span class="text-lg font-black text-[#00bad6]" id="statReplies">0</span>
                         <p class="text-[9px] text-slate-500 uppercase tracking-wide mt-0.5">Réponses</p>
                     </div>
-                    <div class="bg-[#080f1a] rounded-xl p-3 text-center">
+                    <div class="bg-[#000] rounded-xl p-3 text-center">
                         <span class="text-lg font-black text-[#00bad6]" id="statLikes">0</span>
                         <p class="text-[9px] text-slate-500 uppercase tracking-wide mt-0.5">Likes reçus</p>
                     </div>
@@ -330,7 +330,7 @@
                     <div id="themeToggle"
                         class="w-12 h-6 bg-[#00bad6] rounded-full relative p-1 cursor-pointer transition-all active:scale-95 transition-transform">
                         <div id="themeThumb"
-                            class="w-4 h-4 bg-[#080f1a] rounded-full translate-x-6 transition-transform"></div>
+                            class="w-4 h-4 bg-[#000] rounded-full translate-x-6 transition-transform"></div>
                     </div>
                 </div>
 
@@ -397,21 +397,21 @@
             <div>
                 <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Prénom / Pseudo</label>
                 <input id="editName" type="text" placeholder="Lucas Dupont"
-                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                    class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
             </div>
 
             <div>
                 <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Bio / Description</label>
                 <textarea id="editBio" rows="3"
                     placeholder="Surfeur passionné depuis toujours 🤙 Partage tes sessions..."
-                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6] resize-none"></textarea>
+                    class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6] resize-none"></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Niveau</label>
                     <select id="editLevel"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
                         <option value="debutant">🌊 Débutant</option>
                         <option value="intermediaire">⚡ Intermédiaire</option>
                         <option value="avance">🔥 Avancé</option>
@@ -421,14 +421,14 @@
                 <div>
                     <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Année de début</label>
                     <input id="editSince" type="number" placeholder="2018" min="1970" max="2025"
-                        class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                        class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
                 </div>
             </div>
 
             <div>
                 <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Houle préférée</label>
                 <select id="editPrefWave"
-                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
+                    class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]">
                     <option>
                         < 1m — Petites et sympas</option>
                     <option>1m — 1.5m — Ideales</option>
@@ -440,14 +440,14 @@
             <div>
                 <label class="text-xs text-slate-400 uppercase tracking-widest mb-2 block">Spot signature</label>
                 <input id="editSigSpot" type="text" placeholder="Ex: Hossegor, La Torche..."
-                    class="w-full bg-[#080f1a] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
+                    class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#00bad6]" />
             </div>
 
             <div class="flex gap-3 pt-2">
                 <button onclick="document.getElementById('editModal').classList.remove('open')"
                     class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 font-semibold">Annuler</button>
                 <button onclick="saveProfile()"
-                    class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold active:scale-95 transition-transform">Sauvegarder</button>
+                    class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold active:scale-95 transition-transform">Sauvegarder</button>
             </div>
         </div>
     </div>
@@ -464,7 +464,7 @@
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
                 style="position:relative;display:inline-block;"><span
                     class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
                 class="text-[10px]">Alertes</span></a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
@@ -522,7 +522,7 @@
                 const empty = document.getElementById('postsEmpty');
                 if (myPosts.length > 0) {
                     grid.innerHTML = myPosts.map(p => `
-                        <div class="aspect-square bg-[#0f2438] overflow-hidden cursor-pointer" onclick="window.location.href='community.html#post-${p.id}'">
+                        <div class="aspect-square bg-[#111] overflow-hidden cursor-pointer" onclick="window.location.href='community.html#post-${p.id}'">
                             <img src="${p.image_url}" class="w-full h-full object-cover" loading="lazy"/>
                         </div>`).join('');
                     empty.classList.add('hidden');
@@ -655,11 +655,11 @@
             ['langFR', 'langEN', 'langES', 'langPT'].forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                el.classList.remove('bg-[#00bad6]', 'text-[#080f1a]');
+                el.classList.remove('bg-[#00bad6]', 'text-[#000]');
                 el.classList.add('text-[#00bad6]');
             });
             const el = document.getElementById('lang' + l.toUpperCase());
-            if (el) { el.classList.add('bg-[#00bad6]', 'text-[#080f1a]'); el.classList.remove('text-[#00bad6]'); }
+            if (el) { el.classList.add('bg-[#00bad6]', 'text-[#000]'); el.classList.remove('text-[#00bad6]'); }
             localStorage.setItem('sw_lang', l);
             document.documentElement.lang = l;
             applyI18n(l);

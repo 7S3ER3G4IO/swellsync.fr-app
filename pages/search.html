@@ -26,12 +26,12 @@
         }
 
         body {
-            background: #080f1a;
+            background: #000;
             color: #f1f5f9;
         }
 
         .card {
-            background: #0f2438;
+            background: #111;
             border: 1px solid rgba(0, 186, 214, .12);
         }
 
@@ -49,7 +49,7 @@
 
         .chip.active {
             background: #00bad6;
-            color: #080f1a;
+            color: #000;
             border-color: #00bad6;
         }
 
@@ -137,8 +137,8 @@
 
     <style>
         :root {
-            --bg-primary: #080f1a;
-            --bg-card: #0f2438;
+            --bg-primary: #000;
+            --bg-card: #111;
             --bg-nav: rgba(8, 15, 26, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
@@ -160,15 +160,15 @@
         }
 
         .light .card,
-        .light [class*="bg-[#0f2438]"] {
+        .light [class*="bg-[#111]"] {
             background: var(--bg-card) !important;
         }
 
-        .light [class*="bg-[#080f1a]"] {
+        .light [class*="bg-[#000]"] {
             background: var(--bg-primary) !important;
         }
 
-        .light [class*="bg-[#0b1929]"] {
+        .light [class*="bg-[#111]"] {
             background: #f8fafc !important;
         }
 
@@ -209,7 +209,7 @@
 <body class="min-h-screen pb-28">
 
     <!-- Header Search -->
-    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#080f1a]/92 border-b border-[#00bad6]/15 px-3 py-3">
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/92 border-b border-[#00bad6]/15 px-3 py-3">
         <div class="flex items-center gap-2">
             <a href="javascript:history.back()"
                 class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-slate-400 shrink-0">
@@ -217,7 +217,7 @@
             </a>
             <div class="flex-1 relative">
                 <input id="globalSearch" autofocus type="search" placeholder="Surfeurs, spots, sessions, posts…"
-                    class="w-full bg-[#0f2438] border border-[#00bad6]/20 rounded-2xl pl-4 pr-10 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#00bad6]/60"
+                    class="w-full bg-[#111] border border-[#00bad6]/20 rounded-2xl pl-4 pr-10 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#00bad6]/60"
                     oninput="handleSearch(this.value)" />
                 <span
                     class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-[18px]">search</span>
@@ -240,19 +240,19 @@
                 <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">🔥 Tendances</p>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="fillSearch('Hossegor')"
-                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Hossegor</button>
+                        class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Hossegor</button>
                     <button onclick="fillSearch('La Torche')"
-                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">La
+                        class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">La
                         Torche</button>
                     <button onclick="fillSearch('Biarritz')"
-                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Biarritz</button>
+                        class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Biarritz</button>
                     <button onclick="fillSearch('Lacanau')"
-                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Lacanau</button>
+                        class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Lacanau</button>
                     <button onclick="fillSearch('houle')"
-                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">2m+
+                        class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">2m+
                         de houle</button>
                     <button onclick="fillSearch('offshore')"
-                        class="text-xs bg-[#0f2438] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Vent
+                        class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Vent
                         offshore</button>
                 </div>
             </div>
@@ -331,7 +331,7 @@
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
                 style="position:relative;display:inline-block;"><span
                     class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#080f1a;">⭐</span></span><span
+                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
                 class="text-[10px]">Alertes</span></a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
@@ -462,11 +462,11 @@
         </div>
         <div class="px-4 pb-3 flex items-center gap-2">
             <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mr-1">Spots :</p>
-            ${s.spots.map(sp => `<span class="text-[10px] bg-[#0f2438] border border-[#00bad6]/20 px-2 py-0.5 rounded-full text-slate-300">${sp}</span>`).join('')}
+            ${s.spots.map(sp => `<span class="text-[10px] bg-[#111] border border-[#00bad6]/20 px-2 py-0.5 rounded-full text-slate-300">${sp}</span>`).join('')}
         </div>
         <div class="flex items-center gap-2 px-4 pb-4">
             <button onclick="followUser(event,'${s.id}','${s.name}')" id="follow-btn-${s.id}"
-                class="px-4 py-1.5 rounded-xl text-xs font-black transition-all text-[#080f1a]"
+                class="px-4 py-1.5 rounded-xl text-xs font-black transition-all text-[#000]"
                 style="background:linear-gradient(135deg,#00bad6,#0077cc)">+ Suivre</button>
             <button onclick="goToProfile('${s.id}')" class="flex-1 text-center py-1.5 rounded-xl text-xs font-bold border border-white/10 text-slate-400">Voir le profil →</button>
         </div>
@@ -613,7 +613,7 @@
                 followedUsers = followedUsers.filter(id => id !== userId);
                 btn.textContent = '+ Suivre';
                 btn.style.background = 'linear-gradient(135deg,#00bad6,#0077cc)';
-                btn.style.color = '#080f1a';
+                btn.style.color = '#000';
             } else {
                 followedUsers.push(userId);
                 btn.textContent = '✓ Abonné·e';
