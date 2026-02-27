@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+    <title>SwellSync - Bienvenue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100dvh;
+            overflow: hidden
+        }
+
+        .onboarding {
+            position: relative;
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column
+        }
+
+        .slides {
+            flex: 1;
+            display: flex;
+            overflow: hidden
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.4s ease
+        }
+
+        .slide-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: float 3s ease-in-out infinite
+        }
+
+        .slide h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px
+        }
+
+        .slide h2 span {
+            color: #00bad6
+        }
+
+        .slide p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            max-width: 280px
+        }
+
+        .slide-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 30px;
+            object-fit: cover;
+            margin-bottom: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.08)
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s
+        }
+
+        .dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: #00bad6
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px 40px
+        }
+
+        .skip-btn {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit
+        }
+
+        .next-btn {
+            background: #00bad6;
+            color: #000;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 14px 32px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.15s
+        }
+
+        .next-btn:active {
+            transform: scale(0.95)
+        }
+
+        .features {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px
+        }
+
+        .feat {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="onboarding">
+        <div class="slides" id="slides">
+            <!-- Slide 1 -->
+            <div class="slide">
+                <div class="slide-icon">🌊</div>
+                <h2>Bienvenue sur <span>SwellSync</span></h2>
+                <p>La meilleure app pour les surfeurs. Prévisions en temps réel, communauté et sessions tracking.</p>
+                <div class="features">
+                    <div class="feat">🏄 60+ spots</div>
+                    <div class="feat">📊 Prévisions 7j</div>
+                    <div class="feat">👥 Communauté</div>
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="slide">
+                <div class="slide-icon">📡</div>
+                <h2>Alertes <span>intelligentes</span></h2>
+                <p>Reçois des notifications quand les conditions sont parfaites sur tes spots favoris.</p>
+                <div class="features">
+                    <div class="feat">🔔 Alertes houle</div>
+                    <div class="feat">💨 Alerte vent</div>
+                    <div class="feat">🌅 Alerte marée</div>
+                </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="slide">
+                <div class="slide-icon">🤙</div>
+                <h2>Rejoins la <span>communauté</span></h2>
+                <p>Partage tes sessions, échange avec les surfeurs et grimpe dans le classement !</p>
+                <div class="features">
+                    <div class="feat">📸 Stories</div>
+                    <div class="feat">🏆 Classement</div>
+                    <div class="feat">💬 Chat</div>
+                    <div class="feat">🎖️ Badges</div>
+                </div>
+            </div>
+        </div>
+        <div class="dots" id="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="controls">
+            <button class="skip-btn" onclick="finish()">Passer</button>
+            <button class="next-btn" id="nextBtn" onclick="next()">Suivant →</button>
+        </div>
+    </div>
+    <script>
+        let current = 0;
+        const total = 3;
+        function next() {
+            if (current < total - 1) {
+                current++;
+                update();
+            } else {
+                finish();
+            }
+        }
+        function update() {
+            document.querySelectorAll('.slide').forEach((s, i) => {
+                s.style.transform = `translateX(-${current * 100}%)`;
+            });
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.classList.toggle('active', i === current);
+            });
+            document.getElementById('nextBtn').textContent = current === total - 1 ? "C'est parti ! 🏄" : 'Suivant →';
+        }
+        function finish() {
+            localStorage.setItem('onboarding_done', '1');
+            window.location.href = 'home.html';
+        }
+        // Swipe support
+        let sx = 0;
+        document.addEventListener('touchstart', e => { sx = e.touches[0].clientX }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - sx;
+            if (dx < -50 && current < total - 1) { current++; update(); }
+            if (dx > 50 && current > 0) { current--; update(); }
+        });
+    </script>
+</body>
+
+</html>

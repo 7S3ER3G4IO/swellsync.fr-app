@@ -144,7 +144,8 @@
         setTimeout(() => {
             document.getElementById('splash').classList.add('exit');
             setTimeout(() => {
-                window.location.href = 'home.html';
+                const dest = localStorage.getItem('onboarding_done') ? 'home.html' : 'onboarding.html';
+                window.location.href = dest;
             }, 500);
         }, 2000);
     </script>

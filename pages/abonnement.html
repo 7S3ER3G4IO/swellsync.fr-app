@@ -27,7 +27,7 @@
 
         /* Dark */
         .dark body {
-            background: #080f1a;
+            background: #000;
             color: #f1f5f9
         }
 
@@ -250,9 +250,9 @@
       :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
       .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
       .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
-      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
-      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
-      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
+      .light .card, .light [class*="bg-[#111]"] { background: var(--bg-card) !important; }
+      .light [class*="bg-[#000]"] { background: var(--bg-primary) !important; }
+      .light [class*="bg-[#111]"] { background: #f8fafc !important; }
       .light [class*="text-white"] { color: #0f172a !important; }
       .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
       .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
@@ -648,7 +648,7 @@
                 const modal = document.createElement('div');
                 modal.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
                 modal.innerHTML = `
-                    <div class="bg-[#0f2438] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
+                    <div class="bg-[#111] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4">
                             <span class="material-symbols-outlined text-3xl text-[#080f1a]" style="font-variation-settings:'FILL' 1">rocket_launch</span>
                         </div>
