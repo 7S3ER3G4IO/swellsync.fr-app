@@ -5,16 +5,14 @@
     <script src="js/app-guard.js"></script>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0" name="viewport" />
-    <title>SwellSync - Coaching & Tips</title>
+    <title>SwellSync - Coaching Surf</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Coaching Surf">
-    <meta property="og:description" content="Conseils et tips de surf pour progresser.">
+    <meta property="og:description" content="Coaching surf personnalisé avec des pros certifiés.">
     <meta property="og:image" content="https://swellsync.fr/assets/images/swellsync_logo.png">
-    <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
-    <meta name="description" content="SwellSync Coaching — Conseils de pros pour améliorer ton surf.">
     <script src="js/theme.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
@@ -23,197 +21,608 @@
         rel="stylesheet" />
     <script>tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#00bad6", "background-dark": "#080f1a", "card-dark": "#0f2438" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } } }</script>
     <style>
-        .glass {
-            background: rgba(15, 36, 56, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 186, 214, 0.1)
+        .dark body {
+            background: #080f1a;
+            color: #f1f5f9
+        }
+
+        .dark .card {
+            background: rgba(15, 36, 56, 0.8);
+            border: 1px solid rgba(0, 186, 214, 0.12)
+        }
+
+        .dark .hdr {
+            background: rgba(8, 15, 26, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 186, 214, 0.1)
+        }
+
+        .light body {
+            background: #f0f6ff;
+            color: #1e293b
+        }
+
+        .light .card {
+            background: #fff;
+            border: 1px solid #e2eaf4;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .06)
+        }
+
+        .light .hdr {
+            background: rgba(240, 246, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #e2eaf4
         }
 
         body {
-            min-height: max(884px, 100dvh)
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100dvh
         }
-    </style>
-    <style>
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none
+        }
+
+        .plan-card {
+            transition: all .15s
+        }
+
+        .plan-card:active {
+            transform: scale(0.97)
+        }
+
+        .plan-popular {
+            border: 1px solid rgba(245, 158, 11, 0.35) !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, .08), rgba(15, 36, 56, 0.8)) !important
+        }
+
+        .coach-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(0, 186, 214, 0.3)
+        }
+
+        .rating-star {
+            color: #f59e0b;
+            font-size: 12px
+        }
+
+        .feature-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0
+        }
+
+        .feature-check .material-symbols-outlined {
+            font-size: 16px;
+            color: #00bad6
+        }
+
+        .feature-check span:last-child {
+            font-size: 12px;
+            color: #94a3b8
+        }
+
         :root {
             --bg-primary: #080f1a;
-            --bg-card: #0f2438;
-            --bg-nav: rgba(8, 15, 26, 0.95);
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border-color: rgba(0, 186, 214, 0.2);
+            --text-primary: #f1f5f9
         }
 
         .light {
             --bg-primary: #f0f4f8;
-            --bg-card: #ffffff;
-            --bg-nav: rgba(255, 255, 255, 0.95);
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-color: rgba(0, 186, 214, 0.15);
-        }
-
-        .light body {
-            background: var(--bg-primary) !important;
-            color: var(--text-primary) !important;
-        }
-
-        .light .card,
-        .light [class*="bg-[#0f2438]"] {
-            background: var(--bg-card) !important;
-        }
-
-        .light [class*="text-white"] {
-            color: #0f172a !important;
-        }
-
-        .light [class*="text-slate-400"],
-        .light [class*="text-slate-500"] {
-            color: #64748b !important;
+            --text-primary: #0f172a
         }
     </style>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#00bad6">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
 </head>
 
-<body class="bg-[#080f1a] font-display text-slate-100 min-h-screen pb-24">
+<body class="font-display pb-28">
 
-    <header class="flex items-center justify-between p-6 sticky top-0 z-10 glass">
-        <a href="home.html" class="material-symbols-outlined text-slate-400 cursor-pointer">chevron_left</a>
-        <h1 class="text-xl font-bold">Coaching & Tips</h1>
-        <div class="w-6"></div>
+    <!-- Header -->
+    <header class="hdr sticky top-0 z-30 px-4 py-3">
+        <div class="flex items-center gap-3">
+            <a href="home.html" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center">
+                <span class="material-symbols-outlined text-slate-400">arrow_back</span>
+            </a>
+            <h1 class="text-lg font-bold flex-1">Coaching Surf</h1>
+            <div
+                class="flex items-center gap-1 text-[10px] text-emerald-400 font-bold bg-emerald-400/10 px-2 py-1 rounded-full">
+                <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span> 12 coachs dispos
+            </div>
+        </div>
     </header>
 
-    <main class="max-w-md mx-auto px-4 py-6 space-y-6">
+    <main class="px-4 py-4 space-y-6 max-w-lg mx-auto">
 
-        <!-- Intro -->
-        <section class="text-center space-y-2">
-            <div
-                class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto">
-                <span class="material-symbols-outlined text-3xl text-[#080f1a]">school</span>
+        <!-- Hero Banner -->
+        <div class="relative rounded-3xl overflow-hidden" style="min-height:160px">
+            <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80"
+                class="w-full h-full object-cover absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#080f1a] via-[#080f1a]/60 to-transparent"></div>
+            <div class="relative z-2 p-5 flex flex-col justify-end" style="min-height:160px">
+                <span class="text-[10px] font-bold text-[#00bad6] uppercase tracking-wider mb-1">Coaching
+                    personnalisé</span>
+                <h2 class="text-xl font-black text-white">Progresse avec des<br>pros certifiés 🏄</h2>
+                <p class="text-xs text-white/60 mt-1">Séances individuelles ou en groupe sur les meilleurs spots</p>
             </div>
-            <h2 class="text-2xl font-black">Deviens meilleur surfeur</h2>
-            <p class="text-sm text-slate-400">Conseils de pros, techniques et astuces pour progresser rapidement 🏄</p>
-        </section>
+        </div>
 
-        <!-- Tips List -->
-        <section class="space-y-3">
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">🌊</span>
-                    <h3 class="font-bold text-sm">Lire les vagues</h3>
-                    <span
-                        class="ml-auto text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Débutant</span>
+        <!-- Stats Row -->
+        <div class="flex gap-2">
+            <div class="card rounded-2xl flex-1 py-3 text-center">
+                <p class="text-lg font-black text-[#00bad6]">12</p>
+                <p class="text-[9px] text-slate-500">Coachs certifiés</p>
+            </div>
+            <div class="card rounded-2xl flex-1 py-3 text-center">
+                <p class="text-lg font-black text-amber-400">4.8★</p>
+                <p class="text-[9px] text-slate-500">Note moyenne</p>
+            </div>
+            <div class="card rounded-2xl flex-1 py-3 text-center">
+                <p class="text-lg font-black text-emerald-400">2k+</p>
+                <p class="text-[9px] text-slate-500">Sessions données</p>
+            </div>
+        </div>
+
+        <!-- Plans Section -->
+        <div id="initiation">
+            <h3 class="font-black text-base mb-3">Choisis ta formule</h3>
+
+            <!-- Initiation -->
+            <div class="card plan-card rounded-2xl p-4 mb-3" style="border:1px solid rgba(0,186,214,0.15)">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-emerald-400 text-2xl">surfing</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-black text-base">Initiation</h4>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-[#00bad6]">45€</span>
+                                <span class="text-[10px] text-slate-500">/séance</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">Pour les débutants qui veulent prendre leur première
+                            vague.</p>
+                        <div class="mt-3 space-y-0.5">
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>2h de cours avec un coach
+                                    diplômé</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Matériel fourni (planche
+                                    + combi)</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Groupe de 4 personnes
+                                    max</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Échauffement & sécurité
+                                    inclus</span></div>
+                        </div>
+                        <button onclick="bookCoaching('initiation')"
+                            class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
+                            Réserver — 45€
+                        </button>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Apprends à identifier les séries, les sets et les
-                    channels. Observer pendant 15 minutes avant d'entrer dans l'eau te fera gagner 80% de tes vagues.
-                </p>
             </div>
 
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">🏄</span>
-                    <h3 class="font-bold text-sm">Le take-off parfait</h3>
-                    <span
-                        class="ml-auto text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">Débutant</span>
+            <!-- Perfectionnement (Popular) -->
+            <div class="card plan-card plan-popular rounded-2xl p-4 mb-3" id="perfectionnement">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-amber-400 text-2xl"
+                            style="font-variation-settings:'FILL' 1">trending_up</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-black text-base">Perfectionnement</h4>
+                                <span
+                                    class="text-[8px] font-bold bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full">⭐
+                                    Populaire</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-amber-400">65€</span>
+                                <span class="text-[10px] text-slate-500">/séance</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">Tu surfes déjà ? Travaille tes manœuvres et ta
+                            lecture des vagues.</p>
+                        <div class="mt-3 space-y-0.5">
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>2h30 avec coach
+                                    spécialisé</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Analyse vidéo de tes
+                                    sessions</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Bottom turn, cut-back,
+                                    floater</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Lecture des vagues &
+                                    positionnement</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Maximum 2
+                                    personnes</span></div>
+                        </div>
+                        <button onclick="bookCoaching('perfectionnement')"
+                            class="w-full mt-3 py-2.5 rounded-xl font-bold text-sm active:scale-95 transition-transform text-black"
+                            style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+                            Réserver — 65€
+                        </button>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Place tes mains au niveau de la poitrine, pousse et
-                    pivote les pieds d'un coup. Regarde là où tu veux aller, pas la planche.</p>
             </div>
 
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">💨</span>
-                    <h3 class="font-bold text-sm">Comprendre le vent</h3>
-                    <span
-                        class="ml-auto text-[9px] bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full font-bold">Intermédiaire</span>
+            <!-- Compétition -->
+            <div class="card plan-card rounded-2xl p-4 mb-3" id="competition"
+                style="border:1px solid rgba(168,85,247,0.25)">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-purple-400 text-2xl"
+                            style="font-variation-settings:'FILL' 1">emoji_events</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-black text-base">Compétition</h4>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-purple-400">90€</span>
+                                <span class="text-[10px] text-slate-500">/séance</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">Préparation intensive pour les compétiteurs et
+                            surfeurs confirmés.</p>
+                        <div class="mt-3 space-y-0.5">
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>3h d'entraînement
+                                    personnalisé</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Analyse vidéo HD
+                                    détaillée</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Stratégie de
+                                    compétition</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Tubes, aérials, carving
+                                    avancé</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Coaching individuel
+                                    uniquement</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Plan d'entraînement
+                                    physique inclus</span></div>
+                        </div>
+                        <button onclick="bookCoaching('competition')"
+                            class="w-full mt-3 py-2.5 rounded-xl bg-purple-500 text-white font-bold text-sm active:scale-95 transition-transform">
+                            Réserver — 90€
+                        </button>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Le vent offshore (de la terre vers la mer) lisse les
-                    vagues et les creuse. Le vent onshore fait l'inverse. Surfe tôt le matin quand le vent est faible.
-                </p>
             </div>
 
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">⚡</span>
-                    <h3 class="font-bold text-sm">Le bottom turn</h3>
-                    <span
-                        class="ml-auto text-[9px] bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full font-bold">Intermédiaire</span>
+            <!-- Vidéo Analyse -->
+            <div class="card plan-card rounded-2xl p-4 mb-3" id="video" style="border:1px solid rgba(0,186,214,0.2)">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-[#00bad6]/15 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-[#00bad6] text-2xl">videocam</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-black text-base">Vidéo Analyse</h4>
+                            <div class="text-right">
+                                <span class="text-xl font-black text-[#00bad6]">35€</span>
+                                <span class="text-[10px] text-slate-500">/vidéo</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">Envoie ta vidéo de session, un coach pro l'analyse en
+                            détail.</p>
+                        <div class="mt-3 space-y-0.5">
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Analyse détaillée par un
+                                    pro</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Annotations sur la
+                                    vidéo</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Conseils personnalisés
+                                    écrits</span></div>
+                            <div class="feature-check"><span
+                                    class="material-symbols-outlined">check_circle</span><span>Réponse sous 48h</span>
+                            </div>
+                        </div>
+                        <button onclick="bookCoaching('video')"
+                            class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
+                            Commander — 35€
+                        </button>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Le bottom turn est LA manœuvre clé. En bas de la
-                    vague, appuie sur ton rail intérieur et regarde vers la lèvre. Plie les genoux et projette ton
-                    corps.</p>
             </div>
+        </div>
 
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">🔥</span>
-                    <h3 class="font-bold text-sm">Le tube</h3>
-                    <span
-                        class="ml-auto text-[9px] bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-bold">Avancé</span>
+        <!-- Packs -->
+        <div>
+            <h3 class="font-black text-base mb-3">💰 Packs économiques</h3>
+            <div class="space-y-2">
+                <div class="card rounded-2xl p-4 flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-sm">Pack 5 séances</p>
+                        <p class="text-[10px] text-slate-500">Valable 6 mois · Tous types</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-lg font-black text-emerald-400">199€</span>
+                        <p class="text-[9px] text-slate-500"><s class="text-slate-600">250€</s> -20%</p>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Pour te mettre au tube, prends la vague tard,
-                    positionne-toi derrière la section qui creuse. Baisse-toi, regarde la sortie, et laisse la vague te
-                    couvrir.</p>
-            </div>
-
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">🧘</span>
-                    <h3 class="font-bold text-sm">La préparation physique</h3>
-                    <span
-                        class="ml-auto text-[9px] bg-[#00bad6]/20 text-[#00bad6] px-2 py-0.5 rounded-full font-bold">Tous
-                        niveaux</span>
+                <div class="card rounded-2xl p-4 flex items-center justify-between"
+                    style="border:1px solid rgba(245,158,11,0.2)">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <p class="font-bold text-sm">Pack 10 séances</p>
+                            <span
+                                class="text-[8px] font-bold bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full">Meilleur
+                                prix</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500">Valable 12 mois · Tous types</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-lg font-black text-amber-400">349€</span>
+                        <p class="text-[9px] text-slate-500"><s class="text-slate-600">500€</s> -30%</p>
+                    </div>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Travaille ta rame (natation, ramage), ta souplesse
-                    (yoga), et tes jambes (squats, fentes). 20 minutes par jour améliorent ta session de 200%.</p>
             </div>
+        </div>
 
-            <div class="glass rounded-2xl p-4 space-y-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">🛡️</span>
-                    <h3 class="font-bold text-sm">Sécurité en mer</h3>
+        <!-- Top Coachs -->
+        <div>
+            <h3 class="font-black text-base mb-3">👨‍🏫 Nos coachs</h3>
+            <div class="space-y-2">
+                <div class="card rounded-2xl p-3 flex items-center gap-3">
+                    <div
+                        class="w-14 h-14 rounded-full bg-gradient-to-br from-[#00bad6] to-[#0077b6] flex items-center justify-center flex-shrink-0 text-white font-black text-lg">
+                        TL</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm">Thomas Laurent</p>
+                        <p class="text-[10px] text-slate-500">BPJEPS Surf · 8 ans d'XP · Hossegor</p>
+                        <div class="flex items-center gap-0.5 mt-0.5">
+                            <span class="rating-star">★</span><span class="rating-star">★</span><span
+                                class="rating-star">★</span><span class="rating-star">★</span><span
+                                class="rating-star">★</span>
+                            <span class="text-[9px] text-slate-500 ml-1">4.9 (127 avis)</span>
+                        </div>
+                    </div>
                     <span
-                        class="ml-auto text-[9px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full font-bold">Essentiel</span>
+                        class="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full">Dispo</span>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Surfe toujours avec les autres en vue. Connaît les
-                    courants, les rochers, et les drapeaux. Ne surfe jamais seul dans des conditions au-dessus de ton
-                    niveau.</p>
+                <div class="card rounded-2xl p-3 flex items-center gap-3">
+                    <div
+                        class="w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0 text-white font-black text-lg">
+                        MB</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm">Marie Beaumont</p>
+                        <p class="text-[10px] text-slate-500">BPJEPS Surf · 5 ans d'XP · Biarritz</p>
+                        <div class="flex items-center gap-0.5 mt-0.5">
+                            <span class="rating-star">★</span><span class="rating-star">★</span><span
+                                class="rating-star">★</span><span class="rating-star">★</span><span class="rating-star"
+                                style="opacity:.3">★</span>
+                            <span class="text-[9px] text-slate-500 ml-1">4.7 (89 avis)</span>
+                        </div>
+                    </div>
+                    <span
+                        class="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full">Dispo</span>
+                </div>
+                <div class="card rounded-2xl p-3 flex items-center gap-3">
+                    <div
+                        class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0 text-white font-black text-lg">
+                        JD</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm">Julien Deschamps</p>
+                        <p class="text-[10px] text-slate-500">Ex-compétiteur WSL · 12 ans d'XP · La Torche</p>
+                        <div class="flex items-center gap-0.5 mt-0.5">
+                            <span class="rating-star">★</span><span class="rating-star">★</span><span
+                                class="rating-star">★</span><span class="rating-star">★</span><span
+                                class="rating-star">★</span>
+                            <span class="text-[9px] text-slate-500 ml-1">5.0 (201 avis)</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-slate-500 bg-white/5 px-2 py-1 rounded-full">Complet</span>
+                </div>
             </div>
-        </section>
+        </div>
 
-        <!-- CTA -->
-        <a href="community.html"
-            class="block w-full py-4 text-center rounded-2xl bg-[#00bad6] text-[#080f1a] font-black text-sm active:scale-95 transition-transform">
-            💬 Poser une question à la Communauté
-        </a>
+        <!-- Tips gratuits -->
+        <div>
+            <h3 class="font-black text-base mb-3">📚 Tips gratuits</h3>
+            <div class="space-y-2">
+                <div class="card rounded-2xl p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-base">🌊</span>
+                        <h4 class="font-bold text-sm">Lire les vagues</h4>
+                        <span
+                            class="text-[8px] font-bold bg-emerald-500/15 text-emerald-400 px-1.5 py-0.5 rounded-full ml-auto">Débutant</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">Observe la houle au large pendant 5 minutes
+                        avant d'entrer. Repère les séries (groupes de vagues) et les accalmies. Le timing est plus
+                        important que la taille.</p>
+                </div>
+                <div class="card rounded-2xl p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-base">🦶</span>
+                        <h4 class="font-bold text-sm">Le take-off parfait</h4>
+                        <span
+                            class="text-[8px] font-bold bg-emerald-500/15 text-emerald-400 px-1.5 py-0.5 rounded-full ml-auto">Débutant</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">Mains au niveau de la poitrine, pousse et
+                        pivote les pieds d'un coup. Regarde là où tu veux aller, pas la planche. Le mouvement doit être
+                        fluide et rapide.</p>
+                </div>
+                <div class="card rounded-2xl p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-base">💨</span>
+                        <h4 class="font-bold text-sm">Comprendre le vent</h4>
+                        <span
+                            class="text-[8px] font-bold bg-yellow-500/15 text-yellow-400 px-1.5 py-0.5 rounded-full ml-auto">Intermédiaire</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">Offshore (terre → mer) = vagues creuses et
+                        propres. Onshore (mer → terre) = vagues molles et désordonnées. Cross-shore = conditions
+                        variables. Privilégie toujours l'offshore.</p>
+                </div>
+                <div class="card rounded-2xl p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-base">🔄</span>
+                        <h4 class="font-bold text-sm">Le bottom turn</h4>
+                        <span
+                            class="text-[8px] font-bold bg-orange-500/15 text-orange-400 px-1.5 py-0.5 rounded-full ml-auto">Avancé</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">En bas de la vague, appuie sur ton rail
+                        intérieur et regarde vers la lèvre. Plie les genoux et projette ton corps vers le haut de la
+                        vague. C'est la base de toutes les manœuvres.</p>
+                </div>
+                <div class="card rounded-2xl p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-base">💪</span>
+                        <h4 class="font-bold text-sm">Préparation physique</h4>
+                        <span
+                            class="text-[8px] font-bold bg-[#00bad6]/15 text-[#00bad6] px-1.5 py-0.5 rounded-full ml-auto">Tous
+                            niveaux</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">Travaille ta rame (natation, ramage), ta
+                        souplesse (yoga), et tes jambes (squats, fentes). 20 minutes par jour améliorent ta session de
+                        200%.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div>
+            <h3 class="font-black text-base mb-3">❓ Questions fréquentes</h3>
+            <div class="space-y-2">
+                <div class="card rounded-2xl p-3">
+                    <p class="font-bold text-sm">Quel matériel apporter ?</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Pour l'initiation : rien, tout est fourni. Pour les
+                        autres formules : ta planche et ta combinaison.</p>
+                </div>
+                <div class="card rounded-2xl p-3">
+                    <p class="font-bold text-sm">Comment fonctionne la vidéo analyse ?</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Filme ta session (minimum 10 min), envoie-la via l'app.
+                        Un coach annotéra ta vidéo avec des conseils personnalisés sous 48h.</p>
+                </div>
+                <div class="card rounded-2xl p-3">
+                    <p class="font-bold text-sm">Annulation possible ?</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Annulation gratuite jusqu'à 24h avant la séance.
+                        Remboursement intégral. Reportable en cas de mauvais temps.</p>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Bottom Nav -->
-    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg transition-colors duration-300"
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-[#00bad6]/20 pb-6 pt-2 px-2 flex justify-between items-center z-50 backdrop-blur-lg"
         style="background: var(--nav-bg, rgba(8,15,26,0.95))">
-        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html"><span
-                class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span></a>
-        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
-                class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
-        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
-                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span></a>
-        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
-                class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
-        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
-                class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="home.html">
+            <span class="material-symbols-outlined">home</span><span class="text-[10px]">Home</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html">
+            <span class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html">
+            <span class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html">
+            <span class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html">
+            <span class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span>
+        </a>
     </nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/adsense.js"></script>
-    <script src="js/share-social.js"></script>
+    <!-- Booking Modal -->
+    <div id="bookModal"
+        class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="w-full max-w-xs card rounded-3xl p-6 text-center space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-[#00bad6]/20 flex items-center justify-center mx-auto">
+                <span class="material-symbols-outlined text-[#00bad6] text-3xl">event_available</span>
+            </div>
+            <h3 class="font-black text-base" id="modalTitle">Réservation</h3>
+            <p class="text-xs text-slate-400" id="modalDesc">Choisis une date et un créneau.</p>
+            <input type="date" id="bookDate"
+                class="w-full rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2 text-sm text-white">
+            <select id="bookTime"
+                class="w-full rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2 text-sm text-white">
+                <option value="9h">9h00 — 11h00</option>
+                <option value="11h">11h00 — 13h00</option>
+                <option value="14h">14h00 — 16h00</option>
+                <option value="16h">16h00 — 18h00</option>
+            </select>
+            <button onclick="confirmBooking()"
+                class="w-full py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
+                Confirmer la réservation
+            </button>
+            <button onclick="closeModal()" class="w-full py-2 text-slate-500 text-xs">Annuler</button>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="successToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[300] hidden">
+        <div
+            class="bg-emerald-500 text-white font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">check_circle</span>
+            <span>Réservation confirmée !</span>
+        </div>
+    </div>
+
+    <script>
+        const PLANS = {
+            initiation: { name: 'Initiation', price: '45€' },
+            perfectionnement: { name: 'Perfectionnement', price: '65€' },
+            competition: { name: 'Compétition', price: '90€' },
+            video: { name: 'Vidéo Analyse', price: '35€' }
+        };
+
+        let currentPlan = null;
+
+        function bookCoaching(plan) {
+            currentPlan = plan;
+            const p = PLANS[plan];
+            document.getElementById('modalTitle').textContent = 'Réserver — ' + p.name;
+            document.getElementById('modalDesc').textContent = p.price + ' · Choisis une date et un créneau.';
+            // Set min date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookDate').min = today;
+            document.getElementById('bookDate').value = today;
+            document.getElementById('bookModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeModal() {
+            document.getElementById('bookModal').classList.replace('flex', 'hidden');
+        }
+
+        function confirmBooking() {
+            closeModal();
+            const toast = document.getElementById('successToast');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        // Smooth scroll to anchor
+        if (window.location.hash) {
+            setTimeout(() => {
+                const el = document.querySelector(window.location.hash);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+    </script>
     <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
     <script src="/js/i18n.js"></script>
-    <script src="/js/push_notifs.js" defer></script>
 </body>
 
 </html>
