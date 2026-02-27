@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920">
+    <title>SwellSync — Aperçu Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1920px;
+            height: 1080px;
+            background: #050a14;
+            background-image:
+                radial-gradient(ellipse at 30% 50%, rgba(0, 186, 214, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 80px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .title {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .title h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .title h1 span {
+            color: #00bad6;
+        }
+
+        .title p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        /* iPhone Frame */
+        .phone {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            border-radius: 55px;
+            background: #1a1a1a;
+            padding: 12px;
+            box-shadow:
+                0 0 0 2px #333,
+                0 0 0 4px #1a1a1a,
+                0 0 0 6px #333,
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                0 0 120px rgba(0, 186, 214, 0.1);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            border-radius: 44px;
+            overflow: hidden;
+            background: #080f1a;
+            position: relative;
+        }
+
+        .phone-screen iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Notch */
+        .phone::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 18px 18px;
+            z-index: 10;
+        }
+
+        /* Dynamic Island */
+        .phone::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 34px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 11;
+        }
+
+        /* Side buttons */
+        .phone .btn-power {
+            position: absolute;
+            right: -3px;
+            top: 180px;
+            width: 3px;
+            height: 80px;
+            background: #333;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .phone .btn-vol-up {
+            position: absolute;
+            left: -3px;
+            top: 160px;
+            width: 3px;
+            height: 40px;
+            background: #333;
+            border-radius: 2px 0 0 2px;
+        }
+
+        .phone .btn-vol-down {
+            position: absolute;
+            left: -3px;
+            top: 210px;
+            width: 3px;
+            height: 40px;
+            background: #333;
+            border-radius: 2px 0 0 2px;
+        }
+
+        /* Label under phone */
+        .phone-label {
+            text-align: center;
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .phone-label span {
+            color: #00bad6;
+            font-weight: 800;
+        }
+
+        .phone-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Navigation dots between phones */
+        .nav-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-hint .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #334155;
+            transition: all 0.3s;
+        }
+
+        .nav-hint .dot.active {
+            background: #00bad6;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Page selector */
+        .page-tabs {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .page-tabs button {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 186, 214, 0.2);
+            background: rgba(15, 36, 56, 0.8);
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .page-tabs button:hover,
+        .page-tabs button.active {
+            background: rgba(0, 186, 214, 0.15);
+            color: #00bad6;
+            border-color: rgba(0, 186, 214, 0.4);
+        }
+
+        /* Info panel */
+        .info {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            max-width: 280px;
+        }
+
+        .info .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info .logo-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #00bad6, #10b981);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .info .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .info .stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .info .stat {
+            text-align: center;
+        }
+
+        .info .stat-val {
+            color: #00bad6;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .info .stat-label {
+            color: #64748b;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Left Info -->
+    <div class="info">
+        <div class="logo">
+            <div class="logo-circle">🏄</div>
+            <div class="logo-text">SwellSync</div>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-val">64</div>
+                <div class="stat-label">Spots</div>
+            </div>
+            <div class="stat">
+                <div class="stat-val">247</div>
+                <div class="stat-label">En ligne</div>
+            </div>
+            <div class="stat">
+                <div class="stat-val">FR/EN</div>
+                <div class="stat-label">Langues</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phone -->
+    <div class="phone-wrapper">
+        <div class="phone">
+            <div class="btn-power"></div>
+            <div class="btn-vol-up"></div>
+            <div class="btn-vol-down"></div>
+            <div class="phone-screen">
+                <iframe id="appFrame" src="pages/home.html"></iframe>
+            </div>
+        </div>
+        <p class="phone-label">iPhone 15 Pro — <span>SwellSync PWA</span></p>
+    </div>
+
+    <!-- Right page tabs -->
+    <div class="page-tabs">
+        <button class="active" onclick="nav(this,'pages/home.html')">🏠 Home</button>
+        <button onclick="nav(this,'pages/map.html')">🗺️ Spots</button>
+        <button onclick="nav(this,'pages/community.html')">👥 Communauté</button>
+        <button onclick="nav(this,'pages/profile.html')">👤 Profil</button>
+        <button onclick="nav(this,'pages/alerts.html')">🔔 Alertes</button>
+        <button onclick="nav(this,'pages/settings.html')">⚙️ Paramètres</button>
+    </div>
+
+    <script>
+        function nav(btn, url) {
+            document.querySelectorAll('.page-tabs button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('appFrame').src = url;
+        }
+    </script>
+</body>
+
+</html>
