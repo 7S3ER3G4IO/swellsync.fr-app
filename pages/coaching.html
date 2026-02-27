@@ -4,7 +4,7 @@
 <head>
     <script src="js/app-guard.js"></script>
     <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1.0" name="viewport" />
+    <meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport" />
     <title>SwellSync - Coaching Surf</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Coaching Surf">
@@ -56,7 +56,7 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            min-height: 100dvh
+            min-height: 100dvh; padding-top: env(safe-area-inset-top, 44px)
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -186,7 +186,7 @@
                         <div class="flex items-center justify-between">
                             <h4 class="font-black text-base">Initiation</h4>
                             <div class="text-right">
-                                <span class="text-xl font-black text-[#00bad6]">45€</span>
+                                <span class="text-xl font-black text-[#00bad6]">79€</span>
                                 <span class="text-[10px] text-slate-500">/séance</span>
                             </div>
                         </div>
@@ -208,7 +208,7 @@
                         </div>
                         <button onclick="bookCoaching('initiation')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
-                            Réserver — 45€
+                            Réserver — 79€
                         </button>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                                     Populaire</span>
                             </div>
                             <div class="text-right">
-                                <span class="text-xl font-black text-amber-400">65€</span>
+                                <span class="text-xl font-black text-amber-400">119€</span>
                                 <span class="text-[10px] text-slate-500">/séance</span>
                             </div>
                         </div>
@@ -256,7 +256,7 @@
                         <button onclick="bookCoaching('perfectionnement')"
                             class="w-full mt-3 py-2.5 rounded-xl font-bold text-sm active:scale-95 transition-transform text-black"
                             style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                            Réserver — 65€
+                            Réserver — 119€
                         </button>
                     </div>
                 </div>
@@ -274,7 +274,7 @@
                         <div class="flex items-center justify-between">
                             <h4 class="font-black text-base">Compétition</h4>
                             <div class="text-right">
-                                <span class="text-xl font-black text-purple-400">90€</span>
+                                <span class="text-xl font-black text-purple-400">179€</span>
                                 <span class="text-[10px] text-slate-500">/séance</span>
                             </div>
                         </div>
@@ -302,7 +302,7 @@
                         </div>
                         <button onclick="bookCoaching('competition')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-purple-500 text-white font-bold text-sm active:scale-95 transition-transform">
-                            Réserver — 90€
+                            Réserver — 179€
                         </button>
                     </div>
                 </div>
@@ -318,7 +318,7 @@
                         <div class="flex items-center justify-between">
                             <h4 class="font-black text-base">Vidéo Analyse</h4>
                             <div class="text-right">
-                                <span class="text-xl font-black text-[#00bad6]">35€</span>
+                                <span class="text-xl font-black text-[#00bad6]">59€</span>
                                 <span class="text-[10px] text-slate-500">/vidéo</span>
                             </div>
                         </div>
@@ -340,7 +340,7 @@
                         </div>
                         <button onclick="bookCoaching('video')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm active:scale-95 transition-transform">
-                            Commander — 35€
+                            Commander — 59€
                         </button>
                     </div>
                 </div>
@@ -360,8 +360,8 @@
                         <p class="text-[10px] text-slate-500">Valable 6 mois · Tous types</p>
                     </div>
                     <div class="text-right">
-                        <span class="text-lg font-black text-emerald-400">199€</span>
-                        <p class="text-[9px] text-slate-500"><s class="text-slate-600">250€</s> -20%</p>
+                        <span class="text-lg font-black text-emerald-400">599€</span>
+                        <p class="text-[9px] text-slate-500"><s class="text-slate-600">450€</s> -20%</p>
                     </div>
                 </div>
                 <div class="card rounded-2xl p-4 flex items-center justify-between"
@@ -376,8 +376,8 @@
                         <p class="text-[10px] text-slate-500">Valable 12 mois · Tous types</p>
                     </div>
                     <div class="text-right">
-                        <span class="text-lg font-black text-amber-400">349€</span>
-                        <p class="text-[9px] text-slate-500"><s class="text-slate-600">500€</s> -30%</p>
+                        <span class="text-lg font-black text-amber-400">599€</span>
+                        <p class="text-[9px] text-slate-500"><s class="text-slate-600">890€</s> -30%</p>
                     </div>
                 </div>
             </div>
@@ -587,10 +587,10 @@
 
     <script>
         const PLANS = {
-            initiation: { name: 'Initiation', price: '45€' },
-            perfectionnement: { name: 'Perfectionnement', price: '65€' },
-            competition: { name: 'Compétition', price: '90€' },
-            video: { name: 'Vidéo Analyse', price: '35€' }
+            initiation: { name: 'Initiation', price: '79€' },
+            perfectionnement: { name: 'Perfectionnement', price: '119€' },
+            competition: { name: 'Compétition', price: '179€' },
+            video: { name: 'Vidéo Analyse', price: '59€' }
         };
 
         let currentPlan = null;
