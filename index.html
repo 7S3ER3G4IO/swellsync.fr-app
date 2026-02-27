@@ -207,22 +207,25 @@
         }
 
         .car-phone {
-            width: 200px;
-            height: 400px;
+            width: 220px;
+            height: 440px;
             border-radius: 32px;
-            background: var(--text);
-            border: 2px solid rgba(255, 255, 255, .1);
+            background: #080f1a;
+            border: 3px solid #1e293b;
             overflow: hidden;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .05);
             flex-shrink: 0;
             position: relative;
         }
 
         .car-phone iframe {
-            width: 100%;
-            height: 100%;
+            width: 430px;
+            height: 860px;
             border: none;
             pointer-events: none;
+            transform: scale(.512);
+            transform-origin: 0 0;
+            background: #080f1a;
         }
 
         .car-phone .notch {
@@ -231,8 +234,8 @@
             left: 50%;
             transform: translateX(-50%);
             width: 90px;
-            height: 20px;
-            background: var(--text);
+            height: 22px;
+            background: #080f1a;
             border-radius: 0 0 14px 14px;
             z-index: 2;
         }

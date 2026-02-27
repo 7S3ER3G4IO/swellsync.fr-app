@@ -1,385 +1,173 @@
 <!DOCTYPE html>
-<html class="dark" lang="fr">
+<html lang="fr">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SwellSync | Légal</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#00bad6",
-                        "background-light": "#f5f8f8",
-                        "background-dark": "#0f2123",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
-    <!-- Meta-Tags Web App & PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f2123">
-    <!-- Optimisations Mobile pures Apple -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SwellSync">
-    <link rel="apple-touch-icon" href="assets/images/swellsync_icon.svg">
-    <link rel="icon" type="image/svg+xml" href="assets/images/swellsync_icon.svg">
-    <link rel="shortcut icon" href="assets/images/swellsync_icon.svg">
-    <!-- Nos styles personnels (Pour les Toasts Custom et variables) -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/light-mode.css">
-    <link rel="stylesheet" href="css/mobile.css">
-    <!-- FontAwesome pour les logos de marques -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-
-</head>
-
-<body
-    class="bg-background-dark text-white font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
-    <!-- Navbar Site Vitrine -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentions Légales — SwellSync</title>
+    <meta name="description" content="Mentions légales de SwellSync. Éditeur, hébergement et propriété intellectuelle.">
+    <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/site/style.css">
     <style>
-        .site-navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(7, 13, 26, 0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 0 24px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-family: 'Inter', sans-serif;
+        .legal-content {
+            max-width: 760px;
+            margin: 0 auto;
         }
 
-        .site-nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: #f0f4ff;
-        }
-
-        .site-nav-logo img {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-        }
-
-        .site-nav-logo span {
-            font-family: 'Lexend', sans-serif;
+        .legal-content h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.3rem;
             font-weight: 800;
-            font-size: 20px;
-            color: #f0f4ff;
+            color: var(--text);
+            margin: 40px 0 16px;
         }
 
-        .site-nav-logo .site-nav-accent {
-            color: #00bad6;
+        .legal-content p {
+            font-size: 15px;
+            color: var(--text2);
+            line-height: 1.9;
+            margin-bottom: 14px;
         }
 
-        .site-nav-links {
-            display: flex;
-            gap: 4px;
-            align-items: center;
+        .legal-content ul {
+            list-style: disc;
+            padding-left: 24px;
+            margin: 12px 0 20px;
         }
 
-        .site-nav-links a {
-            padding: 8px 16px;
-            border-radius: 10px;
+        .legal-content ul li {
             font-size: 14px;
-            font-weight: 500;
-            color: #94a8cc;
-            text-decoration: none;
-            transition: all .2s;
+            color: var(--text2);
+            line-height: 1.8;
+            margin-bottom: 8px;
         }
 
-        .site-nav-links a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f0f4ff;
+        .legal-content strong {
+            color: var(--text);
         }
 
-        .site-nav-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 20px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #00bad6, #00d696);
-            color: #fff;
-            font-weight: 700;
-            font-size: 14px;
-            text-decoration: none;
-            transition: all .3s;
+        .legal-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
         }
 
-        .site-nav-cta:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(0, 186, 214, 0.3);
-        }
-
-        .site-nav-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #f0f4ff;
-            align-items: center;
-        }
-
-        @media (max-width: 768px) {
-
-            .site-nav-links,
-            .site-nav-cta {
-                display: none;
-            }
-
-            .site-nav-menu-btn {
-                display: flex;
-            }
-
-            .site-nav-links.open {
-                display: flex;
-                flex-direction: column;
-                position: fixed;
-                top: 64px;
-                left: 0;
-                right: 0;
-                background: rgba(7, 13, 26, 0.97);
-                padding: 16px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-                z-index: 99;
-            }
+        .legal-card p {
+            margin-bottom: 6px;
         }
     </style>
-    <nav class="site-navbar">
-        <a href="/" class="site-nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="site-nav-accent">Sync</span></span>
-        </a>
-        <div class="site-nav-links" id="siteNavLinks">
-            <a href="/">Accueil</a>
-            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
-            <a href="/site/spots.html">Spots</a>
-            <a href="/site/tarifs.html">Tarifs</a>
-            <a href="/site/faq.html">FAQ</a>
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
+        <div class="nav-links" id="navLinks">
+            <a href="/">Accueil</a><a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a><a href="/site/faq.html">FAQ</a><a
+                href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="site-nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="site-nav-menu-btn"
-            onclick="var n=document.getElementById('siteNavLinks');n.classList.toggle('open')">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <!-- Contenu Légal -->
-    <main class="pt-32 pb-24 max-w-4xl mx-auto px-6 relative z-10">
-        <div class="mb-12 border-b border-white/10 pb-8">
-            <span class="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Transparence
-                SWELLSYNC</span>
-            <h1 class="text-4xl md:text-5xl font-black mb-4">Mentions <br /><span class="text-primary">Légales
-                    (LCEN)</span></h1>
-            <p class="text-slate-400 font-medium">Informations légales concernant l'éditeur et l'hébergement de cette
-                plateforme web & mobile.</p>
-        </div>
-
-        <div
-            class="prose prose-invert prose-p:text-slate-400 prose-headings:text-white prose-a:text-primary max-w-none">
-
-            <div class="glass p-8 rounded-[2rem] border border-white/5 mb-8">
-                <h3 class="text-2xl font-bold mb-4 mt-0 text-white">Éditeur du Site / Propriétaire </h3>
-                <p class="mb-2"><strong>Raison sociale :</strong> SWELLSYNC TECHNOLOGY S.A.S</p>
-                <p class="mb-2"><strong>Capital social :</strong> 10 000,00 Euros</p>
-                <p class="mb-2"><strong>Siège social :</strong> Pépinière d'entreprise Pédebert, Avenue des Tisserands,
-                    40150 Soorts-Hossegor, FRANCE.</p>
-                <p class="mb-2"><strong>RCS (Registre du Commerce et des Sociétés) :</strong> Dax B 999 999 999</p>
-                <p class="mb-2"><strong>N° de TVA Intracommunautaire :</strong> FR 99 999 999 999</p>
-                <p class="mb-4"><strong>Numéro de Téléphone :</strong> +33 (0)5 99 99 99 99 (Non surtaxé, du Lun au Ven
-                    - 9h-18h)</p>
-                <p><strong>Directeur de la Publication :</strong> Max, Gérant-Fondateur.</p>
+    <section style="padding:140px 0 60px;background:var(--bg)">
+        <div class="container">
+            <div class="legal-content">
+                <div class="section-tag animate">⚖️ Transparence</div>
+                <h1 class="animate animate-delay-1" style="font-size:clamp(2rem,4.5vw,3rem);margin:18px 0 12px">Mentions
+                    <em
+                        style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">Légales
+                        (LCEN)</em></h1>
+                <p class="animate animate-delay-2" style="color:var(--text3);font-size:14px">Informations légales
+                    concernant l'éditeur et l'hébergement de cette plateforme web & mobile.</p>
             </div>
-
-            <h3 class="text-2xl font-bold mt-8 mb-4">Hébergement des Services</h3>
-            <p>Afin de garantir une disponibilité de 99.9% et des latences de 5ms, les serveurs de production (Base de
-                Données, API Météo, Application) et le réseau sont gérés par de prestataires cloud ultra-sécurisés.</p>
-            <p>
-                <strong>L'infrastructure informatique mère est localisée exclusivement en Union Européenne chez
-                    :</strong><br />
-                AWS Ireland (Amazon Web Services)<br />
-                Burlington Plaza, Burlington Road, Dublin 4, Irlande
-            </p>
-
-            <h3 class="text-2xl font-bold mt-8 mb-4">Propriété Intellectuelle (Copyright)</h3>
-            <p>L'ensemble de ce site et de cette application (Base de données des 60 Spots, Codes Sources, Intelligence
-                Artificielle Prévisionnelle, API Custom Swagger, Design UI Glassmorphism, Logotype SwellSync) relève de
-                la législation française et internationale sur le droit d’auteur et la propriété intellectuelle.</p>
-            <p><strong>Toute reproduction, représentation, modification, publication, adaptation totale ou
-                    partielle</strong> des éléments du site, quel que soit le moyen ou le procédé utilisé, "scrapping"
-                du site inclus, est loggé, repéré techniquement et formellement interdite sans l'autorisation écrite
-                préalable de SWELLSYNC TECHNOLOGY.</p>
-
         </div>
-    </main>
+    </section>
 
+    <section class="section section-white">
+        <div class="container">
+            <div class="legal-content">
 
-    <!-- Footer Professionnel -->
-    <footer class="bg-[#0a1516] text-slate-400 py-16 border-t border-white/5 mt-12 w-full">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
-                <div class="flex flex-col gap-4">
-                    <div class="flex items-center gap-2">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo"
-                            class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
-                        <span class="font-display font-black text-xl text-white tracking-tight">Swell<span
-                                class="text-primary">Sync</span></span>
-                    </div>
-                    <p class="text-sm leading-relaxed mt-2">La plateforme de prévision de surf la plus technologique du
-                        marché. Surf smart, ride hard.</p>
-                    <div class="flex gap-4 mt-4">
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-instagram"></i></a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-tiktok"></i></a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-x-twitter"></i></a>
-                    </div>
+                <div class="legal-card">
+                    <h3 style="margin-top:0">Éditeur du Site / Propriétaire</h3>
+                    <p><strong>Raison sociale :</strong> SWELLSYNC TECHNOLOGY S.A.S</p>
+                    <p><strong>Capital social :</strong> 10 000,00 Euros</p>
+                    <p><strong>Siège social :</strong> Pépinière d'entreprise Pédebert, Avenue des Tisserands, 40150
+                        Soorts-Hossegor, FRANCE.</p>
+                    <p><strong>RCS :</strong> Dax B 999 999 999</p>
+                    <p><strong>N° de TVA Intracommunautaire :</strong> FR 99 999 999 999</p>
+                    <p><strong>Téléphone :</strong> +33 (0)5 99 99 99 99 (Non surtaxé, Lun–Ven 9h–18h)</p>
+                    <p><strong>Directeur de la Publication :</strong> Max, Gérant-Fondateur.</p>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">SwellSync</h4>
-                    <a href="index.html" class="text-sm hover:text-primary transition-colors">La Carte Interactive</a>
-                    <a href="#" class="text-sm hover:text-primary transition-colors">Spots Tendances</a>
-                    <a href="#" class="text-sm hover:text-primary transition-colors">Abonnement PRO</a>
+
+                <h3>Hébergement des Services</h3>
+                <p>Afin de garantir une disponibilité de 99.9% et des latences de 5ms, les serveurs de production (Base
+                    de Données, API Météo, Application) et le réseau sont gérés par de prestataires cloud
+                    ultra-sécurisés.</p>
+                <p><strong>L'infrastructure informatique mère est localisée exclusivement en Union Européenne chez
+                        :</strong><br>
+                    AWS Ireland (Amazon Web Services)<br>
+                    Burlington Plaza, Burlington Road, Dublin 4, Irlande</p>
+
+                <h3>Propriété Intellectuelle (Copyright)</h3>
+                <p>L'ensemble de ce site et de cette application (Base de données des 60 Spots, Codes Sources,
+                    Intelligence Artificielle Prévisionnelle, API Custom, Design UI, Logotype SwellSync) relève de la
+                    législation française et internationale sur le droit d'auteur et la propriété intellectuelle.</p>
+                <p><strong>Toute reproduction, représentation, modification, publication, adaptation totale ou
+                        partielle</strong> des éléments du site, quel que soit le moyen ou le procédé utilisé,
+                    "scrapping" du site inclus, est loggé, repéré techniquement et formellement interdite sans
+                    l'autorisation écrite préalable de SWELLSYNC TECHNOLOGY.</p>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
+                            src="/assets/images/swellsync_logo.png" alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France.</p>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Légal</h4>
-                    <button onclick="openLegalModal('cgv')"
-                        class="text-left text-sm hover:text-primary transition-colors">Conditions Générales
-                        (CGV)</button>
-                    <button onclick="openLegalModal('privacy')"
-                        class="text-left text-sm hover:text-primary transition-colors">Politique de
-                        Confidentialité</button>
-                    <button onclick="openLegalModal('legal')"
-                        class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions
-                        Légales</button>
-                    <button onclick="openLegalModal('cookies')"
-                        class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Assistance</h4>
-                    <p class="text-sm mb-2">Notre équipe est basée à Hossegor, France. Nous répondons en moins de 24h.
-                    </p>
-                    <a href="mailto:support@swellsync.com"
-                        class="text-primary font-bold hover:underline flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-[16px]">mail</span>
-                        support@swellsync.com
-                    </a>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium">
-                <p>&copy; 2026 SwellSync Technology. Tous droits réservés.</p>
-                <div class="flex items-center gap-2 mt-4 md:mt-0">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    Serveurs Opérationnels (99.9% Uptime)
-                </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
             </div>
         </div>
     </footer>
 
-    <!-- Légal Modals Container -->
-    <div id="legal-modal-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
-        <div id="legal-modal-container"
-            class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-full overflow-y-auto custom-scrollbar relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col">
-            <div
-                class="w-full flex justify-end p-6 border-b border-white/5 sticky top-0 bg-background-dark/90 backdrop-blur z-20">
-                <button onclick="closeLegalModal()"
-                    class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div id="legal-modal-content" class="p-8 md:p-12 w-full">
-                <!-- Injected via JS -->
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Scripts -->
-    <script src="js/legal_modals.js?v=6"></script>
-    <script src="js/global_search.js" defer></script>
-
-
-    <!-- Global Search Modal -->
-    <div id="global-search-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
-        <div id="global-search-container"
-            class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
-
-            <!-- Search Input Area -->
-            <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
-                <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
-                <input type="text" id="global-search-input"
-                    class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
-                    placeholder="Chercher un spot, une page, une info..." autocomplete="off">
-                <button onclick="closeGlobalSearchModal()"
-                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-xl">close</span>
-                </button>
-            </div>
-
-            <!-- Search Results Area -->
-            <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
-                <div class="text-center py-10 text-slate-500 text-sm font-medium">
-                    Que cherchez-vous ? 🏄
-                </div>
-            </div>
-
-            <!-- Footer Hints -->
-            <div
-                class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
-                <div class="flex items-center gap-2">
-                    <span class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
-                            class="font-sans mr-1">&#8593;&#8595;</span> Naviguer</span>
-                    <span
-                        class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entr&#233;e
-                        <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
-                </div>
-                <div>SwellSync Global Search</div>
-            </div>
-        </div>
-    </div>
-
-
+    <script>
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate').forEach(el => ao.observe(el));
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
+    </script>
 </body>
 
 </html>

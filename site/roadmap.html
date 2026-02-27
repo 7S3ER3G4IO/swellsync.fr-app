@@ -293,19 +293,64 @@
         const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
         document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
 
-        const votes = JSON.parse(localStorage.getItem('sw_votes') || '{}');
+        // Load real votes from API
+        const localVotes = JSON.parse(localStorage.getItem('sw_votes') || '{}');
+        fetch('/api/votes').then(r => r.json()).then(data => {
+            if (Array.isArray(data)) {
+                data.forEach(v => {
+                    const btn = document.querySelector('.vote-btn[data-id="' + v.feature_id + '"]');
+                    if (btn) {
+                        const cnt = btn.querySelector('.vcount');
+                        if (cnt) cnt.textContent = v.count;
+                    }
+                });
+            }
+            // Mark already voted (from localStorage as fallback)
+            Object.keys(localVotes).forEach(id => {
+                const btn = document.querySelector('.vote-btn[data-id="' + id + '"]');
+                if (btn) { btn.classList.add('voted'); const cnt = btn.querySelector('.vcount'); btn.innerHTML = '✅ Voté · <span class="vcount">' + (cnt ? cnt.textContent : '0') + '</span>'; }
+            });
+        }).catch(() => {
+            // Fallback: mark local votes
+            Object.keys(localVotes).forEach(id => {
+                const btn = document.querySelector('.vote-btn[data-id="' + id + '"]');
+                if (btn) { btn.classList.add('voted'); btn.innerHTML = '✅ Voté · <span class="vcount">' + btn.querySelector('.vcount').textContent + '</span>'; }
+            });
+        });
+
         function vote(btn) {
             const id = btn.dataset.id;
-            if (votes[id]) { return; }
-            votes[id] = true; localStorage.setItem('sw_votes', JSON.stringify(votes));
-            const cnt = btn.querySelector('.vcount');
-            cnt.textContent = parseInt(cnt.textContent) + 1;
-            btn.classList.add('voted'); btn.innerHTML = '✅ Voté · ' + cnt.outerHTML;
+            if (localVotes[id] || btn.classList.contains('voted')) return;
+            btn.disabled = true;
+            fetch('/api/votes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ feature_id: id })
+            }).then(r => r.json()).then(data => {
+                if (data.count !== undefined) {
+                    const cnt = btn.querySelector('.vcount');
+                    if (cnt) cnt.textContent = data.count;
+                    btn.classList.add('voted');
+                    btn.innerHTML = '✅ Voté · <span class="vcount">' + data.count + '</span>';
+                    localVotes[id] = true;
+                    localStorage.setItem('sw_votes', JSON.stringify(localVotes));
+                } else if (data.error === 'already_voted') {
+                    btn.classList.add('voted');
+                    const cnt = btn.querySelector('.vcount');
+                    btn.innerHTML = '✅ Voté · <span class="vcount">' + (cnt ? cnt.textContent : '?') + '</span>';
+                    localVotes[id] = true;
+                    localStorage.setItem('sw_votes', JSON.stringify(localVotes));
+                }
+            }).catch(() => {
+                // Fallback localStorage
+                localVotes[id] = true;
+                localStorage.setItem('sw_votes', JSON.stringify(localVotes));
+                const cnt = btn.querySelector('.vcount');
+                cnt.textContent = parseInt(cnt.textContent) + 1;
+                btn.classList.add('voted');
+                btn.innerHTML = '✅ Voté · ' + cnt.outerHTML;
+            });
         }
-        Object.keys(votes).forEach(id => {
-            const btn = document.querySelector('.vote-btn[data-id="' + id + '"]');
-            if (btn) { btn.classList.add('voted'); btn.innerHTML = '✅ Voté · <span class="vcount">' + btn.querySelector('.vcount').textContent + '</span>'; }
-        });
 
         if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>

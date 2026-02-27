@@ -1,439 +1,259 @@
 <!DOCTYPE html>
-<html class="dark" lang="fr">
+<html lang="fr">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SwellSync | Légal</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#00bad6",
-                        "background-light": "#f5f8f8",
-                        "background-dark": "#0f2123",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
-    <!-- Meta-Tags Web App & PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f2123">
-    <!-- Optimisations Mobile pures Apple -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SwellSync">
-    <link rel="apple-touch-icon" href="assets/images/swellsync_icon.svg">
-    <link rel="icon" type="image/svg+xml" href="assets/images/swellsync_icon.svg">
-    <link rel="shortcut icon" href="assets/images/swellsync_icon.svg">
-    <!-- Nos styles personnels (Pour les Toasts Custom et variables) -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/light-mode.css">
-    <link rel="stylesheet" href="css/mobile.css">
-    <!-- FontAwesome pour les logos de marques -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-
-</head>
-
-<body
-    class="bg-background-dark text-white font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
-    <!-- Navbar Site Vitrine -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Cookies — SwellSync</title>
+    <meta name="description"
+        content="Contrôlez les cookies et traceurs utilisés sur SwellSync. Privacy by Design, aucun traceur publicitaire.">
+    <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/site/style.css">
     <style>
-        .site-navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: rgba(7, 13, 26, 0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 0 24px;
-            height: 64px;
+        .legal-content {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .legal-content h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text);
+            margin: 40px 0 16px;
+        }
+
+        .legal-content p {
+            font-size: 15px;
+            color: var(--text2);
+            line-height: 1.9;
+            margin-bottom: 14px;
+        }
+
+        .legal-content strong {
+            color: var(--text);
+        }
+
+        .cookie-option {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .site-nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: #f0f4ff;
-        }
-
-        .site-nav-logo img {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-        }
-
-        .site-nav-logo span {
-            font-family: 'Lexend', sans-serif;
-            font-weight: 800;
-            font-size: 20px;
-            color: #f0f4ff;
-        }
-
-        .site-nav-logo .site-nav-accent {
-            color: #00bad6;
-        }
-
-        .site-nav-links {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-
-        .site-nav-links a {
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #94a8cc;
-            text-decoration: none;
+            gap: 20px;
+            margin-bottom: 14px;
             transition: all .2s;
         }
 
-        .site-nav-links a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f0f4ff;
+        .cookie-option:hover {
+            border-color: rgba(0, 150, 199, .3);
         }
 
-        .site-nav-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 20px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #00bad6, #00d696);
-            color: #fff;
+        .cookie-option h4 {
+            font-size: 1rem;
             font-weight: 700;
-            font-size: 14px;
-            text-decoration: none;
+            margin: 0 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cookie-option p {
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .cookie-badge {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        .cookie-badge.always {
+            background: var(--bg3);
+            color: var(--text3);
+        }
+
+        .toggle-sw {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .toggle-sw input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-sw .slider {
+            position: absolute;
+            inset: 0;
+            background: var(--bg3);
+            border-radius: 28px;
+            cursor: pointer;
             transition: all .3s;
         }
 
-        .site-nav-cta:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(0, 186, 214, 0.3);
+        .toggle-sw .slider::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            left: 3px;
+            top: 3px;
+            transition: all .3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
         }
 
-        .site-nav-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #f0f4ff;
-            align-items: center;
+        .toggle-sw input:checked+.slider {
+            background: var(--accent);
         }
 
-        @media (max-width: 768px) {
-
-            .site-nav-links,
-            .site-nav-cta {
-                display: none;
-            }
-
-            .site-nav-menu-btn {
-                display: flex;
-            }
-
-            .site-nav-links.open {
-                display: flex;
-                flex-direction: column;
-                position: fixed;
-                top: 64px;
-                left: 0;
-                right: 0;
-                background: rgba(7, 13, 26, 0.97);
-                padding: 16px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-                z-index: 99;
-            }
+        .toggle-sw input:checked+.slider::before {
+            transform: translateX(24px);
         }
     </style>
-    <nav class="site-navbar">
-        <a href="/" class="site-nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="site-nav-accent">Sync</span></span>
-        </a>
-        <div class="site-nav-links" id="siteNavLinks">
-            <a href="/">Accueil</a>
-            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
-            <a href="/site/spots.html">Spots</a>
-            <a href="/site/tarifs.html">Tarifs</a>
-            <a href="/site/faq.html">FAQ</a>
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
+        <div class="nav-links" id="navLinks">
+            <a href="/">Accueil</a><a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a><a href="/site/faq.html">FAQ</a><a
+                href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="site-nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="site-nav-menu-btn"
-            onclick="var n=document.getElementById('siteNavLinks');n.classList.toggle('open')">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <!-- Contenu Légal -->
-    <main class="pt-32 pb-24 max-w-4xl mx-auto px-6 relative z-10">
-        <div class="mb-12 border-b border-white/10 pb-8">
-            <span class="text-primary font-bold tracking-widest uppercase text-xs mb-2 block">Préférences
-                Utilisateur</span>
-            <h1 class="text-4xl md:text-5xl font-black mb-4">Gérer mes <br /><span class="text-primary">Traceurs
-                    (Cookies)</span></h1>
-            <p class="text-slate-400 font-medium">Contrôlez finement l'empreinte numérique que vous laissez sur la
-                plateforme.</p>
+    <section style="padding:140px 0 60px;background:var(--bg)">
+        <div class="container">
+            <div class="legal-content">
+                <div class="section-tag animate">🍪 Préférences</div>
+                <h1 class="animate animate-delay-1" style="font-size:clamp(2rem,4.5vw,3rem);margin:18px 0 12px">Gérer
+                    mes <em
+                        style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">Traceurs
+                        (Cookies)</em></h1>
+                <p class="animate animate-delay-2" style="color:var(--text3);font-size:14px">Contrôlez finement
+                    l'empreinte numérique que vous laissez sur la plateforme.</p>
+            </div>
         </div>
+    </section>
 
-        <div
-            class="prose prose-invert prose-p:text-slate-400 prose-headings:text-white prose-a:text-primary max-w-none">
+    <section class="section section-white">
+        <div class="container">
+            <div class="legal-content">
 
-            <p class="text-lg">Lors de votre consultation de l'application SwellSync, des informations relatives à votre
-                navigation sont susceptibles d'être enregistrées dans des fichiers "Cookies", installés sur votre
-                terminal (Smartphone, PC, Tablette).</p>
-            <p class="mb-8">Nous avons fait le choix de la transparence et d'une conception "Privacy by Design" :
-                <strong>Nous n'utilisons aucun traceur publicitaire intrusif.</strong>
-            </p>
+                <p style="font-size:1rem">Lors de votre consultation de l'application SwellSync, des informations
+                    relatives à votre navigation sont susceptibles d'être enregistrées dans des fichiers "Cookies",
+                    installés sur votre terminal.</p>
+                <p style="margin-bottom:32px">Nous avons fait le choix de la transparence et d'une conception "Privacy
+                    by Design" : <strong>Nous n'utilisons aucun traceur publicitaire intrusif.</strong></p>
 
-            <h3 class="text-2xl font-bold mt-8 mb-4">Vos Préférences Globales</h3>
-            <div class="space-y-4">
+                <h3>Vos Préférences Globales</h3>
 
-                <!-- Option 1 : Toujours Actif -->
-                <div
-                    class="glass p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="cookie-option">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="material-symbols-outlined text-green-400">check_circle</span>
-                            <h4 class="font-bold text-white text-lg m-0 leading-none">Cookies Techniques Strictly
-                                Nécessaires</h4>
-                        </div>
-                        <p class="text-sm text-slate-400 m-0">Indispensables au site pour fonctionner (Sauvegarder
-                            l'état sombre, conserver votre Panier VIP PRO, maintenir votre connexion via 'JSON Web
-                            Token' sans vous déconnecter à chaque clic sur la carte).</p>
+                        <h4><span class="material-symbols-outlined"
+                                style="color:var(--accent2);font-size:20px">check_circle</span> Cookies Techniques
+                            (Nécessaires)</h4>
+                        <p>Indispensables : sauvegarde du thème, panier VIP PRO, maintien de votre connexion via JWT.
+                        </p>
                     </div>
-                    <div class="shrink-0">
-                        <span
-                            class="text-[10px] text-background-dark font-black uppercase tracking-widest px-3 py-1 rounded bg-slate-300">Toujours
-                            Actif</span>
-                    </div>
+                    <span class="cookie-badge always">Toujours actif</span>
                 </div>
 
-                <!-- Option 2 : Optionnel -->
-                <div
-                    class="glass p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:border-primary/30 transition-colors">
+                <div class="cookie-option">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="material-symbols-outlined text-primary">analytics</span>
-                            <h4 class="font-bold text-white text-lg m-0 leading-none">Cookies de Performance
-                                d'Intelligence Artificielle</h4>
-                        </div>
-                        <p class="text-sm text-slate-400 m-0">Aide notre équipe (statistiques anonymisées) à savoir
-                            "Quels sont les 60 Spots les plus consultés hier ?", pour allouer aux serveurs Leaflet de la
-                            puissance serveur avant un très gros week-end.</p>
+                        <h4><span class="material-symbols-outlined"
+                                style="color:var(--accent);font-size:20px">analytics</span> Cookies de Performance IA
+                        </h4>
+                        <p>Statistiques anonymisées : quels sont les spots les plus consultés ? Permet d'allouer de la
+                            puissance serveur.</p>
                     </div>
-                    <div class="shrink-0">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" checked class="sr-only peer">
-                            <div
-                                class="w-14 h-7 bg-background-dark rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-slate-400 peer-checked:after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary border border-white/20">
-                            </div>
-                        </label>
-                    </div>
+                    <label class="toggle-sw"><input type="checkbox" checked id="perfCookie"><span
+                            class="slider"></span></label>
                 </div>
 
-                <!-- Option 3 : Optionnel -->
-                <div
-                    class="glass p-6 rounded-2xl border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:border-primary/30 transition-colors">
+                <div class="cookie-option">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="material-symbols-outlined text-orange-400">tune</span>
-                            <h4 class="font-bold text-white text-lg m-0 leading-none">Cookies de Fonctionnalités &
-                                Cartographie</h4>
-                        </div>
-                        <p class="text-sm text-slate-400 m-0">Mémorise votre comportement sur la "Carte Leaflet" : Sur
-                            quel niveau de Zoom Micro êtes vous resté en quittant l'App ? Quel "Filtre" pour les graphs
-                            de vent avez-vous activé hier ?</p>
+                        <h4><span class="material-symbols-outlined" style="color:#f59e0b;font-size:20px">tune</span>
+                            Cookies de Fonctionnalités & Cartographie</h4>
+                        <p>Mémorise votre zoom sur la carte Leaflet, vos filtres de vent, et vos paramètres de
+                            graphiques.</p>
                     </div>
-                    <div class="shrink-0">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" checked class="sr-only peer">
-                            <div
-                                class="w-14 h-7 bg-background-dark rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-slate-400 peer-checked:after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary border border-white/20">
-                            </div>
-                        </label>
-                    </div>
+                    <label class="toggle-sw"><input type="checkbox" checked id="funcCookie"><span
+                            class="slider"></span></label>
                 </div>
+
+                <button class="btn-primary" style="width:100%;justify-content:center;margin-top:28px;padding:16px"
+                    onclick="this.textContent='✅ Préférences sauvegardées';this.style.background='var(--accent2)';localStorage.setItem('cookie_pref',JSON.stringify({perf:document.getElementById('perfCookie').checked,func:document.getElementById('funcCookie').checked}))">
+                    Sauvegarder mes Préférences
+                </button>
+                <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:10px">Un Cookie de session
+                    valide pendant 6 mois sera posé pour retenir ce choix.</p>
 
             </div>
-
-            <button
-                class="w-full mt-8 bg-primary/10 hover:bg-primary text-primary hover:text-background-dark transition-all duration-300 py-4 rounded-xl font-black uppercase tracking-widest border border-primary/30"
-                onclick="alert('Vos préférences viennent d\'être sauvegardées sur votre terminal courant.')">
-                Sauvegarder mes Préférences
-            </button>
-            <p class="text-xs text-center mt-3 text-slate-500">Un Cookie de session valide pendant 6 mois sera posé pour
-                retenir ce choix actuel.</p>
-
         </div>
-    </main>
+    </section>
 
-
-    <!-- Footer Professionnel -->
-    <footer class="bg-[#0a1516] text-slate-400 py-16 border-t border-white/5 mt-12 w-full">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
-                <div class="flex flex-col gap-4">
-                    <div class="flex items-center gap-2">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo"
-                            class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
-                        <span class="font-display font-black text-xl text-white tracking-tight">Swell<span
-                                class="text-primary">Sync</span></span>
-                    </div>
-                    <p class="text-sm leading-relaxed mt-2">La plateforme de prévision de surf la plus technologique du
-                        marché. Surf smart, ride hard.</p>
-                    <div class="flex gap-4 mt-4">
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-instagram"></i></a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-tiktok"></i></a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-colors text-xl"><i
-                                class="fa-brands fa-x-twitter"></i></a>
-                    </div>
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
+                            src="/assets/images/swellsync_logo.png" alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France.</p>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">SwellSync</h4>
-                    <a href="index.html" class="text-sm hover:text-primary transition-colors">La Carte Interactive</a>
-                    <a href="#" class="text-sm hover:text-primary transition-colors">Spots Tendances</a>
-                    <a href="#" class="text-sm hover:text-primary transition-colors">Abonnement PRO</a>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Légal</h4>
-                    <button onclick="openLegalModal('cgv')"
-                        class="text-left text-sm hover:text-primary transition-colors">Conditions Générales
-                        (CGV)</button>
-                    <button onclick="openLegalModal('privacy')"
-                        class="text-left text-sm hover:text-primary transition-colors">Politique de
-                        Confidentialité</button>
-                    <button onclick="openLegalModal('legal')"
-                        class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions
-                        Légales</button>
-                    <button onclick="openLegalModal('cookies')"
-                        class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
                 </div>
-                <div class="flex flex-col gap-4">
-                    <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Assistance</h4>
-                    <p class="text-sm mb-2">Notre équipe est basée à Hossegor, France. Nous répondons en moins de 24h.
-                    </p>
-                    <a href="mailto:support@swellsync.com"
-                        class="text-primary font-bold hover:underline flex items-center gap-2 text-sm">
-                        <span class="material-symbols-outlined text-[16px]">mail</span>
-                        support@swellsync.com
-                    </a>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 font-medium">
-                <p>&copy; 2026 SwellSync Technology. Tous droits réservés.</p>
-                <div class="flex items-center gap-2 mt-4 md:mt-0">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                    Serveurs Opérationnels (99.9% Uptime)
-                </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
             </div>
         </div>
     </footer>
 
-    <!-- Légal Modals Container -->
-    <div id="legal-modal-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
-        <div id="legal-modal-container"
-            class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-full overflow-y-auto custom-scrollbar relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col">
-            <div
-                class="w-full flex justify-end p-6 border-b border-white/5 sticky top-0 bg-background-dark/90 backdrop-blur z-20">
-                <button onclick="closeLegalModal()"
-                    class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div id="legal-modal-content" class="p-8 md:p-12 w-full">
-                <!-- Injected via JS -->
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Scripts -->
-    <script src="js/legal_modals.js?v=6"></script>
-    <script src="js/global_search.js" defer></script>
-
-
-    <!-- Global Search Modal -->
-    <div id="global-search-backdrop"
-        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
-        <div id="global-search-container"
-            class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
-
-            <!-- Search Input Area -->
-            <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
-                <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
-                <input type="text" id="global-search-input"
-                    class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
-                    placeholder="Chercher un spot, une page, une info..." autocomplete="off">
-                <button onclick="closeGlobalSearchModal()"
-                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-xl">close</span>
-                </button>
-            </div>
-
-            <!-- Search Results Area -->
-            <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
-                <div class="text-center py-10 text-slate-500 text-sm font-medium">
-                    Que cherchez-vous ? 🏄
-                </div>
-            </div>
-
-            <!-- Footer Hints -->
-            <div
-                class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
-                <div class="flex items-center gap-2">
-                    <span class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
-                            class="font-sans mr-1">&#8593;&#8595;</span> Naviguer</span>
-                    <span
-                        class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entr&#233;e
-                        <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
-                </div>
-                <div>SwellSync Global Search</div>
-            </div>
-        </div>
-    </div>
-
-
+    <script>
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate').forEach(el => ao.observe(el));
+        // Restore saved prefs
+        try { const p = JSON.parse(localStorage.getItem('cookie_pref')); if (p) { document.getElementById('perfCookie').checked = p.perf; document.getElementById('funcCookie').checked = p.func; } } catch { }
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
+    </script>
 </body>
 
 </html>
