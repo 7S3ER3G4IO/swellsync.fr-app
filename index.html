@@ -706,19 +706,28 @@
         setInterval(() => { if (slides.length > 0) moveCarousel(1); }, 5000);
 
         // ═══ DONNÉES LIVE ═══
-        fetch('/api/spots').then(r => r.json()).then(spots => {
-            const targets = ['Hossegor', 'Biarritz', 'La Torche'];
-            targets.forEach((name, i) => {
-                const spot = spots.find(s => s.name.includes(name));
-                if (spot && spot.forecast && spot.forecast.length > 0) {
-                    const f = spot.forecast[0];
-                    const idx = i + 1;
-                    document.getElementById('liveWave' + idx).textContent = (f.waveHeight || '—') + 'm';
-                    document.getElementById('liveWind' + idx).textContent = (f.windSpeed || '—') + 'km/h';
-                    document.getElementById('livePeriod' + idx).textContent = (f.wavePeriod || '—') + 's';
-                    document.getElementById('liveTemp' + idx).textContent = (f.waterTemp || '—') + '°C';
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+        fetch(SB_URL + '/rest/v1/spots?select=id,name,latitude,longitude&or=(name.ilike.%25Hossegor%25,name.ilike.%25Biarritz%25,name.ilike.%25Torche%25)&limit=3', {
+            headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+        }).then(r => r.json()).then(async spots => {
+            const targets = ['Hossegor', 'Biarritz', 'Torche'];
+            for (let i = 0; i < targets.length; i++) {
+                const spot = spots.find(s => s.name && s.name.includes(targets[i]));
+                if (spot) {
+                    try {
+                        const fc = await fetch('/api/spots/' + spot.id + '/forecast').then(r => r.json());
+                        if (fc && fc.data && fc.data.length > 0) {
+                            const f = fc.data[0];
+                            const idx = i + 1;
+                            document.getElementById('liveWave' + idx).textContent = (f.waveHeight || '—') + 'm';
+                            document.getElementById('liveWind' + idx).textContent = (f.windSpeed || '—') + 'km/h';
+                            document.getElementById('livePeriod' + idx).textContent = (f.wavePeriod || '—') + 's';
+                            document.getElementById('liveTemp' + idx).textContent = (f.waterTemp || '—') + '°C';
+                        }
+                    } catch { }
                 }
-            });
+            }
         }).catch(() => { });
 
         // ═══ BOUTON RETOUR EN HAUT ═══
