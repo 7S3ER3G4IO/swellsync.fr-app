@@ -519,6 +519,29 @@
                         explorer</p>
                 </section>
 
+                <!-- Surf Score du Jour -->
+                <section class="mt-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-emerald-400 text-xl">surfing</span>
+                        <h2 class="font-bold text-base">Surf Score du Jour</h2>
+                        <span class="ml-auto text-[10px] text-slate-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+                            Live
+                        </span>
+                    </div>
+                    <div id="surfScoreWidget" class="rounded-2xl bg-[#0f2438] border border-[#00bad6]/10 p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <p class="text-3xl font-black text-slate-500">—<span class="text-sm text-slate-600">/100</span></p>
+                                <p class="text-sm font-bold text-slate-500">Chargement…</p>
+                            </div>
+                        </div>
+                        <div class="h-2 rounded-full bg-[#080f1a] overflow-hidden">
+                            <div class="h-full rounded-full bg-slate-700 animate-pulse" style="width:30%"></div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- 🌅 Nouveau Widget — Conditions du Jour -->
                 <section class="mt-4 mb-2">
                     <div class="flex items-center gap-2 mb-3">
@@ -731,9 +754,12 @@
             const wWind = document.getElementById('wStatWind');
             const wWave = document.getElementById('wStatWave');
             const wTemp = document.getElementById('wStatTemp');
-            if (wWind) wWind.textContent = windSpeed !== '—' ? windSpeed : '15km/h';
-            if (wWave) wWave.textContent = waveH !== '—' ? waveH + 'm' : '1.5m';
-            if (wTemp) wTemp.textContent = waterTemp !== '—' ? waterTemp : '14°C';
+            if (wWind) wWind.textContent = windSpeed;
+            if (wWave) wWave.textContent = waveH !== '—' ? waveH + 'm' : '—';
+            if (wTemp) wTemp.textContent = waterTemp;
+
+            // Mettre à jour le surf score
+            updateSurfScore(waveH, windSpeed, waterTemp);
         }
 
         function renderList(spots) {
@@ -776,6 +802,14 @@
               </div>
             </a>`;
             document.getElementById('spotsList').innerHTML = '<p class="text-slate-500 text-sm px-2">Connecte-toi pour voir les conditions en direct 🌊</p>';
+            // Fallback données vent/houle
+            const wWind = document.getElementById('wStatWind');
+            const wWave = document.getElementById('wStatWave');
+            const wTemp = document.getElementById('wStatTemp');
+            if (wWind) wWind.textContent = '15km/h';
+            if (wWave) wWave.textContent = '2.4m';
+            if (wTemp) wTemp.textContent = '14°C';
+            updateSurfScore('2.4', '15km/h', '14°C');
         }
 
         // ── Recherche rapide ──────────────────────────────────
@@ -796,6 +830,41 @@
                   </div>
                 </a>`).join('');
             res.classList.remove('hidden');
+        }
+
+        // ── Surf Score du Jour ────────────────────────────────
+        function updateSurfScore(waveH, windSpeed, waterTemp) {
+            const el = document.getElementById('surfScoreWidget');
+            if (!el) return;
+            const wh = parseFloat(waveH) || 1.5;
+            const ws = parseInt(windSpeed) || 15;
+            const wt = parseInt(waterTemp) || 14;
+            // Calcul du score
+            const waveScore = Math.min(100, wh * 40);
+            const windScore = Math.max(0, 100 - ws * 5);
+            const tempScore = Math.min(100, wt * 5);
+            const total = Math.round(waveScore * 0.5 + windScore * 0.3 + tempScore * 0.2);
+            // Labels
+            const label = total >= 80 ? '🔥 Excellent' : total >= 60 ? '✅ Bon' : total >= 40 ? '🌊 Correct' : '😐 Calme';
+            const color = total >= 80 ? '#10b981' : total >= 60 ? '#00bad6' : total >= 40 ? '#f59e0b' : '#ef4444';
+            const windType = ws <= 10 ? '🟢 Glassy' : ws <= 20 ? '🟡 Modéré' : '🔴 Venteux';
+            const hour = new Date().getHours();
+            const bestTime = hour < 10 ? '🌅 Maintenant ! (matin tôt)' : hour < 14 ? '🕐 Début d\'après-midi' : '🌇 Session sunset 17h-19h';
+
+            el.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <p class="text-3xl font-black" style="color:${color}">${total}<span class="text-sm text-slate-400">/100</span></p>
+                        <p class="text-sm font-bold">${label}</p>
+                    </div>
+                    <div class="text-right space-y-1">
+                        <p class="text-[10px] text-slate-400">Vent : <span class="font-bold text-white">${windType}</span></p>
+                        <p class="text-[10px] text-slate-400">Meilleur créneau : <span class="font-bold text-white">${bestTime}</span></p>
+                    </div>
+                </div>
+                <div class="h-2 rounded-full bg-[#080f1a] overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-1000" style="width:${total}%;background:${color}"></div>
+                </div>`;
         }
 
         init();
@@ -1006,6 +1075,7 @@
     <script src="js/notif-badge.js"></script>
     <script src="js/stories.js"></script>
     <script src="/js/i18n.js"></script>
+    <script src="js/onboarding.js"></script>
     <script src="/js/push_notifs.js" defer></script>
 </body>
 
