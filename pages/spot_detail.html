@@ -590,7 +590,7 @@
 
             // Forecast
             try {
-                const fc = await fetch('/api/spots/' + SPOT_ID + '/forecast', { credentials: 'include' }).then(r => r.json());
+                const fc = await API.spots.forecast(SPOT_ID);
                 forecastData = fc;
                 if (fc.mock) document.getElementById('mockBadge').classList.remove('hidden');
                 if (fc.data?.length) {

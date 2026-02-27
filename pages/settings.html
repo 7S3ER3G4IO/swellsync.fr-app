@@ -219,6 +219,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/api.js"></script>
 </head>
 
 <body class="min-h-screen pb-10">
@@ -1175,11 +1177,11 @@
 
         // ── Pro-gate check ──
         let memberPlan = 'free';
-        fetch('/api/auth/me', { credentials: 'include' })
-            .then(r => r.json())
+        API.auth.me()
             .then(m => {
-                const data = m.member || m;
-                memberPlan = data?.is_pro === 1 || data?.is_pro === true ? 'pro' : 'free';
+                memberPlan = m?.is_pro === 1 || m?.is_pro === true ? 'pro' : 'free';
+                if (m?.name) document.getElementById('settingsName').textContent = m.name;
+                if (m?.email) document.getElementById('settingsEmail') && (document.getElementById('settingsEmail').textContent = m.email);
             })
             .catch(() => { });
 
@@ -1221,11 +1223,7 @@
             if (!toggle) return;
             toggle.classList.toggle('on');
             const isPrivate = toggle.classList.contains('on');
-            fetch('/api/auth/profile', {
-                method: 'PATCH', credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ is_private: isPrivate })
-            }).catch(() => { });
+            API.auth.updateProfile({ is_private: isPrivate }).catch(() => { });
             showToasty(isPrivate ? '🔒 Compte mis en privé' : '🔓 Compte mis en public');
         }
 
@@ -1235,11 +1233,7 @@
             if (!toggle) return;
             toggle.classList.toggle('on');
             const show = toggle.classList.contains('on');
-            fetch('/api/auth/profile', {
-                method: 'PATCH', credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ show_activity: show })
-            }).catch(() => { });
+            API.auth.updateProfile({ show_activity: show }).catch(() => { });
             showToasty(show ? '✅ Activité visible' : '🙈 Activité masquée');
         }
 
@@ -1253,22 +1247,21 @@
         };
 
         // Load notification prefs from API
-        fetch('/api/members/notifications-prefs', { credentials: 'include' })
-            .then(r => r.ok ? r.json() : null)
-            .then(prefs => {
-                if (!prefs) return;
-                const map = {
-                    notif_followers: 'toggle-followers-notif',
-                    notif_likes: 'toggle-likes-notif',
-                    notif_comments: 'toggle-comments-notif',
-                    notif_waves: 'toggle-waves-notif',
-                    notif_marketing: 'toggle-push-notif',
-                };
-                Object.entries(map).forEach(([key, id]) => {
-                    const el = document.getElementById(id);
-                    if (el) { if (prefs[key]) el.classList.add('on'); else el.classList.remove('on'); }
-                });
-            }).catch(() => { });
+        // Load prefs from localStorage (no server needed)
+        try {
+            const prefs = JSON.parse(localStorage.getItem('sw_notif_prefs') || '{}');
+            const map = {
+                notif_followers: 'toggle-followers-notif',
+                notif_likes: 'toggle-likes-notif',
+                notif_comments: 'toggle-comments-notif',
+                notif_waves: 'toggle-waves-notif',
+                notif_marketing: 'toggle-push-notif',
+            };
+            Object.entries(map).forEach(([key, id]) => {
+                const el = document.getElementById(id);
+                if (el) { if (prefs[key]) el.classList.add('on'); else el.classList.remove('on'); }
+            });
+        } catch { }
 
         // Save notif prefs debounced
         let notifSaveTimeout = null;
@@ -1280,11 +1273,7 @@
                     const el = document.getElementById(id);
                     if (el) prefs[key] = el.classList.contains('on');
                 });
-                fetch('/api/members/notifications-prefs', {
-                    method: 'PUT', credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(prefs)
-                }).catch(() => { });
+                localStorage.setItem('sw_notif_prefs', JSON.stringify(prefs));
             }, 800);
         }
 
@@ -1535,11 +1524,7 @@
             const sel = document.querySelector('[name="surfLevel"]:checked');
             if (sel) {
                 localStorage.setItem('sw_surf_level', sel.value);
-                fetch('/api/auth/profile', {
-                    method: 'PATCH', credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ level: sel.value })
-                }).catch(() => { });
+                API.auth.updateProfile({ level: sel.value }).catch(() => { });
             }
             closeSheet('levelSheet');
             showToasty('✅ Niveau mis à jour');
@@ -1550,15 +1535,15 @@
             const list = document.getElementById('defaultSpotList');
             list.innerHTML = '<p class="text-slate-500 text-sm text-center py-3">Chargement des favoris…</p>';
             document.getElementById('defaultSpotSheet').classList.replace('hidden', 'flex');
-            fetch('/api/members/favorites', { credentials: 'include' })
-                .then(r => r.ok ? r.json() : [])
-                .then(spots => {
+            API.favorites.list()
+                .then(favs => {
+                    const spots = (favs || []).map(f => f.spots || f);
                     if (!spots.length) { list.innerHTML = '<p class="text-slate-400 text-xs text-center py-4">Aucun spot favori. Ajoutes-en depuis la carte !</p>'; return; }
                     const curr = localStorage.getItem('sw_default_spot') || '';
                     list.innerHTML = spots.map(s => `
                         <label class="flex items-center gap-3 p-3 border-b border-white/5 cursor-pointer hover:bg-white/3">
-                            <input type="radio" name="defaultSpot" value="${s.spot_id}" ${s.name === curr ? 'checked' : ''} class="accent-[#00bad6]"/>
-                            <div><p class="font-bold text-sm">${s.name}</p><p class="text-[11px] text-slate-500">${s.location || ''}</p></div>
+                            <input type="radio" name="defaultSpot" value="${s.spot_id || s.id}" ${(s.name || '') === curr ? 'checked' : ''} class="accent-[#00bad6]"/>
+                            <div><p class="font-bold text-sm">${s.name || ''}</p><p class="text-[11px] text-slate-500">${s.location || ''}</p></div>
                         </label>`).join('');
                 }).catch(() => { list.innerHTML = '<p class="text-red-400 text-xs text-center py-4">Erreur</p>'; });
         }

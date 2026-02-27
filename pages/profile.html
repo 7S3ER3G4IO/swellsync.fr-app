@@ -507,8 +507,7 @@
 
         async function loadPostsGrid() {
             try {
-                const r = await fetch('/api/community/posts?limit=12', { credentials: 'include' });
-                const posts = await r.json();
+                const posts = await API.community.posts();
                 const myPosts = posts.filter(p => p.member_id === me?.id && p.image_url);
                 const grid = document.getElementById('postsGrid');
                 const empty = document.getElementById('postsEmpty');
@@ -673,28 +672,7 @@
 
         // Push Notifications
         async function enablePush() {
-            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-                toast('Notifications push non supportées sur ce navigateur', 'err'); return;
-            }
-            try {
-                const keyRes = await fetch('/api/push/vapid-public-key').then(r => r.json());
-                if (keyRes.error) { toast('Push non configuré sur le serveur', 'err'); return; }
-                const perm = await Notification.requestPermission();
-                if (perm !== 'granted') { toast('Permission refusée', 'err'); return; }
-                const reg = await navigator.serviceWorker.ready;
-                const sub = await reg.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(keyRes.publicKey)
-                });
-                await fetch('/api/members/push-subscribe', {
-                    method: 'POST', credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ subscription: sub })
-                });
-                document.getElementById('pushStatus').textContent = '✅ Actif';
-                document.getElementById('pushStatus').className = 'text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400';
-                toast('🔔 Notifications activées !');
-            } catch (e) { toast('Erreur : ' + e.message, 'err'); }
+            toast('🔔 Les notifications push seront bientôt disponibles !');
         }
 
         function urlBase64ToUint8Array(base64String) {

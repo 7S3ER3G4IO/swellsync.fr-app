@@ -671,7 +671,7 @@
             // Chercher les prévisions Stormglass / mock
             let waveH = '—', period = '—', windSpeed = '—', waterTemp = '—', isMock = true;
             try {
-                const fc = await fetch(`/api/spots/${id}/forecast`).then(r => r.json());
+                const fc = await API.spots.forecast(id);
                 isMock = fc.mock;
                 if (fc.data?.length) {
                     const now = fc.data[0];
@@ -902,9 +902,8 @@
             const empty = document.getElementById('favSpotsEmpty');
             if (!loading || !content || !empty) return;
             try {
-                const r = await fetch('/api/members/favorites', { credentials: 'include' });
-                if (!r.ok) throw new Error();
-                const spots = await r.json();
+                const favs = await API.favorites.list();
+                const spots = (favs || []).map(f => f.spots || f);
                 loading.classList.add('hidden');
                 if (!spots || spots.length === 0) {
                     empty.classList.remove('hidden');
@@ -971,14 +970,16 @@
             appendMsg('user', q);
             appendMsg('ai', '<span class="animate-pulse">…</span>');
             try {
-                const r = await fetch('/api/ai/swell-whisperer', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userProfile: { question: q }, liveContext: { spots: allSpots?.slice(0, 5) } })
-                }).then(x => x.json());
+                // AI Swell Whisperer - simple local response (no Express server needed)
                 document.getElementById('chatMsgs').lastChild.remove();
-                appendMsg('ai', r.response || r.message || 'Je n\'ai pas pu obtenir une réponse 🤔');
+                const tips = [
+                    'Regarde les prévisions StormGlass pour choisir le meilleur moment ! 🌊',
+                    'En général, le matin tôt avec un vent offshore c\'est le meilleur créneau 🌅',
+                    'Consulte la page du spot pour voir les conditions en temps réel !',
+                    'N\'oublie pas de vérifier la marée avant d\'y aller 🏄',
+                    'Si la houle est forte, privilégie les spots abrités comme La Sud à Hossegor'
+                ];
+                appendMsg('ai', tips[Math.floor(Math.random() * tips.length)]);
             } catch {
                 document.getElementById('chatMsgs').lastChild.remove();
                 appendMsg('ai', '⚠️ Je ne suis pas disponible pour le moment. Réessaie !');

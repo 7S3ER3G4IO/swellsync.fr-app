@@ -208,6 +208,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/api.js"></script>
 </head>
 
 <body class="min-h-screen pb-10">
@@ -294,9 +296,8 @@
         let currentCat = 'region';
 
         // Check pro
-        fetch('/api/auth/me', { credentials: 'include' })
-            .then(r => r.json())
-            .then(m => { isPro = (m.member || m)?.plan === 'pro' || (m.member || m)?.isPro; renderGrid(); })
+        API.auth.me()
+            .then(m => { isPro = m?.plan === 'pro' || m?.isPro; renderGrid(); })
             .catch(() => renderGrid());
 
         function switchCategory(cat, btn) {
@@ -426,8 +427,8 @@
         }
     </script>
     <script src="js/adsense.js"></script>
-<script src="js/share-social.js"></script>
-<script src="js/ui-components.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
 </body>
 

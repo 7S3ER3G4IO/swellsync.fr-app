@@ -148,18 +148,67 @@
     <script src="js/theme.js"></script>
 
     <style>
-      :root { --bg-primary: #080f1a; --bg-card: #0f2438; --bg-nav: rgba(8,15,26,0.95); --text-primary: #f1f5f9; --text-secondary: #94a3b8; --border-color: rgba(0,186,214,0.2); }
-      .light { --bg-primary: #f0f4f8; --bg-card: #ffffff; --bg-nav: rgba(255,255,255,0.95); --text-primary: #0f172a; --text-secondary: #475569; --border-color: rgba(0,186,214,0.15); }
-      .light body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
-      .light .card, .light [class*="bg-[#0f2438]"] { background: var(--bg-card) !important; }
-      .light [class*="bg-[#080f1a]"] { background: var(--bg-primary) !important; }
-      .light [class*="bg-[#0b1929]"] { background: #f8fafc !important; }
-      .light [class*="text-white"] { color: #0f172a !important; }
-      .light [class*="text-slate-400"], .light [class*="text-slate-500"] { color: #64748b !important; }
-      .light [class*="border-[#00bad6]"] { border-color: rgba(0,186,214,0.25) !important; }
-      .light nav[style*="--nav-bg"] { --nav-bg: rgba(255,255,255,0.95) !important; border-color: rgba(0,186,214,0.15) !important; }
-      .light .section-label { color: #334155 !important; }
-      .light .setting-row:hover { background: #e2e8f0 !important; }
+        :root {
+            --bg-primary: #080f1a;
+            --bg-card: #0f2438;
+            --bg-nav: rgba(8, 15, 26, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(0, 186, 214, 0.2);
+        }
+
+        .light {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 186, 214, 0.15);
+        }
+
+        .light body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .light .card,
+        .light [class*="bg-[#0f2438]"] {
+            background: var(--bg-card) !important;
+        }
+
+        .light [class*="bg-[#080f1a]"] {
+            background: var(--bg-primary) !important;
+        }
+
+        .light [class*="bg-[#0b1929]"] {
+            background: #f8fafc !important;
+        }
+
+        .light [class*="text-white"] {
+            color: #0f172a !important;
+        }
+
+        .light [class*="text-slate-400"],
+        .light [class*="text-slate-500"] {
+            color: #64748b !important;
+        }
+
+        .light [class*="border-[#00bad6]"] {
+            border-color: rgba(0, 186, 214, 0.25) !important;
+        }
+
+        .light nav[style*="--nav-bg"] {
+            --nav-bg: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 186, 214, 0.15) !important;
+        }
+
+        .light .section-label {
+            color: #334155 !important;
+        }
+
+        .light .setting-row:hover {
+            background: #e2e8f0 !important;
+        }
     </style>
 
     <link rel="manifest" href="/manifest.json">
@@ -167,6 +216,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/api.js"></script>
 </head>
 
 <body class="min-h-screen pb-20">
@@ -179,14 +230,16 @@
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         </a>
         <h1 class="font-black text-base flex-1">Centre d'aide</h1>
-        <div class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
+        <div
+            class="w-8 h-8 rounded-full bg-[#00bad6]/15 flex items-center justify-center active:scale-95 transition-transform">
             <span class="material-symbols-outlined text-[#00bad6] text-[18px]">help</span>
         </div>
     </header>
 
     <!-- Hero -->
     <div class="px-4 pt-5 pb-4 text-center">
-        <div class="w-16 h-16 rounded-2xl bg-[#00bad6]/15 flex items-center justify-center mx-auto mb-3 active:scale-95 transition-transform">
+        <div
+            class="w-16 h-16 rounded-2xl bg-[#00bad6]/15 flex items-center justify-center mx-auto mb-3 active:scale-95 transition-transform">
             <span class="material-symbols-outlined text-[#00bad6] text-3xl">support_agent</span>
         </div>
         <h2 class="font-black text-xl mb-1">Comment peut-on t'aider ? 🤙</h2>
@@ -457,12 +510,7 @@
             const subjectLine = encodeURIComponent('SwellSync Support - ' + subject);
             const body = encodeURIComponent(message);
             // Try API first, fallback to mailto
-            fetch('/api/contact', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject, message })
-            }).catch(() => {
+            API.contact.send({ subject, message }).catch(() => {
                 window.location.href = `mailto:support@swellsync.app?subject=${subjectLine}&body=${body}`;
             });
             document.getElementById('contactForm').classList.add('hidden');
@@ -489,19 +537,20 @@
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span>
         </a>
         <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="profile.html"><span
-                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person</span><span class="text-[10px] font-bold">Profil</span>
+                class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">person</span><span
+                class="text-[10px] font-bold">Profil</span>
             <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
         </a>
     </nav>
 
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
     </script>
-<script src="js/adsense.js"></script>
-<script src="js/share-social.js"></script>
-<script src="js/ui-components.js"></script>
+    <script src="js/adsense.js"></script>
+    <script src="js/share-social.js"></script>
+    <script src="js/ui-components.js"></script>
     <script src="js/notif-badge.js"></script>
 </body>
 

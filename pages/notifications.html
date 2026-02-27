@@ -127,6 +127,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/api.js"></script>
 </head>
 
 <body class="bg-[#080f1a] font-display text-slate-100 flex flex-col">
@@ -210,9 +212,7 @@
         // ── Load notifications ──
         async function loadNotifications() {
             try {
-                const r = await fetch('/api/members/notifications', { credentials: 'include' });
-                if (!r.ok) throw new Error('Non connecté');
-                notifications = await r.json();
+                notifications = await API.notifications.list();
                 renderNotifications();
                 updateCount();
             } catch {
@@ -295,24 +295,17 @@
         // ── Mark read ──
         async function markRead(id) {
             try {
-                await fetch('/api/members/notifications/read', {
-                    method: 'PUT', credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ids: [id] })
-                });
+                const sb = await getSupabase();
+                await sb.from('notifications').update({ is_read: true }).eq('id', id);
                 const n = notifications.find(x => x.id === id);
-                if (n) n.is_read = 1;
+                if (n) n.is_read = true;
             } catch { }
         }
 
         async function markAllRead() {
             try {
-                await fetch('/api/members/notifications/read', {
-                    method: 'PUT', credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
-                });
-                notifications.forEach(n => n.is_read = 1);
+                await API.notifications.markRead();
+                notifications.forEach(n => n.is_read = true);
                 renderNotifications();
                 showToast('✅ Toutes les notifications marquées comme lues');
             } catch { }
@@ -321,8 +314,7 @@
         // ── Update count badge ──
         async function updateCount() {
             try {
-                const r = await fetch('/api/members/notifications/count', { credentials: 'include' });
-                const data = await r.json();
+                const data = await API.notifications.count();
                 const badge = document.getElementById('navBadge');
                 if (data.count > 0) {
                     badge.textContent = data.count > 99 ? '99+' : data.count;
