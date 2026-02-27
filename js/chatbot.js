@@ -128,15 +128,21 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadSpotsCache() {
         if (spotsCache.length) return;
         try {
-            const r = await fetch('/api/spots');
-            if (r.ok) spotsCache = await r.json();
+            if (typeof API !== 'undefined') {
+                spotsCache = await API.spots.list() || [];
+            }
         } catch (e) { }
     }
 
     async function loadUserServerData() {
         try {
-            const r = await fetch('/api/members/dashboard', { credentials: 'include' });
-            if (r.ok) userServerData = await r.json();
+            if (typeof API !== 'undefined') {
+                const me = await API.auth.me();
+                if (me) {
+                    const favs = await API.favorites.list();
+                    userServerData = { ...me, favorites: favs || [] };
+                }
+            }
         } catch (e) { }
     }
 
@@ -475,33 +481,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // ─────────────────────────────────────────────
     async function fetchSpotConditions(spotId, spotName) {
         try {
-            const r = await fetch(`/api/spots/${spotId}`);
-            if (!r.ok) throw new Error('API error');
-            const spot = await r.json();
-            const cond = spot.current_conditions;
-            if (!cond) return `Données live indisponibles pour **${spotName}** pour le moment. Réessaie dans quelques instants.`;
+            // Use the Supabase spots data
+            await loadSpotsCache();
+            const spot = spotsCache.find(s => String(s.id) === String(spotId));
+            if (!spot) return `Données live indisponibles pour **${spotName}** pour le moment.`;
 
-            const h = cond.wave_height?.toFixed(1) || '?';
-            const p = cond.wave_period?.toFixed(0) || '?';
-            const wDir = cond.wind_direction_label || cond.wind_direction || '?';
-            const wSpd = cond.wind_speed ? cond.wind_speed.toFixed(0) : '?';
-            const swellDir = cond.swell_direction_label || '';
-            const hNum = parseFloat(cond.wave_height) || 0;
+            // Try to get forecast from API
+            let forecastData = null;
+            try {
+                if (typeof API !== 'undefined') forecastData = await API.spots.forecast(spotId);
+            } catch { }
 
-            // Qualité basée sur la hauteur de houle
+            const h = forecastData?.data?.[0]?.waveHeight?.toFixed(1) || '?';
+            const p = forecastData?.data?.[0]?.wavePeriod?.toFixed(0) || '?';
+            const wDir = forecastData?.data?.[0]?.windDirection || '?';
+            const wSpd = forecastData?.data?.[0]?.windSpeed ? forecastData.data[0].windSpeed.toFixed(0) : '?';
+            const hNum = parseFloat(h) || 0;
+
             let qualLabel = '💤 Plat';
-            let qualColor = '#64748b';
-            if (hNum >= 2.0) { qualLabel = '💜 Solide'; qualColor = '#c084fc'; }
-            else if (hNum >= 1.2) { qualLabel = '🔵 Épique'; qualColor = '#00bad6'; }
-            else if (hNum >= 0.6) { qualLabel = '🟢 Bon'; qualColor = '#4ade80'; }
-            else if (hNum >= 0.3) { qualLabel = '🟡 Moyen'; qualColor = '#facc15'; }
+            if (hNum >= 2.0) { qualLabel = '💜 Solide'; }
+            else if (hNum >= 1.2) { qualLabel = '🔵 Épique'; }
+            else if (hNum >= 0.6) { qualLabel = '🟢 Bon'; }
+            else if (hNum >= 0.3) { qualLabel = '🟡 Moyen'; }
 
             return `<div>
 <p style="color:#00bad6;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">🌊 ${spotName} — Live</p>
 <p style="margin:4px 0"><strong style="color:white">${h}m</strong> <span style="color:#64748b;font-size:11px">· Houle · ${p}s</span></p>
 <p style="margin:4px 0"><strong style="color:white">${wDir}</strong> <span style="color:#64748b;font-size:11px">· Vent · ${wSpd} kts</span></p>
-${swellDir ? `<p style="margin:4px 0;color:#94a3b8;font-size:11px">↗ Direction swell : ${swellDir}</p>` : ''}
-${score ? `<p style="margin:8px 0 4px 0;font-weight:800">${qualLabel}</p>` : ''}
+<p style="margin:8px 0 4px 0;font-weight:800">${qualLabel}</p>
 <a href="spot_detail.html?id=${spotId}" style="display:inline-block;margin-top:8px;color:#00bad6;font-size:11px;font-weight:700;text-decoration:none">Voir le spot complet →</a>
 </div>`;
         } catch (e) {

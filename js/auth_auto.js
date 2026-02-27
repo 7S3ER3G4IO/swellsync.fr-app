@@ -88,27 +88,25 @@
             updateNavUI(cachedUser);
         }
 
-        // Validation serveur (silencieuse, ne bloque pas l'affichage)
+        // Validation Supabase (silencieuse, ne bloque pas l'affichage)
         try {
-            const r = await fetch('/api/auth/me', {
-                headers: { Authorization: `Bearer ${token}` },
-                signal: AbortSignal.timeout(4000)
-            });
-            if (r.ok) {
-                const user = await r.json();
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-                sessionStorage.setItem('swellsync_had_session', '1');
-                window.SwellAuth = { user, token, isLoggedIn: true };
-                updateNavUI(user);
-                document.dispatchEvent(new CustomEvent('swellsync:auth', { detail: { user, token } }));
-            } else if (r.status === 401) {
-                clearSession();
-                window.SwellAuth = { user: null, token: null, isLoggedIn: false };
-                updateNavUI(null);
-                if (cachedUser) showToast('🔒 Session expirée — reconnectez-vous', 'warning');
+            if (typeof API !== 'undefined') {
+                const user = await API.auth.me();
+                if (user) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+                    sessionStorage.setItem('swellsync_had_session', '1');
+                    window.SwellAuth = { user, token, isLoggedIn: true };
+                    updateNavUI(user);
+                    document.dispatchEvent(new CustomEvent('swellsync:auth', { detail: { user, token } }));
+                } else {
+                    clearSession();
+                    window.SwellAuth = { user: null, token: null, isLoggedIn: false };
+                    updateNavUI(null);
+                    if (cachedUser) showToast('🔒 Session expirée — reconnectez-vous', 'warning');
+                }
             }
         } catch (_) {
-            // Réseau down → on garde l'utilisateur du cache local
+            // API pas chargée ou réseau down → on garde l'utilisateur du cache local
         }
     }
 

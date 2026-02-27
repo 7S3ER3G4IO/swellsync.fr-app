@@ -287,8 +287,11 @@
         // Charger spots
         let spots;
         try {
-            const r = await fetch('/api/spots');
-            spots = await r.json();
+            if (typeof API !== 'undefined') {
+                spots = await API.spots.list();
+            } else {
+                throw new Error('API not loaded');
+            }
         } catch (e) {
             // fallback spots statiques
             spots = [

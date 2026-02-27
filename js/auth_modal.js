@@ -8,13 +8,12 @@ let currentAuthIdentifier = '';
 // ──────────────────────────────────────────────────
 async function checkServerSession() {
     try {
-        const r = await fetch('/api/auth/me', { credentials: 'include' });
-        if (r.ok) {
-            const user = await r.json();
-            // Synchroniser le localStorage avec les données serveur
+        if (typeof API === 'undefined') return;
+        const user = await API.auth.me();
+        if (user) {
             const userData = {
                 identifier: user.email,
-                name: user.name || user.email.split('@')[0],
+                name: user.name || user.email?.split('@')[0],
                 is_pro: user.is_pro,
                 id: user.id,
                 loggedInAt: Date.now(),
@@ -24,7 +23,7 @@ async function checkServerSession() {
             updateProfileUI(userData);
         }
     } catch (e) {
-        // Pas connecté ou serveur indisponible — silencieux
+        // Pas connecté — silencieux
     }
 }
 
@@ -229,12 +228,10 @@ function renderFavorites() {
 
 async function logoutProfile() {
     try {
-        // Effacer le cookie JWT côté serveur
-        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        if (typeof API !== 'undefined') await API.auth.logout();
     } catch (e) { }
     localStorage.removeItem('swellsync_user');
     Toast.show('Déconnexion réussie ! A bientôt. 🌊', 'info');
-    // Reset UI
     const btnAvatar = document.getElementById('btn-login-avatar');
     const statusIcon = document.getElementById('login-status-icon');
     const btn = document.getElementById('btn-login');
@@ -279,34 +276,24 @@ function resetAuthModal() {
 
 async function submitLead(provider, identifier, code = null) {
     try {
-        const response = await fetch('/api/auth/verify-code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ provider, identifier, code })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            const userData = {
-                provider,
-                identifier: data.user ? data.user.email : identifier,
-                name: data.user ? data.user.name : null,
-                is_pro: data.user ? data.user.is_pro : 0,
-                id: data.user ? data.user.id : null,
-                loggedInAt: Date.now(),
-                from_server: true
-            };
-            localStorage.setItem('swellsync_user', JSON.stringify(userData));
-            updateProfileUI(userData);
-            Toast.show(`Bienvenue sur SwellSync ! 🏄‍♂️`, 'success');
-            setTimeout(() => closeAuthModal(), 1200);
-        } else {
-            Toast.show(`Oups: ${data.error || 'Erreur inconnue.'}`, 'error');
-        }
+        if (typeof API === 'undefined') { Toast.show('Chargement...', 'info'); return; }
+        const result = await API.auth.verifyCode(identifier, code);
+        const user = await API.auth.me();
+        const userData = {
+            provider,
+            identifier: user?.email || identifier,
+            name: user?.name || identifier.split('@')[0],
+            is_pro: user?.is_pro || 0,
+            id: user?.id || null,
+            loggedInAt: Date.now(),
+            from_server: true
+        };
+        localStorage.setItem('swellsync_user', JSON.stringify(userData));
+        updateProfileUI(userData);
+        Toast.show(`Bienvenue sur SwellSync ! 🏄‍♂️`, 'success');
+        setTimeout(() => closeAuthModal(), 1200);
     } catch (e) {
-        Toast.show(`Erreur réseau lors de la transaction.`, 'error');
+        Toast.show(`Oups: ${e.message || 'Erreur inconnue.'}`, 'error');
     }
 }
 
@@ -328,32 +315,18 @@ async function handleAuthForm(e) {
     currentAuthIdentifier = identifier;
 
     try {
-        const response = await fetch('/api/auth/send-code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier })
-        });
+        if (typeof API === 'undefined') { Toast.show('Chargement...', 'info'); return; }
+        await API.auth.sendCode(identifier);
+        Toast.show(`Code de sécurité envoyé au ${identifier}... 🔒`, 'info');
 
-        const data = await response.json();
-
-        if (response.ok) {
-            Toast.show(`Code de sécurité envoyé au ${identifier}... 🔒`, 'info');
-
-            // Switch UI to Step 2
-            document.getElementById('auth-step-1').classList.add('hidden');
-            document.getElementById('auth-step-1').classList.remove('flex');
-
-            document.getElementById('auth-identifier-display').textContent = identifier;
-
-            document.getElementById('auth-step-2').classList.remove('hidden');
-            document.getElementById('auth-step-2').classList.add('flex');
-
-            document.querySelectorAll('.code-input')[0].focus();
-        } else {
-            Toast.show(`Erreur: ${data.error}`, 'error');
-        }
+        document.getElementById('auth-step-1').classList.add('hidden');
+        document.getElementById('auth-step-1').classList.remove('flex');
+        document.getElementById('auth-identifier-display').textContent = identifier;
+        document.getElementById('auth-step-2').classList.remove('hidden');
+        document.getElementById('auth-step-2').classList.add('flex');
+        document.querySelectorAll('.code-input')[0].focus();
     } catch (error) {
-        Toast.show(`Impossible de contacter le serveur.`, 'error');
+        Toast.show(`Erreur: ${error.message || 'Impossible de contacter le serveur.'}`, 'error');
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;

@@ -19,14 +19,32 @@
     // ── Charger les stories ──
     async function loadStories() {
         try {
-            const me = await fetch('/api/auth/me', { credentials: 'include' }).then(r => r.json()).catch(() => null);
-            myMemberId = me?.id || null;
+            if (typeof API !== 'undefined') {
+                const me = await API.auth.me();
+                myMemberId = me?.id || null;
+            }
         } catch { }
 
         try {
-            const r = await fetch('/api/stories', { credentials: 'include' });
-            if (!r.ok) return;
-            allStoryGroups = await r.json();
+            if (typeof API === 'undefined') return;
+            const sb = await getSupabase();
+            const { data } = await sb.from('stories')
+                .select('*, members(name, avatar_url)')
+                .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+                .order('created_at', { ascending: false });
+            // Group by author
+            const grouped = {};
+            (data || []).forEach(s => {
+                const key = s.member_id;
+                if (!grouped[key]) grouped[key] = {
+                    author_name: s.members?.name || 'Inconnu',
+                    author_avatar: s.members?.avatar_url || null,
+                    has_unseen: true,
+                    stories: []
+                };
+                grouped[key].stories.push(s);
+            });
+            allStoryGroups = Object.values(grouped);
             renderStoriesBar();
         } catch { }
     }
@@ -95,7 +113,10 @@
         if (!story) { closeViewer(); return; }
 
         // Marquer comme vue
-        fetch(`/api/stories/${story.id}/view`, { method: 'POST', credentials: 'include' }).catch(() => { });
+        // Marquer comme vue via Supabase
+        if (typeof getSupabase !== 'undefined') {
+            getSupabase().then(sb => sb.from('story_views').upsert({ story_id: story.id, member_id: myMemberId }).catch(() => { }));
+        }
 
         let viewer = document.getElementById('story-viewer');
         if (!viewer) {
@@ -218,7 +239,8 @@
     // ── Suppression ──
     async function deleteStory(storyId) {
         try {
-            await fetch(`/api/stories/${storyId}`, { method: 'DELETE', credentials: 'include' });
+            const sb = await getSupabase();
+            await sb.from('stories').delete().eq('id', storyId).eq('member_id', myMemberId);
             closeViewer();
             showToast('Story supprimée 🗑️');
         } catch { showToast('Erreur', '#ef4444'); }
@@ -228,8 +250,10 @@
     async function showViewers(storyId) {
         clearTimeout(storyTimer);
         try {
-            const r = await fetch(`/api/stories/${storyId}/viewers`, { credentials: 'include' });
-            const viewers = await r.json();
+            const sb = await getSupabase();
+            const { data: viewers } = await sb.from('story_views')
+                .select('*, members(name, avatar_url)')
+                .eq('story_id', storyId);
 
             let panel = document.getElementById('story-viewers-panel');
             if (panel) panel.remove();
@@ -403,24 +427,40 @@
         btn.disabled = true;
 
         try {
-            const r = await fetch('/api/stories', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    image: selectedImageBase64,
-                    text: document.getElementById('story-text-input')?.value || '',
-                    textColor: document.getElementById('story-text-color')?.value || '#ffffff',
-                    textPosition: textPosition
-                })
+            const sb = await getSupabase();
+            // Upload image to Supabase Storage
+            const fileName = `stories/${myMemberId}_${Date.now()}.jpg`;
+            const base64Data = selectedImageBase64.split(',')[1];
+            const byteString = atob(base64Data);
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+            const blob = new Blob([ab], { type: 'image/jpeg' });
+
+            const { data: uploadData, error: uploadError } = await sb.storage
+                .from('avatars').upload(fileName, blob, { upsert: true });
+
+            let mediaUrl = selectedImageBase64; // fallback
+            if (!uploadError && uploadData) {
+                const { data: { publicUrl } } = sb.storage.from('avatars').getPublicUrl(fileName);
+                mediaUrl = publicUrl;
+            }
+
+            const { error } = await sb.from('stories').insert({
+                member_id: myMemberId,
+                media_url: mediaUrl,
+                media_type: 'image',
+                text_overlay: document.getElementById('story-text-input')?.value || '',
+                text_color: document.getElementById('story-text-color')?.value || '#ffffff',
+                text_position: textPosition
             });
-            const data = await r.json();
-            if (data.ok) {
+
+            if (!error) {
                 closeCreator();
                 showToast('Story publiée ! 📸');
                 loadStories();
             } else {
-                showToast(data.error || 'Erreur', '#ef4444');
+                showToast(error.message || 'Erreur', '#ef4444');
                 btn.textContent = '📸 Publier la Story';
                 btn.disabled = false;
             }

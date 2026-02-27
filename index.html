@@ -716,7 +716,7 @@
                 const spot = spots.find(s => s.name && s.name.includes(targets[i]));
                 if (spot) {
                     try {
-                        const fc = await fetch('/api/spots/' + spot.id + '/forecast').then(r => r.json());
+                        const fc = await fetch('/api/spots/' + spot.id + '/forecast').then(r => r.json()).catch(() => null);
                         if (fc && fc.data && fc.data.length > 0) {
                             const f = fc.data[0];
                             const idx = i + 1;

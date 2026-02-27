@@ -20,14 +20,9 @@
     function getPushState() { return localStorage.getItem(PUSH_KEY); }
     function setPushState(state) { localStorage.setItem(PUSH_KEY, state); }
 
-    // ── Récupérer la clé VAPID depuis le serveur ──
+    // Push notifications désactivées (pas de serveur VAPID)
     async function getVapidKey() {
-        try {
-            const r = await fetch('/api/push/vapid-public-key');
-            if (!r.ok) return null;
-            const data = await r.json();
-            return data.publicKey || null;
-        } catch { return null; }
+        return null;
     }
 
     // ── Souscrire au push et envoyer au serveur ──
@@ -45,13 +40,8 @@
                 });
             }
 
-            // Envoyer la souscription au backend
-            await fetch('/api/members/push-subscribe', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subscription: sub })
-            });
+            // Push subscribe désactivé (pas de serveur backend)
+            // await fetch('/api/members/push-subscribe', ...);
             return true;
         } catch (e) {
             console.warn('Push subscribe error:', e);

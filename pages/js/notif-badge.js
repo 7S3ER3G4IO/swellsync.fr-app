@@ -8,10 +8,9 @@
 
     async function updateNotifBadge() {
         try {
-            const r = await fetch('/api/members/notifications/count', { credentials: 'include' });
-            if (!r.ok) return;
-            const data = await r.json();
-            const count = data.count || 0;
+            if (typeof API === 'undefined') return;
+            const data = await API.notifications.count();
+            const count = (typeof data === 'number') ? data : (data?.count || 0);
 
             // Chercher le lien alertes/notifications dans la nav
             const navLinks = document.querySelectorAll('nav a');
