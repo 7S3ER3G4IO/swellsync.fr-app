@@ -651,9 +651,51 @@
             window.location.replace('/pages/home.html');
         }
 
-        // ── Instructions iOS ──
+        // ── iOS Install Modal ──
         function showIosInstall() {
-            alert('🍎 Sur iPhone / iPad :\n\n1. Ouvre swellsync.fr dans Safari\n2. Appuie sur le bouton Partager ⬆️\n3. Choisis "Sur l\'écran d\'accueil"\n\nL\'app sera installée comme une vraie app !');
+            const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent);
+            const isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(navigator.userAgent);
+
+            const modal = document.createElement('div');
+            modal.id = 'iosInstallModal';
+            modal.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);animation:fadeIn .3s ease';
+
+            const steps = isIos && isSafari ? [
+                { icon: '⬆️', title: 'Appuie sur Partager', desc: 'Le bouton en bas de Safari (carré avec une flèche)' },
+                { icon: '➕', title: '"Sur l\'écran d\'accueil"', desc: 'Fais défiler et appuie sur cette option' },
+                { icon: '✅', title: 'Appuie "Ajouter"', desc: 'L\'app apparaît sur ton écran d\'accueil !' }
+            ] : isIos ? [
+                { icon: '🧭', title: 'Ouvre Safari', desc: 'L\'installation ne fonctionne que depuis Safari' },
+                { icon: '🔗', title: 'Va sur swellsync.fr', desc: 'Tape l\'adresse dans la barre Safari' },
+                { icon: '⬆️', title: 'Partager → Écran d\'accueil', desc: 'Puis suis les instructions' }
+            ] : [
+                { icon: '📱', title: 'Ouvre sur ton iPhone', desc: 'Ouvre swellsync.fr dans Safari sur iPhone' },
+                { icon: '⬆️', title: 'Bouton Partager', desc: 'Appuie sur le carré avec la flèche en bas' },
+                { icon: '➕', title: '"Sur l\'écran d\'accueil"', desc: 'L\'app s\'installe comme une vraie app !' }
+            ];
+
+            modal.innerHTML = `
+                <div style="background:linear-gradient(135deg,#0f2438,#080f1a);border:1px solid rgba(0,186,214,0.2);border-radius:24px;padding:32px 28px;max-width:380px;width:90%;animation:scaleIn .3s ease">
+                    <div style="text-align:center;margin-bottom:24px">
+                        <div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#00bad6,#10b981);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">🍎</div>
+                        <h3 style="font-size:20px;font-weight:800;margin:0 0 8px">Installer SwellSync</h3>
+                        <p style="color:#94a3b8;font-size:13px;margin:0">3 étapes simples, 10 secondes ⚡</p>
+                    </div>
+                    ${steps.map((s, i) => `
+                        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;${i < 2 ? 'border-bottom:1px solid rgba(255,255,255,0.06)' : ''}">
+                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(0,186,214,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${s.icon}</div>
+                            <div>
+                                <p style="font-weight:700;font-size:14px;margin:0 0 2px">${s.title}</p>
+                                <p style="color:#94a3b8;font-size:12px;margin:0">${s.desc}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                    <button onclick="document.getElementById('iosInstallModal').remove()" style="width:100%;padding:14px;border-radius:16px;background:linear-gradient(135deg,#00bad6,#10b981);color:#080f1a;font-weight:800;font-size:15px;border:none;margin-top:24px;cursor:pointer">
+                        👍 Compris !
+                    </button>
+                </div>`;
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
         }
 
         // ── Register SW ──

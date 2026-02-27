@@ -537,6 +537,50 @@
         </div>
     </div>
 
+    <!-- ═══ WIDGET VENT DÉTAILLÉ ═══ -->
+    <div class="mt-6 px-4">
+        <h3 class="mb-3 text-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#00bad6]">air</span>
+            Conditions de Vent
+        </h3>
+        <div class="glass rounded-2xl p-5">
+            <div class="grid grid-cols-3 gap-4 text-center mb-4">
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500">Vitesse
+                    </p>
+                    <p class="text-2xl font-black text-[#00bad6]" id="windSpeed">—</p>
+                    <p class="text-[10px] dark:text-slate-500 text-slate-400">km/h</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500">Rafales
+                    </p>
+                    <p class="text-2xl font-black text-orange-400" id="windGust">—</p>
+                    <p class="text-[10px] dark:text-slate-500 text-slate-400">km/h</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-wider dark:text-slate-400 text-slate-500">
+                        Direction</p>
+                    <p class="text-2xl font-black" id="windDirLabel">—</p>
+                    <p class="text-[10px] dark:text-slate-500 text-slate-400" id="windDegrees">—°</p>
+                </div>
+            </div>
+            <!-- Beaufort Scale -->
+            <div class="flex items-center gap-3 p-3 rounded-xl bg-[#00bad6]/5 border border-[#00bad6]/10">
+                <div class="flex size-10 items-center justify-center rounded-full bg-[#00bad6]/20 text-[#00bad6] font-black text-lg"
+                    id="beaufortNum">—</div>
+                <div>
+                    <p class="text-sm font-bold" id="beaufortLabel">—</p>
+                    <p class="text-xs dark:text-slate-400 text-slate-500" id="beaufortDesc">—</p>
+                </div>
+            </div>
+            <!-- Wind type indicator -->
+            <div class="mt-3 flex items-center gap-2 text-sm" id="windAdvice">
+                <span class="material-symbols-outlined text-[#00bad6] text-lg">tips_and_updates</span>
+                <span class="dark:text-slate-300 text-slate-600" id="windAdviceText">Chargement...</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Actions -->
     <div class="mt-6 px-4 pb-8 space-y-3">
         <button id="alertBtn" onclick="addAlert()"
@@ -548,6 +592,59 @@
             <span class="material-symbols-outlined">sports_score</span> Logger une session ici
         </button>
     </div>
+    <!-- Social Share Modal -->
+    <div id="shareModal" class="fixed inset-0 z-[999] hidden items-end justify-center"
+        style="background:rgba(0,0,0,0.6);backdrop-filter:blur(4px)">
+        <div class="w-full max-w-md rounded-t-3xl p-6 pb-10"
+            style="background:#0f2438;border:1px solid rgba(0,186,214,0.15);animation:slideUp .3s ease">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-bold">Partager ce spot</h3>
+                <button onclick="closeShareModal()"
+                    class="size-8 rounded-full bg-white/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <div class="grid grid-cols-4 gap-4 mb-6" id="shareButtons">
+                <!-- WhatsApp -->
+                <button onclick="shareTo('whatsapp')" class="flex flex-col items-center gap-2">
+                    <div class="size-14 rounded-2xl bg-[#25D366]/20 flex items-center justify-center text-2xl">💬</div>
+                    <span class="text-[10px] font-semibold dark:text-slate-300">WhatsApp</span>
+                </button>
+                <!-- Instagram -->
+                <button onclick="shareTo('instagram')" class="flex flex-col items-center gap-2">
+                    <div
+                        class="size-14 rounded-2xl bg-gradient-to-br from-[#833AB4]/20 via-[#FD1D1D]/20 to-[#F77737]/20 flex items-center justify-center text-2xl">
+                        📸</div>
+                    <span class="text-[10px] font-semibold dark:text-slate-300">Instagram</span>
+                </button>
+                <!-- Facebook -->
+                <button onclick="shareTo('facebook')" class="flex flex-col items-center gap-2">
+                    <div class="size-14 rounded-2xl bg-[#1877F2]/20 flex items-center justify-center text-2xl">📘</div>
+                    <span class="text-[10px] font-semibold dark:text-slate-300">Facebook</span>
+                </button>
+                <!-- Twitter/X -->
+                <button onclick="shareTo('twitter')" class="flex flex-col items-center gap-2">
+                    <div class="size-14 rounded-2xl bg-white/10 flex items-center justify-center text-2xl">𝕏</div>
+                    <span class="text-[10px] font-semibold dark:text-slate-300">X</span>
+                </button>
+            </div>
+            <button onclick="shareTo('copy')"
+                class="w-full py-3.5 rounded-2xl bg-[#00bad6]/10 border border-[#00bad6]/30 text-[#00bad6] font-bold flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-lg">content_copy</span> Copier le lien
+            </button>
+        </div>
+    </div>
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%)
+            }
+
+            to {
+                transform: translateY(0)
+            }
+        }
+    </style>
     <!-- AdSense Slot -->
     <div class="sw-ad-slot px-4 pb-4" data-ad-slot="2999484532" data-ad-format="auto"></div>
 
@@ -614,6 +711,7 @@
                     renderDirections(fc.data);
                     renderTides(SPOT_ID);
                     renderQuality(fc.data);
+                    renderWindWidget(fc.data);
                 }
             } catch (e) {
                 document.getElementById('waveH').textContent = (1.5 + Math.random()).toFixed(1);
@@ -957,9 +1055,68 @@
         }
 
         function shareSpot() {
+            document.getElementById('shareModal').classList.remove('hidden');
+            document.getElementById('shareModal').classList.add('flex');
+        }
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+            document.getElementById('shareModal').classList.remove('flex');
+        }
+        function shareTo(platform) {
             const name = spotData?.name || 'ce spot';
-            if (navigator.share) navigator.share({ title: 'SwellSync — ' + name, url: location.href });
-            else navigator.clipboard.writeText(location.href).then(() => toast('Lien copié !'));
+            const url = location.href;
+            const text = '🏄 Check les conditions de ' + name + ' sur SwellSync ! ';
+            switch (platform) {
+                case 'whatsapp': window.open('https://wa.me/?text=' + encodeURIComponent(text + url)); break;
+                case 'instagram': navigator.clipboard.writeText(text + url).then(() => toast('Lien copié ! Colle-le dans ton story Instagram 📸')); break;
+                case 'facebook': window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url)); break;
+                case 'twitter': window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url)); break;
+                case 'copy': navigator.clipboard.writeText(url).then(() => toast('🔗 Lien copié !')); break;
+            }
+            closeShareModal();
+        }
+
+        // ═══ WIDGET VENT ═══
+        function renderWindWidget(data) {
+            if (!data || !data.length) return;
+            const now = data[0];
+            const ws = now.windSpeed != null ? Math.round(now.windSpeed) : null;
+            const gust = now.windGust != null ? Math.round(now.windGust) : (ws ? Math.round(ws * 1.4) : null);
+            const wd = now.windDirection;
+            const dirLabels = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO'];
+            const dirLabel = wd != null ? dirLabels[Math.round(wd / 22.5) % 16] : '—';
+
+            if (ws != null) document.getElementById('windSpeed').textContent = ws;
+            if (gust != null) document.getElementById('windGust').textContent = gust;
+            document.getElementById('windDirLabel').textContent = dirLabel;
+            if (wd != null) document.getElementById('windDegrees').textContent = Math.round(wd) + '°';
+
+            // Beaufort scale
+            const beaufort = [
+                [1, 'Calme', 'Mer d\'huile — parfait pour le longboard', 0],
+                [6, 'Brise légère', 'Légères risées — bonnes conditions', 1],
+                [12, 'Brise', 'Petites vagues courtes — conditions OK', 2],
+                [20, 'Bonne brise', 'Moutons fréquents — conditions variables', 3],
+                [29, 'Jolie brise', 'Vagues modérées — vent notable', 4],
+                [39, 'Brise fraîche', 'Grandes vagues — conditions sportives', 5],
+                [50, 'Vent frais', 'Grosses vagues — réservé aux experts', 6],
+                [999, 'Coup de vent', 'Dangereux — surf déconseillé ⚠️', 7]
+            ];
+            const bf = beaufort.find(b => (ws || 0) <= b[0]);
+            document.getElementById('beaufortNum').textContent = bf[3];
+            document.getElementById('beaufortLabel').textContent = 'Force ' + bf[3] + ' — ' + bf[1];
+            document.getElementById('beaufortDesc').textContent = bf[2];
+
+            // Conseil surf
+            const swDir = now.swellDirection || 270;
+            const diff = wd != null ? Math.abs(((wd - swDir + 540) % 360) - 180) : 90;
+            let advice;
+            if (ws <= 10) advice = '🟢 Vent faible — Conditions glassy, idéales pour surfer';
+            else if (diff > 120) advice = '🟢 Offshore — Le vent lisse les vagues, conditions rêvées';
+            else if (diff < 60 && ws > 20) advice = '🔴 Onshore fort — Vagues brouillées, conditions difficiles';
+            else if (diff < 60) advice = '🟡 Onshore léger — Vagues un peu molles mais surfables';
+            else advice = '🟡 Side-shore — Conditions correctes, adapter le take-off';
+            document.getElementById('windAdviceText').textContent = advice;
         }
 
         init();
