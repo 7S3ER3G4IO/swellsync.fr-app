@@ -12,7 +12,7 @@
     <meta property="og:image" content="https://swellsync.fr/assets/images/swellsync_logo.png?v=3">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
@@ -583,7 +583,7 @@
                 <!-- Action buttons -->
                 <div class="flex gap-3 w-full">
                     <!-- Camera: voir ci-dessous -->
-                    
+
                 </div>
                 <!-- Caption -->
                 <div class="w-full">
@@ -1292,46 +1292,114 @@
                 <p class="text-sm text-slate-400 text-center">Prends une photo ou choisis<br>depuis ta galerie</p>`;
             document.getElementById('storyCaption').value = '';
         }
-        const FAKE_PHOTOS = [
-            'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80',
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80',
-            'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=600&q=80',
-            'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=80',
-            'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&q=80'
-        ];
-        let capturedPhoto = null;
-        " style="width:100%;height:100%;object-fit:cover">`;
-            document.getElementById('storyPreview').style.border = 'none';
-        }
-         // Same simulation
+        // ── Supabase Storage config pour stories ──
+        const SB_STORY_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_STORY_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+        let capturedPhoto = null;  // data URL pour prévisualisation locale
+        let capturedFile = null;   // Fichier réel pour l'upload Supabase
 
-        function publishStory() {
-            if (!capturedPhoto) { fakeCapture(); }
-            const caption = document.getElementById('storyCaption').value || 'Ma session du jour 🏄';
-            // Add to stories list
-            const newStory = {
-                id: Date.now(),
-                user: 'Toi',
-                avatar: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?w=100&q=80',
-                time: 'à l\'instant',
-                caption: caption,
-                images: [capturedPhoto]
+        function handleStoryFile(file) {
+            if (!file) return;
+            capturedFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                capturedPhoto = e.target.result;
+                const preview = document.getElementById('storyPreview');
+                preview.innerHTML = `<img src="${capturedPhoto}" style="width:100%;height:100%;object-fit:cover">`;
+                preview.style.border = 'none';
             };
-            PUBLIC_STORIES.unshift(newStory);
-            // Refresh stories row
-            const row = document.getElementById('storiesRow');
-            // Remove old story circles (keep first = your story button)
-            while (row.children.length > 1) row.removeChild(row.lastChild);
-            renderStories();
+            reader.readAsDataURL(file);
+        }
+
+
+
+
+        async function publishStory() {
+            const caption = document.getElementById('storyCaption').value || 'Ma session du jour 🏄';
+            const btn = document.querySelector('[onclick="publishStory()"]');
+            if (btn) { btn.textContent = 'Publication...'; btn.disabled = true; }
+
+            let imageUrl = null;
+
+            // Upload vers Supabase Storage si une photo a été sélectionnée
+            if (capturedFile) {
+                try {
+                    const ext = capturedFile.name.split('.').pop() || 'jpg';
+                    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+
+                    // Obtenir le token auth
+                    let token = SB_STORY_KEY;
+                    try {
+                        const sbC = window.supabase?.createClient?.(SB_STORY_URL, SB_STORY_KEY);
+                        const { data: { session } } = sbC ? await sbC.auth.getSession() : { data: {} };
+                        if (session?.access_token) token = session.access_token;
+                    } catch { }
+
+                    const uploadRes = await fetch(
+                        `${SB_STORY_URL}/storage/v1/object/stories/${fileName}`,
+                        {
+                            method: 'POST',
+                            headers: { 'apikey': SB_STORY_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': capturedFile.type },
+                            body: capturedFile
+                        }
+                    );
+
+                    if (uploadRes.ok) {
+                        imageUrl = `${SB_STORY_URL}/storage/v1/object/public/stories/${fileName}`;
+                    }
+                } catch { }
+            }
+
+            // Enregistrer la story dans community_posts (type 'story')
+            try {
+                let token = SB_STORY_KEY;
+                try {
+                    const sbC = window.supabase?.createClient?.(SB_STORY_URL, SB_STORY_KEY);
+                    const { data: { session } } = sbC ? await sbC.auth.getSession() : { data: {} };
+                    if (session?.access_token) token = session.access_token;
+                } catch { }
+
+                await fetch(`${SB_STORY_URL}/rest/v1/community_posts`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SB_STORY_KEY,
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        content: caption,
+                        image_url: imageUrl,
+                        post_type: 'story',
+                        created_at: new Date().toISOString()
+                    })
+                });
+            } catch { }
+
+            // Rafraîchir la liste des stories (afficher la photo uploadée)
+            if (imageUrl || capturedPhoto) {
+                const newStory = {
+                    id: Date.now(), user: 'Toi',
+                    time: 'à l\'instant', caption,
+                    images: [imageUrl || capturedPhoto]
+                };
+                PUBLIC_STORIES.unshift(newStory);
+                const row = document.getElementById('storiesRow');
+                while (row.children.length > 1) row.removeChild(row.lastChild);
+                renderStories();
+            }
+
             closeCreateStory();
+            capturedPhoto = null; capturedFile = null;
+
             // Toast
             const t = document.createElement('div');
             t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:300;background:#00bad6;color:#000;font-weight:700;font-size:12px;padding:8px 16px;border-radius:20px;box-shadow:0 4px 20px rgba(0,186,214,0.3)';
-            t.textContent = 'Story publiée ! 🎉';
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 2500);
-            capturedPhoto = null;
+            t.textContent = imageUrl ? 'Story publiée ! 🎉' : (capturedFile ? 'Erreur upload, story enregistrée sans photo.' : 'Story enregistrée 🤙');
+            document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+            if (btn) { btn.textContent = 'Publier'; btn.disabled = false; }
         }
+
 
         renderStories();
     </script>
@@ -1393,7 +1461,7 @@
                             document.getElementById('heroWind').textContent = ws !== '—' ? ws + ' km/h' : '— km/h';
                             document.getElementById('heroTemp').textContent = wt;
                             document.getElementById('waveBar').style.width = wh !== '—' ? Math.min(95, (parseFloat(wh) / 4) * 100) + '%' : '15%';
-                            
+
                         }
                     } catch (fcErr) {
                         console.warn('Hero forecast error:', fcErr.message);

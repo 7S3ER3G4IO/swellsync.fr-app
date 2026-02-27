@@ -13,7 +13,7 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
@@ -556,6 +556,23 @@
                     loadJournalSection(rows);
                 }
             } catch { document.querySelectorAll('#statSessions').forEach(el => el.textContent = '0'); }
+
+            // Followers / Following depuis Supabase
+            try {
+                const sbClient2 = window.supabase?.createClient?.(SB_URL, SB_KEY);
+                const { data: { session: s2 } } = sbClient2 ? await sbClient2.auth.getSession() : { data: {} };
+                const userId = s2?.user?.id;
+                if (userId && s2?.access_token) {
+                    const [followersRes, followingRes] = await Promise.all([
+                        fetch(`${SB_URL}/rest/v1/follows?followed_id=eq.${userId}&select=id`, { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${s2.access_token}`, 'Prefer': 'count=exact' } }),
+                        fetch(`${SB_URL}/rest/v1/follows?follower_id=eq.${userId}&select=id`, { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${s2.access_token}`, 'Prefer': 'count=exact' } })
+                    ]);
+                    const followersCount = parseInt(followersRes.headers.get('content-range')?.split('/')[1] || '0', 10);
+                    const followingCount = parseInt(followingRes.headers.get('content-range')?.split('/')[1] || '0', 10);
+                    document.querySelectorAll('#statFollowers').forEach(el => el.textContent = followersCount);
+                    document.querySelectorAll('#statFollowing').forEach(el => el.textContent = followingCount);
+                }
+            } catch { }
 
             // Posts et likes communauté
             try {
