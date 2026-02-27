@@ -6,48 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>60+ Spots de Surf — SwellSync</title>
     <meta name="description"
-        content="Découvrez plus de 60 spots de surf sur la côte Atlantique française avec SwellSync. De la Bretagne au Pays Basque.">
+        content="Explorez plus de 60 spots de surf sur la côte Atlantique française. Bretagne, Vendée, Gironde, Landes, Pays Basque — conditions en temps réel.">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
             <a href="/">Accueil</a>
             <a href="/site/fonctionnalites.html">Fonctionnalités</a>
             <a href="/site/spots.html" class="active">Spots</a>
             <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a>
             <a href="/site/faq.html">FAQ</a>
+            <a href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <section class="section spots-section" style="padding-top:140px">
+    <!-- HERO -->
+    <section
+        style="padding:140px 0 60px;background:radial-gradient(ellipse at 30% 0%,rgba(0,150,199,.08) 0%,transparent 55%),var(--bg)">
+        <div class="container text-center">
+            <div class="section-tag animate">📍 Spots</div>
+            <h1 class="animate animate-delay-1"
+                style="font-size:clamp(2.2rem,5vw,3.5rem);max-width:680px;margin:0 auto 20px">60+ spots sur <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">la
+                    côte Atlantique</em></h1>
+            <p class="animate animate-delay-2"
+                style="font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto 40px;line-height:1.8">De la
+                Bretagne au Pays Basque. Chaque spot avec ses prévisions détaillées, la webcam live et les avis de la
+                communauté.</p>
+            <div class="stats-grid animate animate-delay-3" style="max-width:720px;margin:0 auto">
+                <div class="stat-card">
+                    <div class="stat-num">60+</div>
+                    <div class="stat-label">Spots couverts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">5</div>
+                    <div class="stat-label">Régions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">7j</div>
+                    <div class="stat-label">De prévisions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">4h</div>
+                    <div class="stat-label">Mises à jour</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPOTS DIRECTORY -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">📍 Spots</div>
-                <h2>60+ spots sur <em>la côte Atlantique</em></h2>
-                <p>De la Bretagne au Pays Basque, chaque spot avec ses prévisions et conditions en temps réel.</p>
+                <div class="section-tag">🔍 Annuaire</div>
+                <h2>Trouve ton <em>spot idéal</em></h2>
+                <p>Filtre par région et explore les spots selon ton niveau et tes préférences.</p>
             </div>
-            <div class="region-tabs" id="regionTabs">
+
+            <div style="max-width:400px;margin:0 auto 28px;position:relative">
+                <input id="searchInput" type="text" placeholder="🔍  Chercher un spot..."
+                    style="width:100%;padding:13px 20px;border:1.5px solid var(--border);border-radius:var(--radius-full);font-size:14px;font-family:inherit;outline:none;background:var(--bg)">
+            </div>
+
+            <div class="spots-filters" id="regionTabs">
                 <div class="region-tab active" data-region="tous">🌊 Tous</div>
                 <div class="region-tab" data-region="Bretagne">🏴 Bretagne</div>
                 <div class="region-tab" data-region="Vendée">⚓ Vendée</div>
@@ -55,99 +91,194 @@
                 <div class="region-tab" data-region="Landes">🌲 Landes</div>
                 <div class="region-tab" data-region="Pays Basque">🏔️ Pays Basque</div>
             </div>
-            <div style="text-align:center;margin-bottom:20px;font-size:13px;color:var(--text3)">
-                <span id="spotCount">0</span> spots trouvés
-            </div>
-            <div class="spots-scroll" id="spotsGrid">
-                <div style="text-align:center;padding:40px;color:var(--text3)">Chargement des spots...</div>
+            <div style="text-align:center;margin-bottom:22px;font-size:13px;color:var(--text3)"><span
+                    id="spotCount">0</span> spots trouvés</div>
+            <div class="spots-grid" id="spotsGrid">
+                <div style="text-align:center;padding:60px;color:var(--text3);grid-column:1/-1">Chargement des spots...
+                    🌊</div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ RÉGIONS STATS ═══ -->
-    <section class="stats">
+    <!-- REGION SPOTLIGHTS -->
+    <section class="section section-alt">
         <div class="container">
-            <div class="stat animate">
-                <div class="stat-num">🏴</div>
-                <div class="stat-label">Bretagne</div>
+            <div class="section-header">
+                <div class="section-tag">🏄 Régions</div>
+                <h2>5 régions, <em>des milliers de sessions</em></h2>
+                <p>Chaque région a ses spots emblématiques et son caractère unique.</p>
             </div>
-            <div class="stat animate">
-                <div class="stat-num">⚓</div>
-                <div class="stat-label">Vendée</div>
+            <div class="region-spotlight">
+                <div class="region-card animate" style="background:linear-gradient(135deg,#1a3a5c,#0077b6)">
+                    <div class="region-content">
+                        <h4>🏴 Bretagne</h4>
+                        <p>La Torche, Pointe de la Torche, Audierne — surfs puissants et reculés</p>
+                    </div>
+                    <div class="spot-count">~12 spots</div>
+                </div>
+                <div class="region-card animate animate-delay-1"
+                    style="background:linear-gradient(135deg,#1e4d6b,#0096c7)">
+                    <div class="region-content">
+                        <h4>⚓ Vendée</h4>
+                        <p>Les Sables d'Olonne, Saint-Gilles-Croix-de-Vie — vagues accessibles</p>
+                    </div>
+                    <div class="spot-count">~8 spots</div>
+                </div>
+                <div class="region-card animate animate-delay-2"
+                    style="background:linear-gradient(135deg,#2d4a1e,#3a7c17)">
+                    <div class="region-content">
+                        <h4>🍷 Gironde</h4>
+                        <p>Lacanau, Montalivet, Le Porge — beach breaks infinis sur le Médoc</p>
+                    </div>
+                    <div class="spot-count">~10 spots</div>
+                </div>
+                <div class="region-card animate" style="background:linear-gradient(135deg,#0d2f1a,#00b4a0)">
+                    <div class="region-content">
+                        <h4>🌲 Landes</h4>
+                        <p>Hossegor, Capbreton, Mimizan — la mecque du surf français</p>
+                    </div>
+                    <div class="spot-count">~15 spots</div>
+                </div>
+                <div class="region-card animate animate-delay-1"
+                    style="background:linear-gradient(135deg,#3d1a5c,#6c63ff)">
+                    <div class="region-content">
+                        <h4>🏔️ Pays Basque</h4>
+                        <p>Biarritz, Anglet, Hendaye, Guéthary — la culture surf historique</p>
+                    </div>
+                    <div class="spot-count">~14 spots</div>
+                </div>
+                <div class="region-card animate animate-delay-2"
+                    style="background:linear-gradient(135deg,#1a2a3a,#0077b6);display:flex;align-items:center;justify-content:center;text-align:center">
+                    <div class="region-content" style="text-align:center">
+                        <div style="font-size:32px;margin-bottom:8px">🌍</div>
+                        <h4>International — à venir</h4>
+                        <p>Portugal, Espagne, Maroc — expansion prévue 2026</p>
+                    </div>
+                </div>
             </div>
-            <div class="stat animate">
-                <div class="stat-num">🍷</div>
-                <div class="stat-label">Gironde</div>
-            </div>
-            <div class="stat animate">
-                <div class="stat-num">🌲</div>
-                <div class="stat-label">Landes</div>
-            </div>
-            <div class="stat animate">
-                <div class="stat-num">🏔️</div>
-                <div class="stat-label">Pays Basque</div>
+        </div>
+    </section>
+
+    <!-- MAP TEASER -->
+    <section class="section section-white">
+        <div class="container">
+            <div
+                style="background:linear-gradient(135deg,rgba(0,150,199,.06),rgba(0,180,160,.04));border:1px solid var(--border);border-radius:var(--radius);padding:56px 40px;text-align:center">
+                <div style="font-size:48px;margin-bottom:20px">🗺️</div>
+                <h2 style="font-size:2rem;margin-bottom:14px">Explore la carte <em
+                        style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">interactive</em>
+                </h2>
+                <p style="color:var(--text2);max-width:500px;margin:0 auto 32px;line-height:1.8">Tous les spots sur une
+                    carte Leaflet avec les conditions en temps réel. Zoom, filtre, explore — disponible dans l'app.</p>
+                <div class="flex-center">
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary"
+                        style="font-size:15px;padding:14px 36px" download><span
+                            class="material-symbols-outlined">download</span> Ouvrir la carte dans l'app</a>
+                    <a href="/site/fonctionnalites.html" class="btn-ghost">En savoir plus</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA -->
     <section class="cta-final">
-        <h2>Explore tous les spots <em
-                style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">en
-                temps réel</em></h2>
-        <p>Télécharge l'app pour accéder aux prévisions détaillées de chaque spot.</p>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px" download>
-            <span class="material-symbols-outlined">download</span>
-            Télécharger SwellSync
-        </a>
+        <div class="container">
+            <h2>Explore tous les spots <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">en
+                    temps réel</em></h2>
+            <p>Télécharge l'app pour accéder aux prévisions détaillées, webcams et alertes de chaque spot.</p>
+            <div class="cta-buttons">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px"
+                    download><span class="material-symbols-outlined">download</span> Télécharger SwellSync</a>
+            </div>
+            <div class="cta-tags mt-24">
+                <span class="cta-tag">✅ 60+ Spots</span>
+                <span class="cta-tag">✅ Mises à jour toutes les 4h</span>
+                <span class="cta-tag">✅ Gratuit</span>
+            </div>
+        </div>
     </section>
 
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img src="/assets/images/swellsync_logo.png"
+                            alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France. Conçu par des surfeurs, pour des surfeurs.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
 
     <script>
-        let allSpots = [];
-        fetch('/api/spots').then(r => r.json()).then(spots => {
-            allSpots = spots;
-            renderSpots(spots);
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
 
-            // Region tab click
+        let allSpots = [];
+        const diffEmoji = { 'Débutant': '🟢', 'Intermédiaire': '🟡', 'Avancé': '🔴', 'Expert': '⚫' };
+        const diffClass = { 'Débutant': 'debutant', 'Intermédiaire': 'intermediaire', 'Avancé': 'avance', 'Expert': 'expert' };
+
+        function renderSpots(spots) {
+            const grid = document.getElementById('spotsGrid');
+            document.getElementById('spotCount').textContent = spots.length;
+            if (!spots.length) { grid.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text3);grid-column:1/-1">Aucun spot trouvé 🤷</div>'; return; }
+            grid.innerHTML = spots.map(s => `
+    <div class="spot-chip">
+      <span class="emoji">${diffEmoji[s.difficulty] || '🏄'}</span>
+      <div class="info">
+        <span class="name">${s.name}</span>
+        <span class="loc">${s.location}</span>
+        <span class="difficulty-badge ${diffClass[s.difficulty] || ''}">${s.difficulty || 'Tous niveaux'}</span>
+      </div>
+    </div>`).join('');
+        }
+
+        fetch('/api/spots').then(r => r.json()).then(spots => {
+            allSpots = spots; renderSpots(spots);
             document.querySelectorAll('.region-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     const region = tab.dataset.region;
-                    const filtered = region === 'tous' ? allSpots : allSpots.filter(s => s.location.includes(region));
+                    const search = document.getElementById('searchInput').value.toLowerCase();
+                    let filtered = region === 'tous' ? allSpots : allSpots.filter(s => s.location.includes(region));
+                    if (search) filtered = filtered.filter(s => s.name.toLowerCase().includes(search) || s.location.toLowerCase().includes(search));
                     renderSpots(filtered);
                 });
             });
-        }).catch(() => {
-            document.getElementById('spotsGrid').innerHTML = '<p style="padding:20px;text-align:center;color:var(--text3)">Impossible de charger les spots.</p>';
-        });
+            document.getElementById('searchInput').addEventListener('input', e => {
+                const search = e.target.value.toLowerCase();
+                const activeRegion = document.querySelector('.region-tab.active')?.dataset.region || 'tous';
+                let filtered = activeRegion === 'tous' ? allSpots : allSpots.filter(s => s.location.includes(activeRegion));
+                if (search) filtered = filtered.filter(s => s.name.toLowerCase().includes(search) || s.location.toLowerCase().includes(search));
+                renderSpots(filtered);
+            });
+        }).catch(() => { document.getElementById('spotsGrid').innerHTML = '<p style="padding:40px;text-align:center;color:var(--text3);grid-column:1/-1">Impossible de charger les spots.</p>'; });
 
-        function renderSpots(spots) {
-            const grid = document.getElementById('spotsGrid');
-            const diffEmoji = { 'Débutant': '🟢', 'Intermédiaire': '🟡', 'Avancé': '🔴', 'Expert': '⚫' };
-            document.getElementById('spotCount').textContent = spots.length;
-            grid.innerHTML = spots.map(s => `
-                <div class="spot-chip">
-                    <span class="emoji">${diffEmoji[s.difficulty] || '🏄'}</span>
-                    <div class="info">
-                        <span class="name">${s.name}</span>
-                        <span class="loc">${s.location}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>
-    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
 </body>
 
 </html>

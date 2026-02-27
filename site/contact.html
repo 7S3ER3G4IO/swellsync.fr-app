@@ -6,250 +6,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact — SwellSync</title>
     <meta name="description"
-        content="Contactez l'équipe SwellSync. Envoyez-nous un message, signalez un bug ou proposez une fonctionnalité.">
+        content="Contactez l'équipe SwellSync. Support technique, suggestions, partenariats — réponse garantie en moins de 24h.">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
-    <style>
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .contact-form label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text2);
-            margin-bottom: -10px;
-        }
-
-        .contact-form input,
-        .contact-form textarea,
-        .contact-form select {
-            padding: 14px 18px;
-            border-radius: 14px;
-            border: 1.5px solid var(--glass-border);
-            background: var(--bg3);
-            color: var(--text);
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color .2s;
-            resize: vertical;
-        }
-
-        .contact-form input:focus,
-        .contact-form textarea:focus,
-        .contact-form select:focus {
-            border-color: var(--accent);
-        }
-
-        .contact-form select option {
-            background: var(--bg2);
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .contact-card {
-            background: var(--bg2);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 24px;
-            transition: all .3s;
-        }
-
-        .contact-card:hover {
-            border-color: rgba(0, 186, 214, 0.2);
-            box-shadow: 0 0 20px rgba(0, 186, 214, 0.08);
-        }
-
-        .contact-card h3 {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .contact-card p {
-            font-size: 13px;
-            color: var(--text2);
-            line-height: 1.6;
-        }
-
-        .contact-card a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 12px;
-            background: rgba(0, 186, 214, 0.06);
-            border: 1px solid rgba(0, 186, 214, 0.1);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--accent);
-            text-decoration: none;
-            transition: all .2s;
-        }
-
-        .social-link:hover {
-            background: rgba(0, 186, 214, 0.12);
-        }
-
-        .form-success {
-            display: none;
-            text-align: center;
-            padding: 40px;
-            background: rgba(0, 214, 150, 0.06);
-            border: 1px solid rgba(0, 214, 150, 0.15);
-            border-radius: 20px;
-        }
-
-        .form-success .check-icon {
-            font-size: 48px;
-            color: var(--accent2);
-            margin-bottom: 12px;
-        }
-
-        @media(max-width:768px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 
 <body>
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
-            <a href="/">Accueil</a>
-            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
-            <a href="/site/spots.html">Spots</a>
-            <a href="/site/tarifs.html">Tarifs</a>
-            <a href="/site/faq.html">FAQ</a>
+            <a href="/">Accueil</a><a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a><a href="/site/faq.html">FAQ</a><a href="/site/contact.html"
+                class="active">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <section class="section" style="padding-top:140px">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">📞 Contact</div>
-                <h2>Parle-nous <em>directement</em></h2>
-                <p>Une question, un bug, une idée ? On répond à tout et en général assez vite.</p>
+    <!-- HERO -->
+    <section
+        style="padding:140px 0 72px;background:radial-gradient(ellipse at 50% 0%,rgba(108,99,255,.08) 0%,transparent 50%),var(--bg)">
+        <div class="container text-center">
+            <div class="section-tag animate">📞 Contact</div>
+            <h1 class="animate animate-delay-1"
+                style="font-size:clamp(2.2rem,5vw,3.4rem);max-width:620px;margin:0 auto 18px">On est là <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">pour
+                    toi</em> 🤙</h1>
+            <p class="animate animate-delay-2"
+                style="font-size:1.05rem;color:var(--text2);max-width:500px;margin:0 auto 24px;line-height:1.8">Une
+                question, un bug, une suggestion ? L'équipe SwellSync basée à Hossegor répond en moins de 24 heures.</p>
+            <div class="animate animate-delay-3"
+                style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,180,160,.08);border:1px solid rgba(0,180,160,.2);border-radius:var(--radius-full);padding:8px 20px;font-size:13px;font-weight:600;color:var(--accent2)">
+                ⚡ Temps de réponse moyen : &lt;24h
             </div>
+        </div>
+    </section>
+
+    <!-- CONTACT GRID -->
+    <section class="section section-white">
+        <div class="container">
             <div class="contact-grid">
-                <div id="contactForm">
-                    <form class="contact-form" onsubmit="submitContact(event)">
-                        <label>Nom</label>
-                        <input type="text" placeholder="Ton nom" required>
-                        <label>Email</label>
-                        <input type="email" placeholder="ton@email.com" required>
-                        <label>Sujet</label>
-                        <select required>
-                            <option value="">— Choisis un sujet —</option>
-                            <option>Question générale</option>
-                            <option>Signaler un bug</option>
-                            <option>Proposer une fonctionnalité</option>
-                            <option>Partenariat</option>
-                            <option>Autre</option>
-                        </select>
-                        <label>Message</label>
-                        <textarea rows="5" placeholder="Ton message..." required></textarea>
-                        <button type="submit" class="btn-primary" style="justify-content:center">
-                            <span class="material-symbols-outlined">send</span>
-                            Envoyer
-                        </button>
+                <!-- FORM -->
+                <div>
+                    <h2 style="font-size:1.6rem;margin-bottom:24px">Envoie-nous un message</h2>
+                    <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                            <div class="form-group"><label>Prénom *</label><input type="text" placeholder="Max"
+                                    required></div>
+                            <div class="form-group"><label>Nom *</label><input type="text" placeholder="Loviat"
+                                    required></div>
+                        </div>
+                        <div class="form-group"><label>Email *</label><input type="email" placeholder="max@swellsync.fr"
+                                required></div>
+                        <div class="form-group">
+                            <label>Sujet *</label>
+                            <select required>
+                                <option value="">Choisir un sujet...</option>
+                                <option value="support">🔧 Support technique</option>
+                                <option value="bug">🐛 Signaler un bug</option>
+                                <option value="feature">💡 Suggestion de fonctionnalité</option>
+                                <option value="spot">📍 Proposer un spot</option>
+                                <option value="abonnement">💎 Question abonnement</option>
+                                <option value="partenariat">🤝 Partenariat</option>
+                                <option value="autre">💬 Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Message *</label><textarea rows="5"
+                                placeholder="Décris ta demande en détail..." required></textarea></div>
+                        <button type="submit" class="btn-primary" style="align-self:flex-start">Envoyer le message
+                            ✉️</button>
+                        <div id="successMsg"
+                            style="display:none;background:rgba(0,180,160,.08);border:1px solid rgba(0,180,160,.3);border-radius:var(--radius-sm);padding:16px 20px;color:var(--accent2);font-weight:600">
+                            ✅ Message envoyé ! On te répond dans les 24h.</div>
                     </form>
                 </div>
-                <div id="formSuccess" class="form-success">
-                    <div class="check-icon">✅</div>
-                    <h3 style="font-size:1.2rem;margin-bottom:8px;color:var(--text)">Message envoyé !</h3>
-                    <p style="color:var(--text2);font-size:14px">Merci pour ton message. On te répond au plus vite 🤙
-                    </p>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-card">
-                        <h3>📧 Email</h3>
-                        <p><a href="mailto:contact@swellsync.fr">contact@swellsync.fr</a></p>
-                    </div>
-                    <div class="contact-card">
-                        <h3>💬 Réponse</h3>
-                        <p>On répond en général sous 24h. Pour les bugs urgents, signale-les directement dans l'app.</p>
-                    </div>
-                    <div class="contact-card">
-                        <h3>🌐 Réseaux</h3>
-                        <p>Suis-nous pour les actus, les conditions et les shots du jour.</p>
-                        <div class="social-links">
-                            <a href="#" class="social-link">📸 Instagram</a>
-                            <a href="#" class="social-link">🎵 TikTok</a>
+
+                <!-- INFO -->
+                <div>
+                    <h2 style="font-size:1.6rem;margin-bottom:24px">Nos coordonnées</h2>
+                    <div class="contact-info-cards">
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">📧</div>
+                            <div>
+                                <h4>Email général</h4>
+                                <p><a href="mailto:hello@swellsync.fr"
+                                        style="color:var(--accent)">hello@swellsync.fr</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">🔧</div>
+                            <div>
+                                <h4>Support technique</h4>
+                                <p><a href="mailto:support@swellsync.fr"
+                                        style="color:var(--accent)">support@swellsync.fr</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">⏱️</div>
+                            <div>
+                                <h4>Temps de réponse</h4>
+                                <p>Moins de 24h en semaine<br><span style="font-size:12px;color:var(--text3)">9h–18h,
+                                        lun–ven</span></p>
+                            </div>
+                        </div>
+                        <div class="contact-info-card">
+                            <div class="contact-info-icon">📍</div>
+                            <div>
+                                <h4>Basés à</h4>
+                                <p>Hossegor, Landes (40)<br><span style="font-size:12px;color:var(--text3)">(on surfe
+                                        quand les conditions sont bonnes)</span></p>
+                            </div>
                         </div>
                     </div>
-                    <div class="contact-card">
-                        <h3>🗺️ Localisation</h3>
-                        <p>Quelque part entre Hossegor et Biarritz 🏄‍♂️<br>Côte Basque, France 🇫🇷</p>
+
+                    <div style="margin-top:28px">
+                        <h4
+                            style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px">
+                            Nous suivre</h4>
+                        <div class="social-links">
+                            <a href="#" class="social-link" title="Instagram">📸</a>
+                            <a href="#" class="social-link" title="TikTok">🎵</a>
+                            <a href="#" class="social-link" title="Twitter/X">✖️</a>
+                            <a href="#" class="social-link" title="YouTube">▶️</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- MAP SECTION -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📍 Localisation</div>
+                <h2>On est à <em>Hossegor</em></h2>
+                <p>La mecque du surf français. Parce qu'il faut bien tester l'app dans les meilleures conditions.</p>
+            </div>
+            <div
+                style="border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--border)">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11423.09!2d-1.4673!3d43.6648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd5191ab15bca7b3%3A0x4081d25f3abf10f0!2sHossegor!5e0!3m2!1sfr!2sfr!4v1620000000000!5m2!1sfr!2sfr"
+                    width="100%" height="360" style="border:0" allowfullscreen loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- APP CTA -->
+    <section class="section section-white">
+        <div class="container">
+            <div
+                style="background:linear-gradient(135deg,rgba(0,150,199,.06),rgba(0,180,160,.04));border:1px solid var(--border);border-radius:var(--radius);padding:48px;text-align:center">
+                <div style="font-size:40px;margin-bottom:16px">📱</div>
+                <h3 style="font-size:1.5rem;margin-bottom:12px">Tu préfères l'app ?</h3>
+                <p
+                    style="color:var(--text2);margin-bottom:28px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.8">
+                    Pour les questions urgentes, tu peux aussi contacter le support directement depuis l'app via Profil
+                    → Support.</p>
+                <div class="flex-center">
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" download><span
+                            class="material-symbols-outlined">download</span> Télécharger SwellSync</a>
+                    <a href="/site/faq.html" class="btn-ghost">Voir la FAQ</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/site/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
+                            src="/assets/images/swellsync_logo.png" alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
-    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
+
     <script>
-        function submitContact(e) {
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
+
+        function submitForm(e) {
             e.preventDefault();
-            document.getElementById('contactForm').style.display = 'none';
-            document.getElementById('formSuccess').style.display = 'block';
+            document.getElementById('contactForm').style.opacity = '.5';
+            document.getElementById('contactForm').style.pointerEvents = 'none';
+            setTimeout(() => { document.getElementById('successMsg').style.display = 'block'; }, 600);
         }
+
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>
 </body>
 

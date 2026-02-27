@@ -6,95 +6,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ — SwellSync</title>
     <meta name="description"
-        content="Toutes les réponses à vos questions sur SwellSync : installation, spots disponibles, données météo, fonctionnement hors-ligne et messagerie.">
+        content="Toutes les réponses sur SwellSync : installation, spots, prévisions, abonnement Pro, communauté et données personnelles.">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
-            <a href="/">Accueil</a>
-            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
-            <a href="/site/spots.html">Spots</a>
-            <a href="/site/tarifs.html">Tarifs</a>
-            <a href="/site/faq.html" class="active">FAQ</a>
+            <a href="/">Accueil</a><a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a><a href="/site/faq.html" class="active">FAQ</a><a
+                href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <section class="section section-dark" style="padding-top:140px">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">❓ FAQ</div>
-                <h2>Questions <em>fréquentes</em></h2>
+    <!-- HERO -->
+    <section
+        style="padding:140px 0 72px;background:radial-gradient(ellipse at 40% 0%,rgba(108,99,255,.08) 0%,transparent 55%),var(--bg)">
+        <div class="container text-center">
+            <div class="section-tag animate">❓ FAQ</div>
+            <h1 class="animate animate-delay-1"
+                style="font-size:clamp(2.2rem,5vw,3.4rem);max-width:640px;margin:0 auto 18px">Des questions ? On a <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">les
+                    réponses</em></h1>
+            <p class="animate animate-delay-2"
+                style="font-size:1.05rem;color:var(--text2);max-width:520px;margin:0 auto 36px;line-height:1.8">Tout ce
+                qu'il faut savoir sur SwellSync, de l'installation aux fonctionnalités avancées.</p>
+            <!-- Search -->
+            <div class="faq-search animate animate-delay-3" style="max-width:500px;margin:0 auto">
+                <span class="material-symbols-outlined faq-search-icon">search</span>
+                <input type="text" id="faqSearch" placeholder="Rechercher une question...">
             </div>
-            <div class="faq-list">
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-q">SwellSync est-il vraiment gratuit ?</div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="container" style="margin-top:-20px;margin-bottom:0;padding-bottom:0">
+        <div class="stats-grid animate" style="max-width:640px;margin:0 auto;grid-template-columns:repeat(3,1fr)">
+            <div class="stat-card">
+                <div class="stat-num">17</div>
+                <div class="stat-label">Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">4</div>
+                <div class="stat-label">Catégories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">&lt;24h</div>
+                <div class="stat-label">Réponse support</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="faq-cats" id="faqCats">
+                <button class="faq-cat-btn active" data-cat="tous">🌊 Tous</button>
+                <button class="faq-cat-btn" data-cat="installation">📱 Installation</button>
+                <button class="faq-cat-btn" data-cat="fonctionnalites">✨ Fonctionnalités</button>
+                <button class="faq-cat-btn" data-cat="abonnement">💎 Abonnement</button>
+                <button class="faq-cat-btn" data-cat="communaute">👥 Communauté</button>
+            </div>
+
+            <div class="faq-list" id="faqList">
+                <!-- INSTALLATION -->
+                <div class="faq-item" data-cat="installation" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment installer SwellSync sur Android ?<span class="faq-arrow">+</span></div>
                     <div class="faq-a">
-                        <p>Oui ! L'app est 100% gratuite avec toutes les fonctionnalités de base : prévisions, carte,
-                            communauté, messagerie. Le plan Pro (4.99€/mois) ajoute des fonctionnalités premium comme
-                            les prévisions 16 jours et la suppression des pubs.</p>
+                        <p>Télécharge le fichier <strong>.apk</strong> depuis le bouton "Télécharger" sur notre site.
+                            Ouvre-le sur ton téléphone. Si Android te demande l'autorisation d'installer des sources
+                            inconnues, accepte. L'installation prend moins de 30 secondes.</p>
                     </div>
                 </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-q">Comment installer l'app sur mon téléphone ?</div>
+                <div class="faq-item" data-cat="installation" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment installer SwellSync sur iPhone (iOS) ?<span class="faq-arrow">+</span>
+                    </div>
                     <div class="faq-a">
-                        <p><strong>Android :</strong> Télécharge le fichier .apk depuis cette page et ouvre-le sur ton
-                            téléphone.<br>
-                            <strong>iPhone/iPad :</strong> Ouvre swellsync.fr dans Safari → appuie sur le bouton
-                            Partager (⬆️) → "Sur l'écran d'accueil".
+                        <p>Ouvre <strong>swellsync.fr</strong> dans <strong>Safari</strong> (obligatoirement Safari sur
+                            iOS). Appuie sur le bouton Partager ⬆️ en bas de l'écran, puis sélectionne "Sur l'écran
+                            d'accueil". L'app est maintenant installée comme une vraie app native.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="installation" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">L'app fonctionne-t-elle hors-ligne ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Oui ! SwellSync est une Progressive Web App (PWA) qui met en cache les dernières données
+                            consultées. Les prévisions des spots récemment visités restent accessibles même sans
+                            connexion internet.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="installation" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment mettre à jour l'application ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Les mises à jour se font automatiquement à chaque ouverture de l'app si tu as une connexion.
+                            Pour les utilisateurs Android APK, des nouvelles versions sont régulièrement publiées sur le
+                            site — il te suffit de télécharger et réinstaller le nouveau fichier .apk.</p>
+                    </div>
+                </div>
+                <!-- FONCTIONNALITES -->
+                <div class="faq-item" data-cat="fonctionnalites" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Quels spots de surf sont disponibles ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Plus de 60 spots sur toute la côte Atlantique française : La Torche, Hossegor, Capbreton,
+                            Biarritz, Anglet, Hendaye, Lacanau, Montalivet et bien plus. De la Bretagne au Pays Basque,
+                            en passant par la Vendée, la Gironde et les Landes.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="fonctionnalites" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">D'où viennent les données de prévisions ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Nos prévisions proviennent de <strong>StormGlass</strong>, l'une des meilleures sources
+                            mondiales de données marines. Elles incluent hauteur des vagues, période, direction, vitesse
+                            du vent, température de l'eau et niveau de marée. Mises à jour toutes les 4 heures.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="fonctionnalites" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment configurer une alerte houle ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Dans l'app, va sur la page d'un spot puis clique sur "Créer une alerte". Tu peux configurer
+                            des seuils de hauteur de vague et de période. Dès que les conditions atteignent tes
+                            critères, tu reçois une notification push (plan Pro : illimité, plan Gratuit : max 2
+                            alertes).</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="fonctionnalites" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Les prévisions sont-elles fiables ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Nos données StormGlass sont parmi les plus précises disponibles pour les conditions marines.
+                            Le score de surf calculé agrège plusieurs indicateurs pour te donner une note globale. Comme
+                            toute prévision météo, une marge d'erreur existe, surtout au-delà de 5-7 jours.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="fonctionnalites" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment partager une session dans la communauté ?<span class="faq-arrow">+</span>
+                    </div>
+                    <div class="faq-a">
+                        <p>Depuis l'onglet Communauté dans l'app, clique sur le bouton + en bas de l'écran. Tu peux
+                            écrire un post, ajouter des photos, mentionner un spot et tag tes amis. Ton post apparaît
+                            dans le fil d'actualités de tes followers.</p>
+                    </div>
+                </div>
+                <!-- ABONNEMENT -->
+                <div class="faq-item" data-cat="abonnement" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">SwellSync est-il vraiment gratuit ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Oui, le plan Gratuit inclut toutes les fonctionnalités essentielles sans limite de durée :
+                            60+ spots, prévisions 7 jours, carte interactive, communauté, messagerie et journal de
+                            sessions. Le plan Pro (4.99€/mois) ajoute des fonctionnalités avancées optionnelles.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-cat="abonnement" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment résilier mon abonnement Pro ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Va dans l'app → Profil → Paramètres → Abonnement → Résilier. Ton accès Pro reste actif
+                            jusqu'à la fin de la période payée. Aucuns frais supplémentaires, aucune mauvaise surprise.
                         </p>
                     </div>
                 </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-q">Quels spots de surf sont disponibles ?</div>
+                <div class="faq-item" data-cat="abonnement" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Puis-je obtenir un remboursement ?<span class="faq-arrow">+</span></div>
                     <div class="faq-a">
-                        <p>Plus de 60 spots sur toute la côte Atlantique française : Hossegor, Biarritz, La Torche,
-                            Lacanau, Capbreton, Anglet, Hendaye, et bien plus. De la Bretagne au Pays Basque en passant
-                            par les Landes et la Gironde.</p>
+                        <p>Conformément au Code de la consommation, le droit de rétractation de 14 jours ne s'applique
+                            pas aux services numériques avec accès immédiat. En cas de problème technique grave,
+                            contacte notre support à <a href="mailto:support@swellsync.com"
+                                style="color:var(--accent)">support@swellsync.com</a> — on trouvera une solution.</p>
                     </div>
                 </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-q">D'où viennent les données de prévisions ?</div>
+                <div class="faq-item" data-cat="abonnement" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Le paiement est-il sécurisé ?<span class="faq-arrow">+</span></div>
                     <div class="faq-a">
-                        <p>Les prévisions proviennent de StormGlass, l'une des sources les plus fiables au monde pour
-                            les données marines. Elles incluent la hauteur des vagues, la période, la direction du vent,
-                            la température de l'eau et le niveau de marée.</p>
+                        <p>Oui. Nous utilisons Stripe pour traiter les paiements. Tes coordonnées bancaires ne
+                            transitent jamais par nos serveurs. Le paiement est entièrement chiffré (TLS 1.3). Stripe
+                            est certifié PCI-DSS niveau 1.</p>
                     </div>
                 </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-q">L'app fonctionne-t-elle hors-ligne ?</div>
+                <!-- COMMUNAUTE -->
+                <div class="faq-item" data-cat="communaute" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment fonctionne la messagerie ?<span class="faq-arrow">+</span></div>
                     <div class="faq-a">
-                        <p>Oui ! SwellSync est une Progressive Web App (PWA) qui cache les données pour une utilisation
-                            hors-ligne. Les dernières prévisions consultées restent accessibles même sans connexion.</p>
+                        <p>Tu peux envoyer des messages privés à n'importe quel surfeur inscrit sur SwellSync. Va sur
+                            son profil, clique "Message" et commence à discuter. Les messages sont en temps réel. Tu
+                            peux aussi partager des spots et conditions directement dans le chat.</p>
                     </div>
                 </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-q">Comment fonctionne la messagerie ?</div>
+                <div class="faq-item" data-cat="communaute" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment signaler un contenu inapproprié ?<span class="faq-arrow">+</span></div>
                     <div class="faq-a">
-                        <p>Tu peux envoyer des messages privés à n'importe quel surfeur inscrit sur SwellSync. Trouve un
-                            profil, clique sur "Message" et commence à discuter. Les messages sont mis à jour en temps
-                            réel.</p>
+                        <p>Sur chaque post ou profil, tu trouveras un menu "..." avec l'option "Signaler". Notre équipe
+                            modère les signalements sous 24h. Pour les cas urgents, écris à <a
+                                href="mailto:support@swellsync.com"
+                                style="color:var(--accent)">support@swellsync.com</a>.</p>
                     </div>
+                </div>
+                <div class="faq-item" data-cat="communaute" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment proposer une fonctionnalité ou un nouveau spot ?<span
+                            class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Utilise notre page <a href="/site/roadmap.html" style="color:var(--accent)">Roadmap</a> pour
+                            voter pour les fonctionnalités à venir, ou contacte-nous via la page <a
+                                href="/site/contact.html" style="color:var(--accent)">Contact</a>. Tes retours modèlent
+                            directement le développement de SwellSync.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="section section-alt">
+        <div class="container">
+            <div
+                style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:48px;text-align:center;max-width:600px;margin:0 auto;box-shadow:var(--shadow-sm)">
+                <div style="font-size:40px;margin-bottom:16px">🤙</div>
+                <h3 style="font-size:1.4rem;margin-bottom:10px">Pas trouvé ta réponse ?</h3>
+                <p style="color:var(--text2);margin-bottom:28px;line-height:1.8">Notre équipe basée à Hossegor répond en
+                    moins de 24h. Contacte-nous directement et on te donnera une réponse claire.</p>
+                <div class="flex-center">
+                    <a href="/site/contact.html" class="btn-primary">Contacter le support</a>
+                    <a href="mailto:support@swellsync.com" class="btn-ghost">support@swellsync.com</a>
                 </div>
             </div>
         </div>
@@ -102,31 +244,85 @@
 
     <!-- CTA -->
     <section class="cta-final">
-        <h2>Prêt à trouver ta <em
-                style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">prochaine
-                session</em> ?</h2>
-        <p>Rejoins des centaines de surfeurs qui utilisent SwellSync pour ne plus jamais rater la bonne vague.</p>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px" download>
-            <span class="material-symbols-outlined">download</span>
-            Télécharger SwellSync — C'est gratuit
-        </a>
-        <div class="cta-tags">
-            <span class="cta-tag">✅ Pas besoin d'App Store</span>
-            <span class="cta-tag">✅ Fonctionne hors-ligne</span>
-            <span class="cta-tag">✅ 100% gratuit</span>
+        <div class="container">
+            <h2>Prêt à trouver ta <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">prochaine
+                    session</em> ?</h2>
+            <p>Rejoins des centaines de surfeurs qui utilisent SwellSync pour ne plus jamais rater la bonne vague.</p>
+            <div class="cta-buttons">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px"
+                    download><span class="material-symbols-outlined">download</span> Télécharger — C'est gratuit</a>
+            </div>
+            <div class="cta-tags mt-24">
+                <span class="cta-tag">✅ Pas besoin d'App Store</span>
+                <span class="cta-tag">✅ Fonctionne hors-ligne</span>
+                <span class="cta-tag">✅ 100% gratuit</span>
+            </div>
         </div>
     </section>
 
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
+                            src="/assets/images/swellsync_logo.png" alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
-    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
+
+    <script>
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
+
+        // FAQ cats + search
+        const allItems = [...document.querySelectorAll('.faq-item')];
+        document.getElementById('faqCats').addEventListener('click', e => {
+            const btn = e.target.closest('.faq-cat-btn'); if (!btn) return;
+            document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const cat = btn.dataset.cat;
+            const search = document.getElementById('faqSearch').value.toLowerCase();
+            allItems.forEach(item => {
+                const matchCat = cat === 'tous' || item.dataset.cat === cat;
+                const matchSearch = !search || item.textContent.toLowerCase().includes(search);
+                item.style.display = (matchCat && matchSearch) ? 'block' : 'none';
+            });
+        });
+        document.getElementById('faqSearch').addEventListener('input', e => {
+            const search = e.target.value.toLowerCase();
+            const activeCat = document.querySelector('.faq-cat-btn.active')?.dataset.cat || 'tous';
+            allItems.forEach(item => {
+                const matchCat = activeCat === 'tous' || item.dataset.cat === activeCat;
+                const matchSearch = !search || item.textContent.toLowerCase().includes(search);
+                item.style.display = (matchCat && matchSearch) ? 'block' : 'none';
+            });
+        });
+
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
+    </script>
 </body>
 
 </html>

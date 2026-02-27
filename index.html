@@ -7,7 +7,6 @@
     <title>SwellSync — Prévisions Surf en Temps Réel</title>
     <meta name="description"
         content="SwellSync : l'app de prévisions surf pour la côte Atlantique. 60+ spots, messagerie, communauté, alertes houle. Gratuit sur iOS et Android.">
-    <!-- SEO & Social -->
     <link rel="canonical" href="https://swellsync.fr/">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://swellsync.fr/">
@@ -21,132 +20,665 @@
     <meta name="twitter:title" content="SwellSync — Prévisions Surf en Temps Réel">
     <meta name="twitter:description" content="60+ spots, prévisions houle, communauté de surfeurs.">
     <meta name="twitter:image" content="https://swellsync.fr/assets/images/swellsync_logo.png">
-    <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#00bad6">
+    <meta name="theme-color" content="#0096C7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SwellSync">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
+    <style>
+        /* ── Homepage specific ── */
+        .ticker {
+            background: var(--accent);
+            overflow: hidden;
+            padding: 10px 0;
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 40px;
+            animation: marquee 28s linear infinite;
+            width: max-content;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .ticker-item .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        .live-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .live-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative;
+            transition: all .3s;
+        }
+
+        .live-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(0, 150, 199, .3);
+        }
+
+        .live-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: #ef4444;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-spot-name {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .live-spot-loc {
+            font-size: 12px;
+            color: var(--text3);
+            margin-bottom: 18px;
+        }
+
+        .live-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .live-stat .val {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .live-stat .lbl {
+            font-size: 10px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-top: 2px;
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .how-card {
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius);
+            padding: 32px;
+            position: relative;
+            transition: all .3s;
+        }
+
+        .how-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .how-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 16px rgba(0, 150, 199, .25);
+        }
+
+        .how-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .how-card p {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.7;
+        }
+
+        .carousel-wrap {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform .4s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 40px;
+            align-items: center;
+            padding: 0 48px;
+        }
+
+        .car-phone {
+            width: 200px;
+            height: 400px;
+            border-radius: 32px;
+            background: var(--text);
+            border: 2px solid rgba(255, 255, 255, .1);
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .car-phone iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+
+        .car-phone .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 20px;
+            background: var(--text);
+            border-radius: 0 0 14px 14px;
+            z-index: 2;
+        }
+
+        .carousel-caption h3 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .carousel-caption p {
+            font-size: 15px;
+            color: var(--text2);
+            line-height: 1.8;
+            max-width: 380px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border2);
+            border: none;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .carousel-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: var(--accent);
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text2);
+            box-shadow: var(--shadow-sm);
+            transition: all .2s;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .carousel-nav.prev {
+            left: -22px;
+        }
+
+        .carousel-nav.next {
+            right: -22px;
+        }
+
+        .badge-item {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            text-align: center;
+            transition: all .3s;
+        }
+
+        .badge-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(0, 150, 199, .3);
+        }
+
+        .badge-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .badge-item h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .badge-item p {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 14px;
+        }
+
+        .problem-card {
+            background: var(--bg2);
+            border-radius: var(--radius);
+            padding: 28px;
+        }
+
+        .problem-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .problem-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .problem-card ul li {
+            font-size: 14px;
+            color: var(--text2);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .ps-icon {
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        .back-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 150, 199, .3);
+            transition: all .3s;
+            z-index: 100;
+        }
+
+        .back-top.visible {
+            display: flex;
+        }
+
+        .back-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 150, 199, .4);
+        }
+
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            z-index: 300;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, .06);
+        }
+
+        .cookie-banner p {
+            font-size: 14px;
+            color: var(--text2);
+        }
+
+        .cookie-banner a {
+            color: var(--accent);
+        }
+
+        .cookie-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cookie-btn {
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cookie-btn.accept {
+            background: var(--gradient);
+            color: #fff;
+        }
+
+        .cookie-btn.reject {
+            background: var(--bg3);
+            color: var(--text2);
+        }
+
+        @media(max-width:900px) {
+            .live-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .how-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .badges-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .carousel-slide {
+                grid-template-columns: 1fr;
+            }
+
+            .car-phone {
+                display: none;
+            }
+        }
+
+        @media(max-width:480px) {
+            .badges-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- ═══ NAVBAR ═══ -->
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
             <a href="/" class="active">Accueil</a>
             <a href="/site/fonctionnalites.html">Fonctionnalités</a>
             <a href="/site/spots.html">Spots</a>
             <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a>
             <a href="/site/faq.html">FAQ</a>
+            <a href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
     <!-- ═══ HERO ═══ -->
     <section class="hero">
         <div class="container">
-            <div class="hero-content animate">
-                <div class="hero-badge">
-                    <span
-                        style="width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite"></span>
-                    Disponible maintenant — 100% Gratuit
-                </div>
-                <h1>La meilleure app de <em>prévisions surf</em> en France</h1>
-                <p class="hero-desc">60+ spots sur la côte Atlantique, prévisions 7 jours, messagerie entre surfeurs,
-                    communauté active et alertes houle personnalisées. Tout dans une seule app installable.</p>
-                <div class="hero-buttons">
-                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" download>
-                        <span class="material-symbols-outlined" style="font-size:20px">download</span>
-                        Télécharger Android (.apk)
-                    </a>
-                    <a href="javascript:void(0)" class="btn-outline" onclick="showIosInstall()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
-                        </svg>
-                        Installer sur iPhone
-                    </a>
-                </div>
-                <div class="platforms">
-                    <div class="platform">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83" />
-                        </svg>
-                        iOS
+            <div class="hero-inner">
+                <div>
+                    <div class="hero-badge animate"><span
+                            style="width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite"></span>
+                        Disponible maintenant — 100% Gratuit</div>
+                    <h1 class="animate animate-delay-1">La meilleure app de <em>prévisions surf</em> en France</h1>
+                    <p class="hero-desc animate animate-delay-2">60+ spots sur la côte Atlantique, prévisions 7 jours,
+                        messagerie entre surfeurs, communauté active et alertes houle personnalisées. Tout dans une
+                        seule app installable.</p>
+                    <div class="hero-ctas animate animate-delay-3">
+                        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" download><span
+                                class="material-symbols-outlined" style="font-size:19px">download</span> Télécharger
+                            Android (.apk)</a>
+                        <a href="javascript:void(0)" class="btn-outline" onclick="showIosInstall()">🍎 Installer sur
+                            iPhone</a>
                     </div>
-                    <div class="platform">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V7H6v11zM3.5 7C2.67 7 2 7.67 2 8.5v7c0 .83.67 1.5 1.5 1.5S5 16.33 5 15.5v-7C5 7.67 4.33 7 3.5 7zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0012 0c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 006 6h12c0-1.98-.96-3.74-2.47-4.84zM10 4H9V3h1v1zm5 0h-1V3h1v1z" />
-                        </svg>
-                        Android
+                    <div class="hero-trust animate animate-delay-4">
+                        <div class="hero-trust-item">✅ Gratuit pour toujours</div>
+                        <div class="hero-trust-item">✅ Sans App Store</div>
+                        <div class="hero-trust-item">✅ Hors-ligne</div>
+                        <div class="hero-trust-item">✅ iOS & Android</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="hero-phone animate float" style="animation-delay:.3s">
-                <div class="phone-glow"></div>
-                <div class="phone-mock">
-                    <iframe src="/pages/home.html" loading="lazy" title="SwellSync App"
-                        style="background:#080f1a;pointer-events:none"></iframe>
+                <div class="hero-visual">
+                    <div class="hero-glow"></div>
+                    <div class="phone-mockup">
+                        <div class="phone-notch"></div>
+                        <iframe src="/pages/home.html" loading="lazy" title="SwellSync App"
+                            style="background:#080f1a;pointer-events:none;transform-origin:0 0"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ STATS ═══ -->
-    <section class="stats">
+    <!-- TRUST BAR -->
+    <div class="trust-bar">
+        <div class="marquee-track">
+            <div class="marquee-item">🌊 StormGlass API</div>
+            <div class="marquee-item">🗺️ Leaflet Maps</div>
+            <div class="marquee-item">💨 Windy.com</div>
+            <div class="marquee-item">🔒 JWT Auth</div>
+            <div class="marquee-item">🐘 PostgreSQL</div>
+            <div class="marquee-item">⚡ Node.js</div>
+            <div class="marquee-item">📱 PWA Ready</div>
+            <div class="marquee-item">🤖 Capacitor</div>
+            <div class="marquee-item">☁️ Render Hosting</div>
+            <div class="marquee-item">🇫🇷 Made in France</div>
+            <!-- Duplicate for seamless loop -->
+            <div class="marquee-item">🌊 StormGlass API</div>
+            <div class="marquee-item">🗺️ Leaflet Maps</div>
+            <div class="marquee-item">💨 Windy.com</div>
+            <div class="marquee-item">🔒 JWT Auth</div>
+            <div class="marquee-item">🐘 PostgreSQL</div>
+            <div class="marquee-item">⚡ Node.js</div>
+            <div class="marquee-item">📱 PWA Ready</div>
+            <div class="marquee-item">🤖 Capacitor</div>
+            <div class="marquee-item">☁️ Render Hosting</div>
+            <div class="marquee-item">🇫🇷 Made in France</div>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <section class="section section-white" style="padding:60px 0">
         <div class="container">
-            <div class="stat animate">
-                <div class="stat-num">60+</div>
-                <div class="stat-label">Spots de surf</div>
-            </div>
-            <div class="stat animate">
-                <div class="stat-num">7 jours</div>
-                <div class="stat-label">De prévisions</div>
-            </div>
-            <div class="stat animate">
-                <div class="stat-num">24/7</div>
-                <div class="stat-label">Données live</div>
-            </div>
-            <div class="stat animate">
-                <div class="stat-num">100%</div>
-                <div class="stat-label">Gratuit</div>
+            <div class="stats-grid animate">
+                <div class="stat-card">
+                    <div class="stat-num" id="c1">60+</div>
+                    <div class="stat-label">Spots couverts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="c2">7j</div>
+                    <div class="stat-label">De prévisions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="c3">500+</div>
+                    <div class="stat-label">Surfeurs inscrits</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="c4">98%</div>
+                    <div class="stat-label">Satisfaction</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ CONDITIONS LIVE ═══ -->
-    <section class="section section-gradient-1 reveal">
+    <!-- LIVE CONDITIONS TICKER -->
+    <div class="ticker">
+        <div class="ticker-track">
+            <div class="ticker-item"><span class="material-symbols-outlined">waves</span>Hossegor : 1.8m — Bonnes
+                conditions</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">air</span>Biarritz : vent offshore 15km/h
+            </div>
+            <div class="ticker-item"><span class="material-symbols-outlined">thermostat</span>Eau : 14°C — Côte Basque
+            </div>
+            <div class="ticker-item"><span class="material-symbols-outlined">surfing</span>Session du jour : La Gravière
+                ⭐</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">groups</span>248 surfeurs connectés</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">waves</span>La Torche : 2.1m — Épique</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">schedule</span>Prochaine marée haute :
+                15h42</div>
+            <!-- duplicate -->
+            <div class="ticker-item"><span class="material-symbols-outlined">waves</span>Hossegor : 1.8m — Bonnes
+                conditions</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">air</span>Biarritz : vent offshore 15km/h
+            </div>
+            <div class="ticker-item"><span class="material-symbols-outlined">thermostat</span>Eau : 14°C — Côte Basque
+            </div>
+            <div class="ticker-item"><span class="material-symbols-outlined">surfing</span>Session du jour : La Gravière
+                ⭐</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">groups</span>248 surfeurs connectés</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">waves</span>La Torche : 2.1m — Épique</div>
+            <div class="ticker-item"><span class="material-symbols-outlined">schedule</span>Prochaine marée haute :
+                15h42</div>
+        </div>
+    </div>
+
+    <!-- PROBLEM → SOLUTION -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">🤔 Le problème</div>
+                <h2>Les apps météo <em>ne comprennent pas le surf</em></h2>
+                <p>Les apps génériques te donnent la météo, pas les conditions surf. SwellSync a été conçu par des
+                    surfeurs, pour des surfeurs.</p>
+            </div>
+            <div class="problem-solution-grid">
+                <div class="problem-card" style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15)">
+                    <h4><span style="color:#ef4444">❌</span> Avant SwellSync</h4>
+                    <ul>
+                        <li><span class="ps-icon" style="color:#ef4444">✗</span>Météo généraliste inexacte pour le surf
+                        </li>
+                        <li><span class="ps-icon" style="color:#ef4444">✗</span>Impossible de comparer plusieurs spots
+                        </li>
+                        <li><span class="ps-icon" style="color:#ef4444">✗</span>Pas de communauté de surfeurs</li>
+                        <li><span class="ps-icon" style="color:#ef4444">✗</span>Apps payantes ou peu adaptées à la
+                            France</li>
+                        <li><span class="ps-icon" style="color:#ef4444">✗</span>Aucun moyen d'organiser des sessions
+                        </li>
+                    </ul>
+                </div>
+                <div class="ps-arrow">→</div>
+                <div class="problem-card" style="background:rgba(0,150,199,.04);border:1px solid rgba(0,150,199,.2)">
+                    <h4><span style="color:var(--accent)">✅</span> Avec SwellSync</h4>
+                    <ul>
+                        <li><span class="ps-icon" style="color:var(--accent)">✓</span>Données marines précises
+                            (StormGlass)</li>
+                        <li><span class="ps-icon" style="color:var(--accent)">✓</span>60+ spots comparables en un coup
+                            d'œil</li>
+                        <li><span class="ps-icon" style="color:var(--accent)">✓</span>Communauté de surfeurs active</li>
+                        <li><span class="ps-icon" style="color:var(--accent)">✓</span>100% gratuit, fait pour la France
+                        </li>
+                        <li><span class="ps-icon" style="color:var(--accent)">✓</span>Messagerie pour organiser des
+                            sessions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE SPOTS CONDITIONS -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">🌊 Conditions en direct</div>
                 <h2>Spots populaires <em>en ce moment</em></h2>
                 <p>Données actualisées toutes les 4 heures via StormGlass.</p>
             </div>
-            <div class="live-grid" id="liveSpots">
-                <div class="live-card">
+            <div class="live-grid">
+                <div class="live-card animate">
                     <div class="live-badge">Live</div>
                     <div class="live-spot-name">Hossegor — La Gravière</div>
                     <div class="live-spot-loc">Landes, Nouvelle-Aquitaine</div>
@@ -169,7 +701,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="live-card">
+                <div class="live-card animate animate-delay-1">
                     <div class="live-badge">Live</div>
                     <div class="live-spot-name">Biarritz — Grande Plage</div>
                     <div class="live-spot-loc">Pays Basque, Nouvelle-Aquitaine</div>
@@ -192,7 +724,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="live-card">
+                <div class="live-card animate animate-delay-2">
                     <div class="live-badge">Live</div>
                     <div class="live-spot-name">La Torche</div>
                     <div class="live-spot-loc">Bretagne, Finistère</div>
@@ -216,139 +748,117 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- ═══ LOGOS DE CONFIANCE ═══ -->
-    <section class="stats" style="padding:24px 0">
-        <div class="container" style="justify-content:center">
-            <div class="logos-strip">
-                <div class="logo-item"><span>🌊</span> StormGlass</div>
-                <div class="logo-item"><span>🗺️</span> Leaflet</div>
-                <div class="logo-item"><span>💨</span> Windy</div>
-                <div class="logo-item"><span>☁️</span> Render</div>
-                <div class="logo-item"><span>🐘</span> PostgreSQL</div>
-                <div class="logo-item"><span>⚡</span> Node.js</div>
+            <div class="flex-center mt-32">
+                <a href="/site/spots.html" class="btn-outline">Voir tous les spots →</a>
             </div>
         </div>
     </section>
 
-    <!-- ═══ LIVE TICKER ═══ -->
-    <div class="ticker">
-        <div class="ticker-track">
-            <div class="ticker-item"><span class="material-symbols-outlined">waves</span> Hossegor : 1.8m — Bonnes
-                conditions</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">air</span> Biarritz : vent offshore 15km/h
-            </div>
-            <div class="ticker-item"><span class="material-symbols-outlined">thermostat</span> Eau : 14°C — Côte Basque
-            </div>
-            <div class="ticker-item"><span class="material-symbols-outlined">tide</span> Marée montante — Lacanau</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">surfing</span> Session du jour : La
-                Gravière ⭐</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">groups</span> 248 surfeurs connectés</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">waves</span> La Torche : 2.1m — Épique
-            </div>
-            <div class="ticker-item"><span class="material-symbols-outlined">schedule</span> Prochaine marée haute :
-                15h42</div>
-            <!-- Dupliqué pour boucle infinie -->
-            <div class="ticker-item"><span class="material-symbols-outlined">waves</span> Hossegor : 1.8m — Bonnes
-                conditions</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">air</span> Biarritz : vent offshore 15km/h
-            </div>
-            <div class="ticker-item"><span class="material-symbols-outlined">thermostat</span> Eau : 14°C — Côte Basque
-            </div>
-            <div class="ticker-item"><span class="material-symbols-outlined">tide</span> Marée montante — Lacanau</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">surfing</span> Session du jour : La
-                Gravière ⭐</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">groups</span> 248 surfeurs connectés</div>
-            <div class="ticker-item"><span class="material-symbols-outlined">waves</span> La Torche : 2.1m — Épique
-            </div>
-            <div class="ticker-item"><span class="material-symbols-outlined">schedule</span> Prochaine marée haute :
-                15h42</div>
-        </div>
-    </div>
-
-    <!-- ═══ COMMENT ÇA MARCHE ═══ -->
-    <section class="section section-gradient-1">
+    <!-- HOW IT WORKS -->
+    <section class="section section-alt">
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">🚀 Comment ça marche</div>
                 <h2>Prêt en <em>3 étapes</em></h2>
-                <p>Pas besoin d'App Store. Installe SwellSync en 30 secondes et surfe mieux dès aujourd'hui.</p>
+                <p>Pas besoin d'App Store. Installe SwellSync en 30 secondes.</p>
             </div>
-            <div class="steps-grid">
-                <div class="step-card animate">
-                    <div class="step-num">1</div>
+            <div class="how-grid">
+                <div class="how-card animate">
+                    <div class="how-num">1</div>
                     <h3>Télécharge l'app</h3>
-                    <p>Clique sur "Télécharger" et installe le fichier sur ton téléphone Android. Sur iPhone, ajoute-le
-                        depuis Safari.</p>
+                    <p>Clique sur "Télécharger" et installe le fichier .apk sur Android. Sur iPhone, ouvre le site dans
+                        Safari et ajoute-le à l'écran d'accueil.</p>
                 </div>
-                <div class="step-card animate" style="animation-delay:.15s">
-                    <div class="step-num">2</div>
+                <div class="how-card animate animate-delay-1">
+                    <div class="how-num">2</div>
                     <h3>Crée ton profil</h3>
-                    <p>Inscris-toi en 10 secondes avec un pseudo et choisis tes spots favoris pour personnaliser ton
+                    <p>Inscris-toi en 10 secondes avec un pseudo. Choisis tes spots favoris pour personnaliser ton
                         expérience.</p>
                 </div>
-                <div class="step-card animate" style="animation-delay:.3s">
-                    <div class="step-num">3</div>
+                <div class="how-card animate animate-delay-2">
+                    <div class="how-num">3</div>
                     <h3>Surfe mieux 🤙</h3>
-                    <p>Consulte les prévisions, reçois des alertes houle, et connecte-toi avec la communauté de
-                        surfeurs.</p>
+                    <p>Consulte les prévisions, reçois des alertes houle, enregistre tes sessions et connecte-toi avec
+                        la communauté.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ SCREENSHOTS DE L'APP ═══ -->
-    <section class="section section-dark reveal">
+    <!-- APP CAROUSEL -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">📱 L'app en action</div>
                 <h2>Découvre <em>SwellSync</em> de l'intérieur</h2>
-                <p>Navigue entre les écrans de l'app et vois ce qui t'attend.</p>
+                <p>Navigue entre les écrans et vois ce qui t'attend.</p>
             </div>
-            <div class="carousel" id="appCarousel">
+            <div class="carousel-wrap">
                 <button class="carousel-nav prev" onclick="moveCarousel(-1)">‹</button>
                 <button class="carousel-nav next" onclick="moveCarousel(1)">›</button>
-                <div class="carousel-track" id="carouselTrack">
-                    <div class="carousel-slide">
-                        <div class="phone-frame active-frame"><iframe src="/pages/home.html" loading="lazy"
-                                style="background:#080f1a;pointer-events:none"></iframe></div>
-                        <div class="carousel-caption">
-                            <h3>🏠 Accueil</h3>
-                            <p>Spot le plus proche, conditions live, accès rapide à tout</p>
+                <div style="overflow:hidden;border-radius:var(--radius)">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-slide">
+                            <div class="car-phone">
+                                <div class="notch"></div><iframe src="/pages/home.html" loading="lazy"
+                                    style="background:#080f1a"></iframe>
+                            </div>
+                            <div class="carousel-caption">
+                                <div class="section-tag">🏠 Accueil</div>
+                                <h3>Ton spot, tes conditions</h3>
+                                <p>Le spot le plus proche avec les conditions du jour. Score de surf, prévisions
+                                    horaires, marée — tout d'un coup d'œil.</p><a href="/site/fonctionnalites.html"
+                                    class="btn-ghost" style="margin-top:16px">En savoir plus →</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="phone-frame active-frame"><iframe src="/pages/spots.html" loading="lazy"
-                                style="background:#080f1a;pointer-events:none"></iframe></div>
-                        <div class="carousel-caption">
-                            <h3>🗺️ Carte des spots</h3>
-                            <p>60+ spots sur la côte Atlantique avec carte interactive</p>
+                        <div class="carousel-slide">
+                            <div class="car-phone">
+                                <div class="notch"></div><iframe src="/pages/spots.html" loading="lazy"
+                                    style="background:#080f1a"></iframe>
+                            </div>
+                            <div class="carousel-caption">
+                                <div class="section-tag">🗺️ Carte</div>
+                                <h3>60+ spots cartographiés</h3>
+                                <p>Tous les spots de la côte Atlantique sur une carte interactive. Marqueurs colorés
+                                    selon les conditions, zoom et filtres par région.</p><a href="/site/spots.html"
+                                    class="btn-ghost" style="margin-top:16px">Explorer les spots →</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="phone-frame active-frame"><iframe src="/pages/alertes.html" loading="lazy"
-                                style="background:#080f1a;pointer-events:none"></iframe></div>
-                        <div class="carousel-caption">
-                            <h3>🔔 Alertes houle</h3>
-                            <p>Configure tes seuils et reçois des notifications personnalisées</p>
+                        <div class="carousel-slide">
+                            <div class="car-phone">
+                                <div class="notch"></div><iframe src="/pages/alertes.html" loading="lazy"
+                                    style="background:#080f1a"></iframe>
+                            </div>
+                            <div class="carousel-caption">
+                                <div class="section-tag">🔔 Alertes</div>
+                                <h3>Ne rate plus une bonne session</h3>
+                                <p>Configure des alertes par spot avec tes seuils de hauteur et période. Reçois une
+                                    notification push quand les conditions sont idéales.</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="phone-frame active-frame"><iframe src="/pages/communaute.html" loading="lazy"
-                                style="background:#080f1a;pointer-events:none"></iframe></div>
-                        <div class="carousel-caption">
-                            <h3>👥 Communauté</h3>
-                            <p>Partage tes sessions, suis des riders, collecte des badges</p>
+                        <div class="carousel-slide">
+                            <div class="car-phone">
+                                <div class="notch"></div><iframe src="/pages/communaute.html" loading="lazy"
+                                    style="background:#080f1a"></iframe>
+                            </div>
+                            <div class="carousel-caption">
+                                <div class="section-tag">👥 Communauté</div>
+                                <h3>Une communauté de surfeurs</h3>
+                                <p>Partage tes sessions, suis des riders, commente, collecte des badges. La première
+                                    réseau social 100% dédié au surf français.</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <div class="phone-frame active-frame"><iframe src="/pages/profil.html" loading="lazy"
-                                style="background:#080f1a;pointer-events:none"></iframe></div>
-                        <div class="carousel-caption">
-                            <h3>👤 Profil</h3>
-                            <p>Tes stats, badges, historique de sessions et paramètres</p>
+                        <div class="carousel-slide">
+                            <div class="car-phone">
+                                <div class="notch"></div><iframe src="/pages/profil.html" loading="lazy"
+                                    style="background:#080f1a"></iframe>
+                            </div>
+                            <div class="carousel-caption">
+                                <div class="section-tag">👤 Profil</div>
+                                <h3>Tes stats de rider</h3>
+                                <p>Historique de sessions, badges collectés, followers, journal de surf et accès aux
+                                    paramètres — tout sur ton profil.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -357,136 +867,59 @@
         </div>
     </section>
 
-    <!-- ═══ AVIS UTILISATEURS ═══ -->
-    <section class="section section-ocean">
+    <!-- FEATURES GRID -->
+    <section class="section section-alt">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">⭐ Avis</div>
-                <h2>Ce que disent nos <em>surfeurs</em></h2>
-                <p>Rejoins une communauté de passionnés qui ne jurent plus que par SwellSync.</p>
+                <div class="section-tag">✨ Fonctionnalités</div>
+                <h2>Tout ce qu'un surfeur <em>a besoin</em></h2>
             </div>
-            <div class="testimonials-grid">
-                <div class="testimonial animate">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <div class="testimonial-text">"Enfin une app de surf qui marche bien ! Les prévisions sont ultra
-                        précises et le design est magnifique. Je l'utilise tous les jours avant d'aller surfer."</div>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">T</div>
-                        <div class="testimonial-info">
-                            <div class="t-name">Thomas B.</div>
-                            <div class="t-role">Surfeur — Hossegor</div>
-                        </div>
-                    </div>
+            <div class="features-grid">
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(0,150,199,.1)">🌊</div>
+                    <h3>Prévisions 7 jours</h3>
+                    <p>Hauteur, période, vent, eau, marée — données StormGlass toutes les 4h pour 60+ spots.</p>
                 </div>
-                <div class="testimonial animate" style="animation-delay:.1s">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <div class="testimonial-text">"La carte interactive est un game-changer. Je peux voir les conditions
-                        de tous les spots en un clin d'œil. Et la messagerie pour organiser des sessions, c'est top !"
-                    </div>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">M</div>
-                        <div class="testimonial-info">
-                            <div class="t-name">Marine L.</div>
-                            <div class="t-role">Surfeuse — Biarritz</div>
-                        </div>
-                    </div>
+                <div class="feature-card animate animate-delay-1">
+                    <div class="feature-icon" style="background:rgba(0,180,160,.1)">🗺️</div>
+                    <h3>Carte interactive</h3>
+                    <p>Tous les spots sur une carte Leaflet avec conditions en temps réel. Zoom, filtres,
+                        géolocalisation.</p>
                 </div>
-                <div class="testimonial animate" style="animation-delay:.2s">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <div class="testimonial-text">"Les alertes houle m'ont changé la vie. J'ai plus jamais raté une
-                        bonne session depuis que je suis sur SwellSync. Et en plus c'est gratuit !"</div>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar">J</div>
-                        <div class="testimonial-info">
-                            <div class="t-name">Jules D.</div>
-                            <div class="t-role">Surfeur — La Torche</div>
-                        </div>
-                    </div>
+                <div class="feature-card animate animate-delay-2">
+                    <div class="feature-icon" style="background:rgba(108,99,255,.1)">💬</div>
+                    <h3>Messagerie privée</h3>
+                    <p>Chat en temps réel avec d'autres surfeurs pour organiser des sessions et partager des spots.</p>
                 </div>
+                <div class="feature-card animate">
+                    <div class="feature-icon" style="background:rgba(245,158,11,.1)">👥</div>
+                    <h3>Communauté</h3>
+                    <p>Posts, photos de sessions, followers, likes, commentaires et badges exclusifs.</p>
+                </div>
+                <div class="feature-card animate animate-delay-1">
+                    <div class="feature-icon" style="background:rgba(239,68,68,.1)">🔔</div>
+                    <h3>Alertes houle</h3>
+                    <p>Notifications push quand tes conditions idéales se présentent sur ton spot favori.</p>
+                </div>
+                <div class="feature-card animate animate-delay-2">
+                    <div class="feature-icon" style="background:rgba(6,182,212,.1)">📱</div>
+                    <h3>App installable</h3>
+                    <p>PWA installable sur Android et iOS. Fonctionne hors-ligne, rapide, sans App Store.</p>
+                </div>
+            </div>
+            <div class="flex-center mt-32">
+                <a href="/site/fonctionnalites.html" class="btn-outline">Toutes les fonctionnalités →</a>
             </div>
         </div>
     </section>
 
-    <!-- ═══ POURQUOI SWELLSYNC ═══ -->
-    <section class="section section-gradient-2">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">🏆 Comparaison</div>
-                <h2>Pourquoi choisir <em>SwellSync</em> ?</h2>
-                <p>On a comparé SwellSync avec les autres apps de surf du marché. Voici le résultat.</p>
-            </div>
-            <div class="comparison-table animate">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fonctionnalité</th>
-                            <th class="highlight">SwellSync</th>
-                            <th>Magicseaweed</th>
-                            <th>Surfline</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Prix</td>
-                            <td class="highlight"><strong>Gratuit</strong></td>
-                            <td>Freemium</td>
-                            <td>14.99$/mois</td>
-                        </tr>
-                        <tr>
-                            <td>Spots France 🇫🇷</td>
-                            <td class="highlight"><span class="check">60+</span></td>
-                            <td>~30</td>
-                            <td>~20</td>
-                        </tr>
-                        <tr>
-                            <td>Messagerie privée</td>
-                            <td class="highlight"><span class="check">✓</span></td>
-                            <td><span class="cross">✗</span></td>
-                            <td><span class="cross">✗</span></td>
-                        </tr>
-                        <tr>
-                            <td>Communauté sociale</td>
-                            <td class="highlight"><span class="check">✓</span></td>
-                            <td><span class="cross">✗</span></td>
-                            <td>Limité</td>
-                        </tr>
-                        <tr>
-                            <td>Alertes houle</td>
-                            <td class="highlight"><span class="check">✓</span></td>
-                            <td>Premium</td>
-                            <td>Premium</td>
-                        </tr>
-                        <tr>
-                            <td>Mode hors-ligne</td>
-                            <td class="highlight"><span class="check">✓</span></td>
-                            <td><span class="cross">✗</span></td>
-                            <td><span class="cross">✗</span></td>
-                        </tr>
-                        <tr>
-                            <td>Carte interactive</td>
-                            <td class="highlight"><span class="check">✓</span></td>
-                            <td><span class="check">✓</span></td>
-                            <td>Premium</td>
-                        </tr>
-                        <tr>
-                            <td>Journal de sessions</td>
-                            <td class="highlight"><span class="check">✓</span></td>
-                            <td><span class="cross">✗</span></td>
-                            <td>Premium</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ BADGES ═══ -->
-    <section class="section section-dark">
+    <!-- BADGES -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">🎖️ Badges</div>
-                <h2>Collecte des <em>badges</em> uniques</h2>
-                <p>Surfe, explore, et débloque des badges exclusifs pour montrer ton niveau.</p>
+                <h2>Collecte des <em>badges</em> exclusifs</h2>
+                <p>20+ badges à débloquer en surfant, explorant les spots et en aidant la communauté.</p>
             </div>
             <div class="badges-grid">
                 <div class="badge-item animate">
@@ -494,37 +927,37 @@
                     <h4>Première vague</h4>
                     <p>Première session</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.05s">
+                <div class="badge-item animate animate-delay-1">
                     <div class="badge-icon">🌅</div>
                     <h4>Dawn Patrol</h4>
                     <p>Session avant 7h</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.1s">
+                <div class="badge-item animate animate-delay-2">
                     <div class="badge-icon">🔥</div>
                     <h4>On Fire</h4>
                     <p>10 sessions/mois</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.15s">
+                <div class="badge-item animate animate-delay-3">
                     <div class="badge-icon">🗺️</div>
                     <h4>Explorateur</h4>
                     <p>10 spots visités</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.2s">
+                <div class="badge-item animate">
                     <div class="badge-icon">⭐</div>
                     <h4>Top Rider</h4>
-                    <p>50 sessions</p>
+                    <p>50 sessions logguées</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.25s">
+                <div class="badge-item animate animate-delay-1">
                     <div class="badge-icon">🌊</div>
                     <h4>Big Wave</h4>
-                    <p>Session > 3m</p>
+                    <p>Session &gt;3m de vagues</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.3s">
+                <div class="badge-item animate animate-delay-2">
                     <div class="badge-icon">👥</div>
                     <h4>Social</h4>
                     <p>20 followers</p>
                 </div>
-                <div class="badge-item animate" style="animation-delay:.35s">
+                <div class="badge-item animate animate-delay-3">
                     <div class="badge-icon">💎</div>
                     <h4>Pro</h4>
                     <p>Abonné Pro</p>
@@ -533,109 +966,262 @@
         </div>
     </section>
 
-    <!-- ═══ RÉGIONS PHARES ═══ -->
-    <section class="section section-ocean">
+    <!-- TESTIMONIALS -->
+    <section class="section section-alt">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">🗺️ Régions</div>
-                <h2>5 régions, <em>des milliers</em> de vagues</h2>
-                <p>Du nord au sud de la côte Atlantique, chaque région a son caractère.</p>
+                <div class="section-tag">⭐ Avis</div>
+                <h2>Ce que disent nos <em>surfeurs</em></h2>
+                <p>Rejoins une communauté de passionnés qui ne jurent plus que par SwellSync.</p>
             </div>
-            <div class="features-grid" style="grid-template-columns: repeat(5, 1fr)">
-                <div class="feature-card animate" style="text-align:center">
-                    <div class="feature-icon" style="background:rgba(0,186,214,0.08);margin:0 auto 16px;font-size:28px">
-                        🏴</div>
-                    <h3>Bretagne</h3>
-                    <p>La Torche, Penhors, La Palue... Des vagues puissantes dans un cadre sauvage.</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Enfin une app de surf qui marche vraiment ! Les prévisions sont ultra
+                        précises et le design est magnifique. Je l'utilise tous les jours avant d'aller surfer."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">🏄</div>
+                        <div>
+                            <div class="testimonial-name">Thomas B.</div>
+                            <div class="testimonial-loc">Surfeur — Hossegor</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card animate" style="text-align:center;animation-delay:.08s">
-                    <div class="feature-icon"
-                        style="background:rgba(16,185,129,0.08);margin:0 auto 16px;font-size:28px">⚓</div>
-                    <h3>Vendée</h3>
-                    <p>Bud Bud, Les Sables, Saint-Gilles... Beach breaks accessibles toute l'année.</p>
+                <div class="testimonial-card animate animate-delay-1">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"La carte interactive est un game-changer. Je peux voir les conditions
+                        de tous les spots en un clin d'œil. Et la messagerie pour organiser des sessions, c'est top !"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">🌊</div>
+                        <div>
+                            <div class="testimonial-name">Marine L.</div>
+                            <div class="testimonial-loc">Surfeuse — Biarritz</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card animate" style="text-align:center;animation-delay:.16s">
-                    <div class="feature-icon"
-                        style="background:rgba(139,92,246,0.08);margin:0 auto 16px;font-size:28px">🍷</div>
-                    <h3>Gironde</h3>
-                    <p>Lacanau, Le Porge, Montalivet... Les classiques des surfeurs bordelais.</p>
-                </div>
-                <div class="feature-card animate" style="text-align:center;animation-delay:.24s">
-                    <div class="feature-icon"
-                        style="background:rgba(245,158,11,0.08);margin:0 auto 16px;font-size:28px">🌲</div>
-                    <h3>Landes</h3>
-                    <p>Hossegor, Capbreton, Seignosse... Le paradis du surf français.</p>
-                </div>
-                <div class="feature-card animate" style="text-align:center;animation-delay:.32s">
-                    <div class="feature-icon" style="background:rgba(239,68,68,0.08);margin:0 auto 16px;font-size:28px">
-                        🏔️</div>
-                    <h3>Pays Basque</h3>
-                    <p>Biarritz, Anglet, Hendaye, Guéthary... Où tout a commencé en France.</p>
+                <div class="testimonial-card animate animate-delay-2">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Les alertes houle m'ont changé la vie. J'ai plus jamais raté une bonne
+                        session depuis que je suis sur SwellSync. Et en plus c'est gratuit !"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">🤙</div>
+                        <div>
+                            <div class="testimonial-name">Jules D.</div>
+                            <div class="testimonial-loc">Surfeur — La Torche</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ COMMUNAUTÉ EN CHIFFRES ═══ -->
-    <section class="stats"
-        style="padding:60px 0;background:linear-gradient(135deg, rgba(99,102,241,0.04), rgba(0,186,214,0.04))">
-        <div class="container" style="flex-direction:column;align-items:center;gap:40px">
-            <div class="section-header" style="margin-bottom:0">
-                <div class="section-tag">📊 La communauté</div>
-                <h2>SwellSync en <em>chiffres</em></h2>
-            </div>
-            <div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:40px;width:100%">
-                <div class="stat animate">
-                    <div class="stat-num">60+</div>
-                    <div class="stat-label">Spots couverts</div>
-                </div>
-                <div class="stat animate">
-                    <div class="stat-num">500+</div>
-                    <div class="stat-label">Surfeurs inscrits</div>
-                </div>
-                <div class="stat animate">
-                    <div class="stat-num">2K+</div>
-                    <div class="stat-label">Sessions loguées</div>
-                </div>
-                <div class="stat animate">
-                    <div class="stat-num">15K+</div>
-                    <div class="stat-label">Messages envoyés</div>
-                </div>
-                <div class="stat animate">
-                    <div class="stat-num">98%</div>
-                    <div class="stat-label">Satisfaction</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section">
+    <!-- COMPETITOR COMPARISON -->
+    <section class="section section-white">
         <div class="container">
-            <div class="newsletter animate">
-                <h3>📬 Reste informé</h3>
-                <p>Reçois les meilleures conditions de surf chaque semaine dans ta boîte mail.</p>
-                <div class="newsletter-form">
-                    <input type="email" placeholder="ton@email.com" id="nlEmail">
-                    <button onclick="alert('📬 Merci ! Tu recevras bientôt les rapports surf.')">S'inscrire</button>
+            <div class="section-header">
+                <div class="section-tag">🏆 Comparaison</div>
+                <h2>Pourquoi choisir <em>SwellSync</em> ?</h2>
+                <p>On a comparé SwellSync avec les autres apps de surf du marché.</p>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="compare-table" style="max-width:800px;margin:0 auto">
+                    <thead>
+                        <tr>
+                            <th>Fonctionnalité</th>
+                            <th class="highlight">SwellSync 🇫🇷</th>
+                            <th>Magicseaweed</th>
+                            <th>Surfline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Prix</td>
+                            <td><span class="check-yes">Gratuit ✓</span></td>
+                            <td>Freemium</td>
+                            <td>14.99$/mois</td>
+                        </tr>
+                        <tr>
+                            <td>Spots France</td>
+                            <td><span class="check-yes">60+ ✓</span></td>
+                            <td>~30</td>
+                            <td>~20</td>
+                        </tr>
+                        <tr>
+                            <td>Messagerie privée</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-no">—</span></td>
+                        </tr>
+                        <tr>
+                            <td>Communauté sociale</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-no">—</span></td>
+                            <td>Limité</td>
+                        </tr>
+                        <tr>
+                            <td>Alertes houle gratuites</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td>Premium</td>
+                            <td>Premium</td>
+                        </tr>
+                        <tr>
+                            <td>Mode hors-ligne</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-no">—</span></td>
+                        </tr>
+                        <tr>
+                            <td>Journal de sessions</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-no">—</span></td>
+                            <td>Premium</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TARIFS TEASER -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">💎 Tarifs</div>
+                <h2>Gratuit, <em>pour toujours</em></h2>
+                <p>Toutes les fonctionnalités essentielles gratuites. Le Pro pour aller encore plus loin.</p>
+            </div>
+            <div class="pricing-grid" style="max-width:720px;margin:0 auto">
+                <div class="price-card animate">
+                    <div class="price-name">Gratuit</div>
+                    <div class="price-sub">Pour commencer à surfer</div>
+                    <div class="price-amount"><sup>€</sup>0<span> / mois</span></div>
+                    <ul class="price-features" style="margin-bottom:20px">
+                        <li><span class="ico yes">✓</span>60+ spots</li>
+                        <li><span class="ico yes">✓</span>Prévisions 7 jours</li>
+                        <li><span class="ico yes">✓</span>Communauté & Messagerie</li>
+                        <li><span class="ico no">—</span><span style="color:var(--text3)">Alertes illimitées</span></li>
+                    </ul>
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-outline"
+                        style="width:100%;justify-content:center" download>Télécharger gratuitement</a>
+                </div>
+                <div class="price-card pro animate animate-delay-1">
+                    <div class="price-name" style="color:var(--accent)">Pro</div>
+                    <div class="price-sub">Pour les riders sérieux</div>
+                    <div class="price-amount"><sup>€</sup>4.99<span> / mois</span></div>
+                    <ul class="price-features" style="margin-bottom:20px">
+                        <li><span class="ico yes">✓</span>Tout du plan Gratuit</li>
+                        <li><span class="ico yes">✓</span>Prévisions 16 jours</li>
+                        <li><span class="ico yes">✓</span>Alertes illimitées</li>
+                        <li><span class="ico yes">✓</span>Zéro publicité</li>
+                    </ul>
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary"
+                        style="width:100%;justify-content:center" download>Passer Pro</a>
+                </div>
+            </div>
+            <div class="flex-center mt-24">
+                <a href="/site/tarifs.html" class="btn-ghost">Comparer tous les plans →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSTALL GUIDE -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📲 Installation</div>
+                <h2>Installe l'app en <em>10 secondes</em></h2>
+            </div>
+            <div class="download-steps">
+                <div class="download-platform animate">
+                    <div class="platform-icon">🤖</div>
+                    <h3>Android</h3>
+                    <ol>
+                        <li>Clique sur "Télécharger"</li>
+                        <li>Ouvre le fichier <strong>.apk</strong> téléchargé</li>
+                        <li>Autorise les sources inconnues si demandé</li>
+                        <li>L'app est installée ✅</li>
+                    </ol>
+                    <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary"
+                        style="margin-top:20px;display:inline-flex" download><span
+                            class="material-symbols-outlined">download</span> Télécharger .apk</a>
+                </div>
+                <div class="download-platform animate animate-delay-1">
+                    <div class="platform-icon">🍎</div>
+                    <h3>iPhone / iPad</h3>
+                    <ol>
+                        <li>Ouvre <strong>swellsync.fr</strong> dans Safari</li>
+                        <li>Appuie sur le bouton Partager ⬆️</li>
+                        <li>Sélectionne "Sur l'écran d'accueil"</li>
+                        <li>Appuie "Ajouter" ✅</li>
+                    </ol>
+                    <button onclick="showIosInstall()" class="btn-outline" style="margin-top:20px">Voir le
+                        tutoriel</button>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+        <div class="container">
+            <div class="section-tag" style="margin-bottom:16px">🌊 Rejoins-nous</div>
+            <h2>Prêt à surfer <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">plus
+                    intelligemment</em> ?</h2>
+            <p>Rejoins des centaines de surfeurs qui utilisent SwellSync pour ne plus jamais rater la bonne vague.</p>
+            <div class="cta-buttons">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 44px"
+                    download><span class="material-symbols-outlined">download</span> Télécharger SwellSync</a>
+                <button onclick="showIosInstall()" class="btn-outline" style="font-size:16px;padding:16px 30px">🍎
+                    Installation iPhone</button>
+            </div>
+            <div class="cta-tags mt-24">
+                <span class="cta-tag">✅ 100% Gratuit</span>
+                <span class="cta-tag">✅ Pas d'App Store</span>
+                <span class="cta-tag">✅ Hors-ligne</span>
+                <span class="cta-tag">✅ Données StormGlass</span>
+                <span class="cta-tag">✅ 60+ Spots</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img src="/assets/images/swellsync_logo.png"
+                            alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France. Conçu par des surfeurs, pour des surfeurs.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
 
-    <!-- ═══ BOUTON RETOUR EN HAUT ═══ -->
-    <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <span class="material-symbols-outlined">arrow_upward</span>
-    </button>
+    <!-- BACK TO TOP -->
+    <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span
+            class="material-symbols-outlined">arrow_upward</span></button>
 
-    <!-- ═══ BANDEAU COOKIES ═══ -->
+    <!-- COOKIE BANNER -->
     <div class="cookie-banner" id="cookieBanner" style="display:none">
         <p>🍪 Ce site utilise des cookies pour améliorer votre expérience. <a href="/privacy.html">En savoir plus</a>
         </p>
@@ -646,165 +1232,59 @@
     </div>
 
     <script>
-        // ── Auto-redirect si mode standalone (app installée) ──
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-            window.location.replace('/pages/home.html');
-        }
+        // PWA redirect
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone === true) { window.location.replace('/pages/home.html'); }
 
-        // ── iOS Install Modal ──
+        // Navbar scroll
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => { nb.classList.toggle('scrolled', scrollY > 40); document.getElementById('backTop').classList.toggle('visible', scrollY > 400); });
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+
+        // Service Worker
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => { });
+
+        // Scroll animations
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
+
+        // Carousel
+        let carIdx = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const track = document.getElementById('carouselTrack');
+        const dots = document.getElementById('carouselDots');
+        slides.forEach((_, i) => { const d = document.createElement('button'); d.className = 'carousel-dot' + (i === 0 ? ' active' : ''); d.onclick = () => goSlide(i); dots.appendChild(d); });
+        function goSlide(i) { carIdx = i; track.style.transform = `translateX(-${i * 100}%)`; document.querySelectorAll('.carousel-dot').forEach((d, j) => d.classList.toggle('active', j === i)); }
+        function moveCarousel(dir) { let n = carIdx + dir; if (n < 0) n = slides.length - 1; if (n >= slides.length) n = 0; goSlide(n); }
+        setInterval(() => moveCarousel(1), 5000);
+
+        // iOS Install Modal
         function showIosInstall() {
             const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent);
             const isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(navigator.userAgent);
-
-            const modal = document.createElement('div');
-            modal.id = 'iosInstallModal';
-            modal.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);animation:fadeIn .3s ease';
-
-            const steps = isIos && isSafari ? [
-                { icon: '⬆️', title: 'Appuie sur Partager', desc: 'Le bouton en bas de Safari (carré avec une flèche)' },
-                { icon: '➕', title: '"Sur l\'écran d\'accueil"', desc: 'Fais défiler et appuie sur cette option' },
-                { icon: '✅', title: 'Appuie "Ajouter"', desc: 'L\'app apparaît sur ton écran d\'accueil !' }
-            ] : isIos ? [
-                { icon: '🧭', title: 'Ouvre Safari', desc: 'L\'installation ne fonctionne que depuis Safari' },
-                { icon: '🔗', title: 'Va sur swellsync.fr', desc: 'Tape l\'adresse dans la barre Safari' },
-                { icon: '⬆️', title: 'Partager → Écran d\'accueil', desc: 'Puis suis les instructions' }
-            ] : [
-                { icon: '📱', title: 'Ouvre sur ton iPhone', desc: 'Ouvre swellsync.fr dans Safari sur iPhone' },
-                { icon: '⬆️', title: 'Bouton Partager', desc: 'Appuie sur le carré avec la flèche en bas' },
-                { icon: '➕', title: '"Sur l\'écran d\'accueil"', desc: 'L\'app s\'installe comme une vraie app !' }
-            ];
-
-            modal.innerHTML = `
-                <div style="background:linear-gradient(135deg,#0f2438,#080f1a);border:1px solid rgba(0,186,214,0.2);border-radius:24px;padding:32px 28px;max-width:380px;width:90%;animation:scaleIn .3s ease">
-                    <div style="text-align:center;margin-bottom:24px">
-                        <div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#00bad6,#10b981);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">🍎</div>
-                        <h3 style="font-size:20px;font-weight:800;margin:0 0 8px">Installer SwellSync</h3>
-                        <p style="color:#94a3b8;font-size:13px;margin:0">3 étapes simples, 10 secondes ⚡</p>
-                    </div>
-                    ${steps.map((s, i) => `
-                        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;${i < 2 ? 'border-bottom:1px solid rgba(255,255,255,0.06)' : ''}">
-                            <div style="width:44px;height:44px;border-radius:12px;background:rgba(0,186,214,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${s.icon}</div>
-                            <div>
-                                <p style="font-weight:700;font-size:14px;margin:0 0 2px">${s.title}</p>
-                                <p style="color:#94a3b8;font-size:12px;margin:0">${s.desc}</p>
-                            </div>
-                        </div>
-                    `).join('')}
-                    <button onclick="document.getElementById('iosInstallModal').remove()" style="width:100%;padding:14px;border-radius:16px;background:linear-gradient(135deg,#00bad6,#10b981);color:#080f1a;font-weight:800;font-size:15px;border:none;margin-top:24px;cursor:pointer">
-                        👍 Compris !
-                    </button>
-                </div>`;
-            document.body.appendChild(modal);
-            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+            const steps = isIos && isSafari ? [{ icon: '⬆️', title: 'Appuie sur Partager', desc: 'Le bouton carré avec flèche en bas de Safari' }, { icon: '➕', title: '"Sur l\'écran d\'accueil"', desc: 'Fais défiler et appuie sur cette option' }, { icon: '✅', title: 'Appuie "Ajouter"', desc: 'L\'app apparaît sur ton écran d\'accueil !' }] : [{ icon: '🧭', title: 'Ouvre Safari', desc: 'L\'installation ne fonctionne que depuis Safari iPhone' }, { icon: '🔗', title: 'Va sur swellsync.fr', desc: 'Tape l\'adresse dans la barre Safari' }, { icon: '⬆️', title: 'Partager → Écran d\'accueil', desc: 'SwellSync s\'installe comme une vraie app !' }];
+            const m = document.createElement('div');
+            m.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)';
+            m.innerHTML = `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:32px 28px;max-width:380px;width:90%;box-shadow:var(--shadow-lg)"><div style="text-align:center;margin-bottom:24px"><div style="width:64px;height:64px;border-radius:16px;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px">🍎</div><h3 style="font-size:1.2rem;margin:0 0 6px">Installer SwellSync</h3><p style="color:var(--text3);font-size:13px;margin:0">3 étapes simples, 10 secondes ⚡</p></div>${steps.map((s, i) => `<div style="display:flex;align-items:center;gap:16px;padding:14px 0;${i < 2 ? 'border-bottom:1px solid var(--border2)' : ''}"><div style="width:44px;height:44px;border-radius:12px;background:rgba(0,150,199,.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${s.icon}</div><div><p style="font-weight:700;font-size:14px;margin:0 0 2px;color:var(--text)">${s.title}</p><p style="color:var(--text3);font-size:12px;margin:0">${s.desc}</p></div></div>`).join('')}<button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:14px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:800;font-size:15px;border:none;margin-top:20px;cursor:pointer">👍 Compris !</button></div>`;
+            document.body.appendChild(m);
+            m.addEventListener('click', e => { if (e.target === m) m.remove(); });
         }
 
-        // ── Register SW ──
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => { });
-
-        // ═══ SCROLL REVEAL ═══
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    revealObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        // ═══ COMPTEURS ANIMÉS ═══
-        function animateCount(el, target, suffix = '') {
-            let current = 0;
-            const step = target / 60;
-            const timer = setInterval(() => {
-                current += step;
-                if (current >= target) { current = target; clearInterval(timer); }
-                el.textContent = Math.floor(current) + suffix;
-            }, 25);
-        }
-        const countObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const text = el.textContent.trim();
-                    let num, suffix;
-                    if (text.includes('K+')) { num = parseFloat(text) * 1000; suffix = 'K+'; animateCount(el, parseFloat(text), 'K+'); }
-                    else if (text.includes('%')) { num = parseInt(text); animateCount(el, num, '%'); }
-                    else if (text.includes('+')) { num = parseInt(text); animateCount(el, num, '+'); }
-                    countObserver.unobserve(el);
-                }
-            });
-        }, { threshold: 0.5 });
-        document.querySelectorAll('.stat-num').forEach(el => {
-            if (/\d/.test(el.textContent)) countObserver.observe(el);
-        });
-
-        // ═══ CAROUSEL ═══
-        let carouselIdx = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const track = document.getElementById('carouselTrack');
-        const dotsContainer = document.getElementById('carouselDots');
-        if (slides.length > 0 && dotsContainer) {
-            slides.forEach((_, i) => {
-                const dot = document.createElement('button');
-                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-                dot.onclick = () => goToSlide(i);
-                dotsContainer.appendChild(dot);
-            });
-        }
-        function goToSlide(idx) {
-            carouselIdx = idx;
-            if (track) track.style.transform = `translateX(-${idx * 100}%)`;
-            document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-        }
-        function moveCarousel(dir) {
-            let next = carouselIdx + dir;
-            if (next < 0) next = slides.length - 1;
-            if (next >= slides.length) next = 0;
-            goToSlide(next);
-        }
-        // Auto-play carousel
-        setInterval(() => { if (slides.length > 0) moveCarousel(1); }, 5000);
-
-        // ═══ DONNÉES LIVE ═══
+        // Live spot data
         const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
         const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
-        fetch(SB_URL + '/rest/v1/spots?select=id,name,latitude,longitude&or=(name.ilike.%25Hossegor%25,name.ilike.%25Biarritz%25,name.ilike.%25Torche%25)&limit=3', {
-            headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
-        }).then(r => r.json()).then(async spots => {
-            const targets = ['Hossegor', 'Biarritz', 'Torche'];
-            for (let i = 0; i < targets.length; i++) {
-                const spot = spots.find(s => s.name && s.name.includes(targets[i]));
-                if (spot) {
-                    try {
-                        const fc = await fetch('/api/spots/' + spot.id + '/forecast').then(r => r.json()).catch(() => null);
-                        if (fc && fc.data && fc.data.length > 0) {
-                            const f = fc.data[0];
-                            const idx = i + 1;
-                            document.getElementById('liveWave' + idx).textContent = (f.waveHeight || '—') + 'm';
-                            document.getElementById('liveWind' + idx).textContent = (f.windSpeed || '—') + 'km/h';
-                            document.getElementById('livePeriod' + idx).textContent = (f.wavePeriod || '—') + 's';
-                            document.getElementById('liveTemp' + idx).textContent = (f.waterTemp || '—') + '°C';
-                        }
-                    } catch { }
+        fetch(SB_URL + '/rest/v1/spots?select=id,name,latitude,longitude&or=(name.ilike.%25Hossegor%25,name.ilike.%25Biarritz%25,name.ilike.%25Torche%25)&limit=3', { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } })
+            .then(r => r.json()).then(async spots => {
+                const targets = ['Hossegor', 'Biarritz', 'Torche'];
+                for (let i = 0; i < targets.length; i++) {
+                    const spot = spots.find(s => s.name && s.name.includes(targets[i]));
+                    if (spot) { try { const fc = await fetch('/api/spots/' + spot.id + '/forecast').then(r => r.json()).catch(() => null); if (fc && fc.data && fc.data.length > 0) { const f = fc.data[0]; const idx = i + 1; document.getElementById('liveWave' + idx).textContent = (f.waveHeight || '—') + 'm'; document.getElementById('liveWind' + idx).textContent = (f.windSpeed || '—') + 'km/h'; document.getElementById('livePeriod' + idx).textContent = (f.wavePeriod || '—') + 's'; document.getElementById('liveTemp' + idx).textContent = (f.waterTemp || '—') + '°C'; } } catch { } }
                 }
-            }
-        }).catch(() => { });
+            }).catch(() => { });
 
-        // ═══ BOUTON RETOUR EN HAUT ═══
-        const backTop = document.getElementById('backTop');
-        window.addEventListener('scroll', () => {
-            if (backTop) backTop.classList.toggle('visible', window.scrollY > 400);
-        });
-
-        // ═══ COOKIES RGPD ═══
-        function acceptCookies() { localStorage.setItem('cookies', 'accepted'); hideCookieBanner(); }
-        function rejectCookies() { localStorage.setItem('cookies', 'rejected'); hideCookieBanner(); }
-        function hideCookieBanner() { const b = document.getElementById('cookieBanner'); if (b) b.style.display = 'none'; }
-        if (!localStorage.getItem('cookies')) {
-            const b = document.getElementById('cookieBanner');
-            if (b) b.style.display = 'flex';
-        }
+        // Cookies
+        function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); document.getElementById('cookieBanner').style.display = 'none'; }
+        function rejectCookies() { localStorage.setItem('cookiesAccepted', 'false'); document.getElementById('cookieBanner').style.display = 'none'; }
+        if (!localStorage.getItem('cookiesAccepted')) { setTimeout(() => { document.getElementById('cookieBanner').style.display = 'flex'; }, 1500); }
     </script>
 </body>
 

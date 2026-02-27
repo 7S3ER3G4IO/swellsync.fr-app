@@ -6,132 +6,491 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fonctionnalités — SwellSync</title>
     <meta name="description"
-        content="Découvrez les fonctionnalités de SwellSync : prévisions 7 jours, carte interactive, messagerie, communauté, alertes houle et app installable.">
+        content="Prévisions 7j, carte interactive, communauté surf, alertes houle, messagerie et app installable. Découvrez tout ce que SwellSync vous offre.">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
             <a href="/">Accueil</a>
             <a href="/site/fonctionnalites.html" class="active">Fonctionnalités</a>
             <a href="/site/spots.html">Spots</a>
             <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a>
             <a href="/site/faq.html">FAQ</a>
+            <a href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <section class="section" style="padding-top:140px">
+    <!-- HERO -->
+    <section
+        style="padding:140px 0 80px; background:radial-gradient(ellipse at 60% 0%,rgba(0,150,199,.1) 0%,transparent 55%),var(--bg)">
+        <div class="container text-center">
+            <div class="section-tag animate">✨ Fonctionnalités</div>
+            <h1 class="animate animate-delay-1"
+                style="font-size:clamp(2.2rem,5vw,3.5rem);max-width:700px;margin:0 auto 20px">Tout ce qu'un surfeur <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">a
+                    besoin</em></h1>
+            <p class="animate animate-delay-2"
+                style="font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto 36px;line-height:1.8">SwellSync
+                concentre prévisions météo marine, communauté sociale et outils de surf dans une seule app élégante —
+                gratuite.</p>
+            <div class="flex-center animate animate-delay-3">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" download><span
+                        class="material-symbols-outlined">download</span> Télécharger gratuitement</a>
+                <a href="/site/tarifs.html" class="btn-outline">Voir les tarifs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES GRID -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">✨ Fonctionnalités</div>
-                <h2>Tout ce qu'un surfeur <em>a besoin</em></h2>
-                <p>SwellSync concentre prévisions météo, communauté sociale et outils de surf dans une seule app
-                    élégante.</p>
+                <div class="section-tag">8 fonctionnalités majeures</div>
+                <h2>Pensé pour les <em>riders sérieux</em></h2>
+                <p>Chaque fonctionnalité a été conçue avec des surfeurs, pour des surfeurs. Rien de superflu.</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card animate">
-                    <div class="feature-icon" style="background:rgba(0,186,214,0.08)">🌊</div>
+                    <div class="feature-icon" style="background:rgba(0,150,199,.1)">🌊</div>
                     <h3>Prévisions 7 jours</h3>
-                    <p>Hauteur des vagues, période, vent, température de l'eau — données StormGlass mises à jour toutes
-                        les 4 heures.</p>
+                    <p>Données StormGlass mises à jour toutes les 4h. Hauteur des vagues, période, direction, vent,
+                        température eau et marée.</p>
+                    <ul>
+                        <li>Graphiques par heure</li>
+                        <li>Score de surf automatique</li>
+                        <li>Comparaison multi-spots</li>
+                    </ul>
                 </div>
-                <div class="feature-card animate">
-                    <div class="feature-icon" style="background:rgba(16,185,129,0.08)">🗺️</div>
+                <div class="feature-card animate animate-delay-1">
+                    <div class="feature-icon" style="background:rgba(0,180,160,.1)">🗺️</div>
                     <h3>Carte interactive</h3>
-                    <p>Visualise les conditions de chaque spot en un coup d'œil. Zoom, clique, explore la côte
-                        Atlantique.</p>
+                    <p>Tous les spots en un coup d'œil sur une carte Leaflet fine. Zoom, clique, explore la côte
+                        Atlantique française.</p>
+                    <ul>
+                        <li>60+ marqueurs de spots</li>
+                        <li>Conditions en temps réel</li>
+                        <li>Filtres par région</li>
+                    </ul>
                 </div>
-                <div class="feature-card animate">
-                    <div class="feature-icon" style="background:rgba(139,92,246,0.08)">💬</div>
+                <div class="feature-card animate animate-delay-2">
+                    <div class="feature-icon" style="background:rgba(108,99,255,.1)">💬</div>
                     <h3>Messagerie privée</h3>
-                    <p>Discute avec d'autres surfeurs, organise des sessions et partage tes meilleurs spots dans le
-                        chat.</p>
+                    <p>Discute avec d'autres surfeurs en temps réel. Organise des sessions, partage tes spots secrets.
+                    </p>
+                    <ul>
+                        <li>Chat temps réel</li>
+                        <li>Statut en ligne</li>
+                        <li>Partage de spots</li>
+                    </ul>
                 </div>
                 <div class="feature-card animate">
-                    <div class="feature-icon" style="background:rgba(245,158,11,0.08)">👥</div>
+                    <div class="feature-icon" style="background:rgba(245,158,11,.1)">👥</div>
                     <h3>Communauté</h3>
                     <p>Publie tes sessions, partage des photos, suis tes riders préférés et collecte des badges uniques.
                     </p>
+                    <ul>
+                        <li>Posts & stories</li>
+                        <li>Système de badges</li>
+                        <li>Followers & likes</li>
+                    </ul>
                 </div>
-                <div class="feature-card animate">
-                    <div class="feature-icon" style="background:rgba(239,68,68,0.08)">🔔</div>
+                <div class="feature-card animate animate-delay-1">
+                    <div class="feature-icon" style="background:rgba(239,68,68,.1)">🔔</div>
                     <h3>Alertes houle</h3>
-                    <p>Configure des alertes par spot avec des seuils de vague et période — ne rate plus jamais la bonne
-                        session.</p>
+                    <p>Configure des alertes personnalisées par spot. Reçois une notification quand les conditions
+                        idéales se présentent.</p>
+                    <ul>
+                        <li>Seuil de hauteur de vague</li>
+                        <li>Seuil de période</li>
+                        <li>Alertes illimitées (Pro)</li>
+                    </ul>
+                </div>
+                <div class="feature-card animate animate-delay-2">
+                    <div class="feature-icon" style="background:rgba(6,182,212,.1)">📱</div>
+                    <h3>App installable (PWA)</h3>
+                    <p>Installe SwellSync sur ton téléphone comme une vraie app. Fonctionne hors-ligne. Pas besoin d'App
+                        Store.</p>
+                    <ul>
+                        <li>Android APK direct</li>
+                        <li>iOS via Safari</li>
+                        <li>Mode hors-ligne</li>
+                    </ul>
                 </div>
                 <div class="feature-card animate">
-                    <div class="feature-icon" style="background:rgba(6,182,212,0.08)">📱</div>
-                    <h3>App installable</h3>
-                    <p>Installe SwellSync sur ton téléphone comme une vraie app. Fonctionne hors-ligne, rapide, sans App
-                        Store.</p>
+                    <div class="feature-icon" style="background:rgba(16,185,129,.1)">📊</div>
+                    <h3>Journal de sessions</h3>
+                    <p>Enregistre chaque session avec date, spot, durée, notes. Suis ta progression de rider semaine
+                        après semaine.</p>
+                    <ul>
+                        <li>Historique illimité</li>
+                        <li>Stats mensuelles</li>
+                        <li>Export PDF</li>
+                    </ul>
+                </div>
+                <div class="feature-card animate animate-delay-1">
+                    <div class="feature-icon" style="background:rgba(249,115,22,.1)">🏆</div>
+                    <h3>Badges & Classements</h3>
+                    <p>Gagne des badges en surfant, en partageant des sessions et en aidant la communauté. Grimpe dans
+                        le classement.</p>
+                    <ul>
+                        <li>20+ badges uniques</li>
+                        <li>Classement régional</li>
+                        <li>Défis hebdo</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══ TECH STACK ═══ -->
-    <section class="section" style="background:var(--bg3)">
+    <!-- FEATURE DETAIL 1 : Prévisions -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">🌊 In detail</div>
+                <h2>Prévisions <em>ultra-précises</em></h2>
+            </div>
+            <div class="feature-detail">
+                <div class="feature-detail-content">
+                    <h3>7 variables météo. Toutes les 4 heures.</h3>
+                    <p>SwellSync interroge StormGlass, le meilleur agrégateur de données marines au monde, pour te
+                        donner la prévision la plus fiable du marché.</p>
+                    <ul>
+                        <li><span>🌊</span> Hauteur significative des vagues (m)</li>
+                        <li><span>⏱️</span> Période de houle (secondes)</li>
+                        <li><span>🧭</span> Direction de la houle (degrés)</li>
+                        <li><span>💨</span> Vitesse et direction du vent (km/h)</li>
+                        <li><span>🌡️</span> Température de l'eau (°C)</li>
+                        <li><span>🌙</span> Coefficients de marée</li>
+                        <li><span>☀️</span> Score de conditions calculé (0–10)</li>
+                    </ul>
+                </div>
+                <div class="feature-detail-visual">
+                    <div style="width:100%">
+                        <div class="mock-card">
+                            <h5>🌊 Hossegor — Aujourd'hui 14h</h5>
+                            <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:12px">
+                                <div style="text-align:center">
+                                    <div style="font-size:2rem;font-weight:800;color:var(--accent)">1.8m</div>
+                                    <div style="font-size:11px;color:var(--text3)">Vagues</div>
+                                </div>
+                                <div style="text-align:center">
+                                    <div style="font-size:2rem;font-weight:800;color:var(--accent2)">12s</div>
+                                    <div style="font-size:11px;color:var(--text3)">Période</div>
+                                </div>
+                                <div style="text-align:center">
+                                    <div style="font-size:2rem;font-weight:800;color:var(--accent3)">18°</div>
+                                    <div style="font-size:11px;color:var(--text3)">Eau</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mock-card">
+                            <h5>📈 Prévision 7 jours</h5>
+                            <div style="display:flex;gap:4px;align-items:flex-end;height:50px;margin-top:8px">
+                                <div
+                                    style="background:var(--accent);opacity:.6;width:100%;height:40%;border-radius:4px">
+                                </div>
+                                <div
+                                    style="background:var(--accent);opacity:.8;width:100%;height:70%;border-radius:4px">
+                                </div>
+                                <div style="background:var(--accent);width:100%;height:100%;border-radius:4px"></div>
+                                <div
+                                    style="background:var(--accent);opacity:.9;width:100%;height:85%;border-radius:4px">
+                                </div>
+                                <div
+                                    style="background:var(--accent);opacity:.5;width:100%;height:35%;border-radius:4px">
+                                </div>
+                                <div
+                                    style="background:var(--accent);opacity:.7;width:100%;height:55%;border-radius:4px">
+                                </div>
+                                <div
+                                    style="background:var(--accent);opacity:.8;width:100%;height:65%;border-radius:4px">
+                                </div>
+                            </div>
+                            <div
+                                style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:6px">
+                                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+                            </div>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,150,199,.06);border:1px solid rgba(0,150,199,.15);border-radius:12px;padding:12px 16px">
+                            <span style="font-size:13px;font-weight:600;color:var(--text)">Score de session</span>
+                            <span style="font-size:1.4rem;font-weight:800;color:var(--accent)">8.5 / 10 🔥</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FEATURE DETAIL 2 : Carte -->
+            <div class="feature-detail reverse" style="border:none;margin-top:60px">
+                <div class="feature-detail-visual">
+                    <div style="width:100%">
+                        <div
+                            style="background:var(--bg3);border-radius:12px;padding:16px;font-size:13px;margin-bottom:12px">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                                <span>📍</span><strong>60+ spots cartographiés</strong></div>
+                            <div class="mock-row"><span class="mock-dot green"></span><span>Hossegor • 1.5m •
+                                    Bonnes</span></div>
+                            <div class="mock-row"><span class="mock-dot yellow"></span><span>Biarritz • 0.8m •
+                                    Moyennes</span></div>
+                            <div class="mock-row"><span class="mock-dot green"></span><span>La Torche • 2.1m •
+                                    Excellentes</span></div>
+                            <div class="mock-row"><span class="mock-dot red"></span><span>Lacanau • 0.3m •
+                                    Mauvaises</span></div>
+                        </div>
+                        <div
+                            style="background:rgba(0,150,199,.06);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+                            <div style="font-size:28px;margin-bottom:6px">🗺️</div>
+                            <div style="font-size:13px;color:var(--text2)">Carte interactive Leaflet<br>dans
+                                l'application</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-detail-content">
+                    <h3>La carte la plus complète de la côte Atlantique</h3>
+                    <p>Visualise en un seul coup d'œil les conditions de tous les spots de la côte. Zoom sur ta région,
+                        clique sur un spot pour les prévisions complètes.</p>
+                    <ul>
+                        <li><span>📍</span> 60+ spots de Bretagne au Pays Basque</li>
+                        <li><span>🟢</span> Indicateurs de couleur (bon / moyen / mauvais)</li>
+                        <li><span>🔍</span> Recherche par nom de spot ou région</li>
+                        <li><span>⭐</span> Ajout aux favoris en un clic</li>
+                        <li><span>🧭</span> Géolocalisation et centrage auto</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">⚡ Technologies</div>
-                <h2>Propulsé par les <em>meilleures</em> technos</h2>
-                <p>SwellSync utilise des technologies modernes pour une expérience fluide et rapide.</p>
+                <h2>Propulsé par les <em>meilleures technos</em></h2>
+                <p>SwellSync est construit sur une stack moderne, fiable et performante.</p>
             </div>
             <div class="tech-grid">
-                <div class="tech-item"><span>🌊</span> StormGlass API</div>
-                <div class="tech-item"><span>🗺️</span> Leaflet Maps</div>
-                <div class="tech-item"><span>💨</span> Windy.com</div>
-                <div class="tech-item"><span>🔒</span> JWT Auth</div>
-                <div class="tech-item"><span>🐘</span> PostgreSQL</div>
-                <div class="tech-item"><span>📱</span> PWA</div>
-                <div class="tech-item"><span>🤖</span> Capacitor</div>
-                <div class="tech-item"><span>⚡</span> Node.js</div>
+                <div class="tech-card animate">
+                    <div class="tech-icon">🌊</div>
+                    <div>
+                        <h4>StormGlass API</h4>
+                        <p>Données marines ultra-précises</p>
+                    </div>
+                </div>
+                <div class="tech-card animate animate-delay-1">
+                    <div class="tech-icon">🗺️</div>
+                    <div>
+                        <h4>Leaflet Maps</h4>
+                        <p>Cartographie open-source rapide</p>
+                    </div>
+                </div>
+                <div class="tech-card animate animate-delay-2">
+                    <div class="tech-icon">💨</div>
+                    <div>
+                        <h4>Windy.com</h4>
+                        <p>Visualisation météo avancée</p>
+                    </div>
+                </div>
+                <div class="tech-card animate animate-delay-3">
+                    <div class="tech-icon">🔒</div>
+                    <div>
+                        <h4>JWT Auth</h4>
+                        <p>Authentification ultra-sécurisée</p>
+                    </div>
+                </div>
+                <div class="tech-card animate">
+                    <div class="tech-icon">🐘</div>
+                    <div>
+                        <h4>PostgreSQL</h4>
+                        <p>Base de données robuste</p>
+                    </div>
+                </div>
+                <div class="tech-card animate animate-delay-1">
+                    <div class="tech-icon">📱</div>
+                    <div>
+                        <h4>PWA</h4>
+                        <p>App installable sans Store</p>
+                    </div>
+                </div>
+                <div class="tech-card animate animate-delay-2">
+                    <div class="tech-icon">🤖</div>
+                    <div>
+                        <h4>Capacitor</h4>
+                        <p>App native Android & iOS</p>
+                    </div>
+                </div>
+                <div class="tech-card animate animate-delay-3">
+                    <div class="tech-icon">⚡</div>
+                    <div>
+                        <h4>Node.js</h4>
+                        <p>API REST performante</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON TABLE -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">💎 Comparatif</div>
+                <h2>Gratuit vs <em>Pro</em></h2>
+                <p>Toutes les fonctionnalités essentielles sont gratuites. Le Pro va encore plus loin.</p>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="compare-table" style="max-width:700px;margin:0 auto">
+                    <thead>
+                        <tr>
+                            <th style="width:55%">Fonctionnalité</th>
+                            <th>Gratuit</th>
+                            <th class="highlight">Pro 4.99€/mois</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>60+ spots surf</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Prévisions météo</td>
+                            <td><span class="check-partial">7 jours</span></td>
+                            <td><span class="check-partial">16 jours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Carte interactive</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Communauté & Posts</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Messagerie privée</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Journal de sessions</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Alertes houle</td>
+                            <td><span class="check-partial">Max 2</span></td>
+                            <td><span class="check-yes">✓ Illimitées</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sans publicités</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Badge Pro exclusif</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Accès anticipé nouveautés</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Support prioritaire</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓ &lt;24h</span></td>
+                        </tr>
+                        <tr>
+                            <td>Statistiques avancées</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex-center mt-32">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" download>Commencer gratuitement</a>
+                <a href="/site/tarifs.html" class="btn-outline">Voir le plan Pro</a>
             </div>
         </div>
     </section>
 
     <!-- CTA -->
     <section class="cta-final">
-        <h2>Convaincu ? <em
-                style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Télécharge</em>
-            l'app</h2>
-        <p>Disponible gratuitement sur Android et iPhone.</p>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px" download>
-            <span class="material-symbols-outlined">download</span>
-            Télécharger SwellSync
-        </a>
+        <div class="container">
+            <div class="section-tag" style="margin-bottom:16px">🏄 Prêt ?</div>
+            <h2>Convaincu ? <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">Télécharge</em>
+                l'app</h2>
+            <p>Disponible gratuitement sur Android et iPhone. Pas de carte bancaire requise.</p>
+            <div class="cta-buttons">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px"
+                    download><span class="material-symbols-outlined">download</span> Télécharger SwellSync</a>
+            </div>
+            <div class="cta-tags mt-24">
+                <span class="cta-tag">✅ 100% Gratuit</span>
+                <span class="cta-tag">✅ Sans App Store</span>
+                <span class="cta-tag">✅ Fonctionne hors-ligne</span>
+                <span class="cta-tag">✅ Pas d'engagement</span>
+            </div>
+        </div>
     </section>
 
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="nav-logo" style="margin-bottom:14px"><img src="/assets/images/swellsync_logo.png"
+                            alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France. Conçu par des surfeurs, pour des surfeurs.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
-    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
+
+    <script>
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .12 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
+    </script>
 </body>
 
 </html>

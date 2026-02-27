@@ -6,97 +6,378 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarifs — SwellSync</title>
     <meta name="description"
-        content="SwellSync est gratuit pour toujours. Découvrez les plans Gratuit et Pro avec toutes les fonctionnalités.">
+        content="SwellSync est gratuit pour toujours. Plan Pro à 4.99€/mois pour les riders sérieux. Aucun engagement, résiliation en 1 clic.">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
-            <a href="/">Accueil</a>
-            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
-            <a href="/site/spots.html">Spots</a>
-            <a href="/site/tarifs.html" class="active">Tarifs</a>
-            <a href="/site/faq.html">FAQ</a>
+            <a href="/">Accueil</a><a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a><a href="/site/tarifs.html" class="active">Tarifs</a>
+            <a href="/site/roadmap.html">Roadmap</a><a href="/site/faq.html">FAQ</a><a
+                href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <section class="section" style="padding-top:140px">
+    <!-- HERO -->
+    <section
+        style="padding:140px 0 72px;background:radial-gradient(ellipse at 50% 0%,rgba(0,150,199,.09) 0%,transparent 55%),var(--bg)">
+        <div class="container text-center">
+            <div class="section-tag animate">💎 Tarifs</div>
+            <h1 class="animate animate-delay-1"
+                style="font-size:clamp(2.2rem,5vw,3.4rem);max-width:640px;margin:0 auto 18px">Simple. Transparent. <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">Honnête.</em>
+            </h1>
+            <p class="animate animate-delay-2"
+                style="font-size:1.1rem;color:var(--text2);max-width:520px;margin:0 auto;line-height:1.8">Toutes les
+                fonctionnalités essentielles sont gratuites. Le Pro débloque l'expérience complète pour les riders les
+                plus exigeants.</p>
+        </div>
+    </section>
+
+    <!-- PRICING TOGGLE + CARDS -->
+    <section class="section section-white">
         <div class="container">
-            <div class="section-header">
-                <div class="section-tag">💎 Tarifs</div>
-                <h2>Gratuit, <em>pour toujours</em></h2>
-                <p>SwellSync est gratuit avec toutes les fonctionnalités essentielles. Le Pro débloque l'expérience
-                    complète.</p>
+            <div class="price-toggle">
+                <label for="billingToggle">Mensuel</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="billingToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <label for="billingToggle">Annuel <span class="annual-badge">−20%</span></label>
             </div>
-            <div class="pricing-grid">
-                <div class="price-card animate">
+
+            <div class="pricing-grid animate">
+                <!-- FREE -->
+                <div class="price-card">
                     <div class="price-name">Gratuit</div>
-                    <div class="price-desc">Pour commencer à surfer</div>
-                    <div class="price-amount">0€ <span>/ mois</span></div>
+                    <div class="price-sub">Pour commencer à surfer</div>
+                    <div class="price-amount"><sup>€</sup>0<span> / mois</span></div>
+                    <div class="price-period">Pour toujours gratuit</div>
                     <ul class="price-features">
-                        <li>60+ spots de surf</li>
-                        <li>Prévisions 7 jours</li>
-                        <li>Carte interactive</li>
-                        <li>Communauté (posts, follows)</li>
-                        <li>Messagerie privée</li>
-                        <li>Journal de sessions</li>
-                        <li class="no" style="opacity:.5">Alertes houle (max 2)</li>
-                        <li class="no" style="opacity:.5">Pas de publicités</li>
+                        <li><span class="ico yes">✓</span>60+ spots de surf</li>
+                        <li><span class="ico yes">✓</span>Prévisions 7 jours</li>
+                        <li><span class="ico yes">✓</span>Carte interactive</li>
+                        <li><span class="ico yes">✓</span>Communauté (posts, follows)</li>
+                        <li><span class="ico yes">✓</span>Messagerie privée</li>
+                        <li><span class="ico yes">✓</span>Journal de sessions</li>
+                        <li><span class="ico no">—</span><span style="color:var(--text3)">Alertes houle (max 2)</span>
+                        </li>
+                        <li><span class="ico no">—</span><span style="color:var(--text3)">Publicités présentes</span>
+                        </li>
+                        <li><span class="ico no">—</span><span style="color:var(--text3)">Prévisions 16 jours</span>
+                        </li>
                     </ul>
                     <a href="/downloads/SwellSync-1.0.0.apk" class="btn-outline"
                         style="width:100%;justify-content:center" download>Télécharger — Gratuit</a>
                 </div>
-                <div class="price-card pro animate">
-                    <div class="price-name">Pro</div>
-                    <div class="price-desc">Pour les riders sérieux</div>
-                    <div class="price-amount">4.99€ <span>/ mois</span></div>
+                <!-- PRO -->
+                <div class="price-card pro animate animate-delay-1">
+                    <div class="price-name" style="color:var(--accent)">Pro</div>
+                    <div class="price-sub">Pour les riders sérieux</div>
+                    <div class="price-amount" id="proPrice"><sup>€</sup>4.99<span id="proPeriod"> / mois</span></div>
+                    <div class="price-period" id="proSub">Soit 4.99€ facturés chaque mois</div>
                     <ul class="price-features">
-                        <li>Tout du plan Gratuit</li>
-                        <li>Prévisions 16 jours</li>
-                        <li>Alertes houle illimitées</li>
-                        <li>Zéro publicité</li>
-                        <li>Badge Pro exclusif</li>
-                        <li>Accès anticipé aux nouveautés</li>
-                        <li>Support prioritaire</li>
-                        <li>Statistiques avancées</li>
+                        <li><span class="ico yes">✓</span>Tout du plan Gratuit</li>
+                        <li><span class="ico yes">✓</span><strong>Prévisions 16 jours</strong></li>
+                        <li><span class="ico yes">✓</span><strong>Alertes houle illimitées</strong></li>
+                        <li><span class="ico yes">✓</span><strong>Zéro publicité</strong></li>
+                        <li><span class="ico yes">✓</span>Badge Pro exclusif 🏅</li>
+                        <li><span class="ico yes">✓</span>Accès anticipé aux nouveautés</li>
+                        <li><span class="ico yes">✓</span>Support prioritaire (&lt;24h)</li>
+                        <li><span class="ico yes">✓</span>Statistiques avancées</li>
+                        <li><span class="ico yes">✓</span>Coaching sessions AI (bientôt)</li>
                     </ul>
                     <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary"
-                        style="width:100%;justify-content:center" download>Télécharger l'app</a>
+                        style="width:100%;justify-content:center" download>Passer Pro — Essai gratuit 7j</a>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- COMPARE TABLE -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">🔍 Comparatif détaillé</div>
+                <h2>Tout ce qui est <em>inclus</em></h2>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="compare-table" style="max-width:720px;margin:0 auto">
+                    <thead>
+                        <tr>
+                            <th>Fonctionnalité</th>
+                            <th>Gratuit</th>
+                            <th class="highlight">Pro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Spots couverts</td>
+                            <td>60+</td>
+                            <td>60+</td>
+                        </tr>
+                        <tr>
+                            <td>Prévisions surf</td>
+                            <td><span class="check-partial">7 jours</span></td>
+                            <td><span class="check-partial">16 jours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Carte interactive</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Score de session auto</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Communauté & Posts</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Messagerie privée</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Journal de sessions</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>App hors-ligne (PWA)</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Alertes houle</td>
+                            <td><span class="check-partial">2 max</span></td>
+                            <td><span class="check-yes">✓ Illimitées</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sans publicités</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Badge Pro & profil premium</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Accès bêta nouveautés</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Support prioritaire</td>
+                            <td>Standard</td>
+                            <td><span class="check-partial">&lt;24h garanti</span></td>
+                        </tr>
+                        <tr>
+                            <td>Statistiques avancées</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Coach AI surfeur (bientôt)</td>
+                            <td><span class="check-no">—</span></td>
+                            <td><span class="check-yes">✓ Inclus</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS PRO -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">⭐ Avis Pro</div>
+                <h2>Ce que disent les <em>membres Pro</em></h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Les alertes houle illimitées ont changé ma vie. Je ne rate plus une
+                        seule bonne session à Hossegor depuis que je suis passé Pro."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">🏄</div>
+                        <div>
+                            <div class="testimonial-name">Théo M.</div>
+                            <div class="testimonial-loc">Hossegor, Landes</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate animate-delay-1">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Les prévisions 16 jours me permettent d'organiser mes voyages de surf
+                        bien à l'avance. Un outil indispensable pour tout rider sérieux."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">🌊</div>
+                        <div>
+                            <div class="testimonial-name">Camille D.</div>
+                            <div class="testimonial-loc">Biarritz, Pays Basque</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate animate-delay-2">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"4.99€/mois pour avoir 0 pub et les meilleures données surf de France ?
+                        C'est le meilleur rapport qualité-prix que j'ai jamais vu."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">🤙</div>
+                        <div>
+                            <div class="testimonial-name">Julien R.</div>
+                            <div class="testimonial-loc">La Torche, Bretagne</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ PRICING -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">❓ Questions fréquentes</div>
+                <h2>Tout sur <em>l'abonnement</em></h2>
+            </div>
+            <div class="faq-list" style="max-width:680px;margin:0 auto">
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Y a-t-il un engagement ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Aucun engagement. Tu te résilie quand tu veux, directement depuis ton profil dans l'app, en
+                            un seul clic. L'accès Pro reste actif jusqu'à la fin de la période payée.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Comment je paie ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Le paiement se fait par carte bancaire via Stripe, notre prestataire de paiement sécurisé.
+                            Tes informations bancaires ne transitent jamais par nos serveurs.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Y a-t-il un essai gratuit ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Oui ! Chaque nouvel inscrit bénéficie de 7 jours d'essai du plan Pro. Aucune carte bancaire
+                            requise pour l'essai.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Je peux partager mon compte Pro ?<span class="faq-arrow">+</span></div>
+                    <div class="faq-a">
+                        <p>Non. Le plan Pro est une licence personnelle et non transférable. Nos systèmes détectent les
+                            connexions simultanées. En cas d'abus, le compte peut être suspendu.</p>
+                    </div>
+                </div>
+                <div class="faq-item" onclick="this.classList.toggle('open')">
+                    <div class="faq-q">Le plan Gratuit a-t-il des limites cachées ?<span class="faq-arrow">+</span>
+                    </div>
+                    <div class="faq-a">
+                        <p>Non. Le plan Gratuit inclut vraiment toutes les fonctionnalités de base : prévisions 7 jours,
+                            carte, communauté, messagerie, journal de sessions. Aucune limite cachée, 2 alertes houle
+                            max.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GUARANTEE -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="guarantee-box animate">
+                <div class="guarantee-icon">🛡️</div>
+                <h4>Sans engagement — Résiliation en 1 clic</h4>
+                <p style="margin-top:10px;color:var(--text2)">Résilie n'importe quand depuis "Mon Compte" dans l'app.
+                    Tout mois commencé reste actif jusqu'à son terme. Aucune prise de tête.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>Prêt à passer au niveau <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">supérieur</em>
+                ?</h2>
+            <p>Commence gratuitement, passe Pro quand tu veux. Aucun risque.</p>
+            <div class="cta-buttons">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:15px;padding:14px 36px"
+                    download>Commencer gratuitement</a>
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-outline" style="font-size:15px;padding:14px 36px"
+                    download>Essai Pro 7 jours</a>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
+                            src="/assets/images/swellsync_logo.png" alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
-    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
+
+    <script>
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
+
+        const toggle = document.getElementById('billingToggle');
+        const priceEl = document.querySelector('#proPrice');
+        const periodEl = document.querySelector('#proPeriod');
+        const subEl = document.querySelector('#proSub');
+        toggle.addEventListener('change', () => {
+            if (toggle.checked) { priceEl.innerHTML = '<sup>€</sup>39.99<span id="proPeriod"> / an</span>'; subEl.textContent = 'Soit 3.33€/mois — économisez 20%'; }
+            else { priceEl.innerHTML = '<sup>€</sup>4.99<span id="proPeriod"> / mois</span>'; subEl.textContent = 'Soit 4.99€ facturés chaque mois'; }
+        });
+
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
+    </script>
 </body>
 
 </html>

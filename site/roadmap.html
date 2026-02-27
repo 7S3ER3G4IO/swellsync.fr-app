@@ -6,107 +6,236 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roadmap — SwellSync</title>
     <meta name="description"
-        content="Découvrez les fonctionnalités à venir sur SwellSync : alertes push, webcams live, coaching AI et plus encore.">
+        content="Suivez l'évolution de SwellSync : fonctionnalités disponibles, en cours de développement et planifiées. Votez pour les prochaines features.">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/site/style.css">
 </head>
 
 <body>
-    <nav class="navbar">
-        <a href="/" class="nav-logo">
-            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
-            <span>Swell<span class="accent">Sync</span></span>
-        </a>
+
+    <nav class="navbar" id="navbar">
+        <a href="/" class="nav-logo"><img src="/assets/images/swellsync_logo.png" alt="SwellSync"><span>Swell<span
+                    class="accent">Sync</span></span></a>
         <div class="nav-links" id="navLinks">
-            <a href="/">Accueil</a>
-            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
-            <a href="/site/spots.html">Spots</a>
-            <a href="/site/tarifs.html">Tarifs</a>
-            <a href="/site/faq.html">FAQ</a>
+            <a href="/">Accueil</a><a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/roadmap.html" class="active">Roadmap</a><a href="/site/faq.html">FAQ</a><a
+                href="/site/contact.html">Contact</a>
         </div>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download>
-            <span class="material-symbols-outlined" style="font-size:18px">download</span>
-            Télécharger
-        </a>
-        <button class="nav-menu-btn"
-            onclick="document.getElementById('navLinks').style.display=document.getElementById('navLinks').style.display==='flex'?'none':'flex'">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="nav-cta" download><span class="material-symbols-outlined"
+                style="font-size:17px">download</span> Télécharger</a>
+        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
-    <section class="section section-gradient-1" style="padding-top:140px">
+    <!-- HERO -->
+    <section
+        style="padding:140px 0 72px;background:radial-gradient(ellipse at 70% 0%,rgba(0,180,160,.09) 0%,transparent 55%),var(--bg)">
+        <div class="container text-center">
+            <div class="section-tag animate">🗓️ Roadmap</div>
+            <h1 class="animate animate-delay-1"
+                style="font-size:clamp(2.2rem,5vw,3.4rem);max-width:640px;margin:0 auto 18px">La carte du <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">futur
+                    SwellSync</em></h1>
+            <p class="animate animate-delay-2"
+                style="font-size:1.05rem;color:var(--text2);max-width:520px;margin:0 auto 36px;line-height:1.8">On
+                construit SwellSync avec la communauté. Voici ce qui est fait, en cours et ce qui arrive bientôt. Tes
+                votes comptent.</p>
+            <div class="animate animate-delay-3" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+                <div
+                    style="background:rgba(0,150,199,.08);border:1px solid rgba(0,150,199,.2);border-radius:var(--radius-full);padding:8px 18px;font-size:13px;font-weight:600;color:var(--accent)">
+                    ✅ Terminé</div>
+                <div
+                    style="background:rgba(0,180,160,.08);border:1px solid rgba(0,180,160,.2);border-radius:var(--radius-full);padding:8px 18px;font-size:13px;font-weight:600;color:var(--accent2)">
+                    🔄 En cours</div>
+                <div
+                    style="background:rgba(0,0,0,.04);border:1px solid var(--border2);border-radius:var(--radius-full);padding:8px 18px;font-size:13px;font-weight:600;color:var(--text3)">
+                    📋 Planifié</div>
+                <div
+                    style="background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.2);border-radius:var(--radius-full);padding:8px 18px;font-size:13px;font-weight:600;color:var(--accent3)">
+                    💡 Idée</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="section section-white">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">🗓️ Roadmap</div>
-                <h2>Ce qui arrive <em>bientôt</em></h2>
-                <p>On bosse pour rendre SwellSync encore meilleur. Voici notre plan.</p>
+                <div class="section-tag">📍 Timeline</div>
+                <h2>De la <em>v1.0</em> au futur</h2>
+                <p>Transparence totale sur ce qu'on a construit et ce qu'on prépare.</p>
             </div>
-            <div class="roadmap">
+            <div class="roadmap-timeline">
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot done"></div>
-                    <div class="roadmap-status done">✅ Fait</div>
+                    <div class="roadmap-dot done"></div><span class="roadmap-status done">✅ Terminé</span>
                     <h4>🌊 Prévisions surf 7 jours</h4>
-                    <p>Données StormGlass pour 60+ spots : hauteur de vague, période, vent, température, marée.</p>
+                    <p>Données StormGlass pour 60+ spots : hauteur, période, vent, température, marée. Score de session
+                        calculé automatiquement.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot done"></div>
-                    <div class="roadmap-status done">✅ Fait</div>
-                    <h4>👥 Communauté sociale</h4>
-                    <p>Posts, followers, likes, commentaires, badges, photos de sessions.</p>
-                </div>
-                <div class="roadmap-item reveal">
-                    <div class="roadmap-dot done"></div>
-                    <div class="roadmap-status done">✅ Fait</div>
-                    <h4>💬 Messagerie privée</h4>
-                    <p>Chat en temps réel entre surfeurs pour organiser des sessions.</p>
-                </div>
-                <div class="roadmap-item reveal">
-                    <div class="roadmap-dot done"></div>
-                    <div class="roadmap-status done">✅ Fait</div>
+                    <div class="roadmap-dot done"></div><span class="roadmap-status done">✅ Terminé</span>
                     <h4>🗺️ Carte interactive Leaflet</h4>
-                    <p>Tous les spots sur une carte avec marqueurs, popups et conditions live.</p>
+                    <p>Tous les spots cartographiés avec marqueurs couleur, popups de conditions et géolocalisation.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot wip"></div>
-                    <div class="roadmap-status wip">🔄 En cours</div>
-                    <h4>🔔 Notifications push</h4>
-                    <p>Reçois des alertes directement sur ton téléphone quand les conditions sont bonnes.</p>
+                    <div class="roadmap-dot done"></div><span class="roadmap-status done">✅ Terminé</span>
+                    <h4>👥 Communauté sociale</h4>
+                    <p>Posts, photos de sessions, followers, likes, commentaires et système de badges uniques.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot wip"></div>
-                    <div class="roadmap-status wip">🔄 En cours</div>
-                    <h4>📹 Webcams en direct</h4>
-                    <p>Flux vidéo en temps réel des principaux spots : Hossegor, Biarritz, Lacanau, La Torche.</p>
+                    <div class="roadmap-dot done"></div><span class="roadmap-status done">✅ Terminé</span>
+                    <h4>💬 Messagerie privée temps réel</h4>
+                    <p>Chat en direct entre surfeurs pour organiser des sessions et partager des conditions.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot planned"></div>
-                    <div class="roadmap-status planned">📋 Planifié</div>
-                    <h4>🤖 Coach AI personnalisé</h4>
-                    <p>Un assistant AI qui te recommande les meilleurs créneaux et spots selon ton niveau et ta
-                        localisation.</p>
+                    <div class="roadmap-dot done"></div><span class="roadmap-status done">✅ Terminé</span>
+                    <h4>📱 App installable (PWA + APK)</h4>
+                    <p>Installation sur Android et iOS sans passer par l'App Store. Mode hors-ligne inclus.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot planned"></div>
-                    <div class="roadmap-status planned">📋 Planifié</div>
-                    <h4>📊 Statistiques avancées</h4>
-                    <p>Graphiques de progression, heatmap de tes sessions, comparaison avec d'autres riders.</p>
+                    <div class="roadmap-dot done"></div><span class="roadmap-status done">✅ Terminé</span>
+                    <h4>🔔 Alertes houle configurables</h4>
+                    <p>Notifications par spot avec seuils personnalisables de hauteur de vague et période.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot planned"></div>
-                    <div class="roadmap-status planned">📋 Planifié</div>
+                    <div class="roadmap-dot wip"></div><span class="roadmap-status wip">🔄 En cours</span>
+                    <h4>📹 Webcams surf en direct</h4>
+                    <p>Flux vidéo live des principaux spots : Hossegor, Biarritz, Lacanau, La Torche, Capbreton.</p>
+                </div>
+                <div class="roadmap-item reveal">
+                    <div class="roadmap-dot wip"></div><span class="roadmap-status wip">🔄 En cours</span>
+                    <h4>📊 Statistiques avancées de progression</h4>
+                    <p>Graphiques de sessions, heatmap mensuelle, comparaison avec d'autres riders de ta région.</p>
+                </div>
+                <div class="roadmap-item reveal">
+                    <div class="roadmap-dot planned"></div><span class="roadmap-status planned">📋 Planifié</span>
+                    <h4>🤖 Coach IA personnalisé</h4>
+                    <p>Un assistant AI qui te recommande les meilleurs créneaux selon ton niveau, ta localisation et
+                        l'historique de tes sessions.</p>
+                </div>
+                <div class="roadmap-item reveal">
+                    <div class="roadmap-dot planned"></div><span class="roadmap-status planned">📋 Planifié</span>
                     <h4>🏆 Compétitions & Challenges</h4>
-                    <p>Classements hebdomadaires, défis communautaires, et récompenses exclusives.</p>
+                    <p>Classements hebdomadaires, défis communautaires et récompenses exclusives pour les meilleurs
+                        riders.</p>
                 </div>
                 <div class="roadmap-item reveal">
-                    <div class="roadmap-dot planned"></div>
-                    <div class="roadmap-status planned">📋 Planifié</div>
+                    <div class="roadmap-dot planned"></div><span class="roadmap-status planned">📋 Planifié</span>
                     <h4>🌍 Spots internationaux</h4>
-                    <p>Extension vers le Portugal, l'Espagne, le Maroc, et les îles Canaries.</p>
+                    <p>Extension vers le Portugal, l'Espagne (Nord), le Maroc et les îles Canaries — 2026.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VOTE SECTION -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">👍 Vote</div>
+                <h2>Quoi développer <em>ensuite ?</em></h2>
+                <p>Tes votes influencent directement notre roadmap. Les features les plus votées arrivent en premier.
+                </p>
+            </div>
+            <div class="vote-grid" id="voteGrid">
+                <div class="vote-card animate">
+                    <h4>🌡️ Données UV & Qualité eau</h4>
+                    <p>Indice UV, pollution marine, qualité de l'eau par spot</p><button class="vote-btn" data-id="0"
+                        onclick="vote(this)">👍 Voter · <span class="vcount">47</span></button>
+                </div>
+                <div class="vote-card animate animate-delay-1">
+                    <h4>🤝 Sessions groupées</h4>
+                    <p>Organiser des sessions collectives avec un groupe d'amis</p><button class="vote-btn" data-id="1"
+                        onclick="vote(this)">👍 Voter · <span class="vcount">38</span></button>
+                </div>
+                <div class="vote-card animate animate-delay-2">
+                    <h4>📸 Stories de spots</h4>
+                    <p>Photos/vidéos éphémères des conditions du jour par les surfers</p><button class="vote-btn"
+                        data-id="2" onclick="vote(this)">👍 Voter · <span class="vcount">29</span></button>
+                </div>
+                <div class="vote-card animate animate-delay-3">
+                    <h4>🏄 Analyse de style</h4>
+                    <p>Upload une vidéo, l'IA analyse ta technique de surf</p><button class="vote-btn" data-id="3"
+                        onclick="vote(this)">👍 Voter · <span class="vcount">61</span></button>
+                </div>
+                <div class="vote-card animate">
+                    <h4>🗣️ Forum communauté</h4>
+                    <p>Forums par région pour discuter techniques, matériel, sessions</p><button class="vote-btn"
+                        data-id="4" onclick="vote(this)">👍 Voter · <span class="vcount">22</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHANGELOG -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">📝 Changelog</div>
+                <h2>Historique des <em>versions</em></h2>
+                <p>Chaque mise à jour, documentée.</p>
+            </div>
+            <div class="changelog">
+                <div class="changelog-version">
+                    <div class="changelog-header" onclick="this.nextElementSibling.classList.toggle('open')">
+                        <span class="version-tag">v1.0.0 — Version actuelle 🎉</span>
+                        <span class="version-date">Février 2026</span>
+                    </div>
+                    <ul class="changelog-body open">
+                        <li>Lancement officiel de SwellSync</li>
+                        <li>60+ spots surf sur la côte Atlantique française</li>
+                        <li>Prévisions 7 jours (données StormGlass)</li>
+                        <li>Carte interactive Leaflet complète</li>
+                        <li>Communauté : posts, photos, followers, badges</li>
+                        <li>Messagerie privée temps réel</li>
+                        <li>Alertes houle configurables</li>
+                        <li>App PWA installable + APK Android</li>
+                        <li>Plan Pro lancé : prévisions 16j, alertes illimitées</li>
+                    </ul>
+                </div>
+                <div class="changelog-version">
+                    <div class="changelog-header" onclick="this.nextElementSibling.classList.toggle('open')">
+                        <span class="version-tag">v0.9.0 — Bêta privée</span>
+                        <span class="version-date">Décembre 2025</span>
+                    </div>
+                    <ul class="changelog-body">
+                        <li>Première version bêta avec 30 spots</li>
+                        <li>Système d'authentification JWT</li>
+                        <li>Base communautaire (posts + follows)</li>
+                        <li>Messagerie basique</li>
+                    </ul>
+                </div>
+                <div class="changelog-version">
+                    <div class="changelog-header" onclick="this.nextElementSibling.classList.toggle('open')">
+                        <span class="version-tag">v0.5.0 — Alpha</span>
+                        <span class="version-date">Septembre 2025</span>
+                    </div>
+                    <ul class="changelog-body">
+                        <li>Prototype des prévisions surf</li>
+                        <li>10 spots Landes & Pays Basque</li>
+                        <li>Interface minimaliste</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="newsletter animate">
+                <div style="font-size:36px;margin-bottom:12px">📬</div>
+                <h4>Sois le premier informé</h4>
+                <p>Reçois une notification dès que de nouvelles fonctionnalités arrivent sur SwellSync.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="ton@email.com">
+                    <button class="btn-primary"
+                        onclick="this.textContent='✅ Inscrit !';this.style.background='var(--accent2)'">M'abonner</button>
                 </div>
             </div>
         </div>
@@ -114,29 +243,71 @@
 
     <!-- CTA -->
     <section class="cta-final">
-        <h2>Aide-nous à <em
-                style="font-style:normal;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">construire</em>
-            le futur</h2>
-        <p>Tes retours comptent. Rejoins la communauté et suggère des fonctionnalités.</p>
-        <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:16px;padding:16px 40px" download>
-            <span class="material-symbols-outlined">download</span>
-            Télécharger SwellSync
-        </a>
+        <div class="container">
+            <h2>Aide-nous à <em
+                    style="background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal">construire</em>
+                le futur</h2>
+            <p>Tes retours façonnent SwellSync. Rejoins la communauté et vote pour les prochaines features.</p>
+            <div class="cta-buttons">
+                <a href="/downloads/SwellSync-1.0.0.apk" class="btn-primary" style="font-size:15px;padding:14px 36px"
+                    download>Télécharger SwellSync</a>
+                <a href="/site/contact.html" class="btn-outline" style="font-size:15px;padding:14px 36px">Suggérer une
+                    idée</a>
+            </div>
+        </div>
     </section>
 
     <footer>
-        <p style="margin-bottom:8px">© 2026 <strong>SwellSync</strong> — Créé par <a href="#">Max Loviat</a> 🇫🇷</p>
-        <p>
-            <a href="/privacy.html">Confidentialité</a> ·
-            <a href="/cgv.html">Conditions générales</a> ·
-            <a href="/contact.html">Contact</a> ·
-            <a href="/legal.html">Mentions légales</a>
-        </p>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
+                            src="/assets/images/swellsync_logo.png" alt="SwellSync"><span style="color:#fff">Swell<span
+                                style="color:var(--accent)">Sync</span></span></a>
+                    <p>La prévision surf la plus précise de France.</p>
+                    <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
+                            class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
+                </div>
+                <div class="footer-col">
+                    <h5>Produit</h5><a href="/site/fonctionnalites.html">Fonctionnalités</a><a
+                        href="/site/spots.html">Spots</a><a href="/site/tarifs.html">Tarifs</a><a
+                        href="/site/roadmap.html">Roadmap</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Ressources</h5><a href="/site/faq.html">FAQ</a><a href="/site/contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Légal</h5><a href="/cgv.html">CGV</a><a href="/privacy.html">Confidentialité</a><a
+                        href="/legal.html">Mentions légales</a><a href="/cookies.html">Cookies</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2026 SwellSync Technology — Made in Hossegor 🇫🇷</span>
+                <div class="footer-status"><span class="status-dot"></span> Serveurs Opérationnels</div>
+            </div>
+        </div>
     </footer>
-    <script>if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');</script>
+
     <script>
-        const ro = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ro.unobserve(i.target) } }), { threshold: .1 });
-        document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+        const nb = document.getElementById('navbar');
+        window.addEventListener('scroll', () => nb.classList.toggle('scrolled', scrollY > 40));
+        document.getElementById('menuBtn').onclick = () => document.getElementById('navLinks').classList.toggle('open');
+        const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
+        document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
+
+        const votes = JSON.parse(localStorage.getItem('sw_votes') || '{}');
+        function vote(btn) {
+            const id = btn.dataset.id;
+            if (votes[id]) { return; }
+            votes[id] = true; localStorage.setItem('sw_votes', JSON.stringify(votes));
+            const cnt = btn.querySelector('.vcount');
+            cnt.textContent = parseInt(cnt.textContent) + 1;
+            btn.classList.add('voted'); btn.innerHTML = '✅ Voté · ' + cnt.outerHTML;
+        }
+        Object.keys(votes).forEach(id => {
+            const btn = document.querySelector('.vote-btn[data-id="' + id + '"]');
+            if (btn) { btn.classList.add('voted'); btn.innerHTML = '✅ Voté · <span class="vcount">' + btn.querySelector('.vcount').textContent + '</span>'; }
+        });
+
+        if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
     </script>
 </body>
 
