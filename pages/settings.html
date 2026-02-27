@@ -295,7 +295,7 @@
                     <div class="icon-box" style="background:rgba(245,158,11,.15)"><span
                             class="material-symbols-outlined text-amber-400 text-[18px]">star</span></div>
                     <div class="flex-1">
-                        <p class="font-semibold text-sm">SwellSync Pro</p>
+                        <p class="font-semibold text-sm">SwellSync Badges</p>
                         <p class="text-[10px] text-slate-500">Gérer votre abonnement</p>
                     </div>
                     <span class="text-[10px] text-amber-400 font-bold mr-1">Voir →</span>
@@ -431,7 +431,7 @@
                     <span class="material-symbols-outlined text-slate-600 text-[18px]">chevron_right</span>
                 </div>
                 <div class="setting-row"
-                    onclick="openProGateOrPage('','Tes enregistrements de posts et de sessions sont accessibles uniquement avec SwellSync Pro ⭐')">
+                    onclick="openProGateOrPage('','Tes enregistrements de posts et de sessions sont accessibles uniquement avec SwellSync Badges ⭐')">
                     <div class="icon-box" style="background:rgba(245,158,11,.1)"><span
                             class="material-symbols-outlined text-amber-400 text-[18px]">bookmark</span></div>
                     <div class="flex-1">
@@ -738,8 +738,8 @@
                         class="material-symbols-outlined">close</span></button>
             </div>
             <p class="text-slate-400 text-sm text-center py-8">Tes posts archivés apparaîtront ici.<br />Fonctionnalité
-                disponible avec SwellSync Pro ⭐</p>
-            <a href="abonnement.html"
+                disponible avec SwellSync Badges ⭐</p>
+            <a href="community.html"
                 class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-black text-sm text-black"
                 style="background:linear-gradient(135deg,#f59e0b,#d97706)">
                 ⭐ Passer Pro
@@ -1196,7 +1196,7 @@
 
         function checkProThenGo(url) {
             if (memberPlan === 'pro') { window.location.href = url; }
-            else { openProGateOrPage(url, 'Cette fonctionnalité est réservée aux membres SwellSync Pro ⭐'); }
+            else { openProGateOrPage(url, 'Cette fonctionnalité est réservée aux membres SwellSync Badges ⭐'); }
         }
 
         function openProGateOrPage(url, msg) {
@@ -1208,7 +1208,7 @@
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-4">
                         <span class="material-symbols-outlined text-2xl text-white" style="font-variation-settings:'FILL' 1">workspace_premium</span>
                     </div>
-                    <h3 class="text-lg font-black mb-2">SwellSync Pro ⭐</h3>
+                    <h3 class="text-lg font-black mb-2">SwellSync Badges ⭐</h3>
                     <p class="text-sm text-slate-400 mb-5">${msg}</p>
                     <button onclick="window.location.href='abonnement.html'" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 font-black text-sm text-[#000] mb-2 active:scale-95 transition-transform">Passer à Pro</button>
                     <button onclick="this.closest('.fixed').remove()" class="w-full py-2 text-slate-400 text-sm">Plus tard</button>
@@ -1222,7 +1222,7 @@
             if (memberPlan === 'pro') {
                 document.getElementById('archiveSheet').classList.replace('hidden', 'flex');
             } else {
-                openProGateOrPage('', 'L\'archive de tes posts est disponible avec SwellSync Pro. Retrouve tes posts supprimés et archivés facilement.');
+                openProGateOrPage('', 'L\'archive de tes posts est disponible avec SwellSync Badges. Retrouve tes posts supprimés et archivés facilement.');
             }
         }
 

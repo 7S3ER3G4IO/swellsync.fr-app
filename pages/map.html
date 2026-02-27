@@ -278,7 +278,7 @@
                 <p class="text-xs text-slate-400 leading-relaxed">Les membres gratuits peuvent ajouter jusqu'à <strong
                         class="text-white">3 spots en favoris</strong>. Passe à <strong class="text-amber-400">SwellSync
                         Pro</strong> pour des favoris illimités.</p>
-                <a href="abonnement.html"
+                <a href="community.html"
                     class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-black text-sm text-black"
                     style="background:linear-gradient(135deg,#f59e0b,#d97706)">
                     <span class="material-symbols-outlined text-[18px]">star</span>Passer Pro — Favoris illimités
@@ -534,7 +534,7 @@
 
             // Mention limite favoris
             if (!isPro) {
-                html += `<p class="text-center text-[10px] text-slate-600 mt-2">❤️ ${favIds.length}/${MAX_FAVS_FREE} favoris utilisés${favIds.length >= MAX_FAVS_FREE ? ' — <a href="abonnement.html" class="text-amber-400 font-bold">Pro pour illimités →</a>' : ''}</p>`;
+                html += `<p class="text-center text-[10px] text-slate-600 mt-2">❤️ ${favIds.length}/${MAX_FAVS_FREE} favoris utilisés${favIds.length >= MAX_FAVS_FREE ? ' — <a href="community.html" class="text-amber-400 font-bold">Pro pour illimités →</a>' : ''}</p>`;
             }
 
             el.innerHTML = html;
