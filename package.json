@@ -1,14 +1,11 @@
 {
   "name": "swellsync",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "SwellSync — App surf : houle, météo, spots en temps réel",
-  "main": "server.js",
   "author": "SwellSync",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npx serve . -l 3000"
   },
   "keywords": [
     "surf",
@@ -17,37 +14,11 @@
     "weather",
     "ocean"
   ],
-  "type": "commonjs",
   "dependencies": {
     "@capacitor/android": "^8.1.0",
     "@capacitor/cli": "^8.1.0",
     "@capacitor/core": "^8.1.0",
-    "@capacitor/ios": "^8.1.0",
-    "@simplewebauthn/server": "^10.0.1",
-    "@simplewebauthn/types": "^12.0.0",
-    "axios": "^1.13.5",
-    "bcrypt": "^6.0.0",
-    "compression": "^1.8.1",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.2.1",
-    "express-validator": "^7.3.1",
-    "helmet": "^8.1.0",
-    "hpp": "^0.2.3",
-    "jsonwebtoken": "^9.0.3",
-    "morgan": "^1.10.1",
-    "multer": "^2.0.2",
-    "nodemailer": "^8.0.1",
-    "otplib": "^13.3.0",
-    "pg": "^8.19.0",
-    "qrcode": "^1.5.4",
-    "stripe": "^20.4.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "web-push": "^3.6.7",
-    "xss": "^1.0.15"
+    "@capacitor/ios": "^8.1.0"
   },
   "devDependencies": {}
 }
