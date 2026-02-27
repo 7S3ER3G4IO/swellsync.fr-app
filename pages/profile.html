@@ -532,15 +532,44 @@
         }
 
         async function loadStats() {
+            const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+            const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+
+            // Sessions Supabase
+            try {
+                const sbClient = window.supabase?.createClient?.(SB_URL, SB_KEY);
+                const { data: { session } } = sbClient ? await sbClient.auth.getSession() : { data: {} };
+                const token = session?.access_token || SB_KEY;
+                const res = await fetch(
+                    `${SB_URL}/rest/v1/surf_sessions?select=id&order=started_at.desc`,
+                    { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token } }
+                );
+                if (res.ok) {
+                    const rows = await res.json();
+                    const count = Array.isArray(rows) ? rows.length : 0;
+                    // Mettre à jour les 2 endroits où statSessions est affiché
+                    document.querySelectorAll('#statSessions').forEach(el => el.textContent = count);
+                    document.querySelectorAll('#statsSessions').forEach(el => el.textContent = count);
+                    loadJournalSection(rows);
+                }
+            } catch { document.querySelectorAll('#statSessions').forEach(el => el.textContent = '0'); }
+
+            // Posts et likes communauté
+            try {
+                const posts = await API.community.posts();
+                const myPosts = posts.filter(p => p.member_id === me?.id);
+                const totalLikes = myPosts.reduce((s, p) => s + (p.likes_count || 0), 0);
+                const totalReplies = myPosts.reduce((s, p) => s + (p.comments_count || 0), 0);
+                document.querySelectorAll('#statPosts').forEach(el => el.textContent = myPosts.length);
+                document.querySelectorAll('#statReplies').forEach(el => el.textContent = totalReplies);
+                document.querySelectorAll('#statLikes').forEach(el => el.textContent = totalLikes);
+            } catch { }
+
+            // Alertes
             try {
                 const alerts = await API.alerts.list();
-                document.getElementById('statAlerts').textContent = alerts.length;
-            } catch { document.getElementById('statAlerts').textContent = '0'; }
-            try {
-                const journal = await API.journal.list();
-                document.getElementById('statSessions').textContent = journal.length;
-                loadJournalSection(journal);
-            } catch { document.getElementById('statSessions').textContent = '0'; }
+                document.querySelectorAll('#statAlerts').forEach(el => el.textContent = alerts.length);
+            } catch { }
         }
 
         function loadJournalSection(sessions) {
