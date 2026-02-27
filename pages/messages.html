@@ -327,11 +327,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/api.js"></script>
     <script>
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
         let conversations = [];
         let currentChatUserId = null;
         let currentChatName = '';
         let myId = null;
-        let pollTimer = null;
+        let realtimeChannel = null;
 
         async function init() {
             try {
@@ -390,12 +392,32 @@
             document.getElementById('chatView').classList.add('active');
             document.querySelector('nav').style.display = 'none';
             await loadMessages();
-            // Poll for new messages
-            pollTimer = setInterval(loadMessages, 5000);
+
+            // Supabase Realtime — écoute les nouveaux messages
+            if (window.supabase) {
+                const sbClient = window.supabase.createClient(SB_URL, SB_KEY);
+                if (realtimeChannel) sbClient.removeChannel(realtimeChannel);
+                realtimeChannel = sbClient
+                    .channel('messages-' + userId)
+                    .on('postgres_changes', {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'messages',
+                        filter: `receiver_id=eq.${myId}`
+                    }, (payload) => {
+                        if (payload.new?.sender_id === currentChatUserId) {
+                            loadMessages();
+                        }
+                    })
+                    .subscribe();
+            }
         }
 
         function closeChat() {
-            if (pollTimer) clearInterval(pollTimer);
+            if (realtimeChannel && window.supabase) {
+                window.supabase.createClient(SB_URL, SB_KEY).removeChannel(realtimeChannel);
+                realtimeChannel = null;
+            }
             document.getElementById('chatView').classList.remove('active');
             document.getElementById('inboxView').classList.remove('hidden');
             document.querySelector('nav').style.display = '';

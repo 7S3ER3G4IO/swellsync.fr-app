@@ -332,24 +332,19 @@
         <!-- ═══════════════ TAB FEED ═══════════════ -->
         <section id="tab-feed" class="space-y-3">
 
-            <!-- Badge Pro CTA -->
-            <div class="relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 border border-amber-400/20"
-                style="background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(245,158,11,.04))">
+            <!-- Widget Session du Jour -->
+            <div class="relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 border border-[#00bad6]/20"
+                style="background:linear-gradient(135deg,rgba(0,186,214,.08),rgba(0,119,204,.04))">
                 <div class="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-2xl"
-                    style="background:linear-gradient(135deg,#f59e0b,#d97706)">⭐</div>
+                    style="background:linear-gradient(135deg,#00bad6,#0077cc)">🏄</div>
                 <div class="flex-1 min-w-0">
-                    <p class="font-bold text-sm text-amber-300">Badge Surfeur Pro</p>
-                    <p class="text-[10px] text-slate-400 mt-0.5">Badge ⭐ Pro + stats exclusives + visibilité accrue</p>
-                    <div class="flex gap-1 mt-1.5">
-                        <span class="text-[9px] badge-pays-basque px-1.5 py-0.5 rounded-full font-bold">🏄 Pays
-                            Basque</span>
-                        <span class="text-[9px] badge-landes px-1.5 py-0.5 rounded-full font-bold">🌊 Landes</span>
-                        <span class="text-[9px] badge-bretagne px-1.5 py-0.5 rounded-full font-bold">⚓ Bretagne</span>
-                    </div>
+                    <p class="font-bold text-sm text-[#00bad6]">Lance une session !</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Enregistre ta session pour débloquer des badges
+                        automatiquement</p>
                 </div>
-                <button onclick="unlockBadge()"
-                    class="shrink-0 font-black text-sm px-4 py-2 rounded-xl transition-all text-black"
-                    style="background:linear-gradient(135deg,#f59e0b,#d97706)">0,99€</button>
+                <button onclick="window.location.href='session-live.html'"
+                    class="shrink-0 font-black text-sm px-4 py-2 rounded-xl transition-all text-black active:scale-95"
+                    style="background:linear-gradient(135deg,#00bad6,#0077cc)">Démarrer</button>
             </div>
 
             <!-- Topic chips -->
@@ -623,7 +618,7 @@
                         </div>
                         <button
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-                            onclick="buyBadge('Pays Basque',0.99)">0,99€</button>
+                            onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
                     <div class="flex items-center gap-3 card rounded-xl p-3">
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center"

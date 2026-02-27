@@ -329,10 +329,7 @@
             <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="alerts.html"><span
-                style="position:relative;display:inline-block;"><span
-                    class="material-symbols-outlined">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
-                class="text-[10px]">Alertes</span></a>
+                class="material-symbols-outlined">notifications</span><span class="text-[10px]">Alertes</span></a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="profile.html"><span
@@ -346,7 +343,7 @@
         const SURFERS_DB = [
             {
                 id: 'jeromesS', name: 'JerômeS', av: 'J', avClass: 'av-cyan',
-                badge: '⭐ Pro', region: '🏄 Pays Basque',
+                badge: '🏄 Pays Basque', region: '🏄 Pays Basque',
                 bio: 'Surfeur depuis 15 ans, je chasse les houles atlantiques 🌊 Spé shortboard et grosses vagues. Coach certifié FFSurf.',
                 sessions: 42, followers: 287, following: 134,
                 spots: ['Hossegor — La Gravière', 'Biarritz', 'Seignosse'],
@@ -381,7 +378,7 @@
             },
             {
                 id: 'surfGuide64', name: 'SurfGuide64', av: 'S', avClass: 'av-amber',
-                badge: '⭐ Pro', region: '🌊 Landes',
+                badge: '🌊 Landes', region: '🌊 Landes',
                 bio: 'Guide surf pro dans les Landes 🔥 Lacanau, Hossegor, Seignosse. Je partage les meilleures conditions du moment.',
                 sessions: 28, followers: 312, following: 67,
                 spots: ['Lacanau Ocean', 'Hossegor', 'Seignosse — Les Bourdaines'],
@@ -405,13 +402,13 @@
 
         // Posts complets (pour recherche dans les posts)
         const ALL_POSTS = [
-            { id: 1, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '⭐ Pro', text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12, tag: 'session' },
+            { id: 1, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '🏄 Pays Basque', text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12, tag: 'session' },
             { id: 2, user: 'MarieLR', userId: 'marieLR', av: 'M', avClass: 'av-purple', text: "Quelqu'un a des infos sur La Torche ce week-end ? 🏄‍♀️ Je prévois d'y aller samedi matin.", time: '18min', likes: 5, tag: 'question' },
             { id: 3, user: 'AlexSurf29', userId: 'alexSurf29', av: 'A', avClass: 'av-emerald', text: 'Houle 2.8m prévue vendredi sur la côte basque selon Stormglass. Qui sera à Hossegor ? 🤙', time: '1h', likes: 23, tag: 'houle' },
-            { id: 4, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '⭐ Pro', text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18, tag: 'spot' },
+            { id: 4, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '🌊 Landes', text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18, tag: 'spot' },
             { id: 5, user: 'BretagneSurf', userId: 'bretagneSurf', av: 'B', avClass: 'av-red', text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31, tag: 'session' },
-            { id: 6, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '⭐ Pro', text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67, tag: 'competition' },
-            { id: 7, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '⭐ Pro', text: 'Conditions de rêve à Lacanau ce matin ! 1.5m propre, vent nul, eau à 17°C. Parfait pour les débutants 🌊', time: '6h', likes: 44, tag: 'session' },
+            { id: 6, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '🏄 Pays Basque', text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67, tag: 'competition' },
+            { id: 7, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '🌊 Landes', text: 'Conditions de rêve à Lacanau ce matin ! 1.5m propre, vent nul, eau à 17°C. Parfait pour les débutants 🌊', time: '6h', likes: 44, tag: 'session' },
             { id: 8, user: 'MarieLR', userId: 'marieLR', av: 'M', avClass: 'av-purple', text: 'Découvert un spot secret en Bretagne hier 🤫 Seuls 2 surfeurs à l\'eau, fond de sable parfait, 1.2m propre.', time: '1j', likes: 67, tag: 'spot' },
         ];
 
