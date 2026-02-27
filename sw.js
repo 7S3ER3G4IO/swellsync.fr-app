@@ -1,5 +1,5 @@
 // SwellSync Service Worker — Cache-first for assets, network-first for data
-const CACHE_NAME = 'swellsync-v2';
+const CACHE_NAME = 'swellsync-v3';
 const ASSETS = [
     '/pages/home.html',
     '/pages/splash.html',
@@ -57,7 +57,6 @@ self.addEventListener('fetch', e => {
         caches.match(e.request)
             .then(cached => cached || fetch(e.request)
                 .then(response => {
-                    // Cache new resources
                     if (response.ok && e.request.method === 'GET') {
                         const clone = response.clone();
                         caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
@@ -65,5 +64,54 @@ self.addEventListener('fetch', e => {
                     return response;
                 })
             )
+    );
+});
+
+// ── Push Notifications ──────────────────────────────────────────────────────
+self.addEventListener('push', e => {
+    let data = {
+        title: 'SwellSync 🌊',
+        body: 'Les conditions sont idéales pour surfer !',
+        icon: '/assets/images/swellsync_logo.png',
+        badge: '/assets/images/swellsync_logo.png',
+        url: '/pages/alerts.html'
+    };
+
+    try {
+        const payload = e.data?.json();
+        if (payload) {
+            data.title = payload.title || data.title;
+            data.body = payload.body || data.body;
+            data.url = payload.url || data.url;
+        }
+    } catch { }
+
+    e.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: data.icon,
+            badge: data.badge,
+            vibrate: [200, 100, 200],
+            tag: 'swellsync-alert',
+            renotify: true,
+            data: { url: data.url }
+        })
+    );
+});
+
+// Ouvre l'app au clic sur la notification
+self.addEventListener('notificationclick', e => {
+    e.notification.close();
+    const target = e.notification.data?.url || '/pages/alerts.html';
+    e.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+            for (const client of list) {
+                if (client.url.includes('swellsync') && 'focus' in client) {
+                    client.navigate(target);
+                    return client.focus();
+                }
+            }
+            if (clients.openWindow) return clients.openWindow(target);
+        })
     );
 });
