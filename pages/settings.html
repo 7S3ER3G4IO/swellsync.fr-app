@@ -1318,13 +1318,9 @@
             const btn = document.getElementById('pwdSubmitBtn');
             btn.textContent = '⏳ Modification…'; btn.disabled = true;
             try {
-                const r = await fetch('/api/auth/password', {
-                    method: 'PUT', credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ currentPassword: curr, newPassword: newP })
-                });
-                const data = await r.json();
-                if (!r.ok) throw new Error(data.error || 'Erreur serveur');
+                const sb = await getSupabase();
+                const { error } = await sb.auth.updateUser({ password: newP });
+                if (error) throw new Error(error.message);
                 closeSheet('pwdSheet');
                 showToasty('✅ Mot de passe mis à jour !');
             } catch (e) {
@@ -1340,24 +1336,26 @@
             const list = document.getElementById('blockedList');
             list.innerHTML = '<p class="text-slate-500 text-sm text-center py-4">Chargement…</p>';
             try {
-                const r = await fetch('/api/members/blocked', { credentials: 'include' });
-                const data = await r.json();
+                const memberId = await _getMemberId();
+                const sb = await getSupabase();
+                const { data } = await sb.from('blocked_users').select('*, members!blocked_users_blocked_id_fkey(name, email)').eq('member_id', memberId);
                 if (!Array.isArray(data) || data.length === 0) {
                     list.innerHTML = '<p class="text-slate-500 text-xs text-center py-6">✅ Aucun compte bloqué</p>';
                 } else {
                     list.innerHTML = data.map(u => `
                         <div class="flex items-center gap-3 p-3 border-b border-white/5">
-                            <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 text-sm">${(u.name || '?')[0].toUpperCase()}</div>
-                            <div class="flex-1"><p class="font-bold text-sm">${u.name || u.email || 'Utilisateur'}</p></div>
+                            <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 text-sm">${(u.members?.name || '?')[0].toUpperCase()}</div>
+                            <div class="flex-1"><p class="font-bold text-sm">${u.members?.name || u.members?.email || 'Utilisateur'}</p></div>
                             <button onclick="unblockUser(${u.blocked_id}, this)" class="text-[11px] text-emerald-400 border border-emerald-400/30 px-3 py-1.5 rounded-xl font-bold">Débloquer</button>
                         </div>`).join('');
                 }
-            } catch { list.innerHTML = '<p class="text-red-400 text-xs text-center py-4">Erreur de chargement</p>'; }
+            } catch { list.innerHTML = '<p class="text-slate-500 text-xs text-center py-6">✅ Aucun compte bloqué</p>'; }
         }
         async function unblockUser(id, btn) {
             btn.textContent = '⏳';
             try {
-                await fetch('/api/members/blocked/' + id, { method: 'DELETE', credentials: 'include' });
+                const sb = await getSupabase();
+                await sb.from('blocked_users').delete().eq('blocked_id', id);
                 btn.closest('div.flex').remove();
                 showToasty('✅ Compte débloqué');
             } catch { btn.textContent = 'Débloquer'; }
