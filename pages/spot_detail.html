@@ -334,7 +334,7 @@
         <div class="flex gap-1 tab-pill p-1 rounded-2xl mb-5 w-fit">
             <button class="tab-btn active" onclick="switchTab('24h',this)">24h</button>
             <button class="tab-btn" onclick="switchTab('7j',this)">7 jours</button>
-            <button class="tab-btn" onclick="switchTab('16j',this)">16 jours 🔒</button>
+            <button class="tab-btn" onclick="switchTab('16j',this)">16 jours</button>
         </div>
 
         <!-- Tab 24h -->
@@ -669,7 +669,7 @@
     <script>
         const params = new URLSearchParams(location.search);
         const SPOT_ID = params.get('id') || 1;
-        let isFav = false, spotData = null, forecastData = null, isPro = false;
+        let isFav = false, spotData = null, forecastData = null;
         const DAYS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
         async function init() {
@@ -688,11 +688,7 @@
                 document.title = 'SwellSync — ' + spot.name;
             } catch { document.getElementById('spotName').textContent = 'Spot #' + SPOT_ID; }
 
-            // Profil Pro
-            try {
-                const me = await API.auth.me();
-                isPro = !!me.is_pro;
-            } catch { }
+
 
             // Forecast
             try {
@@ -770,26 +766,6 @@
 
         function renderTab16j(data) {
             const el = document.getElementById('tab16jContent');
-            if (!isPro) {
-                el.innerHTML = `
-                <div class="glass rounded-2xl p-8 text-center space-y-4">
-                  <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-[#00bad6]/30">
-                    <span class="material-symbols-outlined text-3xl text-[#000]">lock</span>
-                  </div>
-                  <h3 class="text-xl font-black">16 jours de prévisions</h3>
-                  <p class="dark:text-slate-400 text-slate-500 text-sm leading-relaxed">Anticipe les sessions jusqu'à 16 jours à l'avance.<br/>Disponible avec l'abonnement <span class="text-[#00bad6] font-bold">SwellSync Badges</span>.</p>
-                  <div class="space-y-2 text-left max-w-xs mx-auto">
-                    <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>16j de prévisions surf</div>
-                    <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Alertes houle illimitées</div>
-                    <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Accès prioritaire aux nouveaux spots</div>
-                  </div>
-                  <a href="community.html" class="block w-full py-4 rounded-2xl bg-gradient-to-r from-[#00bad6] to-emerald-400 text-[#000] font-black text-center hover:opacity-90 transition-opacity">
-                    Passer Pro — 4,99€/mois
-                  </a>
-                </div>`;
-                return;
-            }
-            // Pro : afficher 16j
             const daily = buildDaily(data, 16);
             el.innerHTML = `<div class="glass rounded-2xl overflow-hidden divide-y dark:divide-[#00bad6]/08 divide-[#00bad6]/10">${daily.map(([date, d]) => {
                 const dt = new Date(date + 'T12:00:00');

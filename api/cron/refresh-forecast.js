@@ -265,6 +265,82 @@ export default async function handler(req, res) {
         sg_budget_left: 500 - sgRequestCount
     };
 
+    // ═══ Vérification des alertes & push notifications ═══
+    let alertsFired = 0;
+    try {
+        // 1. Récupérer toutes les alertes actives
+        const alertsRes = await fetch(
+            `${SB_URL}/rest/v1/user_alerts?active=eq.1&select=*`,
+            { headers: sbHeaders }
+        );
+        const userAlerts = alertsRes.ok ? await alertsRes.json() : [];
+
+        for (const alert of userAlerts) {
+            // 2. Trouver le cache météo du spot
+            const spot = SPOTS.find(s => s.id === alert.spot_id);
+            if (!spot) continue;
+            const ck = `${parseFloat(spot.lat).toFixed(3)},${parseFloat(spot.lng).toFixed(3)},${today},${bloc}`;
+
+            const cacheRes = await fetch(
+                `${SB_URL}/rest/v1/forecast_cache?cache_key=eq.${encodeURIComponent(ck)}&select=data&limit=1`,
+                { headers: sbHeaders }
+            );
+            if (!cacheRes.ok) continue;
+            const cacheRows = await cacheRes.json();
+            if (!cacheRows?.length) continue;
+
+            const forecastData = cacheRows[0].data;
+            const currentHour = forecastData?.find(h => new Date(h.time) >= now) || forecastData?.[0];
+            if (!currentHour) continue;
+
+            const waveH = parseFloat(currentHour.waveHeight) || 0;
+            const period = parseFloat(currentHour.wavePeriod) || 0;
+            const minH = parseFloat(alert.min_height) || 0;
+            const minP = parseFloat(alert.min_period) || 0;
+
+            // 3. Seuils dépassés ?
+            if (waveH >= minH && period >= minP) {
+                // 4. Récupérer les push subscriptions de l'utilisateur
+                const subsRes = await fetch(
+                    `${SB_URL}/rest/v1/push_subscriptions?user_id=eq.${alert.user_id}&select=*`,
+                    { headers: sbHeaders }
+                );
+                if (!subsRes.ok) continue;
+                const subs = await subsRes.json();
+
+                for (const sub of subs) {
+                    try {
+                        // Envoyer via Web Push API Supabase Edge Function (ou service externe)
+                        await fetch(`${SB_URL}/functions/v1/send-push`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY || SB_KEY}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                subscription: sub.subscription,
+                                payload: {
+                                    title: `🌊 ${alert.spot_name || 'Spot'} — Conditions idéales !`,
+                                    body: `Houle ${waveH.toFixed(1)}m · Période ${period.toFixed(0)}s — C'est le bon moment ! 🤙`,
+                                    icon: '/assets/images/swellsync_logo.png',
+                                    badge: '/assets/images/swellsync_logo.png',
+                                    url: `/pages/spot_detail.html?id=${alert.spot_id}`
+                                }
+                            })
+                        });
+                        alertsFired++;
+                    } catch (pushErr) {
+                        console.warn(`⚠️ Push failed for user ${alert.user_id}:`, pushErr.message);
+                    }
+                }
+            }
+        }
+        console.log(`🔔 [Alerts] ${alertsFired} notifications envoyées`);
+    } catch (alertErr) {
+        console.warn('⚠️ [Alerts] Vérification échouée:', alertErr.message);
+    }
+
+    summary.alerts_fired = alertsFired;
     console.log('✅ [Cron] Terminé :', JSON.stringify(summary));
     return res.status(200).json(summary);
 }

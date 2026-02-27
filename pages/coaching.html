@@ -56,7 +56,8 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            min-height: 100dvh; padding-top: env(safe-area-inset-top, 44px)
+            min-height: 100dvh;
+            padding-top: env(safe-area-inset-top, 44px)
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -206,9 +207,9 @@
                                     class="material-symbols-outlined">check_circle</span><span>Échauffement & sécurité
                                     inclus</span></div>
                         </div>
-                        <button onclick="bookCoaching('initiation')"
+                        <button onclick="contactCoaching('Initiation')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
-                            Réserver — 79€
+                            Nous contacter →
                         </button>
                     </div>
                 </div>
@@ -253,10 +254,10 @@
                                     class="material-symbols-outlined">check_circle</span><span>Maximum 2
                                     personnes</span></div>
                         </div>
-                        <button onclick="bookCoaching('perfectionnement')"
+                        <button onclick="contactCoaching('Perfectionnement')"
                             class="w-full mt-3 py-2.5 rounded-xl font-bold text-sm active:scale-95 transition-transform text-black"
                             style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                            Réserver — 119€
+                            Nous contacter →
                         </button>
                     </div>
                 </div>
@@ -300,9 +301,9 @@
                                     class="material-symbols-outlined">check_circle</span><span>Plan d'entraînement
                                     physique inclus</span></div>
                         </div>
-                        <button onclick="bookCoaching('competition')"
+                        <button onclick="contactCoaching('Competition')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-purple-500 text-white font-bold text-sm active:scale-95 transition-transform">
-                            Réserver — 179€
+                            Nous contacter →
                         </button>
                     </div>
                 </div>
@@ -338,9 +339,9 @@
                                     class="material-symbols-outlined">check_circle</span><span>Réponse sous 48h</span>
                             </div>
                         </div>
-                        <button onclick="bookCoaching('video')"
+                        <button onclick="contactCoaching('Video Analyse')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
-                            Commander — 59€
+                            Nous contacter →
                         </button>
                     </div>
                 </div>
@@ -550,29 +551,51 @@
         </a>
     </nav>
 
-    <!-- Booking Modal -->
-    <div id="bookModal"
+    <!-- Contact Modal -->
+    <div id="contactModal"
         class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-        <div class="w-full max-w-xs card rounded-3xl p-6 text-center space-y-4">
-            <div class="w-16 h-16 rounded-2xl bg-[#00bad6]/20 flex items-center justify-center mx-auto">
-                <span class="material-symbols-outlined text-[#00bad6] text-3xl">event_available</span>
+        <div class="w-full max-w-sm card rounded-3xl p-5 space-y-4">
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-black text-base" id="contactTitle">Demande de coaching</h3>
+                    <p class="text-[11px] text-slate-500" id="contactSubtitle">Formule sélectionnée</p>
+                </div>
+                <button onclick="closeContact()"
+                    class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-slate-400 text-[18px]">close</span>
+                </button>
             </div>
-            <h3 class="font-black text-base" id="modalTitle">Réservation</h3>
-            <p class="text-xs text-slate-400" id="modalDesc">Choisis une date et un créneau.</p>
-            <input type="date" id="bookDate"
-                class="w-full rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2 text-sm text-white">
-            <select id="bookTime"
-                class="w-full rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2 text-sm text-white">
-                <option value="9h">9h00 — 11h00</option>
-                <option value="11h">11h00 — 13h00</option>
-                <option value="14h">14h00 — 16h00</option>
-                <option value="16h">16h00 — 18h00</option>
-            </select>
-            <button onclick="confirmBooking()"
-                class="w-full py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
-                Confirmer la réservation
+
+            <!-- Form -->
+            <div class="space-y-3">
+                <div>
+                    <label class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Votre nom</label>
+                    <input id="contactName" type="text" placeholder="Ex : Marie Dupont"
+                        class="w-full mt-1 rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2.5 text-sm text-white outline-none focus:border-[#00bad6]/50 transition-colors"
+                        style="font-family:inherit">
+                </div>
+                <div>
+                    <label class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Email</label>
+                    <input id="contactEmail" type="email" placeholder="votre@email.com"
+                        class="w-full mt-1 rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2.5 text-sm text-white outline-none focus:border-[#00bad6]/50 transition-colors"
+                        style="font-family:inherit">
+                </div>
+                <div>
+                    <label class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Message
+                        (optionnel)</label>
+                    <textarea id="contactMsg" rows="3" placeholder="Questions, disponibilités, niveau..."
+                        class="w-full mt-1 rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2.5 text-sm text-white outline-none resize-none focus:border-[#00bad6]/50 transition-colors"
+                        style="font-family:inherit"></textarea>
+                </div>
+            </div>
+
+            <button id="contactSubmitBtn" onclick="submitContact()"
+                class="w-full py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">send</span>
+                Envoyer la demande
             </button>
-            <button onclick="closeModal()" class="w-full py-2 text-slate-500 text-xs">Annuler</button>
+            <p class="text-center text-[9px] text-slate-600">Réponse sous 24h · Sans engagement</p>
         </div>
     </div>
 
@@ -581,41 +604,79 @@
         <div
             class="bg-emerald-500 text-white font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-2">
             <span class="material-symbols-outlined text-lg">check_circle</span>
-            <span>Réservation confirmée !</span>
+            <span id="toastMsg">Demande envoyée !</span>
         </div>
     </div>
 
     <script>
-        const PLANS = {
-            initiation: { name: 'Initiation', price: '79€' },
-            perfectionnement: { name: 'Perfectionnement', price: '119€' },
-            competition: { name: 'Compétition', price: '179€' },
-            video: { name: 'Vidéo Analyse', price: '59€' }
-        };
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
 
-        let currentPlan = null;
+        let selectedPlan = null;
 
-        function bookCoaching(plan) {
-            currentPlan = plan;
-            const p = PLANS[plan];
-            document.getElementById('modalTitle').textContent = 'Réserver — ' + p.name;
-            document.getElementById('modalDesc').textContent = p.price + ' · Choisis une date et un créneau.';
-            // Set min date to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('bookDate').min = today;
-            document.getElementById('bookDate').value = today;
-            document.getElementById('bookModal').classList.replace('hidden', 'flex');
+        function contactCoaching(planName) {
+            selectedPlan = planName;
+            document.getElementById('contactTitle').textContent = planName;
+            document.getElementById('contactSubtitle').textContent = 'Formule : ' + planName + ' · Réponse sous 24h';
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactMsg').value = '';
+            document.getElementById('contactModal').classList.replace('hidden', 'flex');
         }
 
-        function closeModal() {
-            document.getElementById('bookModal').classList.replace('flex', 'hidden');
+        function closeContact() {
+            document.getElementById('contactModal').classList.replace('flex', 'hidden');
         }
 
-        function confirmBooking() {
-            closeModal();
-            const toast = document.getElementById('successToast');
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
+        async function submitContact() {
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const msg = document.getElementById('contactMsg').value.trim();
+
+            if (!name || !email) {
+                // Highlight manquants
+                if (!name) document.getElementById('contactName').style.borderColor = '#ef4444';
+                if (!email) document.getElementById('contactEmail').style.borderColor = '#ef4444';
+                return;
+            }
+
+            const btn = document.getElementById('contactSubmitBtn');
+            btn.textContent = 'Envoi en cours…';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${SB_URL}/rest/v1/contact_leads`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SB_KEY,
+                        'Authorization': 'Bearer ' + SB_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        subject: 'Coaching — ' + selectedPlan,
+                        message: msg || '(aucun message)',
+                        source: 'app-coaching'
+                    })
+                });
+
+                closeContact();
+
+                // Toast succes
+                const toast = document.getElementById('successToast');
+                document.getElementById('toastMsg').textContent = 'Demande envoyée ! Réponse sous 24h 🏄';
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 4000);
+
+            } catch (e) {
+                btn.textContent = 'Erreur, réessaie';
+                setTimeout(() => {
+                    btn.innerHTML = '<span class="material-symbols-outlined text-lg" style="font-variation-settings:\'FILL\' 1">send</span> Envoyer la demande';
+                    btn.disabled = false;
+                }, 2000);
+            }
         }
 
         // Smooth scroll to anchor

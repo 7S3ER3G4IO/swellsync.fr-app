@@ -81,8 +81,8 @@
         <div class="card">
             <div class="flex items-center justify-between mb-3">
                 <div>
-                    <p class="text-xs text-white/50">Maintenant · Hossegor</p>
-                    <p class="text-2xl font-bold mt-1">2.6m <span class="text-sm text-white/50">@ 12s</span></p>
+                    <p class="text-xs text-white/50" id="fcLocation">Maintenant · Chargement…</p>
+                    <p class="text-2xl font-bold mt-1" id="fcNow">— <span class="text-sm text-white/50">@ —s</span></p>
                 </div>
                 <div class="text-right">
                     <p class="text-3xl">🌊</p>
@@ -90,9 +90,9 @@
                 </div>
             </div>
             <div class="flex gap-4 text-xs text-white/60">
-                <span>🧭 W (270°)</span>
-                <span>💨 12 km/h NE</span>
-                <span>🌡️ 15°C eau</span>
+                <span id="fcDir">🧭 —</span>
+                <span id="fcWind">💨 —</span>
+                <span id="fcTemp">🌡️ —</span>
             </div>
         </div>
 
@@ -192,54 +192,159 @@
                 class="material-symbols-outlined">person</span><span class="text-[10px]">Profil</span></a>
     </nav>
 
+    <script src="js/api.js"></script>
     <script>
-        // Forecast data
-        const DAYS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-        const SWELL = [2.1, 2.6, 1.8, 3.2, 2.9, 2.5, 3.0];
-        const PERIOD = [11, 12, 10, 14, 13, 11, 12];
-        const WIND = [12, 8, 15, 10, 18, 14, 9];
-        const WIND_DIR = ['NE', 'NE', 'NO', 'NE', 'SO', 'NO', 'NE'];
-        const TEMP = [15, 16, 14, 15, 14, 16, 17];
-        const WEATHER = ['☀️', '🌤️', '⛅', '🌊', '💨', '🌤️', '☀️'];
-        const RATING = ['⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐', '⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐⭐⭐'];
+        const DAYS_FR = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
-        // Render chart
-        const maxH = Math.max(...SWELL);
-        const bars = document.getElementById('chartBars');
-        const labels = document.getElementById('chartLabels');
-        DAYS.forEach((d, i) => {
-            const pct = (SWELL[i] / maxH) * 100;
-            const bar = document.createElement('div');
-            bar.className = 'flex-1 flex flex-col items-center justify-end';
-            const isToday = i === 1;
-            bar.innerHTML = `
-            <span class="text-[10px] ${isToday ? 'text-[#00bad6] font-bold' : 'text-white/50'} mb-1">${SWELL[i]}m</span>
-            <div class="w-full graph-bar ${isToday ? 'bg-[#00bad6]' : 'bg-white/10'}" style="height:${pct}%;min-height:8px"></div>`;
-            bars.appendChild(bar);
-            const lbl = document.createElement('span');
-            lbl.className = isToday ? 'text-[#00bad6] font-bold' : '';
-            lbl.textContent = isToday ? 'Auj.' : d;
-            labels.appendChild(lbl);
-        });
+        function degToCompass(deg) {
+            if (deg == null) return '—';
+            const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+            return dirs[Math.round(deg / 45) % 8];
+        }
 
-        // Render forecast table
-        const table = document.getElementById('forecastTable');
-        DAYS.forEach((d, i) => {
-            const isToday = i === 1;
-            const row = document.createElement('div');
-            row.className = `flex items-center gap-3 py-2 ${i < 6 ? 'border-b border-white/5' : ''}`;
-            row.innerHTML = `
-            <span class="w-8 text-xs ${isToday ? 'text-[#00bad6] font-bold' : 'text-white/60'}">${isToday ? 'Auj.' : d}</span>
-            <span class="text-lg">${WEATHER[i]}</span>
-            <div class="flex-1">
-                <p class="text-sm font-bold">${SWELL[i]}m <span class="text-white/40 font-normal">@ ${PERIOD[i]}s</span></p>
-                <p class="text-[10px] text-white/40">💨 ${WIND[i]}km/h ${WIND_DIR[i]} · 🌡️ ${TEMP[i]}°C</p>
-            </div>
-            <div class="text-right">
-                <p class="text-[10px]">${RATING[i]}</p>
-            </div>`;
-            table.appendChild(row);
-        });
+        function ratingStars(h) {
+            if (h >= 2.5) return '⭐⭐⭐⭐⭐';
+            if (h >= 1.8) return '⭐⭐⭐⭐';
+            if (h >= 1.2) return '⭐⭐⭐';
+            if (h >= 0.6) return '⭐⭐';
+            return '⭐';
+        }
+
+        function weatherEmoji(h) {
+            if (h >= 3) return '🌊';
+            if (h >= 2) return '💨';
+            if (h >= 1) return '🌤️';
+            return '☀️';
+        }
+
+        // Groupe les données horaires par jour, retourne les 7 prochains jours
+        function groupByDay(data) {
+            const days = {};
+            const now = new Date();
+            data.forEach(h => {
+                const t = new Date(h.time);
+                if (t < now) return; // ignorer le passé
+                const day = t.toISOString().slice(0, 10);
+                if (!days[day]) days[day] = { heights: [], periods: [], winds: [], temps: [], dirs: [] };
+                if (h.waveHeight != null) days[day].heights.push(h.waveHeight);
+                if (h.wavePeriod != null) days[day].periods.push(h.wavePeriod);
+                if (h.windSpeed != null) days[day].winds.push(h.windSpeed);
+                if (h.waterTemp != null) days[day].temps.push(h.waterTemp);
+                if (h.waveDirection != null) days[day].dirs.push(h.waveDirection);
+            });
+            return Object.entries(days).slice(0, 7);
+        }
+
+        function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null; }
+        function max(arr) { return arr.length ? Math.max(...arr) : null; }
+
+        async function init() {
+            // Spot par défaut : Hossegor La Gravière (id=1) ou depuis le query string
+            const spotId = new URLSearchParams(location.search).get('id') || 1;
+
+            try {
+                const fc = await API.spots.forecast(spotId);
+                const data = fc.data;
+                const now = new Date();
+
+                // ── Maintenant ────────────────────────────────
+                const current = data.find(h => new Date(h.time) >= now) || data[0];
+                if (current) {
+                    const wh = current.waveHeight != null ? parseFloat(current.waveHeight).toFixed(1) : '—';
+                    const wp = current.wavePeriod != null ? Math.round(current.wavePeriod) + 's' : '—';
+                    const ws = current.windSpeed != null ? Math.round(current.windSpeed * 3.6) + ' km/h' : '—';
+                    const wd = degToCompass(current.waveDirection);
+                    const wdir = degToCompass(current.windDirection);
+                    const wt = current.waterTemp != null ? Math.round(current.waterTemp) + '°C eau' : '—';
+                    document.getElementById('fcNow').innerHTML = `${wh}m <span class="text-sm text-white/50">@ ${wp}</span>`;
+                    document.getElementById('fcDir').textContent = `🧭 ${wd}`;
+                    document.getElementById('fcWind').textContent = `💨 ${ws} ${wdir}`;
+                    document.getElementById('fcTemp').textContent = `🌡️ ${wt}`;
+                }
+
+                // ── Spot name ─────────────────────────────────
+                try {
+                    const spot = await API.spots.get(spotId);
+                    if (spot) document.getElementById('fcLocation').textContent = 'Maintenant · ' + spot.name;
+                } catch { }
+
+                // ── 7 jours ───────────────────────────────────
+                const dailyEntries = groupByDay(data);
+
+                // Chart
+                const bars = document.getElementById('chartBars');
+                const labels = document.getElementById('chartLabels');
+                bars.innerHTML = '';
+                labels.innerHTML = '';
+                const heights = dailyEntries.map(([, d]) => max(d.heights) || 0);
+                const maxH = Math.max(...heights, 0.1);
+                const todayStr = now.toISOString().slice(0, 10);
+
+                dailyEntries.forEach(([date, d], i) => {
+                    const h = max(d.heights);
+                    const hStr = h != null ? h.toFixed(1) : '—';
+                    const pct = h != null ? (h / maxH) * 100 : 0;
+                    const isToday = date === todayStr;
+                    const dt = new Date(date + 'T12:00:00');
+                    const dayLabel = isToday ? 'Auj.' : DAYS_FR[dt.getDay()];
+
+                    const bar = document.createElement('div');
+                    bar.className = 'flex-1 flex flex-col items-center justify-end';
+                    bar.innerHTML = `
+                        <span class="text-[10px] ${isToday ? 'text-[#00bad6] font-bold' : 'text-white/50'} mb-1">${hStr}m</span>
+                        <div class="w-full graph-bar ${isToday ? 'bg-[#00bad6]' : 'bg-white/10'}" style="height:${pct}%;min-height:8px"></div>`;
+                    bars.appendChild(bar);
+
+                    const lbl = document.createElement('span');
+                    lbl.className = isToday ? 'text-[#00bad6] font-bold' : '';
+                    lbl.textContent = dayLabel;
+                    labels.appendChild(lbl);
+                });
+
+                // Tableau
+                const table = document.getElementById('forecastTable');
+                table.innerHTML = '';
+                dailyEntries.forEach(([date, d], i) => {
+                    const h = max(d.heights);
+                    const p = avg(d.periods);
+                    const w = avg(d.winds);
+                    const t = avg(d.temps);
+                    const dir = degToCompass(avg(d.dirs));
+                    const isToday = date === todayStr;
+                    const dt = new Date(date + 'T12:00:00');
+
+                    const hStr = h != null ? h.toFixed(1) + 'm' : '—';
+                    const pStr = p != null ? '@ ' + Math.round(p) + 's' : '';
+                    const wStr = w != null ? Math.round(w * 3.6) + 'km/h ' + dir : '—';
+                    const tStr = t != null ? Math.round(t) + '°C' : '—';
+
+                    const row = document.createElement('div');
+                    row.className = `flex items-center gap-3 py-2 ${i < dailyEntries.length - 1 ? 'border-b border-white/5' : ''}`;
+                    row.innerHTML = `
+                        <span class="w-8 text-xs ${isToday ? 'text-[#00bad6] font-bold' : 'text-white/60'}">${isToday ? 'Auj.' : DAYS_FR[dt.getDay()]}</span>
+                        <span class="text-lg">${weatherEmoji(h || 0)}</span>
+                        <div class="flex-1">
+                            <p class="text-sm font-bold">${hStr} <span class="text-white/40 font-normal">${pStr}</span></p>
+                            <p class="text-[10px] text-white/40">💨 ${wStr} · 🌡️ ${tStr}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px]">${ratingStars(h || 0)}</p>
+                        </div>`;
+                    table.appendChild(row);
+                });
+
+                // Badge mock
+                if (fc.mock) {
+                    document.title = 'SwellSync — Prévisions (estimées)';
+                }
+
+            } catch (err) {
+                console.error('forecast.html error:', err);
+                document.getElementById('fcNow').textContent = 'Données indisponibles';
+            }
+
+            // Direction du vent dans la rose SVG (statique pour l'instant — marée à intégrer plus tard)
+        }
 
         // Tabs
         document.querySelectorAll('.tab').forEach(tab => {
@@ -248,6 +353,8 @@
                 tab.classList.add('tab-active');
             });
         });
+
+        init();
     </script>
 </body>
 

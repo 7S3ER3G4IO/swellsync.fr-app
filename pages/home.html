@@ -709,6 +709,22 @@
             </div>
         </div>
 
+        <!-- 📅 Prévisions 5 jours -->
+        <div>
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-black text-base">📅 Cette semaine</h3>
+                <a href="forecast.html" class="text-xs text-[#00bad6] font-bold">Voir détails →</a>
+            </div>
+            <div id="weekForecast" class="grid grid-cols-5 gap-1.5">
+                <!-- Rempli dynamiquement -->
+                <div class="card rounded-xl p-2 text-center skeleton h-20"></div>
+                <div class="card rounded-xl p-2 text-center skeleton h-20"></div>
+                <div class="card rounded-xl p-2 text-center skeleton h-20"></div>
+                <div class="card rounded-xl p-2 text-center skeleton h-20"></div>
+                <div class="card rounded-xl p-2 text-center skeleton h-20"></div>
+            </div>
+        </div>
+
         <!-- 💨 WIND MAP — Live Windy Embed -->
         <div>
             <div class="flex items-center justify-between mb-3">
@@ -732,43 +748,36 @@
             </div>
         </div>
 
-        <!-- 🏄 COACHING — Paid Plans (Grid) -->
+        <!-- 🏄 COACHING —> Contact -->
         <div>
             <div class="flex items-center justify-between mb-3">
                 <h3 class="font-black text-base">🏄 Coaching Surf</h3>
                 <a href="coaching.html" class="text-xs text-[#00bad6] font-bold">Voir tout →</a>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <a href="coaching.html#initiation" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
+                <a href="coaching.html" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
                     style="border:1px solid rgba(0,186,214,0.15)">
                     <div class="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-2">
                         <span class="material-symbols-outlined text-emerald-400">surfing</span>
                     </div>
                     <p class="font-bold text-sm">Initiation</p>
                     <p class="text-[10px] text-slate-500 mt-0.5">Première vague</p>
-                    <div class="mt-2 flex items-baseline gap-1">
-                        <span class="text-lg font-black text-[#00bad6]">79€</span>
-                        <span class="text-[9px] text-slate-500">/séance</span>
-                    </div>
+                    <p class="text-[10px] text-[#00bad6] font-bold mt-2">Nous contacter →</p>
                 </a>
-                <a href="coaching.html#perfectionnement"
-                    class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
+                <a href="coaching.html" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
                     style="border:1px solid rgba(245,158,11,0.25);background:linear-gradient(135deg,rgba(245,158,11,.06),#111)">
                     <div class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center mb-2">
                         <span class="material-symbols-outlined text-amber-400"
                             style="font-variation-settings:'FILL' 1">trending_up</span>
                     </div>
-                    <p class="font-bold text-sm">Perfection.</p>
+                    <p class="font-bold text-sm">Perfectionnement</p>
                     <p class="text-[10px] text-slate-500 mt-0.5">Techniques avancées</p>
-                    <div class="mt-2 flex items-baseline gap-1">
-                        <span class="text-lg font-black text-amber-400">119€</span>
-                        <span class="text-[9px] text-slate-500">/séance</span>
-                    </div>
+                    <p class="text-[10px] text-amber-400 font-bold mt-2">Nous contacter →</p>
                     <span
                         class="text-[8px] font-bold bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full mt-1 inline-block">⭐
                         Populaire</span>
                 </a>
-                <a href="coaching.html#competition" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
+                <a href="coaching.html" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
                     style="border:1px solid rgba(168,85,247,0.25)">
                     <div class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center mb-2">
                         <span class="material-symbols-outlined text-purple-400"
@@ -776,22 +785,16 @@
                     </div>
                     <p class="font-bold text-sm">Compétition</p>
                     <p class="text-[10px] text-slate-500 mt-0.5">Niveau pro</p>
-                    <div class="mt-2 flex items-baseline gap-1">
-                        <span class="text-lg font-black text-purple-400">179€</span>
-                        <span class="text-[9px] text-slate-500">/séance</span>
-                    </div>
+                    <p class="text-[10px] text-purple-400 font-bold mt-2">Nous contacter →</p>
                 </a>
-                <a href="coaching.html#video" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
+                <a href="coaching.html" class="card rounded-2xl p-4 active:scale-[.97] transition-transform"
                     style="border:1px solid rgba(0,186,214,0.2)">
                     <div class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center mb-2">
                         <span class="material-symbols-outlined text-[#00bad6]">videocam</span>
                     </div>
                     <p class="font-bold text-sm">Vidéo Analyse</p>
                     <p class="text-[10px] text-slate-500 mt-0.5">Analyse ta session</p>
-                    <div class="mt-2 flex items-baseline gap-1">
-                        <span class="text-lg font-black text-[#00bad6]">59€</span>
-                        <span class="text-[9px] text-slate-500">/vidéo</span>
-                    </div>
+                    <p class="text-[10px] text-[#00bad6] font-bold mt-2">Nous contacter →</p>
                 </a>
             </div>
         </div>
@@ -1327,6 +1330,12 @@
         const DIFF_LABELS = { debutant: '🌊 Débutant', intermediaire: '⚡ Intermédiaire', avance: '🔥 Avancé', expert: '💀 Expert' };
         const DIFF_COLORS = { debutant: 'bg-emerald-500/80', intermediaire: 'bg-yellow-500/80', avance: 'bg-orange-500/80', expert: 'bg-red-500/80' };
 
+        function degToCompass(deg) {
+            if (deg == null) return '';
+            const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+            return dirs[Math.round(deg / 45) % 8];
+        }
+
         async function init() {
             try {
                 const spots = await API.spots.list();
@@ -1338,19 +1347,65 @@
                     document.getElementById('heroLocation').textContent = hero.location;
                     document.getElementById('heroSpot').href = 'spot_detail.html?id=' + hero.id;
 
-                    // Simulated live conditions
-                    const h = (1.0 + Math.abs(Math.sin(hero.id * 7)) * 2.5).toFixed(1);
-                    document.getElementById('heroHeight').textContent = h + ' m';
-                    document.getElementById('heroSwell').textContent = h + 'm ' + ['NW', 'W', 'SW', 'N'][hero.id % 4];
-                    document.getElementById('heroWind').textContent = (5 + (hero.id * 3) % 20) + ' km/h';
-                    document.getElementById('heroTemp').textContent = (14 + hero.id % 6) + '°C';
-                    const tides = ['Montante', 'Descendante', 'Haute', 'Basse', 'Étale'];
-                    document.getElementById('heroTide').textContent = tides[hero.id % tides.length];
-                    document.getElementById('waveBar').style.width = Math.min(95, (h / 3) * 100) + '%';
+                    // Données météo réelles depuis StormGlass / cache Supabase
+                    try {
+                        const fc = await API.spots.forecast(hero.id);
+                        const now = new Date();
+                        // Trouver l'heure la plus proche dans les données
+                        const current = fc.data.find(h => new Date(h.time) >= now) || fc.data[0];
+                        if (current) {
+                            const wh = current.waveHeight != null ? parseFloat(current.waveHeight).toFixed(1) : '—';
+                            const ws = current.windSpeed != null ? Math.round(current.windSpeed * 3.6) : '—'; // m/s → km/h
+                            const wd = current.waveDirection != null ? degToCompass(current.waveDirection) : '';
+                            const sh = current.swellHeight != null ? parseFloat(current.swellHeight).toFixed(1) : wh;
+                            const wt = current.waterTemp != null ? Math.round(current.waterTemp) + '°C' : '—';
+                            document.getElementById('heroHeight').textContent = wh !== '—' ? wh + ' m' : '— m';
+                            document.getElementById('heroSwell').textContent = sh + 'm ' + wd;
+                            document.getElementById('heroWind').textContent = ws !== '—' ? ws + ' km/h' : '— km/h';
+                            document.getElementById('heroTemp').textContent = wt;
+                            document.getElementById('waveBar').style.width = wh !== '—' ? Math.min(95, (parseFloat(wh) / 4) * 100) + '%' : '15%';
+                            if (fc.mock) document.getElementById('mockBadge').classList.remove('hidden');
+                        }
+                    } catch (fcErr) {
+                        console.warn('Hero forecast error:', fcErr.message);
+                        // Fallback estimé
+                        document.getElementById('heroHeight').textContent = '— m';
+                        document.getElementById('heroSwell').textContent = '— m';
+                        document.getElementById('heroWind').textContent = '— km/h';
+                        document.getElementById('heroTemp').textContent = '—';
+                        document.getElementById('mockBadge').classList.remove('hidden');
+                    }
 
                     // Hero image
                     const heroImg = document.querySelector('.hero-spot img');
                     heroImg.src = getSpotImg(hero);
+
+                    // Widget "Cette semaine" — prévisions 5j depuis les données fc
+                    try {
+                        const fcWeek = fc || await API.spots.forecast(hero.id);
+                        if (fcWeek?.data?.length) {
+                            // Grouper par jour
+                            const dayMap = {};
+                            for (const h of fcWeek.data) {
+                                const d = new Date(h.time).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' });
+                                if (!dayMap[d]) dayMap[d] = [];
+                                dayMap[d].push(h);
+                            }
+                            const days = Object.entries(dayMap).slice(0, 5);
+                            const EMOJIS = wh => wh > 2.5 ? '🔥' : wh > 1.5 ? '🌊' : wh > 0.8 ? '😊' : '😴';
+                            const weekHtml = days.map(([day, hours]) => {
+                                const maxH = Math.max(...hours.map(h => parseFloat(h.waveHeight) || 0));
+                                const avgW = hours.reduce((s, h) => s + (parseFloat(h.windSpeed) * 3.6 || 0), 0) / hours.length;
+                                return `<div class="card rounded-xl p-2 text-center" style="border:1px solid rgba(0,186,214,0.15)">
+                                    <p class="text-[9px] text-slate-500 capitalize">${day}</p>
+                                    <p class="text-base my-0.5">${EMOJIS(maxH)}</p>
+                                    <p class="text-xs font-black text-[#00bad6]">${maxH > 0 ? maxH.toFixed(1) + 'm' : '—'}</p>
+                                    <p class="text-[8px] text-slate-500">${avgW > 0 ? Math.round(avgW) + 'km/h' : '—'}</p>
+                                </div>`;
+                            }).join('');
+                            document.getElementById('weekForecast').innerHTML = weekHtml;
+                        }
+                    } catch { }
                 }
 
                 // Top spots carousel

@@ -168,54 +168,10 @@
         <div class="flex items-center gap-2">
             <span id="countBadge"
                 class="px-2 py-0.5 bg-[#00bad6]/20 text-[#00bad6] text-xs font-bold rounded-full active:scale-95 transition-transform">0</span>
-            <a href="community.html"
-                class="text-[9px] font-black bg-amber-400/20 text-amber-400 px-2.5 py-1 rounded-full border border-amber-400/30 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[12px]">star</span>PRO
-            </a>
         </div>
     </header>
 
-    <!-- Paywall Banner -->
-    <div id="paywallBanner" class="hidden mx-4 mt-4 rounded-2xl overflow-hidden border border-amber-400/30"
-        style="background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(245,158,11,.04))">
-        <div class="p-5 text-center space-y-3">
-            <div class="w-14 h-14 rounded-2xl bg-amber-400/20 flex items-center justify-center mx-auto">
-                <span class="material-symbols-outlined text-amber-400 text-3xl">lock</span>
-            </div>
-            <div>
-                <h2 class="font-black text-base text-amber-300">Fonctionnalité Pro</h2>
-                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Les alertes houle en temps réel sont réservées
-                    aux membres <strong class="text-amber-400">SwellSync Badges</strong>. Reçois une notification dès que
-                    les conditions sont parfaites à ton spot favori.</p>
-            </div>
-            <div class="space-y-2 text-left">
-                <div class="flex items-center gap-2 text-xs text-slate-300">
-                    <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Alertes
-                    houle illimitées
-                </div>
-                <div class="flex items-center gap-2 text-xs text-slate-300">
-                    <span
-                        class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Notifications
-                    push temps réel
-                </div>
-                <div class="flex items-center gap-2 text-xs text-slate-300">
-                    <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Prévisions 7
-                    jours par spot
-                </div>
-                <div class="flex items-center gap-2 text-xs text-slate-300">
-                    <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Analyse de
-                    vent et période
-                </div>
-            </div>
-            <a href="community.html"
-                class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-base text-black transition-all active:scale-[.98]"
-                style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                <span class="material-symbols-outlined">star</span>
-                Passer à Pro — Débloquer les Alertes
-            </a>
-            <p class="text-[10px] text-slate-500">Dés 4,99€/mois · Annulation à tout moment</p>
-        </div>
-    </div>
+
 
     <main class="flex-1 p-4 space-y-4 pb-36" id="alertsList">
         <div class="flex items-center justify-center py-20">
@@ -276,12 +232,10 @@
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="map.html"><span
                 class="material-symbols-outlined">travel_explore</span><span class="text-[10px]">Spots</span></a>
-        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="alerts.html"><span
-                style="position:relative;display:inline-block;"><span class="material-symbols-outlined"
-                    style="font-variation-settings:\'FILL\' 1">notifications</span><span
-                    style="position:absolute;top:-1px;left:-3px;font-size:8px;line-height:1;z-index:2;display:inline-flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;width:11px;height:11px;font-weight:900;color:#000;">⭐</span></span><span
-                class="text-[10px] font-bold">Alertes</span>
-            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5 active:scale-95 transition-transform"></div>
+        <a class="flex flex-col items-center gap-1 text-[#00bad6] flex-1" href="alerts.html">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">notifications</span>
+            <span class="text-[10px] font-bold">Alertes</span>
+            <div class="w-1 h-1 bg-[#00bad6] rounded-full mt-0.5"></div>
         </a>
         <a class="flex flex-col items-center gap-1 text-slate-500 flex-1" href="community.html"><span
                 class="material-symbols-outlined">groups</span><span class="text-[10px]">Communauté</span></a>
@@ -297,11 +251,8 @@
         const ICONS = { tsunami: 'tsunami', air: 'air', sunny: 'sunny', waves: 'waves' };
 
         async function loadAlerts() {
-            // Vérifier statut Pro
-            let isPro = false;
             try {
-                const me = await API.auth.me();
-                isPro = !!me.is_pro;
+                await API.auth.me();
             } catch {
                 // Non connecté
                 document.getElementById('alertsList').innerHTML = `
@@ -310,32 +261,6 @@
         <p class="text-sm text-center">Connecte-toi pour voir tes alertes</p>
         <a href="home.html" class="mt-2 px-6 py-3 bg-[#00bad6] text-[#000] font-bold rounded-xl text-sm active:scale-95 transition-transform">Se connecter</a>
       </div>`;
-                return;
-            }
-            // Paywall Pro
-            if (!isPro) {
-                document.getElementById('alertsList').innerHTML = `
-      <div class="flex flex-col items-center gap-5 py-10 px-4 text-center">
-        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center shadow-xl shadow-[#00bad6]/30">
-          <span class="material-symbols-outlined text-4xl text-[#000]">notifications_active</span>
-        </div>
-        <h2 class="text-2xl font-black">Alertes Houle</h2>
-        <p class="dark:text-slate-400 text-slate-500 text-sm leading-relaxed max-w-xs">
-          Sois le premier alerté dès que tes spots préférés atteignent les conditions idéales.<br/>
-          Disponible avec <span class="text-[#00bad6] font-bold">SwellSync Badges</span>.
-        </p>
-        <div class="space-y-2 text-left w-full max-w-xs">
-          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Alertes illimitées sur tous tes spots</div>
-          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Notifications en temps réel</div>
-          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>Critères personnalisés (hauteur, période)</div>
-          <div class="flex items-center gap-2 text-sm dark:text-slate-300 text-slate-600"><span class="material-symbols-outlined text-[#00bad6] text-[18px]">check_circle</span>16 jours de prévisions</div>
-        </div>
-        <a href="community.html" class="w-full max-w-xs py-4 rounded-2xl bg-gradient-to-r from-[#00bad6] to-emerald-400 text-[#000] font-black text-center hover:opacity-90 transition-opacity block">
-          Passer Pro — 4,99€/mois
-        </a>
-        <p class="text-xs dark:text-slate-500 text-slate-400">Engagement mensuel · Résiliable à tout moment</p>
-      </div>`;
-                document.getElementById('alertsFab').classList.add('hidden');
                 return;
             }
             try {

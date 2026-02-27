@@ -186,8 +186,8 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
-                            src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span style="color:#fff">Swell<span
-                                style="color:var(--accent)">Sync</span></span></a>
+                            src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span
+                            style="color:#fff">Swell<span style="color:var(--accent)">Sync</span></span></a>
                     <p>La prévision surf la plus précise de France.</p>
                     <div class="footer-socials"><a href="#" class="footer-social">📸</a><a href="#"
                             class="footer-social">🎵</a><a href="#" class="footer-social">✖️</a></div>
@@ -218,11 +218,43 @@
         const ao = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) { i.target.classList.add('visible'); ao.unobserve(i.target); } }), { threshold: .1 });
         document.querySelectorAll('.animate,.reveal').forEach(el => ao.observe(el));
 
-        function submitForm(e) {
+        async function submitForm(e) {
             e.preventDefault();
-            document.getElementById('contactForm').style.opacity = '.5';
-            document.getElementById('contactForm').style.pointerEvents = 'none';
-            setTimeout(() => { document.getElementById('successMsg').style.display = 'block'; }, 600);
+            const form = document.getElementById('contactForm');
+            const btn = form.querySelector('button[type="submit"]');
+            const inputs = form.querySelectorAll('input,select,textarea');
+
+            // Récupérer les valeurs
+            const vals = [...inputs].map(i => i.value.trim());
+            const [prenom, nom, email, sujet, message] = vals;
+
+            btn.textContent = 'Envoi…';
+            btn.disabled = true;
+
+            try {
+                await fetch('https://bxudysseskfpmlpagoid.supabase.co/rest/v1/contact_leads', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU',
+                        'Authorization': 'Bearer sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU',
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        name: prenom + ' ' + nom,
+                        email,
+                        subject: sujet,
+                        message,
+                        source: 'site-contact'
+                    })
+                });
+                form.style.opacity = '.5';
+                form.style.pointerEvents = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+            } catch (err) {
+                btn.textContent = 'Erreur — réessaie';
+                btn.disabled = false;
+            }
         }
 
         if (window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone) window.location.replace('/pages/home.html');
