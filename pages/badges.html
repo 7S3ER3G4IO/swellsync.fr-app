@@ -404,25 +404,29 @@
                 const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
                 const sbClient = window.supabase?.createClient?.(SB_URL, SB_KEY);
                 const { data: { session } } = sbClient ? await sbClient.auth.getSession() : { data: {} };
-                const token = session?.access_token || SB_KEY;
+                const token = session?.access_token;
+                const userId = session?.user?.id;
                 const res = await fetch(
-                    `${SB_URL}/rest/v1/surf_sessions?select=id,started_at&order=started_at.asc`,
-                    { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token } }
+                    `${SB_URL}/rest/v1/surf_sessions?select=id,started_at,waves&order=started_at.asc`,
+                    { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + (token || SB_KEY) } }
                 );
                 if (!res.ok) return;
                 const sessions = await res.json();
                 const count = sessions.length;
                 let changed = false;
+                const newBadges = [];
 
                 // Badge 'OG Member' — 1ère session
                 if (count >= 1 && !equipped.includes('kook')) {
                     equipped.push('kook');
+                    newBadges.push('kook');
                     changed = true;
                     showAutoUnlock('🪝 Tu as débloqué le badge OG Member !');
                 }
                 // Badge 'Early Bird' — 10 sessions
                 if (count >= 10 && !equipped.includes('earlybird')) {
                     equipped.push('earlybird');
+                    newBadges.push('earlybird');
                     changed = true;
                     showAutoUnlock('🌅 Badge Early Bird débloqué !');
                 }
@@ -430,6 +434,7 @@
                 const totalWaves = sessions.reduce((s, r) => s + (r.waves || 0), 0);
                 if (totalWaves >= 50 && !equipped.includes('tuberider')) {
                     equipped.push('tuberider');
+                    newBadges.push('tuberider');
                     changed = true;
                     showAutoUnlock('🌀 Badge Tube Rider débloqué !');
                 }
@@ -437,6 +442,24 @@
                 if (changed) {
                     localStorage.setItem('sw_badges', JSON.stringify(equipped));
                     renderGrid();
+
+                    // Persist nouveaux badges dans Supabase user_badges
+                    if (token && userId && newBadges.length) {
+                        for (const badge_id of newBadges) {
+                            try {
+                                await fetch(`${SB_URL}/rest/v1/user_badges`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'apikey': SB_KEY,
+                                        'Authorization': 'Bearer ' + token,
+                                        'Content-Type': 'application/json',
+                                        'Prefer': 'resolution=ignore-duplicates,return=minimal'
+                                    },
+                                    body: JSON.stringify({ user_id: userId, badge_id })
+                                });
+                            } catch { /* Silencieux */ }
+                        }
+                    }
                 }
             } catch { }
         }

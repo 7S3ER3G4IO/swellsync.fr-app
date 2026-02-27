@@ -8,9 +8,9 @@
  * Protégé par CRON_SECRET pour éviter les appels non autorisés.
  */
 
-const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
-const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
-const SG_KEY = '91e3ecb4-0596-11f1-b82f-0242ac120004-91e3ed18-0596-11f1-b82f-0242ac120004';
+const SB_URL = process.env.SUPABASE_URL || 'https://bxudysseskfpmlpagoid.supabase.co';
+const SB_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+const SG_KEY = process.env.STORMGLASS_KEY || '91e3ecb4-0596-11f1-b82f-0242ac120004-91e3ed18-0596-11f1-b82f-0242ac120004';
 const SG_BASE = 'https://api.stormglass.io/v2/weather/point';
 const SG_PARAMS = 'waveHeight,wavePeriod,waveDirection,windSpeed,windDirection,swellHeight,swellPeriod,waterTemperature,seaLevel';
 
