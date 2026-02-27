@@ -77,3 +77,50 @@ function swSyncThemeOnLoad() {
     const isLight = document.documentElement.classList.contains('light');
     _swSyncUI(isLight);
 }
+
+/**
+ * Material Symbols Font Loader — fallback si Google Fonts bloqué
+ * Vérifie si la police est chargée, sinon charge depuis jsDelivr
+ */
+(function () {
+    function checkAndLoadFont() {
+        // Test if Material Symbols font is already loaded
+        if (document.fonts && document.fonts.check) {
+            document.fonts.ready.then(() => {
+                const loaded = document.fonts.check('20px "Material Symbols Outlined"');
+                if (!loaded) {
+                    loadFallbackFont();
+                }
+            });
+        } else {
+            // Fallback for browsers without Font Loading API
+            setTimeout(() => {
+                const testEl = document.createElement('span');
+                testEl.className = 'material-symbols-outlined';
+                testEl.style.cssText = 'position:absolute;left:-9999px;font-size:20px;visibility:hidden';
+                testEl.textContent = 'home';
+                document.body.appendChild(testEl);
+                const w = testEl.offsetWidth;
+                testEl.remove();
+                // If icon renders as normal text (wide), font didn't load
+                if (w > 30) loadFallbackFont();
+            }, 1000);
+        }
+    }
+
+    function loadFallbackFont() {
+        // Don't load twice
+        if (document.getElementById('sw-material-symbols-fallback')) return;
+        const link = document.createElement('link');
+        link.id = 'sw-material-symbols-fallback';
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/material-symbols@0.27.0/outlined.css';
+        document.head.appendChild(link);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(checkAndLoadFont, 500));
+    } else {
+        setTimeout(checkAndLoadFont, 500);
+    }
+})();

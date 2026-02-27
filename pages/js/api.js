@@ -60,6 +60,76 @@ async function _getMemberId() {
 }
 
 // ══════════════════════════════════════════════════════════════
+// Fallback spots — utilisé quand la table Supabase est vide
+// ══════════════════════════════════════════════════════════════
+const FALLBACK_SPOTS = [
+    { id: 1, name: 'La Gravière', location: 'Hossegor, Landes', difficulty: 'expert' },
+    { id: 2, name: 'La Nord', location: 'Hossegor, Landes', difficulty: 'avance' },
+    { id: 3, name: 'La Sud', location: 'Hossegor, Landes', difficulty: 'intermediaire' },
+    { id: 4, name: 'Les Culs Nuls', location: 'Hossegor, Landes', difficulty: 'avance' },
+    { id: 5, name: 'La Centrale', location: 'Hossegor, Landes', difficulty: 'intermediaire' },
+    { id: 6, name: 'Les Bourdaines', location: 'Seignosse, Landes', difficulty: 'avance' },
+    { id: 7, name: 'Les Estagnots', location: 'Seignosse, Landes', difficulty: 'avance' },
+    { id: 8, name: 'Le Penon', location: 'Seignosse, Landes', difficulty: 'intermediaire' },
+    { id: 9, name: 'Les Casernes', location: 'Seignosse, Landes', difficulty: 'intermediaire' },
+    { id: 10, name: 'La Piste', location: 'Capbreton, Landes', difficulty: 'debutant' },
+    { id: 11, name: 'Le Santocha', location: 'Capbreton, Landes', difficulty: 'intermediaire' },
+    { id: 12, name: 'Moliets Plage', location: 'Moliets, Landes', difficulty: 'intermediaire' },
+    { id: 13, name: 'Vieux Boucau', location: 'Vieux-Boucau, Landes', difficulty: 'debutant' },
+    { id: 14, name: 'Messanges', location: 'Messanges, Landes', difficulty: 'intermediaire' },
+    { id: 15, name: 'Mimizan Plage', location: 'Mimizan, Landes', difficulty: 'intermediaire' },
+    { id: 16, name: 'Côte des Basques', location: 'Biarritz, Pays Basque', difficulty: 'debutant' },
+    { id: 17, name: 'Grande Plage', location: 'Biarritz, Pays Basque', difficulty: 'debutant' },
+    { id: 18, name: 'La Milady', location: 'Biarritz, Pays Basque', difficulty: 'intermediaire' },
+    { id: 19, name: 'Marbella', location: 'Biarritz, Pays Basque', difficulty: 'intermediaire' },
+    { id: 20, name: 'Parlementia', location: 'Guéthary, Pays Basque', difficulty: 'expert' },
+    { id: 21, name: 'Lafitenia', location: 'Saint-Jean-de-Luz, Pays Basque', difficulty: 'avance' },
+    { id: 22, name: 'Erretegia', location: 'Bidart, Pays Basque', difficulty: 'intermediaire' },
+    { id: 23, name: 'Pavillon Royal', location: 'Bidart, Pays Basque', difficulty: 'intermediaire' },
+    { id: 24, name: 'Ilbarritz', location: 'Bidart, Pays Basque', difficulty: 'debutant' },
+    { id: 25, name: 'Les Cavaliers', location: 'Anglet, Pays Basque', difficulty: 'avance' },
+    { id: 26, name: 'Les Corsaires', location: 'Anglet, Pays Basque', difficulty: 'intermediaire' },
+    { id: 27, name: 'La Barre', location: 'Anglet, Pays Basque', difficulty: 'avance' },
+    { id: 28, name: 'Hendaye Plage', location: 'Hendaye, Pays Basque', difficulty: 'debutant' },
+    { id: 29, name: 'Lacanau Océan', location: 'Lacanau, Gironde', difficulty: 'intermediaire' },
+    { id: 30, name: 'La Sud Lacanau', location: 'Lacanau, Gironde', difficulty: 'avance' },
+    { id: 31, name: 'Le Super Sud', location: 'Lacanau, Gironde', difficulty: 'avance' },
+    { id: 32, name: 'Le Porge Océan', location: 'Le Porge, Gironde', difficulty: 'intermediaire' },
+    { id: 33, name: 'Hourtin Plage', location: 'Hourtin, Gironde', difficulty: 'intermediaire' },
+    { id: 34, name: 'Carcans Plage', location: 'Carcans, Gironde', difficulty: 'intermediaire' },
+    { id: 35, name: 'Le Grand Crohot', location: 'Lège-Cap-Ferret, Gironde', difficulty: 'intermediaire' },
+    { id: 36, name: 'La Torche', location: 'Plomeur, Bretagne', difficulty: 'intermediaire' },
+    { id: 37, name: 'La Palue', location: 'Crozon, Bretagne', difficulty: 'avance' },
+    { id: 38, name: 'Pors Carn', location: 'Penmarch, Bretagne', difficulty: 'intermediaire' },
+    { id: 39, name: "La Presqu'île", location: 'Crozon, Bretagne', difficulty: 'avance' },
+    { id: 40, name: 'Guidel Plage', location: 'Guidel, Bretagne', difficulty: 'intermediaire' },
+    { id: 41, name: 'Quiberon', location: 'Quiberon, Bretagne', difficulty: 'intermediaire' },
+    { id: 42, name: 'Donnant', location: 'Belle-Île, Bretagne', difficulty: 'avance' },
+    { id: 43, name: 'Sainte-Barbe', location: 'Plouharnel, Bretagne', difficulty: 'intermediaire' },
+    { id: 44, name: 'Tronoën', location: 'Saint-Jean-Trolimon, Bretagne', difficulty: 'intermediaire' },
+    { id: 45, name: "Les Sables-d'Olonne", location: "Les Sables-d'Olonne, Vendée", difficulty: 'debutant' },
+    { id: 46, name: 'Brétignolles-sur-Mer', location: 'Brétignolles, Vendée', difficulty: 'intermediaire' },
+    { id: 47, name: 'La Sauzaie', location: 'Brétignolles, Vendée', difficulty: 'avance' },
+    { id: 48, name: 'Bud Bud', location: 'Longeville, Vendée', difficulty: 'intermediaire' },
+    { id: 49, name: 'Royan — Grande Conche', location: 'Royan, Charente-Maritime', difficulty: 'debutant' },
+    { id: 50, name: 'Saint-Palais-sur-Mer', location: 'Saint-Palais, Charente-Maritime', difficulty: 'intermediaire' },
+    { id: 51, name: 'Les Huttes', location: "Île d'Oléron, Charente-Maritime", difficulty: 'intermediaire' },
+    { id: 52, name: 'Vert Bois', location: "Île d'Oléron, Charente-Maritime", difficulty: 'intermediaire' },
+    { id: 53, name: 'La Côte Sauvage', location: 'La Palmyre, Charente-Maritime', difficulty: 'avance' },
+    { id: 54, name: 'Les Boucholeurs', location: 'Île de Ré, Charente-Maritime', difficulty: 'debutant' },
+    { id: 55, name: 'Tarnos', location: 'Tarnos, Landes', difficulty: 'intermediaire' },
+    { id: 56, name: 'Labenne Océan', location: 'Labenne, Landes', difficulty: 'debutant' },
+    { id: 57, name: 'Ondres Plage', location: 'Ondres, Landes', difficulty: 'intermediaire' },
+    { id: 58, name: 'Biscarrosse Plage', location: 'Biscarrosse, Landes', difficulty: 'intermediaire' },
+    { id: 59, name: 'Contis Plage', location: 'Saint-Julien-en-Born, Landes', difficulty: 'intermediaire' },
+    { id: 60, name: 'Lespécier', location: 'Mimizan, Landes', difficulty: 'avance' },
+    { id: 61, name: 'Le Truc Vert', location: 'Lège-Cap-Ferret, Gironde', difficulty: 'avance' },
+    { id: 62, name: 'Montalivet', location: 'Vendays-Montalivet, Gironde', difficulty: 'intermediaire' },
+    { id: 63, name: 'Soulac-sur-Mer', location: 'Soulac, Gironde', difficulty: 'debutant' },
+    { id: 64, name: 'Le Pin Sec', location: 'Naujac, Gironde', difficulty: 'intermediaire' },
+];
+
+// ══════════════════════════════════════════════════════════════
 // API — Même interface que l'ancien fichier
 // ══════════════════════════════════════════════════════════════
 const API = {
@@ -138,17 +208,30 @@ const API = {
     // ── Spots ─────────────────────────────────────────────────
     spots: {
         async list() {
-            const sb = await getSupabase();
-            const { data, error } = await sb.from('spots').select('*').order('name');
-            if (error) throw new Error(error.message);
-            return data || [];
+            try {
+                const sb = await getSupabase();
+                const { data, error } = await sb.from('spots').select('*').order('name');
+                if (error) throw error;
+                // Si la table Supabase est vide, utiliser les données fallback
+                if (data && data.length > 0) return data;
+            } catch (e) {
+                console.warn('Supabase spots.list fallback:', e.message);
+            }
+            return [...FALLBACK_SPOTS];
         },
 
         async get(id) {
-            const sb = await getSupabase();
-            const { data, error } = await sb.from('spots').select('*').eq('id', id).single();
-            if (error) throw new Error(error.message);
-            return data;
+            try {
+                const sb = await getSupabase();
+                const { data, error } = await sb.from('spots').select('*').eq('id', id).single();
+                if (error) throw error;
+                if (data) return data;
+            } catch (e) {
+                console.warn('Supabase spots.get fallback:', e.message);
+            }
+            // Fallback
+            const numId = typeof id === 'string' ? parseInt(id, 10) : id;
+            return FALLBACK_SPOTS.find(s => s.id === numId) || FALLBACK_SPOTS[0];
         },
 
         // Forecast reste via l'ancien serveur Express (API externe StormGlass)

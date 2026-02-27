@@ -61,6 +61,30 @@
     document.head.appendChild(style);
 
     /**
+     * Render fallback content for an ad slot
+     */
+    function renderFallback(container) {
+        const fallbacks = [
+            { icon: 'surfing', title: 'SwellSync Pro', desc: 'Passe en Pro pour profiter sans pub', color: '#00bad6,#6366f1', link: 'abonnement.html' },
+            { icon: 'waves', title: 'SwellSync', desc: 'Prévisions surf en temps réel', color: '#10b981,#00bad6', link: null },
+            { icon: 'storm', title: 'Alertes Houle', desc: 'Ne rate plus aucune session parfaite', color: '#f59e0b,#ef4444', link: 'alerts.html' },
+            { icon: 'map', title: '+200 Spots', desc: 'Découvre les meilleurs spots de France', color: '#8b5cf6,#6366f1', link: 'map.html' },
+        ];
+        const f = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        container.innerHTML = `
+            <span class="ad-label">Sponsorisé</span>
+            <div class="sw-ad-fallback" ${f.link ? `onclick="window.location.href='${f.link}'"` : ''}>
+                <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,${f.color});display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <span class="material-symbols-outlined" style="font-size:22px;color:white;font-variation-settings:'FILL' 1">${f.icon}</span>
+                </div>
+                <div style="flex:1">
+                    <div style="font-size:12px;font-weight:700;color:#e2e8f0">${f.title}</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:1px">${f.desc}</div>
+                </div>
+            </div>`;
+    }
+
+    /**
      * Render an AdSense ad slot or a fallback if no PUB_ID
      * @param {HTMLElement} container - The .sw-ad-slot element
      * @param {string} slotId - The AdSense ad slot ID (ex: '1234567890')
@@ -80,24 +104,16 @@
                      data-ad-format="${format || 'auto'}"
                      data-full-width-responsive="true"></ins>`;
             try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+
+            // Check if ad loaded after a delay — if not, show fallback
+            setTimeout(() => {
+                const ins = container.querySelector('ins.adsbygoogle');
+                if (ins && (!ins.innerHTML.trim() || ins.offsetHeight < 10)) {
+                    renderFallback(container);
+                }
+            }, 3000);
         } else {
-            // Fallback — discret placeholder until AdSense is configured
-            const fallbacks = [
-                { icon: 'surfing', title: 'SwellSync Pro', desc: 'Passe en Pro pour profiter sans pub', color: '#00bad6,#6366f1', link: 'abonnement.html' },
-                { icon: 'waves', title: 'SwellSync', desc: 'Prévisions surf en temps réel', color: '#10b981,#00bad6', link: null },
-            ];
-            const f = fallbacks[Math.random() > 0.5 ? 0 : 1];
-            container.innerHTML = `
-                <span class="ad-label">Sponsorisé</span>
-                <div class="sw-ad-fallback" ${f.link ? `onclick="window.location.href='${f.link}'"` : ''}>
-                    <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,${f.color});display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                        <span class="material-symbols-outlined" style="font-size:22px;color:white;font-variation-settings:'FILL' 1">${f.icon}</span>
-                    </div>
-                    <div style="flex:1">
-                        <div style="font-size:12px;font-weight:700;color:#e2e8f0">${f.title}</div>
-                        <div style="font-size:10px;color:#64748b;margin-top:1px">${f.desc}</div>
-                    </div>
-                </div>`;
+            renderFallback(container);
         }
     };
 

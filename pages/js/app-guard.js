@@ -10,6 +10,9 @@
     var path = window.location.pathname;
     if (path === '/' || path === '/index.html' || path.endsWith('/index.html') && !path.includes('/pages/')) return;
 
+    // Autoriser si on est dans un iframe (preview-mobile.html)
+    try { if (window.self !== window.top) return; } catch (e) { return; }
+
     // Détection PWA installée (standalone)
     var isStandalone = window.navigator.standalone === true ||
         window.matchMedia('(display-mode: standalone)').matches ||
