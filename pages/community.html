@@ -13,7 +13,7 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
@@ -1052,16 +1052,10 @@
             } catch { }
         })();
 
-        const RANKING_USERS = [
-            { rank: 1, user: 'JerômeS', av: 'J', color: 'text-amber-400', badges: ['Pays Basque'], sessions: 42, likes: 247, region: 'Pays Basque' },
-            { rank: 2, user: 'MarieLR', av: 'M', color: 'text-purple-400', badges: ['Bretagne'], sessions: 38, likes: 189, region: 'Bretagne' },
-            { rank: 3, user: 'AlexSurf29', av: 'A', color: 'text-emerald-400', badges: ['Bretagne'], sessions: 31, likes: 143, region: 'Bretagne' },
-            { rank: 4, user: 'SurfGuide64', av: 'S', color: 'text-amber-300', badges: ['Landes'], sessions: 28, likes: 201, region: 'Landes' },
-            { rank: 5, user: 'BretagneSurf', av: 'B', color: 'text-red-400', badges: ['Bretagne'], sessions: 25, likes: 167, region: 'Bretagne' },
-            { rank: 6, user: 'WSL_Follow', av: 'W', color: 'text-red-500', badges: ['WSL'], sessions: 22, likes: 312, region: 'Pays Basque' },
-            { rank: 7, user: 'PicoPescado', av: 'P', color: 'text-sky-400', badges: ['Landes'], sessions: 19, likes: 88, region: 'Landes' },
-            { rank: 8, user: 'FloB64', av: 'F', color: 'text-violet-400', badges: ['Pays Basque'], sessions: 17, likes: 76, region: 'Pays Basque' },
-        ];
+        // ── Classement réel depuis Supabase (surf_sessions) ──
+        // Chargé dynamiquement dans renderRanking()
+
+
 
         let currentFilter = 'all';
         let activeTag = null;
@@ -1264,44 +1258,76 @@
         }
 
         // ═══════════════════════════════════════════
-        // RANKING — Monthly rotation + clickable profiles
+        // RANKING — Classement réel depuis Supabase
         // ═══════════════════════════════════════════
-        function renderRanking() {
-            // Monthly rotation based on seed
-            const seed = monthSeed();
-            const rotated = [...RANKING_USERS].sort((a, b) => {
-                // Pseudo-shuffle based on month seed + rank
-                const sa = (a.rank * 31 + seed * 7) % 17;
-                const sb = (b.rank * 31 + seed * 7 + 3) % 17;
-                return sa - sb;
-            }).map((u, i) => ({ ...u, rank: i + 1 }));
-
-            const profileIds = ['jeromesS', 'marieLR', 'alexSurf29', 'surfGuide64', 'bretagneSurf', '', '', ''];
-
-            // Update podium to be clickable
-            const podiumTop = rotated.slice(0, 3);
-
-            // Section label for clarity
+        async function renderRanking() {
+            const fullRankEl = document.getElementById('fullRanking');
+            if (!fullRankEl) return;
             const monthName = new Date().toLocaleString('fr-FR', { month: 'long', year: 'numeric' });
 
-            const top4 = rotated.slice(3);
-            document.getElementById('fullRanking').innerHTML =
-                `<div class="card rounded-2xl p-3 mb-1">
+            fullRankEl.innerHTML = `<div class="card rounded-2xl p-4 animate-pulse"><p class="text-xs text-slate-500 text-center">Chargement du classement…</p></div>`;
+
+            try {
+                const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+                const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
+
+                // Premier mois courant : calculer debuts
+                const now = new Date();
+                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+                // Agréger sessions par user_id ce mois-ci
+                const r = await fetch(
+                    `${SB_URL}/rest/v1/surf_sessions?select=user_id,score,members(pseudo,avatar_url,region)&created_at=gte.${monthStart}&order=score.desc&limit=20`,
+                    { headers: { 'apikey': SB_KEY } }
+                );
+                const sessions = r.ok ? await r.json() : [];
+
+                // Grouper par user_id, additionner scores
+                const byUser = {};
+                sessions.forEach(s => {
+                    const uid = s.user_id;
+                    if (!byUser[uid]) byUser[uid] = { ...s.members, uid, sessions: 0, score: 0 };
+                    byUser[uid].sessions += 1;
+                    byUser[uid].score += s.score || 0;
+                });
+
+                const ranked = Object.values(byUser).sort((a, b) => b.score - a.score || b.sessions - a.sessions).slice(0, 8);
+
+                if (!ranked.length) {
+                    fullRankEl.innerHTML = `<div class="card rounded-2xl p-6 text-center">
+                        <div class="text-3xl mb-2">🏆</div>
+                        <p class="text-sm font-bold text-slate-300">Classement vide pour l'instant</p>
+                        <p class="text-xs text-slate-500 mt-1">Enregistre des sessions pour apparaître ici !</p>
+                    </div>`;
+                    return;
+                }
+
+                fullRankEl.innerHTML = `<div class="card rounded-2xl p-3 mb-1">
                     <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-2">📊 Suite du classement — ${monthName}</p>
-                    ${top4.map((u, i) => `<div class="flex items-center gap-3 py-2.5 border-b border-white/5 last:border-0 cursor-pointer hover:bg-[#00bad6]/5 rounded-lg transition-colors px-1 active:scale-95 transition-transform" onclick="window.location.href='user-profile.html?id=${profileIds[i + 3] || 'jeromesS'}'">
-                        <span class="text-slate-400 font-black text-sm w-6 text-center shrink-0">${u.rank}</span>
-                        <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-black ${u.color} text-sm shrink-0">${u.av}</div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-1 flex-wrap"><span class="font-bold text-sm">${u.user}</span>${u.badges.map(badgeHtml).join('')}</div>
-                            <p class="text-[9px] text-slate-500">${u.region} · ${u.sessions} sessions</p>
-                        </div>
-                        <div class="text-right shrink-0">
-                            <span class="text-[#00bad6] font-bold text-sm">${u.likes}</span>
-                            <p class="text-[9px] text-slate-500">❤️ likes</p>
-                        </div>
-                    </div>`).join('')}
+                    ${ranked.slice(3).map((u, i) => {
+                    const initiale = (u.pseudo || '?')[0].toUpperCase();
+                    return `<div class="flex items-center gap-3 py-2.5 border-b border-white/5 last:border-0 cursor-pointer hover:bg-[#00bad6]/5 rounded-lg transition-colors px-1 active:scale-95" onclick="window.location.href='user-profile.html?id=${u.uid}'">
+                            <span class="text-slate-400 font-black text-sm w-6 text-center shrink-0">${i + 4}</span>
+                            <div class="w-8 h-8 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black text-sm shrink-0 overflow-hidden">
+                                ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-[#00bad6]">${initiale}</span>`}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="font-bold text-sm">${u.pseudo || 'Surfeur'}</span>
+                                <p class="text-[9px] text-slate-500">${u.region || '—'} · ${u.sessions} sessions</p>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="text-[#00bad6] font-bold text-sm">${u.score}</span>
+                                <p class="text-[9px] text-slate-500">pts</p>
+                            </div>
+                        </div>`;
+                }).join('')}
                 </div>`;
+
+            } catch {
+                fullRankEl.innerHTML = `<p class="text-center text-slate-500 text-sm p-4">Classement temporairement indisponible.</p>`;
+            }
         }
+
 
         // ═══════════════════════════════════════════
         // SESSIONS
@@ -1373,13 +1399,7 @@
                     if (data.url) {
                         // Rediriger vers Stripe Checkout
                         window.location.href = data.url;
-                    } else if (data.demo) {
-                        // Mode démo — pas connecté ou pas de Stripe
-                        const m = document.createElement('div');
-                        m.className = 'fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm';
-                        m.innerHTML = `<div class="bg-[#111] rounded-3xl border border-[#00bad6]/20 p-8 max-w-sm mx-4 text-center shadow-2xl">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00bad6] to-emerald-400 flex items-center justify-center mx-auto mb-4"><span class="material-symbols-outlined text-3xl text-[#000]" style="font-variation-settings:'FILL' 1">shopping_bag</span></div>
-                        <h3 class="text-xl font-black mb-2">Badge ${name}</h3>
+                    } </h3>
                         <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
                         <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter ce badge via Stripe.</p>
                         <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
@@ -1537,7 +1557,8 @@
             class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
             <span class="material-symbols-outlined text-white">close</span>
         </button>
-        <img loading="lazy" id="lightboxImg" src="" alt="Photo" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" />
+        <img loading="lazy" id="lightboxImg" src="" alt="Photo"
+            class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" />
     </div>
 
     <script>

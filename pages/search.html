@@ -13,7 +13,7 @@
     <meta property="og:site_name" content="SwellSync">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="apple-touch-icon" href="/assets/images/swellsync_logo.png?v=3">
@@ -272,7 +272,8 @@
                     <div class="result-row" onclick="fillSearch('Hossegor')">
                         <div
                             class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80"
+                            <img loading="lazy"
+                                src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80"
                                 class="w-full h-full object-cover" alt="Hossegor" />
                         </div>
                         <div class="flex-1">
@@ -284,7 +285,8 @@
                     <div class="result-row" onclick="fillSearch('La Torche')">
                         <div
                             class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
+                            <img loading="lazy"
+                                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
                                 class="w-full h-full object-cover" alt="La Torche" />
                         </div>
                         <div class="flex-1">
@@ -296,7 +298,8 @@
                     <div class="result-row" onclick="fillSearch('Biarritz')">
                         <div
                             class="w-10 h-10 rounded-xl bg-[#00bad6]/15 flex items-center justify-center shrink-0 overflow-hidden active:scale-95 transition-transform">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80"
+                            <img loading="lazy"
+                                src="https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=800&q=80"
                                 class="w-full h-full object-cover" alt="Biarritz" />
                         </div>
                         <div class="flex-1">
@@ -340,103 +343,42 @@
     </nav>
 
     <script>
-        // ============================================================
-        // DATA — Surfeurs enrichis avec bio, spots surfés, stats
-        // ============================================================
-        const SURFERS_DB = [
-            {
-                id: 'jeromesS', name: 'JerômeS', av: 'J', avClass: 'av-cyan',
-                badge: '🏄 Pays Basque', region: '🏄 Pays Basque',
-                bio: 'Surfeur depuis 15 ans, je chasse les houles atlantiques 🌊 Spé shortboard et grosses vagues. Coach certifié FFSurf.',
-                sessions: 42, followers: 287, following: 134,
-                spots: ['Hossegor — La Gravière', 'Biarritz', 'Seignosse'],
-                spotImgs: ['🌊', '🏄', '🔥'],
-                posts: [
-                    { id: 1, text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12 },
-                    { id: 6, text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67 }
-                ]
-            },
-            {
-                id: 'marieLR', name: 'MarieLR', av: 'M', avClass: 'av-purple',
-                region: '⚓ Bretagne',
-                bio: 'Pro surfeuse WQS 🏄‍♀️ Bretagne dans le cœur. Spécialiste technique et coaching débutants. La Torche is home.',
-                sessions: 38, followers: 193, following: 89,
-                spots: ['La Torche', 'La Palue', 'Pointe de la Torche'],
-                spotImgs: ['⚓', '🌊', '🏄'],
-                posts: [
-                    { id: 2, text: "Quelqu'un a des infos sur La Torche ce week-end ? 🏄‍♀️ Je prévois d'y aller samedi matin.", time: '18min', likes: 5 },
-                    { id: 3, text: 'Houle 2.8m prévue vendredi sur la côte basque selon Stormglass. Qui sera à Hossegor ? 🤙', time: '1h', likes: 23 }
-                ]
-            },
-            {
-                id: 'alexSurf29', name: 'AlexSurf29', av: 'A', avClass: 'av-emerald',
-                region: '⚓ Bretagne',
-                bio: 'Surfeur breton depuis le berceau 🤙 Amateur de spots secrets et de spots bondés. Longboard et fish.',
-                sessions: 31, followers: 145, following: 201,
-                spots: ['La Palue', 'La Torche', 'Lacanau Ocean'],
-                spotImgs: ['⚓', '🏄', '🌊'],
-                posts: [
-                    { id: 5, text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31 }
-                ]
-            },
-            {
-                id: 'surfGuide64', name: 'SurfGuide64', av: 'S', avClass: 'av-amber',
-                badge: '🌊 Landes', region: '🌊 Landes',
-                bio: 'Guide surf pro dans les Landes 🔥 Lacanau, Hossegor, Seignosse. Je partage les meilleures conditions du moment.',
-                sessions: 28, followers: 312, following: 67,
-                spots: ['Lacanau Ocean', 'Hossegor', 'Seignosse — Les Bourdaines'],
-                spotImgs: ['🌊', '🔥', '🏄'],
-                posts: [
-                    { id: 4, text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18 }
-                ]
-            },
-            {
-                id: 'bretagneSurf', name: 'BretagneSurf', av: 'B', avClass: 'av-red',
-                badge: '⚓ Bretagne', region: '⚓ Bretagne',
-                bio: 'La Bretagne c\'est la vraie vie 🤙 Vague de Belle-île, Quiberon, La Palue. Anti-touriste et pro-nature.',
-                sessions: 25, followers: 167, following: 445,
-                spots: ['Belle-île', 'La Palue', 'Quiberon'],
-                spotImgs: ['⚓', '🌊', '🏄'],
-                posts: [
-                    { id: 5, text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau.', time: '3h', likes: 31 }
-                ]
-            },
-        ];
-
-        // Posts complets (pour recherche dans les posts)
-        const ALL_POSTS = [
-            { id: 1, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '🏄 Pays Basque', text: 'Session incroyable à Hossegor ce matin 🔥 2m+ de houle, vent offshore parfait à 20km/h. La Gravière était épique !', time: '2min', likes: 12, tag: 'session' },
-            { id: 2, user: 'MarieLR', userId: 'marieLR', av: 'M', avClass: 'av-purple', text: "Quelqu'un a des infos sur La Torche ce week-end ? 🏄‍♀️ Je prévois d'y aller samedi matin.", time: '18min', likes: 5, tag: 'question' },
-            { id: 3, user: 'AlexSurf29', userId: 'alexSurf29', av: 'A', avClass: 'av-emerald', text: 'Houle 2.8m prévue vendredi sur la côte basque selon Stormglass. Qui sera à Hossegor ? 🤙', time: '1h', likes: 23, tag: 'houle' },
-            { id: 4, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '🌊 Landes', text: 'Note session Lacanau 7/10 — Fond sable parfait, mais foule au pic. Allez plutôt à 7h du matin pour éviter la foule.', time: '2h', likes: 18, tag: 'spot' },
-            { id: 5, user: 'BretagneSurf', userId: 'bretagneSurf', av: 'B', avClass: 'av-red', text: 'La Palue absolument vide hier avec 1.5m propre 😍 Seuls 4 surfeurs à l\'eau. Bretagne > tout le reste !', time: '3h', likes: 31, tag: 'session' },
-            { id: 6, user: 'JerômeS', userId: 'jeromesS', av: 'J', avClass: 'av-cyan', badge: '🏄 Pays Basque', text: '🏆 Résultats Quik Pro France : Kelly Slater en 1/4 de finale ! Hossegor en feu cette semaine 🔥🔥', time: '5h', likes: 67, tag: 'competition' },
-            { id: 7, user: 'SurfGuide64', userId: 'surfGuide64', av: 'S', avClass: 'av-amber', badge: '🌊 Landes', text: 'Conditions de rêve à Lacanau ce matin ! 1.5m propre, vent nul, eau à 17°C. Parfait pour les débutants 🌊', time: '6h', likes: 44, tag: 'session' },
-            { id: 8, user: 'MarieLR', userId: 'marieLR', av: 'M', avClass: 'av-purple', text: 'Découvert un spot secret en Bretagne hier 🤫 Seuls 2 surfeurs à l\'eau, fond de sable parfait, 1.2m propre.', time: '1j', likes: 67, tag: 'spot' },
-        ];
+        // ── Supabase config ──
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
 
         let allSpots = [], category = 'all', searchTimeout;
 
-        // Render default popular surfers
-        function renderDefaultSurfers() {
-            document.getElementById('defaultSurfers').innerHTML = SURFERS_DB.slice(0, 3).map(s => surferRow(s, true)).join('');
+        function norm(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+        function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+        // Charger les derniers membres inscrits depuis Supabase
+        async function renderDefaultSurfers() {
+            const el = document.getElementById('defaultSurfers');
+            el.innerHTML = `<div class="p-4 space-y-3">${[1, 2, 3].map(() => `<div class="flex items-center gap-3 animate-pulse"><div class="w-10 h-10 rounded-full bg-white/5 shrink-0"></div><div class="flex-1 space-y-1"><div class="h-3 bg-white/5 rounded w-2/3"></div><div class="h-2.5 bg-white/5 rounded w-1/3"></div></div></div>`).join('')}</div>`;
+            try {
+                const res = await fetch(`${SB_URL}/rest/v1/members?select=id,pseudo,region,avatar_url,bio&order=created_at.desc&limit=3`, {
+                    headers: { 'apikey': SB_KEY }
+                });
+                const members = res.ok ? await res.json() : [];
+                if (!members.length) { el.innerHTML = ''; return; }
+                el.innerHTML = members.map(m => surferRow(m, true)).join('');
+            } catch { el.innerHTML = ''; }
         }
 
-        function surferRow(s, compact = false) {
-            return `<div class="result-row" onclick="goToProfile('${s.id}')">
-        <div class="w-10 h-10 rounded-full ${s.avClass} flex items-center justify-center font-black shrink-0 text-base">${s.av}</div>
+        function surferRow(m, compact = false) {
+            const initiale = (m.pseudo || m.name || '?')[0].toUpperCase();
+            const nom = m.pseudo || m.name || 'Surfeur';
+            return `<div class="result-row" onclick="goToProfile('${m.id}')">
+        <div class="w-10 h-10 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black shrink-0 text-base overflow-hidden">
+            ${m.avatar_url ? `<img src="${m.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-[#00bad6]">${initiale}</span>`}
+        </div>
         <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="font-bold text-sm">${s.name}</span>
-                ${s.badge ? `<span class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full font-bold">${s.badge}</span>` : ''}
-                <span class="text-[9px] text-slate-500">${s.region}</span>
+                <span class="font-bold text-sm">${nom}</span>
+                ${m.region ? `<span class="text-[9px] text-slate-500">${m.region}</span>` : ''}
             </div>
-            <p class="text-[10px] text-slate-400 mt-0.5 line-clamp-1">${s.bio}</p>
-            ${!compact ? `<div class="flex gap-3 mt-1 text-[10px] text-slate-500">
-                <span><strong class="text-white">${s.followers}</strong> followers</span>
-                <span><strong class="text-white">${s.sessions}</strong> sessions</span>
-                <span class="text-[#00bad6]">${s.spots.slice(0, 2).join(' · ')}</span>
-            </div>` : `<p class="text-[10px] text-[#00bad6] mt-0.5">${s.spots.slice(0, 2).join(' · ')}</p>`}
+            <p class="text-[10px] text-slate-400 mt-0.5 line-clamp-1">${m.bio || 'Surfeur SwellSync 🤙'}</p>
         </div>
         <span class="material-symbols-outlined text-slate-600 text-[18px] shrink-0">chevron_right</span>
     </div>`;
@@ -531,23 +473,30 @@
                         { id: 'lacanau', name: 'Lacanau Ocean', location: 'Gironde', difficulty: 'intermediaire', cond: 'Bon' },
                         { id: 'seignosse', name: 'Seignosse — Les Bourdaines', location: 'Landes', difficulty: 'avance', cond: 'Excellent' },
                         { id: 'lapalue', name: 'La Palue', location: 'Bretagne', difficulty: 'avance', cond: 'Bon' },
-                        { id: 'bidart', name: 'Bidart', location: 'Pays Basque', difficulty: 'debutant', cond: 'Correct' },
-                        { id: 'capbreton', name: 'Capbreton', location: 'Landes', difficulty: 'intermediaire', cond: 'Bon' },
                     ];
                 }
             }
             const nq = norm(q);
             const inc = cat => category === 'all' || category === cat;
 
-            let surfers = inc('surfers') ? SURFERS_DB.filter(s => norm(s.name).includes(nq) || norm(s.bio).includes(nq) || norm(s.region).includes(nq) || s.spots.some(sp => norm(sp).includes(nq))) : [];
+            // Recherche Supabase réelle pour surfeurs et posts
+            let surfers = [], posts = [], sessions = [];
+            try {
+                if (inc('surfers')) {
+                    const r = await fetch(`${SB_URL}/rest/v1/members?select=id,pseudo,region,avatar_url,bio&or=(pseudo.ilike.*${encodeURIComponent(q)}*,region.ilike.*${encodeURIComponent(q)}*,bio.ilike.*${encodeURIComponent(q)}*)&limit=10`, { headers: { 'apikey': SB_KEY } });
+                    surfers = r.ok ? await r.json() : [];
+                }
+                if (inc('posts')) {
+                    const r = await fetch(`${SB_URL}/rest/v1/community_posts?select=id,content,created_at,likes_count,members(pseudo,avatar_url,region)&content=ilike.*${encodeURIComponent(q)}*&order=created_at.desc&limit=8`, { headers: { 'apikey': SB_KEY } });
+                    posts = r.ok ? await r.json() : [];
+                }
+                if (inc('sessions')) {
+                    const r = await fetch(`${SB_URL}/rest/v1/surf_sessions?select=id,spot_name,score,created_at,members(pseudo)&spot_name=ilike.*${encodeURIComponent(q)}*&order=created_at.desc&limit=5`, { headers: { 'apikey': SB_KEY } });
+                    sessions = r.ok ? await r.json() : [];
+                }
+            } catch { }
+
             let spots = inc('spots') ? allSpots.filter(s => norm(s.name).includes(nq) || norm(s.location || '').includes(nq)) : [];
-            let posts = inc('posts') ? ALL_POSTS.filter(p => norm(p.text).includes(nq) || norm(p.user).includes(nq)) : [];
-            let sessions = inc('sessions') ? [
-                { id: 's1', name: 'Hossegor 🔥 2m+', sub: 'JerômeS · Auj. · ⭐⭐⭐⭐⭐' },
-                { id: 's2', name: 'La Torche — conditions parfaites', sub: 'MarieLR · Hier · ⭐⭐⭐⭐' },
-                { id: 's3', name: 'Lacanau — session du matin', sub: 'AlexSurf29 · Sam. · ⭐⭐⭐' },
-                { id: 's4', name: 'Bidart — vague propre', sub: 'BretagneSurf · Ven. · ⭐⭐⭐⭐' },
-            ].filter(s => norm(s.name).includes(nq) || norm(s.sub).includes(nq)) : [];
 
             const condColor = c => ({ 'Excellent': 'text-emerald-400', 'Très bon': 'text-[#00bad6]', 'Bon': 'text-green-400', 'Correct': 'text-yellow-400' }[c] || 'text-slate-400');
             const diffLabel = d => ({ debutant: '🌊 Débutant', intermediaire: '⚡ Inter.', avance: '🔥 Avancé', expert: '💀 Expert' }[d?.toLowerCase()] || d || '');

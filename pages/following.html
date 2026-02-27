@@ -148,80 +148,110 @@
     </div>
 
     <script>
-        // ── Data of known users ──
-        const USERS_DB = {
-            'jeromesS': { name: 'JerômeS', region: 'Pays Basque', sessions: 42, followers: 287, avatar: 'J', color: 'bg-[#00bad6]/20 text-[#00bad6]', badges: ['⭐ Pro'] },
-            'marieLR': { name: 'MarieLR', region: 'Bretagne', sessions: 38, followers: 213, avatar: 'M', color: 'bg-purple-500/20 text-purple-400', badges: ['⚓ Bretagne'] },
-            'alexSurf29': { name: 'AlexSurf29', region: 'Bretagne', sessions: 31, followers: 156, avatar: 'A', color: 'bg-emerald-500/20 text-emerald-400', badges: [] },
-            'surfGuide64': { name: 'SurfGuide64', region: 'Landes', sessions: 28, followers: 341, avatar: 'S', color: 'bg-amber-500/20 text-amber-400', badges: ['⭐ Pro'] },
-            'bretagneSurf': { name: 'BretagneSurf', region: 'Bretagne', sessions: 25, followers: 189, avatar: 'B', color: 'bg-red-500/20 text-red-400', badges: ['⚓ Bretagne'] },
-        };
-
-        // Mock followers (people who follow current user)
-        const MOCK_FOLLOWERS = [
-            { id: 'ocean_rider', name: 'OceanRider', region: 'Vendée', avatar: 'O', color: 'bg-sky-500/20 text-sky-400' },
-            { id: 'wave_hunter', name: 'WaveHunter', region: 'Landes', avatar: 'W', color: 'bg-violet-500/20 text-violet-400' },
-            { id: 'lacanau_pro', name: 'LacanauPro', region: 'Gironde', avatar: 'L', color: 'bg-teal-500/20 text-teal-400' },
-        ];
-
-        let followed = JSON.parse(localStorage.getItem('sw_followed') || '[]');
+        const SB_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
+        const SB_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
         let currentTab = 'following';
+        let followingCount = 0, followersCount = 0;
 
-        function render() {
-            document.getElementById('countBadge').textContent = followed.length;
-            renderFollowing();
-            renderFollowers();
+        async function getToken() {
+            try {
+                if (!window.supabase?.createClient) return null;
+                const sb = window.supabase.createClient(SB_URL, SB_KEY);
+                const { data } = await sb.auth.getSession();
+                return data?.session?.access_token || null;
+            } catch { return null; }
         }
 
-        function renderFollowing() {
+        async function loadFollowing() {
             const list = document.getElementById('followingList');
             const empty = document.getElementById('followingEmpty');
-            if (followed.length === 0) {
-                list.classList.add('hidden');
-                empty.classList.remove('hidden');
-                return;
-            }
-            list.classList.remove('hidden');
-            empty.classList.add('hidden');
-            list.innerHTML = followed.map((id, i) => {
-                const u = USERS_DB[id] || { name: id, region: '—', sessions: 0, followers: 0, avatar: id[0]?.toUpperCase() || '?', color: 'bg-slate-700 text-slate-300', badges: [] };
-                return `<div class="user-row slide-in" style="animation-delay:${i * .04}s" onclick="viewProfile('${id}')">
-                <div class="w-10 h-10 rounded-full ${u.color} flex items-center justify-center font-black text-sm shrink-0">${u.avatar}</div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="font-bold text-sm">${u.name}</span>
-                        ${u.badges.map(b => `<span class="text-[9px] bg-amber-400/20 text-amber-400 px-1.5 py-0.5 rounded-full font-bold">${b}</span>`).join('')}
-                    </div>
-                    <p class="text-[11px] text-slate-500">${u.region} · ${u.sessions} sessions</p>
-                </div>
-                <button class="unfollow-btn" onclick="event.stopPropagation();unfollow('${id}',this)">Se désabonner</button>
-            </div>`;
-            }).join('');
+            list.innerHTML = `<div class="p-4 space-y-3">${[1,2,3].map(() => `<div class="flex items-center gap-3 animate-pulse"><div class="w-10 h-10 rounded-full bg-white/5 shrink-0"></div><div class="flex-1 space-y-1.5"><div class="h-3 bg-white/5 rounded w-2/3"></div><div class="h-2.5 bg-white/5 rounded w-1/3"></div></div></div>`).join('')}</div>`;
+            list.classList.remove('hidden'); empty.classList.add('hidden');
+
+            try {
+                const token = await getToken();
+                if (!token) { list.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+
+                // Récupérer la liste des personnes suivies
+                const res = await fetch(`${SB_URL}/rest/v1/follows?select=followed_id,members!follows_followed_id_fkey(id,pseudo,region,avatar_url,sessions_count)&follower_id=eq.${await getCurrentUserId(token)}`, {
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` }
+                });
+                const data = res.ok ? await res.json() : [];
+                followingCount = data.length;
+                document.getElementById('countBadge').textContent = followingCount;
+
+                if (!data.length) { list.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+
+                list.classList.remove('hidden'); empty.classList.add('hidden');
+                list.innerHTML = data.map((row, i) => {
+                    const u = row.members || {};
+                    const initiale = (u.pseudo || u.email || '?')[0].toUpperCase();
+                    return `<div class="user-row slide-in" style="animation-delay:${i*.04}s" onclick="window.location.href='user-profile.html?id=${u.id}'">
+                        <div class="w-10 h-10 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black text-sm shrink-0 overflow-hidden">
+                            ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-[#00bad6]">${initiale}</span>`}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="font-bold text-sm">${u.pseudo || 'Surfeur'}</span>
+                            <p class="text-[11px] text-slate-500">${u.region || '—'} · ${u.sessions_count || 0} sessions</p>
+                        </div>
+                        <button class="unfollow-btn" onclick="event.stopPropagation();unfollow('${u.id}',this)">Se désabonner</button>
+                    </div>`;
+                }).join('');
+            } catch { list.classList.add('hidden'); empty.classList.remove('hidden'); }
         }
 
-        function renderFollowers() {
+        async function loadFollowers() {
             const list = document.getElementById('followersList');
-            list.innerHTML = MOCK_FOLLOWERS.map((u, i) => `
-            <div class="user-row slide-in" style="animation-delay:${i * .04}s" onclick="viewProfile('${u.id}')">
-                <div class="w-10 h-10 rounded-full ${u.color} flex items-center justify-center font-black text-sm shrink-0">${u.avatar}</div>
-                <div class="flex-1 min-w-0">
-                    <span class="font-bold text-sm">${u.name}</span>
-                    <p class="text-[11px] text-slate-500">${u.region}</p>
-                </div>
-                <button class="text-[11px] bg-[#00bad6]/15 text-[#00bad6] font-bold px-3 py-1.5 rounded-xl active:scale-95 transition-transform" onclick="event.stopPropagation()">Voir</button>
-            </div>
-        `).join('');
+            list.innerHTML = `<p class="p-4 text-center text-slate-500 text-sm animate-pulse">Chargement…</p>`;
+
+            try {
+                const token = await getToken();
+                if (!token) { list.innerHTML = `<p class="p-4 text-center text-slate-500 text-sm">Connecte-toi pour voir tes abonnés.</p>`; return; }
+
+                const userId = await getCurrentUserId(token);
+                const res = await fetch(`${SB_URL}/rest/v1/follows?select=follower_id,members!follows_follower_id_fkey(id,pseudo,region,avatar_url)&followed_id=eq.${userId}`, {
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` }
+                });
+                const data = res.ok ? await res.json() : [];
+                followersCount = data.length;
+                if (currentTab === 'followers') document.getElementById('countBadge').textContent = followersCount;
+
+                if (!data.length) {
+                    list.innerHTML = `<div class="p-6 text-center"><div class="text-3xl mb-2">🌊</div><p class="text-sm text-slate-400">Pas encore d'abonnés. Partage tes sessions pour en avoir !</p></div>`;
+                    return;
+                }
+
+                list.innerHTML = data.map((row, i) => {
+                    const u = row.members || {};
+                    const initiale = (u.pseudo || '?')[0].toUpperCase();
+                    return `<div class="user-row slide-in" style="animation-delay:${i*.04}s" onclick="window.location.href='user-profile.html?id=${u.id}'">
+                        <div class="w-10 h-10 rounded-full bg-slate-700/60 flex items-center justify-center font-black text-sm shrink-0 overflow-hidden">
+                            ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-slate-300">${initiale}</span>`}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="font-bold text-sm">${u.pseudo || 'Surfeur'}</span>
+                            <p class="text-[11px] text-slate-500">${u.region || '—'}</p>
+                        </div>
+                        <a href="user-profile.html?id=${u.id}" class="text-[11px] bg-[#00bad6]/15 text-[#00bad6] font-bold px-3 py-1.5 rounded-xl active:scale-95 transition-transform">Voir</a>
+                    </div>`;
+                }).join('');
+            } catch { list.innerHTML = `<p class="p-4 text-center text-slate-500 text-sm">Erreur de chargement.</p>`; }
         }
 
-        function unfollow(id, btn) {
-            btn.textContent = '⏳';
-            followed = followed.filter(f => f !== id);
-            localStorage.setItem('sw_followed', JSON.stringify(followed));
-            setTimeout(render, 300);
+        async function getCurrentUserId(token) {
+            const r = await fetch(`${SB_URL}/auth/v1/user`, { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` } });
+            const d = await r.json(); return d.id;
         }
 
-        function viewProfile(id) {
-            window.location.href = `user-profile.html?id=${id}`;
+        async function unfollow(userId, btn) {
+            btn.textContent = '⏳'; btn.disabled = true;
+            const token = await getToken();
+            if (!token) return;
+            const myId = await getCurrentUserId(token);
+            await fetch(`${SB_URL}/rest/v1/follows?follower_id=eq.${myId}&followed_id=eq.${userId}`, {
+                method: 'DELETE', headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${token}` }
+            });
+            loadFollowing();
         }
 
         function switchTab(tab) {
@@ -234,11 +264,14 @@
             document.getElementById('tabAbonnes').classList.toggle('text-[#00bad6]', tab === 'followers');
             document.getElementById('tabAbonnes').classList.toggle('text-slate-500', tab !== 'followers');
             document.getElementById('tabAbonnes').style.borderBottomColor = tab === 'followers' ? '#00bad6' : 'transparent';
-            document.getElementById('countBadge').textContent = tab === 'following' ? followed.length : MOCK_FOLLOWERS.length;
+            document.getElementById('countBadge').textContent = tab === 'following' ? followingCount : followersCount;
         }
 
-        render();
+        // Charger les deux tabs en parallèle
+        loadFollowing();
+        loadFollowers();
     </script>
+
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').catch(() => {});
