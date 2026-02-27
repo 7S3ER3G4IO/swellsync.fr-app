@@ -48,7 +48,7 @@
     <link rel="shortcut icon" href="assets/images/swellsync_icon.svg">
     <!-- Nos styles personnels (Pour les Toasts Custom et variables) -->
     <link rel="stylesheet" href="css/styles.css">
-        <link rel="stylesheet" href="css/light-mode.css">
+    <link rel="stylesheet" href="css/light-mode.css">
     <link rel="stylesheet" href="css/mobile.css">
     <!-- FontAwesome pour les logos de marques -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -58,51 +58,145 @@
 
 <body
     class="bg-background-dark text-white font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
-            <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 py-3 my-3 mx-4 lg:mx-auto rounded-full" style="background: rgba(7,15,16,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06);">
-                <!-- Left: Logo -->
-                <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
-                    <div class="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center border border-primary/25">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync" class="w-5 h-5 object-contain" style="filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(2222%) hue-rotate(152deg) brightness(101%) contrast(106%);">
-                    </div>
-                    <span class="text-lg font-black text-white hidden sm:block tracking-tight">SwellSync</span>
-                </a>
+    <!-- Navbar Site Vitrine -->
+    <style>
+        .site-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(7, 13, 26, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+        }
 
-                <!-- Center: Nav Links -->
-                <div class="hidden md:flex items-center gap-1" id="nav-center-links">
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="cotes.html">Côtes</a>
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="spot_detail.html">Conditions</a>
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="actu.html">Actualités</a>
-                    <div class="relative" id="nav-plus-wrapper">
-                        <button class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1" id="nav-plus-btn">
-                            Plus
-                            <svg class="w-3.5 h-3.5 transition-transform duration-200" id="nav-plus-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                    </div>
-                </div>
+        .site-nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #f0f4ff;
+        }
 
-                <!-- Right: Auth -->
-                <div class="flex items-center gap-3 shrink-0">
-                    <button
-                        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
-                        id="btn-login" onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
-                        <span class="material-symbols-outlined text-[18px]" id="btn-login-avatar">person</span>
-                        <span id="nav-login-text">Connexion</span>
-                        <div class="w-2 h-2 rounded-full bg-red-500 shrink-0" id="login-status-icon"></div>
-                    </button>
-                    <button
-                        class="hidden md:flex bg-primary text-[#0a1516] font-bold text-[13px] px-5 py-2.5 rounded-full hover:brightness-110 hover:scale-[1.03] active:scale-[0.97] transition-all"
-                        onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
-                        S'inscrire
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white md:hidden"
-                        id="mobile-menu-btn">
-                        <span class="material-symbols-outlined text-[20px]">menu</span>
-                    </button>
-                </div>
-            </nav>
-        </header>
+        .site-nav-logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .site-nav-logo span {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: #f0f4ff;
+        }
+
+        .site-nav-logo .site-nav-accent {
+            color: #00bad6;
+        }
+
+        .site-nav-links {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .site-nav-links a {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #94a8cc;
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+        .site-nav-links a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f4ff;
+        }
+
+        .site-nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00bad6, #00d696);
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all .3s;
+        }
+
+        .site-nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0, 186, 214, 0.3);
+        }
+
+        .site-nav-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #f0f4ff;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+
+            .site-nav-links,
+            .site-nav-cta {
+                display: none;
+            }
+
+            .site-nav-menu-btn {
+                display: flex;
+            }
+
+            .site-nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: rgba(7, 13, 26, 0.97);
+                padding: 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                z-index: 99;
+            }
+        }
+    </style>
+    <nav class="site-navbar">
+        <a href="/" class="site-nav-logo">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
+            <span>Swell<span class="site-nav-accent">Sync</span></span>
+        </a>
+        <div class="site-nav-links" id="siteNavLinks">
+            <a href="/">Accueil</a>
+            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a>
+            <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/faq.html">FAQ</a>
+        </div>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="site-nav-cta" download>
+            <span class="material-symbols-outlined" style="font-size:18px">download</span>
+            Télécharger
+        </a>
+        <button class="site-nav-menu-btn"
+            onclick="var n=document.getElementById('siteNavLinks');n.classList.toggle('open')">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </nav>
 
     <!-- Contenu Légal -->
     <main class="pt-32 pb-24 max-w-4xl mx-auto px-6 relative z-10">
@@ -160,7 +254,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12 border-b border-white/5 pb-12">
                 <div class="flex flex-col gap-4">
                     <div class="flex items-center gap-2">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo" class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
+                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync Logo"
+                            class="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(0,186,214,0.4)]">
                         <span class="font-display font-black text-xl text-white tracking-tight">Swell<span
                                 class="text-primary">Sync</span></span>
                     </div>
@@ -193,7 +288,8 @@
                         class="text-left text-sm hover:text-primary transition-colors">Politique de
                         Confidentialité</button>
                     <button onclick="openLegalModal('legal')"
-                        class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions Légales</button>
+                        class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions
+                        Légales</button>
                     <button onclick="openLegalModal('cookies')"
                         class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
                 </div>
@@ -242,48 +338,48 @@
     <script src="js/legal_modals.js?v=6"></script>
     <script src="js/global_search.js" defer></script>
 
-    
-<!-- Global Search Modal -->
-<div id="global-search-backdrop"
-    class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
-    <div id="global-search-container"
-        class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
 
-        <!-- Search Input Area -->
-        <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
-            <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
-            <input type="text" id="global-search-input"
-                class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
-                placeholder="Chercher un spot, une page, une info..." autocomplete="off">
-            <button onclick="closeGlobalSearchModal()"
-                class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-                <span class="material-symbols-outlined text-xl">close</span>
-            </button>
-        </div>
+    <!-- Global Search Modal -->
+    <div id="global-search-backdrop"
+        class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[110] hidden items-start justify-center p-4 md:pt-[10vh] opacity-0 transition-opacity duration-300">
+        <div id="global-search-container"
+            class="bg-background-dark/70 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-2xl transform scale-95 transition-transform duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
 
-        <!-- Search Results Area -->
-        <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
-            <div class="text-center py-10 text-slate-500 text-sm font-medium">
-                Que cherchez-vous ? 🏄
+            <!-- Search Input Area -->
+            <div class="flex items-center gap-3 p-4 md:p-6 border-b border-white/10 relative bg-transparent">
+                <span class="material-symbols-outlined text-white/50 text-2xl">search</span>
+                <input type="text" id="global-search-input"
+                    class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
+                    placeholder="Chercher un spot, une page, une info..." autocomplete="off">
+                <button onclick="closeGlobalSearchModal()"
+                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-xl">close</span>
+                </button>
             </div>
-        </div>
 
-        <!-- Footer Hints -->
-        <div
-            class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
-            <div class="flex items-center gap-2">
-                <span class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
-                        class="font-sans mr-1">&#8593;&#8595;</span> Naviguer</span>
-                <span
-                    class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entr&#233;e
-                    <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
+            <!-- Search Results Area -->
+            <div class="max-h-[60vh] overflow-y-auto custom-scrollbar p-2" id="global-search-results">
+                <div class="text-center py-10 text-slate-500 text-sm font-medium">
+                    Que cherchez-vous ? 🏄
+                </div>
             </div>
-            <div>SwellSync Global Search</div>
+
+            <!-- Footer Hints -->
+            <div
+                class="px-6 py-3 border-t border-white/5 bg-background-dark/50 flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-widest font-bold hidden md:flex">
+                <div class="flex items-center gap-2">
+                    <span class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]"><span
+                            class="font-sans mr-1">&#8593;&#8595;</span> Naviguer</span>
+                    <span
+                        class="bg-white/10 px-2 py-1 flex items-center rounded border border-white/5 text-[9px]">Entr&#233;e
+                        <span class="material-symbols-outlined text-[10px] ml-1">keyboard_return</span></span>
+                </div>
+                <div>SwellSync Global Search</div>
+            </div>
         </div>
     </div>
-</div>
 
-    <script src="js/nav.js"></script>
-    <script src="js/auth_auto.js" defer></script>
+
 </body>
+
 </html>

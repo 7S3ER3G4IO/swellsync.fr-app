@@ -58,51 +58,58 @@
 
 <body
     class="bg-background-dark text-white font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
-            <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 py-3 my-3 mx-4 lg:mx-auto rounded-full" style="background: rgba(7,15,16,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06);">
-                <!-- Left: Logo -->
-                <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
-                    <div class="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center border border-primary/25">
-                        <img src="assets/images/swellsync_icon.svg" alt="SwellSync" class="w-5 h-5 object-contain" style="filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(2222%) hue-rotate(152deg) brightness(101%) contrast(106%);">
-                    </div>
-                    <span class="text-lg font-black text-white hidden sm:block tracking-tight">SwellSync</span>
-                </a>
-
-                <!-- Center: Nav Links -->
-                <div class="hidden md:flex items-center gap-1" id="nav-center-links">
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="cotes.html">Côtes</a>
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="spot_detail.html">Conditions</a>
-                    <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="actu.html">Actualités</a>
-                    <div class="relative" id="nav-plus-wrapper">
-                        <button class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1" id="nav-plus-btn">
-                            Plus
-                            <svg class="w-3.5 h-3.5 transition-transform duration-200" id="nav-plus-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Right: Auth -->
-                <div class="flex items-center gap-3 shrink-0">
-                    <button
-                        class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
-                        id="btn-login" onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
-                        <span class="material-symbols-outlined text-[18px]" id="btn-login-avatar">person</span>
-                        <span id="nav-login-text">Connexion</span>
-                        <div class="w-2 h-2 rounded-full bg-red-500 shrink-0" id="login-status-icon"></div>
-                    </button>
-                    <button
-                        class="hidden md:flex bg-primary text-[#0a1516] font-bold text-[13px] px-5 py-2.5 rounded-full hover:brightness-110 hover:scale-[1.03] active:scale-[0.97] transition-all"
-                        onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
-                        S'inscrire
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white md:hidden"
-                        id="mobile-menu-btn">
-                        <span class="material-symbols-outlined text-[20px]">menu</span>
-                    </button>
-                </div>
-            </nav>
-        </header>
+    <!-- Navbar Site Vitrine -->
+    <style>
+        .site-navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(7, 13, 26, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Inter', sans-serif;
+        }
+        .site-nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #f0f4ff; }
+        .site-nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .site-nav-logo span { font-family: 'Lexend', sans-serif; font-weight: 800; font-size: 20px; color: #f0f4ff; }
+        .site-nav-logo .site-nav-accent { color: #00bad6; }
+        .site-nav-links { display: flex; gap: 4px; align-items: center; }
+        .site-nav-links a { padding: 8px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; color: #94a8cc; text-decoration: none; transition: all .2s; }
+        .site-nav-links a:hover { background: rgba(255,255,255,0.05); color: #f0f4ff; }
+        .site-nav-cta { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 12px; background: linear-gradient(135deg, #00bad6, #00d696); color: #fff; font-weight: 700; font-size: 14px; text-decoration: none; transition: all .3s; }
+        .site-nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,186,214,0.3); }
+        .site-nav-menu-btn { display: none; background: none; border: none; cursor: pointer; color: #f0f4ff; align-items: center; }
+        @media (max-width: 768px) {
+            .site-nav-links, .site-nav-cta { display: none; }
+            .site-nav-menu-btn { display: flex; }
+            .site-nav-links.open { display: flex; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; background: rgba(7,13,26,0.97); padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); z-index: 99; }
+        }
+    </style>
+    <nav class="site-navbar">
+        <a href="/" class="site-nav-logo">
+            <img src="/assets/images/swellsync_logo.png" alt="SwellSync">
+            <span>Swell<span class="site-nav-accent">Sync</span></span>
+        </a>
+        <div class="site-nav-links" id="siteNavLinks">
+            <a href="/">Accueil</a>
+            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/spots.html">Spots</a>
+            <a href="/site/tarifs.html">Tarifs</a>
+            <a href="/site/faq.html">FAQ</a>
+        </div>
+        <a href="/downloads/SwellSync-1.0.0.apk" class="site-nav-cta" download>
+            <span class="material-symbols-outlined" style="font-size:18px">download</span>
+            Télécharger
+        </a>
+        <button class="site-nav-menu-btn" onclick="var n=document.getElementById('siteNavLinks');n.classList.toggle('open')">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </nav>
 
     <!-- Contenu Légal -->
     <main class="pt-32 pb-24 max-w-4xl mx-auto px-6 relative z-10">
@@ -305,7 +312,6 @@
     </div>
 </div>
 
-    <script src="js/nav.js"></script>
-    <script src="js/auth_auto.js" defer></script>
+
 </body>
 </html>
