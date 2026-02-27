@@ -132,17 +132,41 @@
             display: flex
         }
 
+        .sv-top-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .sv-bottom-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
         .story-progress {
             display: flex;
-            gap: 3px;
-            padding: 8px 12px;
+            gap: 4px;
+            padding: 10px 12px 6px;
+            position: relative;
+            z-index: 10
         }
 
         .story-progress .bar {
             flex: 1;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
             overflow: hidden
         }
 
@@ -150,43 +174,184 @@
             height: 100%;
             background: #fff;
             width: 0%;
-            transition: width linear
+            border-radius: 3px
         }
 
         .story-progress .bar.done .fill {
-            width: 100% !important
+            width: 100% !important;
+            transition: none
+        }
+
+        .sv-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 2px 14px 10px;
+            position: relative;
+            z-index: 10
+        }
+
+        .sv-avatar-ring {
+            width: 40px;
+            height: 40px;
+            padding: 2px;
+            border-radius: 50%;
+            background: conic-gradient(#00bad6, #0077b6, #00bad6)
+        }
+
+        .sv-avatar-ring img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #000
+        }
+
+        .sv-user-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.2px
+        }
+
+        .sv-user-time {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 1px
+        }
+
+        .sv-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 28px;
+            cursor: pointer;
+            padding: 4px 2px;
+            line-height: 1;
+            transition: color .15s
+        }
+
+        .sv-close:hover {
+            color: #fff
         }
 
         .story-img {
             flex: 1;
             background-size: cover;
             background-position: center;
-            position: relative
+            position: relative;
+            border-radius: 12px;
+            margin: 0 4px
+        }
+
+        .sv-caption {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            z-index: 5
+        }
+
+        .sv-caption p {
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, .7);
+            line-height: 1.4
+        }
+
+        .sv-bottom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px 14px;
+            position: relative;
+            z-index: 10
+        }
+
+        .sv-reply {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.18);
+            border-radius: 22px;
+            padding: 10px 16px;
+            font-size: 13px;
+            color: #fff;
+            outline: none;
+            font-family: inherit;
+            transition: border-color .2s
+        }
+
+        .sv-reply:focus {
+            border-color: rgba(0, 186, 214, 0.5)
+        }
+
+        .sv-reply::placeholder {
+            color: rgba(255, 255, 255, 0.35)
+        }
+
+        .sv-like-btn {
+            background: none;
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            transition: transform .15s;
+            padding: 2px
+        }
+
+        .sv-like-btn:active {
+            transform: scale(1.3)
+        }
+
+        .sv-send {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px
         }
 
         .story-like-burst {
             position: absolute;
-            font-size: 30px;
-            animation: likeBurst .8s ease-out forwards;
-            pointer-events: none
+            font-size: 40px;
+            animation: likeBurst .9s ease-out forwards;
+            pointer-events: none;
+            z-index: 10
         }
 
         @keyframes likeBurst {
             0% {
-                transform: scale(0);
+                transform: scale(0) rotate(-10deg);
                 opacity: 1
             }
 
-            50% {
-                transform: scale(1.3);
+            40% {
+                transform: scale(1.4) rotate(5deg);
                 opacity: 1
             }
 
             100% {
-                transform: scale(1);
-                opacity: 0;
-                transform: translateY(-40px)
+                transform: scale(0.8) translateY(-60px);
+                opacity: 0
             }
+        }
+
+        /* Tap zones */
+        .sv-tap-left,
+        .sv-tap-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 30%;
+            z-index: 4;
+            cursor: pointer
+        }
+
+        .sv-tap-left {
+            left: 0
+        }
+
+        .sv-tap-right {
+            right: 0
         }
 
         /* Hero spot card */
@@ -799,37 +964,37 @@
 
     <!-- STORY VIEWER (fullscreen) -->
     <div class="story-viewer" id="storyViewer">
+        <!-- Gradient overlays -->
+        <div class="sv-top-gradient"></div>
+        <div class="sv-bottom-gradient"></div>
         <!-- Progress bars -->
         <div class="story-progress" id="storyProgressBars"></div>
         <!-- Header -->
-        <div style="display:flex;align-items:center;gap:10px;padding:4px 12px 8px;position:relative;z-index:5">
-            <div class="story-ring" style="width:36px;height:36px;padding:2px">
-                <img id="svAvatar" src=""
-                    style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #000">
+        <div class="sv-header">
+            <div class="sv-avatar-ring">
+                <img id="svAvatar" src="">
             </div>
             <div style="flex:1">
-                <p id="svName" style="font-size:13px;font-weight:700;color:#fff"></p>
-                <p id="svTime" style="font-size:10px;color:rgba(255,255,255,.5)"></p>
+                <p class="sv-user-name" id="svName"></p>
+                <p class="sv-user-time" id="svTime"></p>
             </div>
-            <button onclick="closeStory()"
-                style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:4px">✕</button>
+            <button class="sv-close" onclick="closeStory()">✕</button>
         </div>
         <!-- Story image -->
         <div class="story-img" id="storyImage" ondblclick="likeStory(event)">
-            <!-- Caption -->
-            <div style="position:absolute;bottom:70px;left:16px;right:16px;z-index:5" id="svCaption">
-                <p style="font-size:13px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)"></p>
+            <div class="sv-tap-left" onclick="prevSlide()"></div>
+            <div class="sv-tap-right" onclick="nextSlide()"></div>
+            <div class="sv-caption" id="svCaption">
+                <p></p>
             </div>
         </div>
         <!-- Bottom: like + reply -->
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(0,0,0,.8)">
-            <input id="svReply" type="text" placeholder="Envoyer un message..."
-                style="flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:8px 14px;font-size:12px;color:#fff;outline:none;font-family:inherit">
-            <button id="svLikeBtn" onclick="toggleLike()"
-                style="background:none;border:none;font-size:24px;cursor:pointer;transition:transform .15s"
-                title="J'aime">🤍</button>
-            <button onclick="sendReply()" style="background:none;border:none;cursor:pointer">
-                <span class="material-symbols-outlined" style="color:#00bad6;font-size:22px">send</span>
+        <div class="sv-bottom">
+            <input class="sv-reply" id="svReply" type="text" placeholder="Envoyer un message..."
+                onkeydown="if(event.key==='Enter')sendReply()">
+            <button class="sv-like-btn" id="svLikeBtn" onclick="toggleLike()" title="J'aime">🤍</button>
+            <button class="sv-send" onclick="sendReply()">
+                <span class="material-symbols-outlined" style="color:#00bad6;font-size:24px">send</span>
             </button>
         </div>
     </div>
@@ -910,14 +1075,6 @@
             }, 50);
 
             storyTimer = setTimeout(() => nextSlide(), 5100);
-
-            // Tap zones
-            const img = document.getElementById('storyImage');
-            img.onclick = (e) => {
-                const x = e.clientX / window.innerWidth;
-                if (x < 0.3) prevSlide();
-                else if (x > 0.7) nextSlide();
-            };
         }
 
         function nextSlide() {
