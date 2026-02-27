@@ -112,6 +112,83 @@
             background: linear-gradient(135deg, #00bad6, #0077b6);
         }
 
+        .story-ring-seen {
+            background: rgba(100, 116, 139, 0.4);
+            padding: 2px;
+            border-radius: 50%;
+        }
+
+        /* Story viewer */
+        .story-viewer {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: #000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .story-viewer.open {
+            display: flex
+        }
+
+        .story-progress {
+            display: flex;
+            gap: 3px;
+            padding: 8px 12px;
+        }
+
+        .story-progress .bar {
+            flex: 1;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        .story-progress .bar .fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transition: width linear
+        }
+
+        .story-progress .bar.done .fill {
+            width: 100% !important
+        }
+
+        .story-img {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            position: relative
+        }
+
+        .story-like-burst {
+            position: absolute;
+            font-size: 30px;
+            animation: likeBurst .8s ease-out forwards;
+            pointer-events: none
+        }
+
+        @keyframes likeBurst {
+            0% {
+                transform: scale(0);
+                opacity: 1
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 1
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+                transform: translateY(-40px)
+            }
+        }
+
         /* Hero spot card */
         .hero-spot {
             position: relative;
@@ -257,16 +334,16 @@
     <main class="px-4 py-3 space-y-5 max-w-lg mx-auto">
 
         <!-- Stories Row -->
-        <div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
+        <div class="flex gap-3 overflow-x-auto no-scrollbar py-1" id="storiesRow">
             <!-- Add Story -->
-            <div class="flex flex-col items-center gap-1.5 flex-shrink-0">
+            <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer"
+                onclick="alert('Fonctionnalité bientôt disponible !')">
                 <div class="w-16 h-16 rounded-full story-ring-add flex items-center justify-center">
                     <span class="material-symbols-outlined text-white text-2xl">add</span>
                 </div>
                 <span class="text-[10px] text-slate-500">Ta story</span>
             </div>
-            <!-- Story placeholders -->
-            <div class="flex flex-col items-center gap-1.5 flex-shrink-0" id="storySlots"></div>
+            <!-- Public stories will be injected by JS -->
         </div>
 
         <!-- Hero: Nearest Spot -->
@@ -720,8 +797,199 @@
         </a>
     </nav>
 
+    <!-- STORY VIEWER (fullscreen) -->
+    <div class="story-viewer" id="storyViewer">
+        <!-- Progress bars -->
+        <div class="story-progress" id="storyProgressBars"></div>
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 12px 8px;position:relative;z-index:5">
+            <div class="story-ring" style="width:36px;height:36px;padding:2px">
+                <img id="svAvatar" src=""
+                    style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #000">
+            </div>
+            <div style="flex:1">
+                <p id="svName" style="font-size:13px;font-weight:700;color:#fff"></p>
+                <p id="svTime" style="font-size:10px;color:rgba(255,255,255,.5)"></p>
+            </div>
+            <button onclick="closeStory()"
+                style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;padding:4px">✕</button>
+        </div>
+        <!-- Story image -->
+        <div class="story-img" id="storyImage" ondblclick="likeStory(event)">
+            <!-- Caption -->
+            <div style="position:absolute;bottom:70px;left:16px;right:16px;z-index:5" id="svCaption">
+                <p style="font-size:13px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)"></p>
+            </div>
+        </div>
+        <!-- Bottom: like + reply -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(0,0,0,.8)">
+            <input id="svReply" type="text" placeholder="Envoyer un message..."
+                style="flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:8px 14px;font-size:12px;color:#fff;outline:none;font-family:inherit">
+            <button id="svLikeBtn" onclick="toggleLike()"
+                style="background:none;border:none;font-size:24px;cursor:pointer;transition:transform .15s"
+                title="J'aime">🤍</button>
+            <button onclick="sendReply()" style="background:none;border:none;cursor:pointer">
+                <span class="material-symbols-outlined" style="color:#00bad6;font-size:22px">send</span>
+            </button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/api.js"></script>
+
+    <!-- Stories System -->
+    <script>
+        const PUBLIC_STORIES = [
+            { id: 1, user: 'Léo_Surf', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80', time: 'il y a 2h', caption: 'Session incroyable ce matin à La Gravière 🔥🌊', images: ['https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80', 'https://images.unsplash.com/photo-1455729552457-5c322b29c789?w=600&q=80'] },
+            { id: 2, user: 'MarineSurf', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80', time: 'il y a 3h', caption: 'Sunset session à Biarritz 🌅', images: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80', 'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=80'] },
+            { id: 3, user: 'TomWaves', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80', time: 'il y a 4h', caption: 'Premier tube de ma vie !!! 🤙💀', images: ['https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=600&q=80'] },
+            { id: 4, user: 'OceanVibes', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80', time: 'il y a 5h', caption: 'La Torche est magique aujourd\'hui ✨', images: ['https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&q=80', 'https://images.unsplash.com/photo-1484291470158-b8f8d608850d?w=600&q=80'] },
+            { id: 5, user: 'SurfCoach64', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80', time: 'il y a 6h', caption: 'Conseil du jour: toujours regarder où tu veux aller 🏄', images: ['https://images.unsplash.com/photo-1509914398892-963f53e6e2f1?w=600&q=80'] },
+            { id: 6, user: 'WaveRider', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80', time: 'il y a 8h', caption: 'Hossegor bombing ! 💣🌊', images: ['https://images.unsplash.com/photo-1416163785019-75f3889c56b0?w=600&q=80', 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80'] },
+            { id: 7, user: 'SaltyGirl', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80', time: 'il y a 10h', caption: 'Dawn patrol 🌅 Réveil 5h30 mais ça valait le coup', images: ['https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600&q=80'] },
+            { id: 8, user: 'AtlanticPro', avatar: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=100&q=80', time: 'il y a 12h', caption: 'Conditions parfaites 5/5 🏆', images: ['https://images.unsplash.com/photo-1437719417032-8b217f069f31?w=600&q=80', 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80'] }
+        ];
+
+        let currentStory = 0, currentSlide = 0, storyTimer = null, liked = {};
+        const seenStories = new Set();
+
+        // Render story circles
+        function renderStories() {
+            const row = document.getElementById('storiesRow');
+            PUBLIC_STORIES.forEach((s, i) => {
+                const seen = seenStories.has(s.id);
+                const div = document.createElement('div');
+                div.className = 'flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer';
+                div.onclick = () => openStory(i);
+                div.innerHTML = `
+                <div class="${seen ? 'story-ring-seen' : 'story-ring'}" style="width:64px;height:64px;padding:2px">
+                    <img src="${s.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid #080f1a">
+                </div>
+                <span class="text-[10px] ${seen ? 'text-slate-600' : 'text-slate-400'}" style="max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.user}</span>`;
+                row.appendChild(div);
+            });
+        }
+
+        function openStory(index) {
+            currentStory = index;
+            currentSlide = 0;
+            liked[PUBLIC_STORIES[index].id] = liked[PUBLIC_STORIES[index].id] || false;
+            showStory();
+            document.getElementById('storyViewer').classList.add('open');
+        }
+
+        function closeStory() {
+            document.getElementById('storyViewer').classList.remove('open');
+            clearTimeout(storyTimer);
+            renderStoriesUpdate();
+        }
+
+        function showStory() {
+            const s = PUBLIC_STORIES[currentStory];
+            if (!s) { closeStory(); return; }
+            seenStories.add(s.id);
+
+            document.getElementById('svAvatar').src = s.avatar;
+            document.getElementById('svName').textContent = s.user;
+            document.getElementById('svTime').textContent = s.time;
+            document.getElementById('storyImage').style.backgroundImage = `url(${s.images[currentSlide]})`;
+            document.getElementById('svCaption').querySelector('p').textContent = s.caption;
+            document.getElementById('svLikeBtn').textContent = liked[s.id] ? '❤️' : '🤍';
+
+            // Progress bars
+            const barsHtml = s.images.map((_, i) =>
+                `<div class="bar ${i < currentSlide ? 'done' : ''}"><div class="fill" id="pbar${i}"></div></div>`
+            ).join('');
+            document.getElementById('storyProgressBars').innerHTML = barsHtml;
+
+            // Animate current bar
+            clearTimeout(storyTimer);
+            setTimeout(() => {
+                const bar = document.getElementById('pbar' + currentSlide);
+                if (bar) { bar.style.transition = 'width 5s linear'; bar.style.width = '100%'; }
+            }, 50);
+
+            storyTimer = setTimeout(() => nextSlide(), 5100);
+
+            // Tap zones
+            const img = document.getElementById('storyImage');
+            img.onclick = (e) => {
+                const x = e.clientX / window.innerWidth;
+                if (x < 0.3) prevSlide();
+                else if (x > 0.7) nextSlide();
+            };
+        }
+
+        function nextSlide() {
+            clearTimeout(storyTimer);
+            const s = PUBLIC_STORIES[currentStory];
+            if (currentSlide < s.images.length - 1) {
+                currentSlide++;
+                showStory();
+            } else {
+                // Next user story
+                if (currentStory < PUBLIC_STORIES.length - 1) {
+                    currentStory++;
+                    currentSlide = 0;
+                    showStory();
+                } else { closeStory(); }
+            }
+        }
+
+        function prevSlide() {
+            clearTimeout(storyTimer);
+            if (currentSlide > 0) { currentSlide--; showStory(); }
+            else if (currentStory > 0) {
+                currentStory--;
+                currentSlide = 0;
+                showStory();
+            }
+        }
+
+        function toggleLike() {
+            const s = PUBLIC_STORIES[currentStory];
+            liked[s.id] = !liked[s.id];
+            document.getElementById('svLikeBtn').textContent = liked[s.id] ? '❤️' : '🤍';
+            document.getElementById('svLikeBtn').style.transform = 'scale(1.3)';
+            setTimeout(() => document.getElementById('svLikeBtn').style.transform = 'scale(1)', 200);
+        }
+
+        function likeStory(e) {
+            const s = PUBLIC_STORIES[currentStory];
+            liked[s.id] = true;
+            document.getElementById('svLikeBtn').textContent = '❤️';
+            // Burst heart
+            const heart = document.createElement('div');
+            heart.className = 'story-like-burst';
+            heart.textContent = '❤️';
+            heart.style.left = (e.offsetX - 15) + 'px';
+            heart.style.top = (e.offsetY - 15) + 'px';
+            document.getElementById('storyImage').appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
+        }
+
+        function sendReply() {
+            const input = document.getElementById('svReply');
+            if (input.value.trim()) {
+                input.value = '';
+                // Toast
+                const t = document.createElement('div');
+                t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:300;background:#00bad6;color:#080f1a;font-weight:700;font-size:12px;padding:8px 16px;border-radius:20px;';
+                t.textContent = 'Message envoyé !';
+                document.body.appendChild(t);
+                setTimeout(() => t.remove(), 2000);
+            }
+        }
+
+        function renderStoriesUpdate() {
+            // Update rings for seen stories
+            const row = document.getElementById('storiesRow');
+            const circles = row.querySelectorAll('[class*="story-ring"]');
+            // Skip first (add story button)
+        }
+
+        renderStories();
+    </script>
     <script>
         const SPOT_IMAGES = [
             'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80',
