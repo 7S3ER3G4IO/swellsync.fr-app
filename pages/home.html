@@ -500,15 +500,67 @@
 
         <!-- Stories Row -->
         <div class="flex gap-3 overflow-x-auto no-scrollbar py-1" id="storiesRow">
-            <!-- Add Story -->
-            <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer"
-                onclick="alert('Fonctionnalité bientôt disponible !')">
-                <div class="w-16 h-16 rounded-full story-ring-add flex items-center justify-center">
-                    <span class="material-symbols-outlined text-white text-2xl">add</span>
+            <!-- Your Story (profile pic + badge) -->
+            <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer" onclick="openCreateStory()">
+                <div style="position:relative;width:64px;height:64px">
+                    <img src="https://images.unsplash.com/photo-1535930749574-1399327ce78f?w=100&q=80"
+                        style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid #0f2438">
+                    <div
+                        style="position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:#00bad6;border:3px solid #080f1a;display:flex;align-items:center;justify-content:center">
+                        <span style="color:#fff;font-size:14px;font-weight:900;line-height:1">+</span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-slate-500">Ta story</span>
+                <span class="text-[10px] text-slate-400">Ta story</span>
             </div>
             <!-- Public stories will be injected by JS -->
+        </div>
+
+        <!-- Story Creation Modal -->
+        <div id="createStoryModal" class="fixed inset-0 z-[200] hidden flex-col" style="background:#080f1a">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-4 py-3"
+                style="border-bottom:1px solid rgba(0,186,214,0.1)">
+                <button onclick="closeCreateStory()"
+                    style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;font-family:inherit;font-weight:600">Annuler</button>
+                <h2 class="font-bold text-base">Nouvelle Story</h2>
+                <button onclick="publishStory()"
+                    style="background:none;border:none;color:#00bad6;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700">Publier</button>
+            </div>
+            <!-- Camera / Gallery -->
+            <div class="flex-1 flex flex-col items-center justify-center gap-6 px-6">
+                <!-- Preview area -->
+                <div id="storyPreview" class="w-full rounded-2xl overflow-hidden"
+                    style="aspect-ratio:9/16;max-height:400px;background:rgba(15,36,56,0.8);border:2px dashed rgba(0,186,214,0.2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px">
+                    <div
+                        style="width:64px;height:64px;border-radius:50%;background:rgba(0,186,214,0.1);display:flex;align-items:center;justify-content:center">
+                        <span class="material-symbols-outlined text-[#00bad6] text-3xl">photo_camera</span>
+                    </div>
+                    <p class="text-sm text-slate-400 text-center">Prends une photo ou choisis<br>depuis ta galerie</p>
+                </div>
+                <!-- Action buttons -->
+                <div class="flex gap-3 w-full">
+                    <button onclick="fakeCapture()"
+                        class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#080f1a] font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-lg">photo_camera</span> Caméra
+                    </button>
+                    <button onclick="fakeGallery()"
+                        class="flex-1 py-3 rounded-xl bg-white/5 border border-[#00bad6]/20 text-white font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-lg">photo_library</span> Galerie
+                    </button>
+                </div>
+                <!-- Caption -->
+                <div class="w-full">
+                    <input id="storyCaption" type="text" placeholder="Ajoute un texte à ta story..."
+                        class="w-full bg-white/5 border border-[#00bad6]/15 rounded-xl px-4 py-3 text-sm text-white outline-none"
+                        style="font-family:inherit">
+                </div>
+                <!-- Location tag -->
+                <div class="flex items-center gap-2 w-full p-3 rounded-xl bg-white/5">
+                    <span class="material-symbols-outlined text-[#00bad6] text-lg">location_on</span>
+                    <span class="text-sm text-slate-400">Ajouter un lieu</span>
+                    <span class="material-symbols-outlined text-slate-600 ml-auto">chevron_right</span>
+                </div>
+            </div>
         </div>
 
         <!-- Hero: Nearest Spot -->
@@ -1143,6 +1195,63 @@
             const row = document.getElementById('storiesRow');
             const circles = row.querySelectorAll('[class*="story-ring"]');
             // Skip first (add story button)
+        }
+
+        // === Story Creation ===
+        function openCreateStory() {
+            document.getElementById('createStoryModal').classList.replace('hidden', 'flex');
+        }
+        function closeCreateStory() {
+            document.getElementById('createStoryModal').classList.replace('flex', 'hidden');
+            // Reset
+            document.getElementById('storyPreview').innerHTML = `
+                <div style="width:64px;height:64px;border-radius:50%;background:rgba(0,186,214,0.1);display:flex;align-items:center;justify-content:center">
+                    <span class="material-symbols-outlined text-[#00bad6] text-3xl">photo_camera</span>
+                </div>
+                <p class="text-sm text-slate-400 text-center">Prends une photo ou choisis<br>depuis ta galerie</p>`;
+            document.getElementById('storyCaption').value = '';
+        }
+        const FAKE_PHOTOS = [
+            'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80',
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80',
+            'https://images.unsplash.com/photo-1505459668311-8dfac7952bf0?w=600&q=80',
+            'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=80',
+            'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&q=80'
+        ];
+        let capturedPhoto = null;
+        function fakeCapture() {
+            capturedPhoto = FAKE_PHOTOS[Math.floor(Math.random() * FAKE_PHOTOS.length)];
+            document.getElementById('storyPreview').innerHTML = `<img src="${capturedPhoto}" style="width:100%;height:100%;object-fit:cover">`;
+            document.getElementById('storyPreview').style.border = 'none';
+        }
+        function fakeGallery() { fakeCapture(); } // Same simulation
+
+        function publishStory() {
+            if (!capturedPhoto) { fakeCapture(); }
+            const caption = document.getElementById('storyCaption').value || 'Ma session du jour 🏄';
+            // Add to stories list
+            const newStory = {
+                id: Date.now(),
+                user: 'Toi',
+                avatar: 'https://images.unsplash.com/photo-1535930749574-1399327ce78f?w=100&q=80',
+                time: 'à l\'instant',
+                caption: caption,
+                images: [capturedPhoto]
+            };
+            PUBLIC_STORIES.unshift(newStory);
+            // Refresh stories row
+            const row = document.getElementById('storiesRow');
+            // Remove old story circles (keep first = your story button)
+            while (row.children.length > 1) row.removeChild(row.lastChild);
+            renderStories();
+            closeCreateStory();
+            // Toast
+            const t = document.createElement('div');
+            t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:300;background:#00bad6;color:#080f1a;font-weight:700;font-size:12px;padding:8px 16px;border-radius:20px;box-shadow:0 4px 20px rgba(0,186,214,0.3)';
+            t.textContent = 'Story publiée ! 🎉';
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 2500);
+            capturedPhoto = null;
         }
 
         renderStories();
