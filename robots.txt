@@ -25,3 +25,7 @@ Allow: /
 Crawl-delay: 2
 
 Sitemap: https://swellsync.fr/sitemap.xml
+
+# Autoriser le blog et les landing pages spots
+Allow: /blog/
+Allow: /spots/
