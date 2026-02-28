@@ -462,3 +462,39 @@ html {
     content: "";
   }
 }
+
+/* ═══════════════════════════════════════
+   Google AdSense — SwellSync Ad Styles
+   ═══════════════════════════════════════ */
+.ad-container {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  margin: 16px auto;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.ad-banner-top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.ad-banner-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.ad-content {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin: 24px 16px;
+}
+
+/* Ne pas afficher si AdSense est bloqué */
+.adsbygoogle[data-ad-status="unfilled"] ~ .ad-label {
+  display: none;
+}

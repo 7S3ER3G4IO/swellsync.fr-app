@@ -116,3 +116,24 @@
         createBanner();
     }
 })();
+
+// Gestion AdSense selon consentement RGPD
+function manageAdSenseConsent(hasConsent) {
+  if (hasConsent) {
+    // Activer les pubs personnalisées
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adsbygoogle.pauseAdRequests = 0;
+  } else {
+    // Désactiver les pubs personnalisées (non-personalized ads)
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adsbygoogle.requestNonPersonalizedAds = 1;
+  }
+}
+
+// Appeler selon le consentement actuel
+const _existingConsent = localStorage.getItem('sw_cookie_consent');
+if (_existingConsent === 'accepted') {
+  manageAdSenseConsent(true);
+} else if (_existingConsent === 'refused') {
+  manageAdSenseConsent(false);
+}
