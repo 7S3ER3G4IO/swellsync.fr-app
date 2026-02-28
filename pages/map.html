@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0" name="viewport" />
-    <title>SwellSync - Découvrir les Spots</title>
+    <title>Carte des spots — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Carte des Spots">
     <meta property="og:description" content="Carte interactive de 60+ spots de surf sur la côte Atlantique.">
@@ -239,9 +239,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/map.html">
 </head>
 
 <body class="page-bg font-display pb-28">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header sticky -->
     <header class="hdr sticky top-0 z-30 px-4 py-3 space-y-3">
@@ -256,22 +258,22 @@
             <input id="searchInput" type="search" inputmode="search" placeholder="🔍  Chercher un spot, une ville…"
                 class="search-bar w-full rounded-2xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#00bad6]/40"
                 oninput="onSearch(this.value)" />
-            <button onclick="document.getElementById('searchInput').value='';onSearch('')"
+            <button type="button" onclick="document.getElementById('searchInput').value='';onSearch('')"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#00bad6] transition-colors">
                 <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
         </div>
         <!-- Filtres -->
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-            <button onclick="setChip('all',this)" data-val="all"
+            <button type="button" onclick="setChip('all',this)" data-val="all"
                 class="chip active whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">Tous</button>
-            <button onclick="setChip('debutant',this)" data-val="debutant"
+            <button type="button" onclick="setChip('debutant',this)" data-val="debutant"
                 class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">🌊 Débutant</button>
-            <button onclick="setChip('intermediaire',this)" data-val="intermediaire"
+            <button type="button" onclick="setChip('intermediaire',this)" data-val="intermediaire"
                 class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">⚡ Inter.</button>
-            <button onclick="setChip('avance',this)" data-val="avance"
+            <button type="button" onclick="setChip('avance',this)" data-val="avance"
                 class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">🔥 Avancé</button>
-            <button onclick="setChip('favs',this)" data-val="favs"
+            <button type="button" onclick="setChip('favs',this)" data-val="favs"
                 class="chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full">❤️ Favoris</button>
         </div>
     </header>
@@ -293,7 +295,7 @@
                     style="background:linear-gradient(135deg,#f59e0b,#d97706)">
                     <span class="material-symbols-outlined text-[18px]">star</span>Passer Pro — Favoris illimités
                 </a>
-                <button onclick="document.getElementById('favPaywall').classList.replace('flex','hidden')"
+                <button type="button" onclick="document.getElementById('favPaywall').classList.replace('flex','hidden')"
                     class="w-full py-2 text-slate-500 text-xs">Plus tard</button>
             </div>
         </div>
@@ -454,7 +456,7 @@
         function favBtn(spotId, small = false) {
             const isFav = favIds.includes(spotId);
             const sz = small ? 'text-[14px] w-6 h-6' : 'text-[18px] w-8 h-8';
-            return `<button onclick="toggleFav(event,${spotId})" class="${sz} rounded-full flex items-center justify-center transition-all active:scale-90"
+            return `<button type="button" onclick="toggleFav(event,${spotId})" class="${sz} rounded-full flex items-center justify-center transition-all active:scale-90"
                 style="background:${isFav ? 'rgba(239,68,68,.25)' : 'rgba(0,0,0,.45)'}">
                 <span class="material-symbols-outlined ${small ? 'text-[14px]' : 'text-[18px]'} ${isFav ? 'text-red-400' : 'text-white/60'}"
                 style="font-variation-settings:'FILL' ${isFav ? 1 : 0}">favorite</span>
@@ -581,6 +583,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

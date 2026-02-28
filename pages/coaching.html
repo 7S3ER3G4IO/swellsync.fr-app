@@ -137,6 +137,7 @@
 </head>
 
 <body class="font-display pb-28">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header class="hdr sticky top-0 z-30 px-4 py-3">
@@ -152,7 +153,7 @@
         </div>
     </header>
 
-    <main class="px-4 py-4 space-y-6 max-w-lg mx-auto">
+    <main id="main-content" class="px-4 py-4 space-y-6 max-w-lg mx-auto">
 
         <!-- Hero Banner -->
         <div class="relative rounded-3xl overflow-hidden" style="min-height:160px">
@@ -217,7 +218,7 @@
                                     class="material-symbols-outlined">check_circle</span><span>Échauffement & sécurité
                                     inclus</span></div>
                         </div>
-                        <button onclick="contactCoaching('Initiation')"
+                        <button type="button" onclick="contactCoaching('Initiation')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
                             Nous contacter →
                         </button>
@@ -264,7 +265,7 @@
                                     class="material-symbols-outlined">check_circle</span><span>Maximum 2
                                     personnes</span></div>
                         </div>
-                        <button onclick="contactCoaching('Perfectionnement')"
+                        <button type="button" onclick="contactCoaching('Perfectionnement')"
                             class="w-full mt-3 py-2.5 rounded-xl font-bold text-sm active:scale-95 transition-transform text-black"
                             style="background:linear-gradient(135deg,#f59e0b,#d97706)">
                             Nous contacter →
@@ -311,7 +312,7 @@
                                     class="material-symbols-outlined">check_circle</span><span>Plan d'entraînement
                                     physique inclus</span></div>
                         </div>
-                        <button onclick="contactCoaching('Competition')"
+                        <button type="button" onclick="contactCoaching('Competition')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-purple-500 text-white font-bold text-sm active:scale-95 transition-transform">
                             Nous contacter →
                         </button>
@@ -349,7 +350,7 @@
                                     class="material-symbols-outlined">check_circle</span><span>Réponse sous 48h</span>
                             </div>
                         </div>
-                        <button onclick="contactCoaching('Video Analyse')"
+                        <button type="button" onclick="contactCoaching('Video Analyse')"
                             class="w-full mt-3 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
                             Nous contacter →
                         </button>
@@ -571,7 +572,7 @@
                     <h3 class="font-black text-base" id="contactTitle">Demande de coaching</h3>
                     <p class="text-[11px] text-slate-500" id="contactSubtitle">Formule sélectionnée</p>
                 </div>
-                <button onclick="closeContact()"
+                <button type="button" onclick="closeContact()"
                     class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
                     <span class="material-symbols-outlined text-slate-400 text-[18px]">close</span>
                 </button>
@@ -589,7 +590,7 @@
                     <label class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Email</label>
                     <input id="contactEmail" type="email" placeholder="votre@email.com"
                         class="w-full mt-1 rounded-xl bg-white/5 border border-[#00bad6]/20 px-3 py-2.5 text-sm text-white outline-none focus:border-[#00bad6]/50 transition-colors"
-                        style="font-family:inherit">
+                        style="font-family:inherit" autocomplete="email">
                 </div>
                 <div>
                     <label class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Message
@@ -600,7 +601,7 @@
                 </div>
             </div>
 
-            <button id="contactSubmitBtn" onclick="submitContact()"
+            <button type="button" id="contactSubmitBtn" onclick="submitContact()"
                 class="w-full py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">send</span>
                 Envoyer la demande
@@ -712,6 +713,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

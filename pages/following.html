@@ -108,6 +108,7 @@
 </head>
 
 <body class="min-h-screen pb-10">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header
@@ -123,11 +124,11 @@
 
     <!-- Tabs: Following / Followers -->
     <div class="flex border-b border-white/5">
-        <button class="flex-1 py-3 text-sm font-bold text-[#00bad6] border-b-2 border-[#00bad6]" id="tabAbonnements"
+        <button type="button" class="flex-1 py-3 text-sm font-bold text-[#00bad6] border-b-2 border-[#00bad6]" id="tabAbonnements"
             onclick="switchTab('following')">
             Abonnements
         </button>
-        <button class="flex-1 py-3 text-sm font-bold text-slate-500 border-b-2 border-transparent" id="tabAbonnes"
+        <button type="button" class="flex-1 py-3 text-sm font-bold text-slate-500 border-b-2 border-transparent" id="tabAbonnes"
             onclick="switchTab('followers')">
             Abonnés
         </button>
@@ -195,13 +196,13 @@
                     const initiale = (u.pseudo || u.email || '?')[0].toUpperCase();
                     return `<div class="user-row slide-in" style="animation-delay:${i*.04}s" onclick="window.location.href='user-profile.html?id=${u.id}'">
                         <div class="w-10 h-10 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black text-sm shrink-0 overflow-hidden">
-                            ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-[#00bad6]">${initiale}</span>`}
+                            ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover" loading="lazy" decoding="async">` : `<span class="text-[#00bad6]">${initiale}</span>`}
                         </div>
                         <div class="flex-1 min-w-0">
                             <span class="font-bold text-sm">${u.pseudo || 'Surfeur'}</span>
                             <p class="text-[11px] text-slate-500">${u.region || '—'} · ${u.sessions_count || 0} sessions</p>
                         </div>
-                        <button class="unfollow-btn" onclick="event.stopPropagation();unfollow('${u.id}',this)">Se désabonner</button>
+                        <button type="button" class="unfollow-btn" onclick="event.stopPropagation();unfollow('${u.id}',this)">Se désabonner</button>
                     </div>`;
                 }).join('');
             } catch { list.classList.add('hidden'); empty.classList.remove('hidden'); }
@@ -233,7 +234,7 @@
                     const initiale = (u.pseudo || '?')[0].toUpperCase();
                     return `<div class="user-row slide-in" style="animation-delay:${i*.04}s" onclick="window.location.href='user-profile.html?id=${u.id}'">
                         <div class="w-10 h-10 rounded-full bg-slate-700/60 flex items-center justify-center font-black text-sm shrink-0 overflow-hidden">
-                            ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-slate-300">${initiale}</span>`}
+                            ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover" loading="lazy" decoding="async">` : `<span class="text-slate-300">${initiale}</span>`}
                         </div>
                         <div class="flex-1 min-w-0">
                             <span class="font-bold text-sm">${u.pseudo || 'Surfeur'}</span>
@@ -299,6 +300,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

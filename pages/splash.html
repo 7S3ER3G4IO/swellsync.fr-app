@@ -140,6 +140,7 @@
 </head>
 
 <body>
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
     <div class="splash" id="splash">
         <div class="logo-ring">
             <img loading="lazy" src="../assets/images/swellsync_logo.png?v=3" onerror="this.src='/assets/images/swellsync_logo.png'"
@@ -147,7 +148,7 @@
         </div>
         <p class="app-name">Swell<span>Sync</span></p>
         <p class="tagline">Surf forecast · Community · Sessions</p>
-        <div class="loader"></div>
+        <div class="loader" role="status" aria-label="Chargement en cours"></div>
     </div>
     <script>
         setTimeout(() => {

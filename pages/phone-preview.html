@@ -347,6 +347,7 @@
 </head>
 
 <body>
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
     <!-- Top branding -->
     <div class="top-brand">
         <p>Prévisions Surf en Direct</p>
@@ -427,6 +428,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

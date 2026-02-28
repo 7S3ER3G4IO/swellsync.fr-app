@@ -129,7 +129,7 @@ class AIBots {
 
     // 13. AI Computer Vision Bot (Analyse des flux Cams en Live)
     static ComputerVisionBot(camId, baseCrowdScore, baseWaveScore) {
-        console.log(`👁️ [VISION-BOT] Analyse de la Caméra HD #${camId} en cours...`);
+
         // Simule une analyse d'image
         // - Compte les surfeurs (Crowd)
         const detectedSurfers = Math.floor(Math.random() * 40);
@@ -149,7 +149,6 @@ class AIBots {
 
     // 14. Swell Whisperer (Chatbot IA Recommandation de spot)
     static SwellWhispererBot(userProfile, liveContext) {
-        console.log(`🗣️ [WHISPERER-BOT] Consultation experte pour le profil: ${userProfile.level}`);
 
         let recommendation = "";
         let tone = "friendly";
@@ -168,7 +167,6 @@ class AIBots {
 
     // 15. Magic Quiver Bot (Vestiaire & Matériel)
     static MagicQuiverBot(waterTemp, waveHeight, userLevel) {
-        console.log(`🛹 [QUIVER-BOT] Analyse de l'équipement idéal (Eau: ${waterTemp}°C, Vagues: ${waveHeight}m)`);
 
         // Recommandation Néoprène
         let wetsuit = "Boardshort & Lycra (Eau chaude !)";
@@ -203,8 +201,7 @@ class AIBots {
      * L'ORCHESTRATEUR : Le système qui consulte les 12 IA pour rendre un verdict final (sur 100%)
      */
     static calculateMasterReliability(spot, liveConditions) {
-        console.log(`\n🤖 [IA-BOT] Lancement de l'analyse multi-agents pour le spot : ${spot.name}`);
-        console.log(`📡 [IA-BOT] Données entrantes -> Houle: ${liveConditions.wave_height}m | Période: ${liveConditions.wave_period}s`);
+
 
         const d = new Date();
         const currentHour = d.getHours();
@@ -258,9 +255,7 @@ class AIBots {
 
         let finalEpicScore = preFinalScore + scores.local_magic; // Sera mathématiquement toujours égal à 100
 
-        console.log(`🧠 [IA-BOT] Score brut de la nature : ${Math.round(masterScore)}%`);
-        console.log(`🔥 [IA-BOT] Score optimisé après facteurs cognitifs -> Fiabilité Finale : ${Math.round(finalEpicScore)}% (Garanti)`);
-        console.log(`✅ [IA-BOT] Analyse terminée. Envoi des résultats au Frontend.\n`);
+
 
         return {
             master_score: Math.round(finalEpicScore) + "%", // Le taux renvoyé en format pourcentage (ex: "100%")

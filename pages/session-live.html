@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0,viewport-fit=cover" name="viewport" />
-    <title>SwellSync - Session Live</title>
+    <title>Session GPS live — SwellSync</title>
     <script src="js/theme.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,9 +89,12 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/session-live.html">
+  <meta name="description" content="Enregistrez votre session de surf en temps réel avec GPS. Timer, compteur de vagues et score automatique.">
 </head>
 
 <body>
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
     <!-- Header -->
     <header class="sticky top-0 z-30 px-4 py-3 backdrop-blur-xl"
         style="background:rgba(0,0,0,0.92);border-bottom:1px solid rgba(255,255,255,0.06)">
@@ -105,7 +108,7 @@
         </div>
     </header>
 
-    <main class="px-4 py-4 space-y-4 max-w-lg mx-auto page-enter">
+    <main id="main-content" class="px-4 py-4 space-y-4 max-w-lg mx-auto page-enter">
 
         <!-- Timer -->
         <div class="flex flex-col items-center py-6">
@@ -162,7 +165,7 @@
         <div class="card">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="font-bold text-sm">Journal de vagues</h2>
-                <button onclick="logWave()"
+                <button type="button" onclick="logWave()"
                     class="bg-[#00bad6] text-black font-bold text-xs px-4 py-2 rounded-xl tap flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">add</span>Vague !
                 </button>
@@ -174,11 +177,11 @@
 
         <!-- Controls -->
         <div class="flex gap-3">
-            <button onclick="toggleSession()" id="startBtn"
+            <button type="button" onclick="toggleSession()" id="startBtn"
                 class="flex-1 bg-[#00bad6] text-black font-black py-4 rounded-2xl text-sm tap flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined">play_arrow</span>Démarrer la session
             </button>
-            <button onclick="endSession()" id="endBtn"
+            <button type="button" onclick="endSession()" id="endBtn"
                 class="hidden flex-1 bg-red-500/20 text-red-400 border border-red-500/30 font-black py-4 rounded-2xl text-sm tap flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined">stop</span>Terminer
             </button>
@@ -401,6 +404,43 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
+
+<script>
+// Wake Lock — Empêcher la veille pendant une session GPS
+let _wakeLock = null;
+async function acquireWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      _wakeLock = await navigator.wakeLock.request('screen');
+      console.info('Wake Lock acquis ✓');
+    } catch(e) { /* Wake Lock non disponible */ }
+  }
+}
+async function releaseWakeLock() {
+  if (_wakeLock) { await _wakeLock.release(); _wakeLock = null; }
+}
+// Réacquérir si la page redevient visible
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && _sessionActive) {
+    await acquireWakeLock();
+  }
+});
+window.addEventListener('beforeunload', releaseWakeLock);
+</script>
 </body>
 
 </html>

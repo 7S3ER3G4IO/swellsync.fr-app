@@ -39,7 +39,7 @@
         </div>
         <a href="/pages/home.html" class="nav-cta"><span class="material-symbols-outlined"
                 style="font-size:17px">open_in_new</span> Ouvrir l'app</a>
-        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
+        <button type="button" class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
     <!-- HERO -->
@@ -155,27 +155,27 @@
             <div class="vote-grid" id="voteGrid">
                 <div class="vote-card animate">
                     <h4>🌡️ Données UV & Qualité eau</h4>
-                    <p>Indice UV, pollution marine, qualité de l'eau par spot</p><button class="vote-btn" data-id="0"
+                    <p>Indice UV, pollution marine, qualité de l'eau par spot</p><button type="button" class="vote-btn" data-id="0"
                         onclick="vote(this)">👍 Voter · <span class="vcount">47</span></button>
                 </div>
                 <div class="vote-card animate animate-delay-1">
                     <h4>🤝 Sessions groupées</h4>
-                    <p>Organiser des sessions collectives avec un groupe d'amis</p><button class="vote-btn" data-id="1"
+                    <p>Organiser des sessions collectives avec un groupe d'amis</p><button type="button" class="vote-btn" data-id="1"
                         onclick="vote(this)">👍 Voter · <span class="vcount">38</span></button>
                 </div>
                 <div class="vote-card animate animate-delay-2">
                     <h4>📸 Stories de spots</h4>
-                    <p>Photos/vidéos éphémères des conditions du jour par les surfers</p><button class="vote-btn"
+                    <p>Photos/vidéos éphémères des conditions du jour par les surfers</p><button type="button" class="vote-btn"
                         data-id="2" onclick="vote(this)">👍 Voter · <span class="vcount">29</span></button>
                 </div>
                 <div class="vote-card animate animate-delay-3">
                     <h4>🏄 Analyse de style</h4>
-                    <p>Upload une vidéo, l'IA analyse ta technique de surf</p><button class="vote-btn" data-id="3"
+                    <p>Upload une vidéo, l'IA analyse ta technique de surf</p><button type="button" class="vote-btn" data-id="3"
                         onclick="vote(this)">👍 Voter · <span class="vcount">61</span></button>
                 </div>
                 <div class="vote-card animate">
                     <h4>🗣️ Forum communauté</h4>
-                    <p>Forums par région pour discuter techniques, matériel, sessions</p><button class="vote-btn"
+                    <p>Forums par région pour discuter techniques, matériel, sessions</p><button type="button" class="vote-btn"
                         data-id="4" onclick="vote(this)">👍 Voter · <span class="vcount">22</span></button>
                 </div>
             </div>
@@ -243,8 +243,8 @@
                 <h4>Sois le premier informé</h4>
                 <p>Reçois une notification dès que de nouvelles fonctionnalités arrivent sur SwellSync.</p>
                 <div class="newsletter-form">
-                    <input type="email" placeholder="ton@email.com">
-                    <button class="btn-primary"
+                    <input type="email" placeholder="ton@email.com" autocomplete="email">
+                    <button type="button" class="btn-primary"
                         onclick="this.textContent='✅ Inscrit !';this.style.background='var(--accent2)'">M'abonner</button>
                 </div>
             </div>

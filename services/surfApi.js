@@ -20,7 +20,7 @@ class SurfApiService {
      * Open-Meteo Marine API (Fallback actuel par défaut)
      */
     static async getWaveDataFromOpenMeteo(lat, lng) {
-        console.log(`📡 [API-MÉTÉO] Tentative de connexion à Open-Meteo pour les coords: [${lat}, ${lng}]...`);
+
         try {
             const response = await axios.get('https://marine-api.open-meteo.com/v1/marine', {
                 params: {
@@ -33,7 +33,7 @@ class SurfApiService {
             });
 
             const current = response.data.current;
-            console.log(`✅ [API-MÉTÉO] Données Open-Meteo reçues avec succès !`);
+
             return {
                 wave_height: current.wave_height,
                 wave_period: current.wave_period,
@@ -42,7 +42,7 @@ class SurfApiService {
             };
         } catch (error) {
             console.error(`❌ [API-MÉTÉO] Erreur Open-Meteo :`, error.message);
-            console.log(`⚠️ [API-MÉTÉO] Activation des données de secours (Offline Mode) pour éviter le crash.`);
+
             return { wave_height: 1.5, wave_period: 12, wave_direction: 270, is_fallback: true, source: 'offline' };
         }
     }
@@ -54,7 +54,7 @@ class SurfApiService {
     static async getWaveDataFromStormglass(lat, lng) {
         const apiKey = process.env.STORMGLASS_API_KEY;
         if (!apiKey) {
-            console.warn("Clé Stormglass introuvable. Repli sur Open-Meteo.");
+
             return this.getWaveDataFromOpenMeteo(lat, lng);
         }
 

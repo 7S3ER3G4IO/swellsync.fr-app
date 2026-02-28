@@ -1,3 +1,8 @@
+/* SwellSync — Font Display Optimization */
+@font-face {
+  font-display: swap;
+}
+
 /* SwellSync - Base CSS Settings */
 :root {
     --bg-dark: #0a0c10;
@@ -181,7 +186,7 @@ a {
 /* Hero Section */
 .hero {
     position: relative;
-    min-height: 100vh;
+    min-height: 100vh; min-height: 100dvh; height: 100dvh;
     display: flex;
     align-items: center;
     padding-top: 80px;
@@ -348,3 +353,58 @@ a {
 .skeleton-stat { height: 72px; border-radius: 16px; }
 .skeleton-img { min-height: 200px; border-radius: 16px; }
 .skeleton-card { height: 120px; border-radius: 20px; margin-bottom: 12px; }
+
+/* Accessibilité — Désactiver animations si demandé */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* SwellSync — Animations GPU-accelerated uniquement */
+/* Utiliser uniquement transform et opacity dans les animations */
+
+/* Scroll-behavior smooth */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Will-change uniquement sur éléments en cours d'animation */
+.animating {
+  will-change: transform, opacity;
+}
+.animating-done {
+  will-change: auto;
+}
+
+/* Amélioration GPU layers pour les éléments fixed */
+.bottom-nav,
+#toast-container,
+#offline-banner,
+#pwa-install-banner {
+  transform: translateZ(0); /* Force GPU layer */
+  backface-visibility: hidden;
+}
+
+/* Page transitions */
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: fadeInPage 0.2s ease forwards;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

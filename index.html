@@ -491,6 +491,46 @@
             }
         }
     </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MobileApplication",
+      "@id": "https://swellsync.fr/#app",
+      "name": "SwellSync",
+      "description": "Application surf française : prévisions houle en temps réel, tracker GPS de sessions, communauté de surfeurs et alertes personnalisées.",
+      "url": "https://swellsync.fr",
+      "operatingSystem": "iOS, Android",
+      "applicationCategory": "SportsApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "127"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://swellsync.fr/#org",
+      "name": "SwellSync",
+      "url": "https://swellsync.fr",
+      "logo": "https://swellsync.fr/assets/icons/icon-512x512.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "support",
+        "email": "support@swellsync.fr",
+        "availableLanguage": "French"
+      }
+    }
+  ]
+}
+</script>
 </head>
 
 <body>
@@ -509,7 +549,7 @@
             <a href="/site/contact.html">Contact</a>
         </div>
         <a href="/pages/home.html" class="nav-cta"><span class="material-symbols-outlined" style="font-size:17px">open_in_new</span> Ouvrir l'app</a>
-        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
+        <button type="button" class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
     <!-- ═══ HERO ═══ -->
@@ -800,14 +840,14 @@
                 <p>Navigue entre les écrans et vois ce qui t'attend.</p>
             </div>
             <div class="carousel-wrap">
-                <button class="carousel-nav prev" onclick="moveCarousel(-1)">‹</button>
-                <button class="carousel-nav next" onclick="moveCarousel(1)">›</button>
+                <button type="button" class="carousel-nav prev" onclick="moveCarousel(-1)">‹</button>
+                <button type="button" class="carousel-nav next" onclick="moveCarousel(1)">›</button>
                 <div style="overflow:hidden;border-radius:var(--radius)">
                     <div class="carousel-track" id="carouselTrack">
                         <div class="carousel-slide">
                             <div class="car-phone">
                                 <div class="notch"></div><iframe src="/pages/home.html" loading="lazy"
-                                    style="background:#080f1a"></iframe>
+                                    style="background:#080f1a" title="Contenu intégré"></iframe>
                             </div>
                             <div class="carousel-caption">
                                 <div class="section-tag">🏠 Accueil</div>
@@ -820,7 +860,7 @@
                         <div class="carousel-slide">
                             <div class="car-phone">
                                 <div class="notch"></div><iframe src="/pages/spots.html" loading="lazy"
-                                    style="background:#080f1a"></iframe>
+                                    style="background:#080f1a" title="Contenu intégré"></iframe>
                             </div>
                             <div class="carousel-caption">
                                 <div class="section-tag">🗺️ Carte</div>
@@ -833,7 +873,7 @@
                         <div class="carousel-slide">
                             <div class="car-phone">
                                 <div class="notch"></div><iframe src="/pages/alertes.html" loading="lazy"
-                                    style="background:#080f1a"></iframe>
+                                    style="background:#080f1a" title="Contenu intégré"></iframe>
                             </div>
                             <div class="carousel-caption">
                                 <div class="section-tag">🔔 Alertes</div>
@@ -845,7 +885,7 @@
                         <div class="carousel-slide">
                             <div class="car-phone">
                                 <div class="notch"></div><iframe src="/pages/communaute.html" loading="lazy"
-                                    style="background:#080f1a"></iframe>
+                                    style="background:#080f1a" title="Contenu intégré"></iframe>
                             </div>
                             <div class="carousel-caption">
                                 <div class="section-tag">👥 Communauté</div>
@@ -857,7 +897,7 @@
                         <div class="carousel-slide">
                             <div class="car-phone">
                                 <div class="notch"></div><iframe src="/pages/profil.html" loading="lazy"
-                                    style="background:#080f1a"></iframe>
+                                    style="background:#080f1a" title="Contenu intégré"></iframe>
                             </div>
                             <div class="carousel-caption">
                                 <div class="section-tag">👤 Profil</div>
@@ -1161,7 +1201,7 @@
                         <li>Sélectionne "Sur l'écran d'accueil"</li>
                         <li>Appuie "Ajouter" ✅</li>
                     </ol>
-                    <button onclick="showIosInstall()" class="btn-outline" style="margin-top:20px">Voir le
+                    <button type="button" onclick="showIosInstall()" class="btn-outline" style="margin-top:20px">Voir le
                         tutoriel</button>
                 </div>
             </div>
@@ -1179,7 +1219,7 @@
             <div class="cta-buttons">
                 <a href="/pages/home.html" class="btn-primary" style="font-size:16px;padding:16px 44px"
                    ><span class="material-symbols-outlined">download</span> Télécharger SwellSync</a>
-                <button onclick="showIosInstall()" class="btn-outline" style="font-size:16px;padding:16px 30px">🍎
+                <button type="button" onclick="showIosInstall()" class="btn-outline" style="font-size:16px;padding:16px 30px">🍎
                     Installation iPhone</button>
             </div>
             <div class="cta-tags mt-24">
@@ -1224,7 +1264,7 @@
     </footer>
 
     <!-- BACK TO TOP -->
-    <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span
+    <button type="button" class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span
             class="material-symbols-outlined">arrow_upward</span></button>
 
     <!-- COOKIE BANNER -->
@@ -1232,8 +1272,8 @@
         <p>🍪 Ce site utilise des cookies pour améliorer votre expérience. <a href="/privacy.html">En savoir plus</a>
         </p>
         <div class="cookie-btns">
-            <button class="cookie-btn accept" onclick="acceptCookies()">Accepter</button>
-            <button class="cookie-btn reject" onclick="rejectCookies()">Refuser</button>
+            <button type="button" class="cookie-btn accept" onclick="acceptCookies()">Accepter</button>
+            <button type="button" class="cookie-btn reject" onclick="rejectCookies()">Refuser</button>
         </div>
     </div>
 
@@ -1270,7 +1310,7 @@
             const steps = isIos && isSafari ? [{ icon: '⬆️', title: 'Appuie sur Partager', desc: 'Le bouton carré avec flèche en bas de Safari' }, { icon: '➕', title: '"Sur l\'écran d\'accueil"', desc: 'Fais défiler et appuie sur cette option' }, { icon: '✅', title: 'Appuie "Ajouter"', desc: 'L\'app apparaît sur ton écran d\'accueil !' }] : [{ icon: '🧭', title: 'Ouvre Safari', desc: 'L\'installation ne fonctionne que depuis Safari iPhone' }, { icon: '🔗', title: 'Va sur swellsync.fr', desc: 'Tape l\'adresse dans la barre Safari' }, { icon: '⬆️', title: 'Partager → Écran d\'accueil', desc: 'SwellSync s\'installe comme une vraie app !' }];
             const m = document.createElement('div');
             m.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(8px)';
-            m.innerHTML = `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:32px 28px;max-width:380px;width:90%;box-shadow:var(--shadow-lg)"><div style="text-align:center;margin-bottom:24px"><div style="width:64px;height:64px;border-radius:16px;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px">🍎</div><h3 style="font-size:1.2rem;margin:0 0 6px">Installer SwellSync</h3><p style="color:var(--text3);font-size:13px;margin:0">3 étapes simples, 10 secondes ⚡</p></div>${steps.map((s, i) => `<div style="display:flex;align-items:center;gap:16px;padding:14px 0;${i < 2 ? 'border-bottom:1px solid var(--border2)' : ''}"><div style="width:44px;height:44px;border-radius:12px;background:rgba(0,150,199,.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${s.icon}</div><div><p style="font-weight:700;font-size:14px;margin:0 0 2px;color:var(--text)">${s.title}</p><p style="color:var(--text3);font-size:12px;margin:0">${s.desc}</p></div></div>`).join('')}<button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:14px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:800;font-size:15px;border:none;margin-top:20px;cursor:pointer">👍 Compris !</button></div>`;
+            m.innerHTML = `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:32px 28px;max-width:380px;width:90%;box-shadow:var(--shadow-lg)"><div style="text-align:center;margin-bottom:24px"><div style="width:64px;height:64px;border-radius:16px;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px">🍎</div><h3 style="font-size:1.2rem;margin:0 0 6px">Installer SwellSync</h3><p style="color:var(--text3);font-size:13px;margin:0">3 étapes simples, 10 secondes ⚡</p></div>${steps.map((s, i) => `<div style="display:flex;align-items:center;gap:16px;padding:14px 0;${i < 2 ? 'border-bottom:1px solid var(--border2)' : ''}"><div style="width:44px;height:44px;border-radius:12px;background:rgba(0,150,199,.1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${s.icon}</div><div><p style="font-weight:700;font-size:14px;margin:0 0 2px;color:var(--text)">${s.title}</p><p style="color:var(--text3);font-size:12px;margin:0">${s.desc}</p></div></div>`).join('')}<button type="button" onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:14px;border-radius:var(--radius-full);background:var(--gradient);color:#fff;font-weight:800;font-size:15px;border:none;margin-top:20px;cursor:pointer">👍 Compris !</button></div>`;
             document.body.appendChild(m);
             m.addEventListener('click', e => { if (e.target === m) m.remove(); });
         }

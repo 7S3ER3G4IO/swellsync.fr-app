@@ -147,6 +147,7 @@
 </head>
 
 <body class="min-h-screen pb-10">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header
@@ -225,16 +226,16 @@
 
             <div>
                 <div class="field-label">Email</div>
-                <input type="email" id="fieldEmail" class="field-input" placeholder="ton@email.com" />
+                <input type="email" id="fieldEmail" class="field-input" placeholder="ton@email.com" / autocomplete="email">
             </div>
         </div>
 
         <!-- Save Button -->
-        <button id="saveBtn" class="save-btn" onclick="saveProfile()">
+        <button type="button" id="saveBtn" class="save-btn" onclick="saveProfile()">
             <span id="saveBtnText">✅ Sauvegarder les modifications</span>
         </button>
 
-        <button onclick="history.back()" class="w-full py-3 text-slate-500 text-sm font-semibold">Annuler</button>
+        <button type="button" onclick="history.back()" class="w-full py-3 text-slate-500 text-sm font-semibold">Annuler</button>
 
     </div>
 
@@ -410,6 +411,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

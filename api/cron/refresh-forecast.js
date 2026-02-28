@@ -132,11 +132,9 @@ export default async function handler(req, res) {
         }
     }
 
-    console.log(`🕒 [Cron] Démarrage refresh — ${clusters.size} clusters pour ${SPOTS.length} spots`);
-
     for (const [, cluster] of clusters) {
         if (sgRequestCount >= MAX_REQUESTS_PER_RUN) {
-            console.warn(`⚠️ [Cron] Limite de ${MAX_REQUESTS_PER_RUN} requêtes atteinte, arrêt.`);
+
             break;
         }
 
@@ -155,7 +153,7 @@ export default async function handler(req, res) {
                 continue; // déjà frais, on skip
             }
         } catch (e) {
-            console.warn(`⚠️ [Cron] Check cache raté pour ${cacheKey} :`, e.message);
+
         }
 
         // Appel StormGlass
@@ -196,7 +194,7 @@ export default async function handler(req, res) {
                 throw new Error('HTTP ' + sgRes.status);
             }
         } catch (sgErr) {
-            console.warn(`⚠️ [StormGlass] ${cluster.name}: ${sgErr.message} → Open-Meteo`);
+
             // Fallback Open-Meteo
             try {
                 const omUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_period,wave_direction,wind_wave_height,wind_wave_period&forecast_days=7&timezone=auto`;
@@ -330,17 +328,17 @@ export default async function handler(req, res) {
                         });
                         alertsFired++;
                     } catch (pushErr) {
-                        console.warn(`⚠️ Push failed for user ${alert.user_id}:`, pushErr.message);
+
                     }
                 }
             }
         }
-        console.log(`🔔 [Alerts] ${alertsFired} notifications envoyées`);
+
     } catch (alertErr) {
-        console.warn('⚠️ [Alerts] Vérification échouée:', alertErr.message);
+
     }
 
     summary.alerts_fired = alertsFired;
-    console.log('✅ [Cron] Terminé :', JSON.stringify(summary));
+
     return res.status(200).json(summary);
 }

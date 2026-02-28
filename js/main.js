@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function loadLiveSpotData() {
     try {
-        console.log("Demande des conditions au serveur Backend...");
 
         // Appelle notre API globale qui s'occupe de la DB, Open-Meteo, et l'IA
         const spotData = await api.fetchAPI('/spots/1');
@@ -111,7 +110,7 @@ let swellMap = null;
 
 async function initSurfMap() {
     try {
-        console.log("Initialisation de la carte interactive globale...");
+
         // 1. Initialiser la carte sans bandeau de droits d'auteur
         swellMap = L.map('surf-map', {
             attributionControl: false

@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0" name="viewport" />
-    <title>SwellSync - Mes Alertes</title>
+    <title>Mes alertes houle — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Alertes Houle">
     <meta property="og:description" content="Alertes personnalisées de conditions de surf.">
@@ -166,9 +166,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/alerts.html">
 </head>
 
 <body class="bg-[#000] font-display text-slate-100 flex flex-col">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-[#00bad6]/10">
         <div class="flex items-center gap-3">
@@ -191,7 +193,7 @@
 
     <!-- FAB Ajouter -->
     <div class="fixed bottom-24 right-6 z-30" id="alertsFab">
-        <button onclick="openModal()"
+        <button type="button" onclick="openModal()"
             class="bg-[#00bad6] glow-primary text-[#000] w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all font-bold">
             <span class="material-symbols-outlined">add</span>
         </button>
@@ -225,9 +227,9 @@
             </div>
 
             <div class="flex gap-3 pt-2">
-                <button onclick="closeModal()"
+                <button type="button" onclick="closeModal()"
                     class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 font-semibold hover:bg-slate-800 transition-colors">Annuler</button>
-                <button onclick="createAlert()"
+                <button type="button" onclick="createAlert()"
                     class="flex-1 py-3 rounded-xl bg-[#00bad6] text-[#000] font-bold hover:opacity-90 transition-opacity active:scale-95 transition-transform">Créer</button>
             </div>
         </div>
@@ -308,7 +310,7 @@
           <input type="checkbox" class="sr-only peer" ${a.active ? 'checked' : ''} onchange="toggleAlert(${a.id}, this.checked)"/>
           <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00bad6] active:scale-95 transition-transform"></div>
         </label>
-        <button onclick="deleteAlert(${a.id})" class="text-red-400/60 hover:text-red-400 transition-colors">
+        <button type="button" onclick="deleteAlert(${a.id})" class="text-red-400/60 hover:text-red-400 transition-colors">
           <span class="material-symbols-outlined text-sm">delete</span>
         </button>
       </div>
@@ -393,6 +395,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

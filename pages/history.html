@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>SwellSync — Historique d'activité</title>
+    <title>Historique sessions — SwellSync</title>
     <meta name="description" content="SwellSync — Historique de vos activités et sessions de surf.">
     <script src="https://cdn.tailwindcss.com"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -175,9 +175,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/history.html">
 </head>
 
 <body class="min-h-screen pb-20">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header
@@ -195,10 +197,10 @@
 
     <!-- Tabs -->
     <div class="flex border-b border-white/5">
-        <button class="tab-btn active" id="tabLikes" onclick="switchTab('likes')">❤️ Likes</button>
-        <button class="tab-btn" id="tabSessions" onclick="switchTab('sessions')">🏄 Sessions</button>
-        <button class="tab-btn" id="tabFollows" onclick="switchTab('follows')">👥 Abonnements</button>
-        <button class="tab-btn" id="tabVues" onclick="switchTab('vues')">👁️ Vus</button>
+        <button type="button" class="tab-btn active" id="tabLikes" onclick="switchTab('likes')">❤️ Likes</button>
+        <button type="button" class="tab-btn" id="tabSessions" onclick="switchTab('sessions')">🏄 Sessions</button>
+        <button type="button" class="tab-btn" id="tabFollows" onclick="switchTab('follows')">👥 Abonnements</button>
+        <button type="button" class="tab-btn" id="tabVues" onclick="switchTab('vues')">👁️ Vus</button>
     </div>
 
     <!-- Stats -->
@@ -397,6 +399,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

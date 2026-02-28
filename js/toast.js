@@ -1,53 +1,78 @@
 /**
- * SwellSync - Toast Notification System
- * Affiche des notifications (succès, erreurs) de façon asynchrone et premium.
+ * SwellSync — Système de Toast amélioré
+ * Accessible (aria-live), auto-dismiss, types multiples
  */
-class ToastSystem {
-    constructor() {
-        this.container = document.createElement('div');
-        this.container.className = 'toast-container';
-        document.body.appendChild(this.container);
-    }
 
-    /**
-     * Affiche un toast.
-     * @param {string} message Le texte à afficher
-     * @param {string} type 'success' ou 'error'
-     * @param {number} duration Durée en millisecondes
-     */
-    show(message, type = 'success', duration = 3000) {
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
+let toastContainer = null;
 
-        // Icône basée sur le type
-        const icon = type === 'success'
-            ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
-            : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-
-        toast.innerHTML = `
-            ${icon}
-            <span>${message}</span>
-        `;
-
-        this.container.appendChild(toast);
-
-        // Animation d'entrée
-        requestAnimationFrame(() => {
-            toast.classList.add('show');
-        });
-
-        // Retrait du toast
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                if (toast.parentNode === this.container) {
-                    this.container.removeChild(toast);
-                }
-            }, 400); // Wait for transition CSS (fade out + translation) to complete
-        }, duration);
-    }
+function getToastContainer() {
+  if (!toastContainer) {
+    toastContainer = document.createElement('div');
+    toastContainer.id = 'toast-container';
+    toastContainer.setAttribute('aria-live', 'polite');
+    toastContainer.setAttribute('aria-atomic', 'false');
+    toastContainer.style.cssText = `
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+      pointer-events: none; width: min(calc(100% - 32px), 360px);
+    `;
+    document.body.appendChild(toastContainer);
+  }
+  return toastContainer;
 }
 
-// Instance globale : utilisable partout (`Toast.show("Bonjour")`)
-const Toast = new ToastSystem();
-window.Toast = Toast;
+function showToast(message, type = 'info', duration = 3500) {
+  const container = getToastContainer();
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  const colors = {
+    success: '#10b981', error: '#ef4444', warning: '#f59e0b', info: '#3b82f6'
+  };
+
+  const toast = document.createElement('div');
+  toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+  toast.style.cssText = `
+    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px);
+    border: 1px solid ${colors[type]}40; border-left: 4px solid ${colors[type]};
+    color: #f1f5f9; padding: 12px 16px; border-radius: 12px;
+    display: flex; align-items: center; gap: 10px; font-size: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3); pointer-events: all;
+    animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    cursor: pointer;
+  `;
+  toast.innerHTML = `<span style="font-size:18px">${icons[type]}</span><span style="flex:1">${message}</span>`;
+  toast.addEventListener('click', () => dismissToast(toast));
+  container.appendChild(toast);
+
+  const timer = setTimeout(() => dismissToast(toast), duration);
+  toast._dismissTimer = timer;
+
+  // Injecter le style d'animation si absent
+  if (!document.getElementById('toast-styles')) {
+    const style = document.createElement('style');
+    style.id = 'toast-styles';
+    style.textContent = `
+      @keyframes toastIn { from { opacity:0; transform:translateY(20px) scale(.9); } to { opacity:1; transform:translateY(0) scale(1); } }
+      @keyframes toastOut { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(10px); } }
+    `;
+    document.head.appendChild(style);
+  }
+
+  return toast;
+}
+
+function dismissToast(toast) {
+  clearTimeout(toast._dismissTimer);
+  toast.style.animation = 'toastOut 0.25s ease forwards';
+  setTimeout(() => toast.remove(), 250);
+}
+
+// Convenience methods
+const toast = {
+  success: (msg, d) => showToast(msg, 'success', d),
+  error: (msg, d) => showToast(msg, 'error', d || 5000),
+  warning: (msg, d) => showToast(msg, 'warning', d),
+  info: (msg, d) => showToast(msg, 'info', d),
+};
+
+window.showToast = showToast;
+window.toast = toast;

@@ -2,6 +2,10 @@
 <html class="dark" lang="en">
 
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://bxudysseskfpmlpagoid.supabase.co">
+  <link rel="dns-prefetch" href="https://plausible.io">
     <meta charset="utf-8" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -182,7 +186,7 @@
                     <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="spot_detail.html">Conditions</a>
                     <a class="nav-link px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all" href="actu.html">Actualités</a>
                     <div class="relative" id="nav-plus-wrapper">
-                        <button class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1" id="nav-plus-btn">
+                        <button type="button" class="px-4 py-2 rounded-lg text-[13px] font-semibold text-primary hover:bg-primary/10 transition-all flex items-center gap-1" id="nav-plus-btn">
                             Plus
                             <svg class="w-3.5 h-3.5 transition-transform duration-200" id="nav-plus-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -191,19 +195,19 @@
 
                 <!-- Right: Auth -->
                 <div class="flex items-center gap-3 shrink-0">
-                    <button
+                    <button type="button"
                         class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
                         id="btn-login" onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
                         <span class="material-symbols-outlined text-[18px]" id="btn-login-avatar">person</span>
                         <span id="nav-login-text">Connexion</span>
                         <div class="w-2 h-2 rounded-full bg-red-500 shrink-0" id="login-status-icon"></div>
                     </button>
-                    <button
+                    <button type="button"
                         class="hidden md:flex bg-primary text-[#0a1516] font-bold text-[13px] px-5 py-2.5 rounded-full hover:brightness-110 hover:scale-[1.03] active:scale-[0.97] transition-all"
                         onclick="typeof openAuthOrProfileModal!=='undefined'&&openAuthOrProfileModal()">
                         S'inscrire
                     </button>
-                    <button
+                    <button type="button"
                         class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white md:hidden"
                         id="mobile-menu-btn">
                         <span class="material-symbols-outlined text-[20px]">menu</span>
@@ -251,9 +255,9 @@
                         </div>
                         <div class="w-px h-4 bg-white/10"></div>
                         <div class="flex items-center gap-3">
-                            <button
+                            <button type="button"
                                 class="text-[10px] font-bold text-primary hover:text-white transition-colors uppercase tracking-widest">REGIONS</button>
-                            <button
+                            <button type="button"
                                 class="text-[10px] font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">LAYERS</button>
                         </div>
                     </div>
@@ -270,7 +274,7 @@
                             oninput="applyDistanceFilter(this.value)" title="Filtrer par distance">
                         <span style="font-size:11px;font-weight:900;color:#00bad6;min-width:50px;"
                             id="geo-dist-val">Tout</span>
-                        <button onclick="resetDistanceFilter()"
+                        <button type="button" onclick="resetDistanceFilter()"
                             style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#64748b;font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;cursor:pointer;transition:all 0.2s;"
                             onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#64748b'">✕
                             Reset</button>
@@ -336,7 +340,7 @@
                                 <h3 class="font-black tracking-widest text-white uppercase text-lg">NOS 60 SPOTS</h3>
                             </div>
                             <div class="flex items-center gap-4">
-                                <button
+                                <button type="button"
                                     class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 text-[10px] font-bold text-primary tracking-widest uppercase bg-primary/5">
                                     <span class="material-symbols-outlined text-[14px]">swipe_up</span> DÉFILER
                                 </button>
@@ -606,7 +610,7 @@
                                                                 <h3 style="margin:0;font-size:13px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:0.1em;">${spot.name.split(',')[0]}</h3>
                                                                 <p style="margin:2px 0 0;font-size:9px;color:#64748b;">${spot.location || ''}</p>
                                                             </div>
-                                                            <button id="${favId}" onclick="event.stopPropagation();addFavFromMap(${spot.id},'${spot.name.split(',')[0].replace(/'/g, "\\'")}',this)" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" title="Favori">
+                                                            <button type="button" id="${favId}" onclick="event.stopPropagation();addFavFromMap(${spot.id},'${spot.name.split(',')[0].replace(/'/g, "\\'")}',this)" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" title="Favori">
                                                                 <i class="fa-regular fa-heart" style="color:rgba(255,255,255,0.3);font-size:13px;"></i>
                                                             </button>
                                                         </div>
@@ -626,7 +630,7 @@
                                                                 <p style="margin:4px 0;font-weight:900;font-size:10px;color:${scoreColor};">${statusText.split(' ')[0]}</p>
                                                             </div>
                                                         </div>
-                                                        <button onclick="window.location.href='/spot_detail.html?id=${spot.id}'" style="width:100%;padding:10px;background:rgba(0,186,214,0.1);border:1px solid rgba(0,186,214,0.3);color:#00bad6;border-radius:10px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#00bad6';this.style.color='#070f10';" onmouseout="this.style.background='rgba(0,186,214,0.1)';this.style.color='#00bad6';">
+                                                        <button type="button" onclick="window.location.href='/spot_detail.html?id=${spot.id}'" style="width:100%;padding:10px;background:rgba(0,186,214,0.1);border:1px solid rgba(0,186,214,0.3);color:#00bad6;border-radius:10px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#00bad6';this.style.color='#070f10';" onmouseout="this.style.background='rgba(0,186,214,0.1)';this.style.color='#00bad6';">
                                                             📊 Conditions Complètes →
                                                         </button>
                                                     </div>
@@ -797,7 +801,7 @@
 
                         <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                             <!-- Apple App Store Button -->
-                            <button
+                            <button type="button"
                                 class="flex items-center gap-3 bg-white hover:bg-slate-100 text-black px-6 py-3 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-[0_10px_30px_rgba(255,255,255,0.1)] w-full sm:w-auto"
                                 onclick="installApplePWA()">
                                 <span class="text-3xl"><i class="fa-brands fa-apple"></i></span>
@@ -810,7 +814,7 @@
                             </button>
 
                             <!-- Google Play Button -->
-                            <button
+                            <button type="button"
                                 class="flex items-center gap-3 bg-transparent border border-white/20 hover:border-primary/50 hover:bg-white/5 px-6 py-3 rounded-2xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto"
                                 onclick="installAndroidPWA()">
                                 <span class="text-3xl text-primary"><i class="fa-brands fa-google-play"></i></span>
@@ -1012,7 +1016,7 @@
                                 Analyse
                                 Prévision Avancée 15 Jours</li>
                         </ul>
-                        <button
+                        <button type="button"
                             class="mt-4 bg-background-dark text-white font-black uppercase tracking-widest px-6 py-3 rounded-full hover:bg-white hover:text-background-dark transition-colors border border-transparent hover:border-white w-full"
                             onclick="Toast.show('Ouverture de la fenêtre d\'Abonnement... 💎', 'info')">
                             Obtenir Premium
@@ -1091,7 +1095,7 @@
                 <form class="w-full max-w-md flex flex-col sm:flex-row gap-3"
                     onsubmit="event.preventDefault(); Toast.show('Bienvenue dans la communauté ! Vous recevrez bientôt notre premier rapport. 🌊', 'success')">
                     <input type="email" data-i18n-placeholder="contact.email_placeholder" placeholder="votre@email.com" required
-                        class="flex-1 bg-white/10 border border-background-dark/20 text-background-dark placeholder-background-dark/50 px-5 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-background-dark focus:bg-white/20 transition-all font-bold">
+                        class="flex-1 bg-white/10 border border-background-dark/20 text-background-dark placeholder-background-dark/50 px-5 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-background-dark focus:bg-white/20 transition-all font-bold" autocomplete="email">
                     <button type="submit"
                         class="bg-background-dark text-white font-black uppercase tracking-widest px-8 py-4 rounded-xl hover:bg-slate-800 transition-colors shadow-xl hover:-translate-y-1">
                         S'Abonner
@@ -1241,15 +1245,15 @@
                     <!-- Colonne 3 : Légal -->
                     <div class="flex flex-col gap-4">
                         <h4 class="text-white font-bold uppercase tracking-widest text-sm mb-2">Légal</h4>
-                        <button onclick="openLegalModal('cgv')"
+                        <button type="button" onclick="openLegalModal('cgv')"
                             class="text-left text-sm hover:text-primary transition-colors">Conditions Générales
                             (CGV)</button>
-                        <button onclick="openLegalModal('privacy')"
+                        <button type="button" onclick="openLegalModal('privacy')"
                             class="text-left text-sm hover:text-primary transition-colors">Politique de
                             Confidentialité</button>
-                        <button onclick="openLegalModal('legal')"
+                        <button type="button" onclick="openLegalModal('legal')"
                             class="text-left text-sm hover:text-primary transition-colors" data-i18n="legal.title">Mentions Légales</button>
-                        <button onclick="openLegalModal('cookies')"
+                        <button type="button" onclick="openLegalModal('cookies')"
                             class="text-left text-sm hover:text-primary transition-colors">Gérer mes Cookies</button>
                     </div>
                     <!-- Colonne 4 : Support -->
@@ -1282,7 +1286,7 @@
             <div id="auth-modal-container"
                 class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-md relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col items-center">
 
-                <button onclick="closeAuthModal()"
+                <button type="button" onclick="closeAuthModal()"
                     class="absolute top-6 right-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white z-20">
                     <span class="material-symbols-outlined text-lg">close</span>
                 </button>
@@ -1309,7 +1313,7 @@
                     </div>
 
                     <!-- Option 2: Google Sign In -->
-                    <button onclick="triggerGoogleAuth()"
+                    <button type="button" onclick="triggerGoogleAuth()"
                         class="w-full bg-white text-black border border-white/20 font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-200 transition-colors focus:outline-none shadow-md cursor-pointer">
                         <i class="fa-brands fa-google text-xl text-blue-500"></i>
                         Continuer avec Google
@@ -1326,7 +1330,7 @@
                             <span
                                 class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">mail</span>
                             <input type="email" id="auth-identifier" placeholder="Votre Adresse Email" required
-                                class="w-full bg-white/5 border border-white/10 text-white placeholder-slate-500 pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-medium text-sm">
+                                class="w-full bg-white/5 border border-white/10 text-white placeholder-slate-500 pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-medium text-sm" autocomplete="email">
                         </div>
                         <button type="submit"
                             class="w-full bg-primary text-background-dark font-black py-4 rounded-xl hover:bg-white transition-colors uppercase tracking-widest mt-2 shadow-[0_10px_20px_rgba(0,186,214,0.3)]">
@@ -1386,7 +1390,7 @@
             class="fixed inset-0 bg-background-dark/90 backdrop-blur-md z-[115] hidden items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-300">
             <div id="profile-modal-container"
                 class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-md relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col">
-                <button onclick="closeProfileModal()"
+                <button type="button" onclick="closeProfileModal()"
                     class="absolute top-6 right-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white z-20">
                     <span class="material-symbols-outlined text-lg">close</span>
                 </button>
@@ -1408,7 +1412,7 @@
                 </div>
 
                 <div id="profile-main-menu" class="p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
-                    <button onclick="showProfileFavorites()"
+                    <button type="button" onclick="showProfileFavorites()"
                         class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-slate-400">favorite</span>
@@ -1416,7 +1420,7 @@
                         </div>
                         <span class="material-symbols-outlined text-slate-500">chevron_right</span>
                     </button>
-                    <button onclick="showProfileAlerts()"
+                    <button type="button" onclick="showProfileAlerts()"
                         class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors group">
                         <div class="flex items-center gap-3">
                             <span
@@ -1425,7 +1429,7 @@
                         </div>
                         <span class="material-symbols-outlined text-slate-500">chevron_right</span>
                     </button>
-                    <button onclick="showProfileAIPrefs()"
+                    <button type="button" onclick="showProfileAIPrefs()"
                         class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-xl flex items-center justify-between px-6 transition-colors">
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-slate-400">settings</span>
@@ -1434,7 +1438,7 @@
                         <span class="material-symbols-outlined text-slate-500">chevron_right</span>
                     </button>
 
-                    <button onclick="logoutProfile()"
+                    <button type="button" onclick="logoutProfile()"
                         class="w-full mt-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-black py-4 rounded-xl transition-colors uppercase tracking-widest text-sm">
                         Déconnexion
                     </button>
@@ -1444,7 +1448,7 @@
                 <div id="profile-favorites-view"
                     class="hidden p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
                     <div class="flex items-center mb-4">
-                        <button onclick="hideProfileViews()"
+                        <button type="button" onclick="hideProfileViews()"
                             class="text-slate-400 hover:text-white transition-colors flex items-center mr-3">
                             <span class="material-symbols-outlined">arrow_back</span>
                         </button>
@@ -1481,7 +1485,7 @@
                 <!-- View: AI Prefs -->
                 <div id="profile-ai-view" class="hidden p-8 w-full flex flex-col gap-3 mt-4 border-t border-white/5">
                     <div class="flex items-center mb-4">
-                        <button onclick="hideProfileViews()"
+                        <button type="button" onclick="hideProfileViews()"
                             class="text-slate-400 hover:text-white transition-colors flex items-center mr-3">
                             <span class="material-symbols-outlined">arrow_back</span>
                         </button>
@@ -1521,7 +1525,7 @@
                 class="bg-background-dark border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-full overflow-y-auto custom-scrollbar relative transform scale-95 transition-transform duration-300 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col">
                 <div
                     class="w-full flex justify-end p-6 border-b border-white/5 sticky top-0 bg-background-dark/90 backdrop-blur z-20">
-                    <button onclick="closeLegalModal()"
+                    <button type="button" onclick="closeLegalModal()"
                         class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors text-white">
                         <span class="material-symbols-outlined">close</span>
                     </button>
@@ -1546,7 +1550,7 @@
                     <input type="text" id="global-search-input"
                         class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg md:text-xl font-medium placeholder-white/30"
                         placeholder="Chercher un spot, une page, une info..." autocomplete="off">
-                    <button onclick="closeGlobalSearchModal()"
+                    <button type="button" onclick="closeGlobalSearchModal()"
                         class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-xl">close</span>
                     </button>

@@ -1,81 +1,97 @@
 {
-    "name": "SwellSync",
-    "short_name": "SwellSync",
-    "description": "Prévisions surf en temps réel — spots, houle & communauté.",
-    "id": "swellsync-app",
-    "start_url": "/pages/home.html",
-    "scope": "/",
-    "display": "standalone",
-    "display_override": [
-        "standalone",
-        "minimal-ui"
-    ],
-    "orientation": "portrait",
-    "lang": "fr",
-    "background_color": "#080f1a",
-    "theme_color": "#00bad6",
-    "categories": [
-        "sports",
-        "weather",
-        "lifestyle"
-    ],
-    "icons": [
+  "name": "SwellSync",
+  "short_name": "SwellSync",
+  "description": "Prévisions surf en temps réel — spots, houle & communauté.",
+  "id": "swellsync-app",
+  "start_url": "/pages/home.html?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "lang": "fr",
+  "background_color": "#080f1a",
+  "theme_color": "#00bad6",
+  "categories": [
+    "sports",
+    "weather",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/assets/images/swellsync_logo.png?v=3",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/swellsync_logo.png?v=3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/swellsync_logo.png?v=3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Carte des Spots",
+      "short_name": "Spots",
+      "description": "Carte interactive des spots de surf",
+      "url": "/pages/map.html",
+      "icons": [
         {
-            "src": "/assets/images/swellsync_logo.png?v=3",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/assets/images/swellsync_logo.png?v=3",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/assets/images/swellsync_logo.png?v=3",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+          "src": "/assets/images/swellsync_logo.png?v=3",
+          "sizes": "96x96"
         }
-    ],
-    "prefer_related_applications": false,
-    "shortcuts": [
+      ]
+    },
+    {
+      "name": "Communauté",
+      "short_name": "Commu",
+      "description": "Feed communautaire surf",
+      "url": "/pages/community.html",
+      "icons": [
         {
-            "name": "Carte des Spots",
-            "short_name": "Spots",
-            "description": "Carte interactive des spots de surf",
-            "url": "/pages/map.html",
-            "icons": [
-                {
-                    "src": "/assets/images/swellsync_logo.png?v=3",
-                    "sizes": "96x96"
-                }
-            ]
-        },
-        {
-            "name": "Communauté",
-            "short_name": "Commu",
-            "description": "Feed communautaire surf",
-            "url": "/pages/community.html",
-            "icons": [
-                {
-                    "src": "/assets/images/swellsync_logo.png?v=3",
-                    "sizes": "96x96"
-                }
-            ]
-        },
-        {
-            "name": "Alertes Houle",
-            "short_name": "Alertes",
-            "description": "Gérer tes alertes de conditions",
-            "url": "/pages/alerts.html",
-            "icons": [
-                {
-                    "src": "/assets/images/swellsync_logo.png?v=3",
-                    "sizes": "96x96"
-                }
-            ]
+          "src": "/assets/images/swellsync_logo.png?v=3",
+          "sizes": "96x96"
         }
-    ]
+      ]
+    },
+    {
+      "name": "Alertes Houle",
+      "short_name": "Alertes",
+      "description": "Gérer tes alertes de conditions",
+      "url": "/pages/alerts.html",
+      "icons": [
+        {
+          "src": "/assets/images/swellsync_logo.png?v=3",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/screenshots/home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "SwellSync — Prévisions surf"
+    },
+    {
+      "src": "/assets/screenshots/community.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "SwellSync — Communauté surf"
+    }
+  ]
 }

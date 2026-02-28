@@ -520,6 +520,7 @@
 </head>
 
 <body class="font-display pb-24">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header class="hdr sticky top-0 z-30 px-4 py-3">
@@ -543,10 +544,10 @@
 
     <!-- Pull to refresh -->
     <div class="ptr-container" id="ptr">
-        <div class="ptr-spinner"></div>
+        <div class="ptr-spinner" role="status" aria-label="Chargement en cours"></div>
     </div>
 
-    <main class="px-4 py-3 space-y-5 max-w-lg mx-auto page-enter">
+    <main id="main-content" class="px-4 py-3 space-y-5 max-w-lg mx-auto page-enter">
 
         <!-- Stories Row -->
         <div class="flex gap-3 overflow-x-auto no-scrollbar py-1" id="storiesRow">
@@ -570,10 +571,10 @@
             <!-- Header -->
             <div class="flex items-center justify-between px-4 py-3"
                 style="border-bottom:1px solid rgba(0,186,214,0.1)">
-                <button onclick="closeCreateStory()"
+                <button type="button" onclick="closeCreateStory()"
                     style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer;font-family:inherit;font-weight:600">Annuler</button>
                 <h2 class="font-bold text-base">Nouvelle Story</h2>
-                <button onclick="publishStory()"
+                <button type="button" onclick="publishStory()"
                     style="background:none;border:none;color:#00bad6;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700">Publier</button>
             </div>
             <!-- Camera / Gallery -->
@@ -740,7 +741,7 @@
             <div class="card rounded-2xl overflow-hidden" style="border:1px solid rgba(0,186,214,0.15)">
                 <iframe
                     src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricWind=km/h&zoom=5&overlay=wind&product=ecmwf&level=surface&lat=46.0&lon=-1.5&message=true"
-                    style="width:100%;height:220px;border:none;border-radius:14px" loading="lazy" allowfullscreen>
+                    style="width:100%;height:220px;border:none;border-radius:14px" loading="lazy" allowfullscreen title="Contenu intégré">
                 </iframe>
                 <div class="px-3 py-2.5 flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -1118,7 +1119,7 @@
                 <p class="sv-user-name" id="svName"></p>
                 <p class="sv-user-time" id="svTime"></p>
             </div>
-            <button class="sv-close" onclick="closeStory()">✕</button>
+            <button type="button" class="sv-close" onclick="closeStory()">✕</button>
         </div>
         <!-- Story image -->
         <div class="story-img" id="storyImage" ondblclick="likeStory(event)">
@@ -1132,8 +1133,8 @@
         <div class="sv-bottom">
             <input class="sv-reply" id="svReply" type="text" placeholder="Envoyer un message..."
                 onkeydown="if(event.key==='Enter')sendReply()">
-            <button class="sv-like-btn" id="svLikeBtn" onclick="toggleLike()" title="J'aime">🤍</button>
-            <button class="sv-send" onclick="sendReply()">
+            <button type="button" class="sv-like-btn" id="svLikeBtn" onclick="toggleLike()" title="J'aime">🤍</button>
+            <button type="button" class="sv-send" onclick="sendReply()">
                 <span class="material-symbols-outlined" style="color:#00bad6;font-size:24px">send</span>
             </button>
         </div>
@@ -1312,7 +1313,7 @@
             reader.onload = e => {
                 capturedPhoto = e.target.result;
                 const preview = document.getElementById('storyPreview');
-                preview.innerHTML = `<img src="${capturedPhoto}" style="width:100%;height:100%;object-fit:cover">`;
+                preview.innerHTML = `<img src="${capturedPhoto}" style="width:100%;height:100%;object-fit:cover" loading="lazy" decoding="async">`;
                 preview.style.border = 'none';
             };
             reader.readAsDataURL(file);
@@ -1590,6 +1591,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

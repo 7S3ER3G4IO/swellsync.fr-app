@@ -654,16 +654,16 @@
 
         <!-- FILTRES PAR CATÉGORIE -->
         <div class="flex flex-wrap gap-2 mb-8" id="cat-filters" style="animation:fadeUp .5s .15s ease both">
-            <button class="cat-btn active" data-cat="all" onclick="filterCat('all',this)">Tout</button>
-            <button class="cat-btn" data-cat="competition" onclick="filterCat('competition',this)">🏆
+            <button type="button" class="cat-btn active" data-cat="all" onclick="filterCat('all',this)">Tout</button>
+            <button type="button" class="cat-btn" data-cat="competition" onclick="filterCat('competition',this)">🏆
                 Compétition</button>
-            <button class="cat-btn" data-cat="spots" onclick="filterCat('spots',this)">🌊 Spots</button>
-            <button class="cat-btn" data-cat="gear" onclick="filterCat('gear',this)">🏄 Équipement</button>
-            <button class="cat-btn" data-cat="environment" onclick="filterCat('environment',this)">🌿
+            <button type="button" class="cat-btn" data-cat="spots" onclick="filterCat('spots',this)">🌊 Spots</button>
+            <button type="button" class="cat-btn" data-cat="gear" onclick="filterCat('gear',this)">🏄 Équipement</button>
+            <button type="button" class="cat-btn" data-cat="environment" onclick="filterCat('environment',this)">🌿
                 Environnement</button>
-            <button class="cat-btn" data-cat="culture" onclick="filterCat('culture',this)">🎥 Culture</button>
-            <button class="cat-btn" data-cat="travel" onclick="filterCat('travel',this)">✈️ Voyage</button>
-            <button class="cat-btn" data-cat="bookmarks" id="bookmarks-tab" onclick="filterCat('bookmarks',this)"
+            <button type="button" class="cat-btn" data-cat="culture" onclick="filterCat('culture',this)">🎥 Culture</button>
+            <button type="button" class="cat-btn" data-cat="travel" onclick="filterCat('travel',this)">✈️ Voyage</button>
+            <button type="button" class="cat-btn" data-cat="bookmarks" id="bookmarks-tab" onclick="filterCat('bookmarks',this)"
                 style="margin-left:auto;border-color:rgba(244,63,94,.3);color:#f87171">
                 🔖 Favoris <span id="bookmark-count-badge"
                     class="ml-1 bg-red-500/20 text-red-400 rounded-full px-1.5 text-[9px] font-black hidden">0</span>
@@ -704,7 +704,7 @@
             </div>
         </div>
         <div class="scroll-sentinel" id="scroll-sentinel" style="display:none">
-            <div class="spinner-ring" id="load-spinner"></div>
+            <div class="spinner-ring" id="load-spinner" role="status" aria-label="Chargement en cours" role="status" aria-label="Chargement en cours"></div>
         </div>
         <div class="mb-12"></div>
 
@@ -718,7 +718,7 @@
                 directement dans votre boîte mail. Aucun spam.</p>
             <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onsubmit="handleNewsletter(event)">
                 <input class="nl-input" type="email" data-i18n-placeholder="contact.email_placeholder"
-                    placeholder="votre@email.com" required />
+                    placeholder="votre@email.com" required / autocomplete="email">
                 <button type="submit" class="btn-primary" style="justify-content:center;white-space:nowrap;">
                     S'abonner
                     <span class="material-symbols-outlined text-[16px]">send</span>
@@ -801,7 +801,7 @@
                 <input type="text" id="global-search-input"
                     class="w-full bg-transparent border-transparent focus:border-transparent outline-none focus:outline-none ring-0 focus:ring-0 text-white text-lg font-medium placeholder-white/30"
                     placeholder="Chercher un spot, une page, une info..." autocomplete="off">
-                <button onclick="closeGlobalSearchModal()"
+                <button type="button" onclick="closeGlobalSearchModal()"
                     class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-xl">close</span>
                 </button>
@@ -832,10 +832,10 @@
                         Lire l'article complet
                         <span class="material-symbols-outlined text-[16px]">open_in_new</span>
                     </a>
-                    <button id="modal-bookmark-btn" onclick="modalToggleBookmark()" class="btn-outline"
+                    <button type="button" id="modal-bookmark-btn" onclick="modalToggleBookmark()" class="btn-outline"
                         style="font-size:13px;padding:12px 22px">
                         <span id="modal-bookmark-icon" data-i18n="common.save">♡</span>>Sauvegarder</button>
-                    <button id="modal-share-btn" onclick="shareArticle()" class="btn-outline"
+                    <button type="button" id="modal-share-btn" onclick="shareArticle()" class="btn-outline"
                         style="font-size:13px;padding:12px 18px;min-width:0" title="Partager l'article">
                         <span class="material-symbols-outlined text-[18px]">share</span>
                     </button>
@@ -1031,7 +1031,7 @@
             <article class="news-card" style="animation-delay:${i * 0.05}s;animation:fadeUp .4s ease both">
                 <div class="img-wrap">
                     <img class="news-img loaded" src="${a.image}" alt="" onerror="this.src=''" / loading="lazy" decoding="async">
-                    <button class="bookmark-btn bookmarked" data-url="${a.url}"
+                    <button type="button" class="bookmark-btn bookmarked" data-url="${a.url}"
                         onclick="removeFromBookmarksView('${encodeURIComponent(a.url)}')">♥</button>
                 </div>
                 <div class="news-body">
@@ -1160,7 +1160,7 @@
                     ${isNew ? '<span class="badge-new">✨ Nouveau</span>' : ''}
                     <img class="news-img" data-src="${a.image}" alt="${a.title.replace(/"/g, '')}" / loading="lazy" decoding="async">
                     <span class="cat-badge">${icon} ${a.cat}</span>
-                    <button class="bookmark-btn${bm ? ' bookmarked' : ''}" data-url="${a.url}"
+                    <button type="button" class="bookmark-btn${bm ? ' bookmarked' : ''}" data-url="${a.url}"
                         onclick="event.stopPropagation();toggleBookmarkCard(event,JSON.parse(this.closest('article').dataset.article))">${bm ? '♥' : '♡'}</button>
                 </div>
                 <div class="news-body">
@@ -1292,7 +1292,7 @@
                     document.getElementById('news-grid').innerHTML = `<div class="col-span-3 text-center py-16 text-slate-500">
                         <p class="text-4xl mb-3">📡</p>
                         <p class="font-bold mb-2">Impossible de charger les actus</p>
-                        <button onclick="loadNews(true)" class="btn-outline mt-4" style="font-size:12px;padding:8px 20px">↻ Réessayer</button>
+                        <button type="button" onclick="loadNews(true)" class="btn-outline mt-4" style="font-size:12px;padding:8px 20px">↻ Réessayer</button>
                     </div>`;
                 }
             }

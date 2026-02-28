@@ -106,6 +106,7 @@
 </head>
 
 <body class="min-h-screen pb-28">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header
@@ -115,13 +116,13 @@
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         </a>
         <h1 class="font-black text-base flex-1" id="headerName">Profil</h1>
-        <button onclick="shareProfile()"
+        <button type="button" onclick="shareProfile()"
             class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
             <span class="material-symbols-outlined text-[18px]">share</span>
         </button>
     </header>
 
-    <main class="max-w-lg mx-auto">
+    <main id="main-content" class="max-w-lg mx-auto">
 
         <!-- Avatar + infos -->
         <section class="px-4 pt-5 pb-4">
@@ -158,16 +159,16 @@
             </div>
             <!-- Boutons action -->
             <div class="flex gap-2 mt-4">
-                <button id="followBtn" onclick="toggleFollow()"
+                <button type="button" id="followBtn" onclick="toggleFollow()"
                     class="flex-1 py-2.5 rounded-xl font-black text-sm text-[#080f1a] transition-all"
                     style="background:linear-gradient(135deg,#00bad6,#0077cc)">
                     + Suivre
                 </button>
-                <button onclick="window.location.href='community.html'"
+                <button type="button" onclick="window.location.href='community.html'"
                     class="flex-1 py-2.5 rounded-xl font-bold text-sm border border-white/15 text-slate-300 transition-all">
                     💬 Message (bientôt)
                 </button>
-                <button onclick="shareProfile()"
+                <button type="button" onclick="shareProfile()"
                     class="w-11 h-10 rounded-xl border border-white/15 flex items-center justify-center text-slate-400">
                     <span class="material-symbols-outlined text-[18px]">more_horiz</span>
                 </button>
@@ -182,11 +183,11 @@
 
         <!-- Tabs posts / sessions -->
         <div class="flex border-t border-white/5 border-b border-white/5 sticky top-[57px] z-30 bg-[#000]">
-            <button onclick="switchTab('posts',this)"
+            <button type="button" onclick="switchTab('posts',this)"
                 class="flex-1 py-3 text-[11px] font-bold text-[#00bad6] border-b-2 border-[#00bad6] tab-btn">
                 <span class="material-symbols-outlined text-[16px] align-middle mr-1">grid_on</span>Posts
             </button>
-            <button onclick="switchTab('sessions',this)"
+            <button type="button" onclick="switchTab('sessions',this)"
                 class="flex-1 py-3 text-[11px] font-bold text-slate-500 border-b-2 border-transparent tab-btn">
                 <span class="material-symbols-outlined text-[16px] align-middle mr-1">surfing</span>Sessions
             </button>
@@ -440,6 +441,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

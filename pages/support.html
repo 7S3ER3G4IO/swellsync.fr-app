@@ -240,6 +240,7 @@
 </head>
 
 <body class="min-h-screen pb-20">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header
@@ -277,11 +278,11 @@
     <!-- Tabs -->
     <div class="px-4 mb-4">
         <div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none">
-            <button class="tab-btn active shrink-0" onclick="switchTab('all',this)">Tous</button>
-            <button class="tab-btn shrink-0" onclick="switchTab('compte',this)">Compte</button>
-            <button class="tab-btn shrink-0" onclick="switchTab('pro',this)">Pro & Paiement</button>
-            <button class="tab-btn shrink-0" onclick="switchTab('surf',this)">Surf & Spots</button>
-            <button class="tab-btn shrink-0" onclick="switchTab('tech',this)">Technique</button>
+            <button type="button" class="tab-btn active shrink-0" onclick="switchTab('all',this)">Tous</button>
+            <button type="button" class="tab-btn shrink-0" onclick="switchTab('compte',this)">Compte</button>
+            <button type="button" class="tab-btn shrink-0" onclick="switchTab('pro',this)">Pro & Paiement</button>
+            <button type="button" class="tab-btn shrink-0" onclick="switchTab('surf',this)">Surf & Spots</button>
+            <button type="button" class="tab-btn shrink-0" onclick="switchTab('tech',this)">Technique</button>
         </div>
     </div>
 
@@ -457,7 +458,7 @@
                         class="text-[10px] font-bold text-slate-500 uppercase tracking-wide block mb-1">Message</label>
                     <textarea id="contactMessage" rows="4" placeholder="Décris ton problème en détail…"></textarea>
                 </div>
-                <button onclick="sendContact()" class="w-full py-3 rounded-2xl font-black text-sm text-[#080f1a]"
+                <button type="button" onclick="sendContact()" class="w-full py-3 rounded-2xl font-black text-sm text-[#080f1a]"
                     style="background:#00bad6">
                     📤 Envoyer le message
                 </button>
@@ -579,6 +580,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

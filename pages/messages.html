@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0" name="viewport" />
-    <title>SwellSync — Messages</title>
+    <title>Messages — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Messages">
     <meta property="og:description" content="Messagerie privée entre surfeurs.">
@@ -222,9 +222,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/messages.html">
 </head>
 
 <body class="pb-24">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- ═══ INBOX VIEW ═══ -->
     <div id="inboxView">
@@ -233,7 +235,7 @@
             class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/92 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
             <a href="home.html" class="material-symbols-outlined text-slate-400 cursor-pointer">chevron_left</a>
             <h1 class="text-xl font-bold flex-1">Messages</h1>
-            <button onclick="openNewDM()"
+            <button type="button" onclick="openNewDM()"
                 class="w-9 h-9 rounded-full bg-[#00bad6]/10 border border-[#00bad6]/30 flex items-center justify-center">
                 <span class="material-symbols-outlined text-[#00bad6] text-[18px]">edit_square</span>
             </button>
@@ -260,7 +262,7 @@
             </div>
             <h3 class="text-lg font-bold mb-1">Aucun message</h3>
             <p class="text-slate-500 text-sm">Envoie un message à un surfeur pour commencer une conversation !</p>
-            <button onclick="openNewDM()"
+            <button type="button" onclick="openNewDM()"
                 class="mt-4 px-6 py-2.5 rounded-xl bg-[#00bad6] text-[#000] font-bold text-sm active:scale-95 transition-transform">
                 Nouveau message
             </button>
@@ -272,7 +274,7 @@
         <!-- Chat Header -->
         <header
             class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/92 border-b border-[#00bad6]/15 px-4 py-3 flex items-center gap-3">
-            <button onclick="closeChat()" class="material-symbols-outlined text-slate-400">arrow_back</button>
+            <button type="button" onclick="closeChat()" class="material-symbols-outlined text-slate-400">arrow_back</button>
             <img loading="lazy" id="chatAvatar" class="w-9 h-9 rounded-full object-cover border border-[#00bad6]/20" src="" alt="">
             <div class="flex-1 min-w-0">
                 <h2 id="chatName" class="font-bold text-sm truncate">—</h2>
@@ -280,7 +282,7 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span> En ligne
                 </p>
             </div>
-            <button onclick="window.location.href='user-profile.html?id=' + currentChatUserId"
+            <button type="button" onclick="window.location.href='user-profile.html?id=' + currentChatUserId"
                 class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400">
                 <span class="material-symbols-outlined text-[16px]">person</span>
             </button>
@@ -294,7 +296,7 @@
             class="fixed bottom-0 left-0 right-0 bg-[#000]/95 backdrop-blur-lg border-t border-white/5 p-3 flex gap-2 items-center z-[61]">
             <input id="msgInput" type="text" class="chat-input" placeholder="Ton message…"
                 onkeydown="if(event.key==='Enter')sendMessage()">
-            <button class="send-btn" onclick="sendMessage()">
+            <button type="button" class="send-btn" onclick="sendMessage()">
                 <span class="material-symbols-outlined text-[20px]">send</span>
             </button>
         </div>
@@ -307,7 +309,7 @@
         <div class="bg-[#111] rounded-3xl w-full max-w-sm border border-[#00bad6]/15 overflow-hidden">
             <div class="p-4 border-b border-white/5 flex items-center justify-between">
                 <h3 class="font-bold">Nouveau message</h3>
-                <button onclick="closeNewDM()" class="material-symbols-outlined text-slate-400 text-xl">close</button>
+                <button type="button" onclick="closeNewDM()" class="material-symbols-outlined text-slate-400 text-xl">close</button>
             </div>
             <div class="p-4">
                 <input id="dmSearchUser" type="text" placeholder="Rechercher un surfeur…"
@@ -534,6 +536,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

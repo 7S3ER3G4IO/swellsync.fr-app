@@ -245,6 +245,7 @@
 </head>
 
 <body class="page-bg font-display pb-28">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header image -->
     <div class="relative h-[340px] w-full">
@@ -258,11 +259,11 @@
                 <span class="material-symbols-outlined">arrow_back</span>
             </a>
             <div class="flex gap-2">
-                <button onclick="shareSpot()"
+                <button type="button" onclick="shareSpot()"
                     class="flex size-10 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-md">
                     <span class="material-symbols-outlined">share</span>
                 </button>
-                <button id="favBtn" onclick="toggleFav()"
+                <button type="button" id="favBtn" onclick="toggleFav()"
                     class="flex size-10 items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-slate-300 transition-colors">
                     <span class="material-symbols-outlined" id="favIcon">favorite_border</span>
                 </button>
@@ -342,9 +343,9 @@
 
         <!-- Tab pills -->
         <div class="flex gap-1 tab-pill p-1 rounded-2xl mb-5 w-fit">
-            <button class="tab-btn active" onclick="switchTab('24h',this)">24h</button>
-            <button class="tab-btn" onclick="switchTab('7j',this)">7 jours</button>
-            <button class="tab-btn" onclick="switchTab('16j',this)">16 jours</button>
+            <button type="button" class="tab-btn active" onclick="switchTab('24h',this)">24h</button>
+            <button type="button" class="tab-btn" onclick="switchTab('7j',this)">7 jours</button>
+            <button type="button" class="tab-btn" onclick="switchTab('16j',this)">16 jours</button>
         </div>
 
         <!-- Tab 24h -->
@@ -593,11 +594,11 @@
 
     <!-- Actions -->
     <div class="mt-6 px-4 pb-8 space-y-3">
-        <button id="alertBtn" onclick="addAlert()"
+        <button type="button" id="alertBtn" onclick="addAlert()"
             class="w-full py-4 rounded-2xl bg-[#00bad6]/10 border border-[#00bad6]/30 text-[#00bad6] font-bold hover:bg-[#00bad6]/20 transition-colors flex items-center justify-center gap-2 active:scale-95 transition-transform">
             <span class="material-symbols-outlined">add_alert</span> Créer une alerte pour ce spot
         </button>
-        <button onclick="logSession()"
+        <button type="button" onclick="logSession()"
             class="w-full py-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold hover:bg-emerald-500/20 transition-colors flex items-center justify-center gap-2">
             <span class="material-symbols-outlined">sports_score</span> Logger une session ici
         </button>
@@ -609,36 +610,36 @@
             style="background:#111;border:1px solid rgba(0,186,214,0.15);animation:slideUp .3s ease">
             <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg font-bold">Partager ce spot</h3>
-                <button onclick="closeShareModal()"
+                <button type="button" onclick="closeShareModal()"
                     class="size-8 rounded-full bg-white/10 flex items-center justify-center">
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
             <div class="grid grid-cols-4 gap-4 mb-6" id="shareButtons">
                 <!-- WhatsApp -->
-                <button onclick="shareTo('whatsapp')" class="flex flex-col items-center gap-2">
+                <button type="button" onclick="shareTo('whatsapp')" class="flex flex-col items-center gap-2">
                     <div class="size-14 rounded-2xl bg-[#25D366]/20 flex items-center justify-center text-2xl">💬</div>
                     <span class="text-[10px] font-semibold dark:text-slate-300">WhatsApp</span>
                 </button>
                 <!-- Instagram -->
-                <button onclick="shareTo('instagram')" class="flex flex-col items-center gap-2">
+                <button type="button" onclick="shareTo('instagram')" class="flex flex-col items-center gap-2">
                     <div
                         class="size-14 rounded-2xl bg-gradient-to-br from-[#833AB4]/20 via-[#FD1D1D]/20 to-[#F77737]/20 flex items-center justify-center text-2xl">
                         📸</div>
                     <span class="text-[10px] font-semibold dark:text-slate-300">Instagram</span>
                 </button>
                 <!-- Facebook -->
-                <button onclick="shareTo('facebook')" class="flex flex-col items-center gap-2">
+                <button type="button" onclick="shareTo('facebook')" class="flex flex-col items-center gap-2">
                     <div class="size-14 rounded-2xl bg-[#1877F2]/20 flex items-center justify-center text-2xl">📘</div>
                     <span class="text-[10px] font-semibold dark:text-slate-300">Facebook</span>
                 </button>
                 <!-- Twitter/X -->
-                <button onclick="shareTo('twitter')" class="flex flex-col items-center gap-2">
+                <button type="button" onclick="shareTo('twitter')" class="flex flex-col items-center gap-2">
                     <div class="size-14 rounded-2xl bg-white/10 flex items-center justify-center text-2xl">𝕏</div>
                     <span class="text-[10px] font-semibold dark:text-slate-300">X</span>
                 </button>
             </div>
-            <button onclick="shareTo('copy')"
+            <button type="button" onclick="shareTo('copy')"
                 class="w-full py-3.5 rounded-2xl bg-[#00bad6]/10 border border-[#00bad6]/30 text-[#00bad6] font-bold flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined text-lg">content_copy</span> Copier le lien
             </button>
@@ -1021,8 +1022,8 @@
                         <input type="hidden" id="logRating" value="4">
                     </div>
                     <div class="sw-confirm-btns">
-                        <button class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Annuler</button>
-                        <button class="sw-confirm-ok" onclick="submitLog()">Enregistrer</button>
+                        <button type="button" class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Annuler</button>
+                        <button type="button" class="sw-confirm-ok" onclick="submitLog()">Enregistrer</button>
                     </div>
                 </div>`;
             document.body.appendChild(overlay);
@@ -1129,6 +1130,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

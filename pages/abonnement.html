@@ -162,6 +162,7 @@
 </head>
 
 <body class="pb-24">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Nav back -->
     <nav class="nav-back sticky top-0 z-30 backdrop-blur-md px-4 py-3 flex items-center gap-3">
@@ -326,7 +327,7 @@
                 La boutique de badges sera disponible très prochainement.<br />
                 Inscris-toi pour être notifié en premier.
             </p>
-            <button onclick="notifyMe(this)" class="btn-buy px-6 py-3 rounded-xl text-sm">
+            <button type="button" onclick="notifyMe(this)" class="btn-buy px-6 py-3 rounded-xl text-sm">
                 📧 Me notifier à l'ouverture
             </button>
         </div>
@@ -358,7 +359,7 @@
                 <h3 class="text-xl font-black mb-1">${name}</h3>
                 <p class="text-sm text-slate-400 mb-2">${price}</p>
                 <p class="text-sm text-slate-500 mb-5 leading-relaxed">La boutique ouvre prochainement. Sois le premier notifié !</p>
-                <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris 🤙</button>
+                <button type="button" onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#080f1a] active:scale-95 transition-transform">Compris 🤙</button>
             </div>`;
             document.body.appendChild(modal);
             modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
@@ -385,6 +386,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

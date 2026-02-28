@@ -2,6 +2,10 @@
 <html lang="fr">
 
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://bxudysseskfpmlpagoid.supabase.co">
+  <link rel="dns-prefetch" href="https://plausible.io">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SwellSync — iPhone Simulator</title>
@@ -556,7 +560,7 @@
             </svg>
             <input type="text" id="urlInput" placeholder="Entrer une URL..." value="/index.html"
                 onkeydown="if(event.key==='Enter')loadUrl()">
-            <button class="go-btn" onclick="loadUrl()" title="Charger">
+            <button type="button" class="go-btn" onclick="loadUrl()" title="Charger">
                 <svg viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                 </svg>
@@ -564,12 +568,12 @@
         </div>
 
         <div class="topbar-actions">
-            <button class="topbar-btn" onclick="goBack()" title="Retour">←</button>
-            <button class="topbar-btn" onclick="goForward()" title="Avancer">→</button>
-            <button class="topbar-btn" onclick="reloadFrame()" title="Recharger">↻</button>
-            <button class="topbar-btn" id="rotateBtn" onclick="toggleRotate()" title="Orientation">⟳</button>
-            <button class="topbar-btn" onclick="toggleDark()" title="Fond clair/sombre" id="darkBtn">◐</button>
-            <button class="topbar-btn" onclick="takeScreenshot()" title="Screenshot">📷</button>
+            <button type="button" class="topbar-btn" onclick="goBack()" title="Retour">←</button>
+            <button type="button" class="topbar-btn" onclick="goForward()" title="Avancer">→</button>
+            <button type="button" class="topbar-btn" onclick="reloadFrame()" title="Recharger">↻</button>
+            <button type="button" class="topbar-btn" id="rotateBtn" onclick="toggleRotate()" title="Orientation">⟳</button>
+            <button type="button" class="topbar-btn" onclick="toggleDark()" title="Fond clair/sombre" id="darkBtn">◐</button>
+            <button type="button" class="topbar-btn" onclick="takeScreenshot()" title="Screenshot">📷</button>
         </div>
     </div>
 
@@ -608,7 +612,7 @@
                 <div class="home-button"></div>
 
                 <!-- App content -->
-                <iframe id="appFrame" src="/index.html"></iframe>
+                <iframe id="appFrame" src="/index.html" title="Contenu intégré"></iframe>
             </div>
         </div>
     </div>

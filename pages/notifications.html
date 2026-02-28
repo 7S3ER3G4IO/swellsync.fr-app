@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0" name="viewport" />
-    <title>SwellSync - Notifications</title>
+    <title>Notifications — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Notifications">
     <meta property="og:description" content="Tes notifications SwellSync.">
@@ -148,9 +148,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/notifications.html">
 </head>
 
 <body class="bg-[#000] font-display text-slate-100 flex flex-col">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-[#00bad6]/10">
@@ -161,7 +163,7 @@
         <div class="flex items-center gap-2">
             <span id="notifCountBadge"
                 class="px-2 py-0.5 bg-[#00bad6]/20 text-[#00bad6] text-xs font-bold rounded-full">0</span>
-            <button onclick="markAllRead()" id="markAllBtn"
+            <button type="button" onclick="markAllRead()" id="markAllBtn"
                 class="text-[10px] font-bold text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full hover:text-[#00bad6] hover:border-[#00bad6]/30 transition-colors hidden">
                 Tout lire
             </button>
@@ -389,6 +391,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

@@ -218,7 +218,7 @@ const API = {
                 // Si la table Supabase est vide, utiliser les données fallback
                 if (data && data.length > 0) return data;
             } catch (e) {
-                console.warn('Supabase spots.list fallback:', e.message);
+
             }
             return [...FALLBACK_SPOTS];
         },
@@ -230,7 +230,7 @@ const API = {
                 if (error) throw error;
                 if (data) return data;
             } catch (e) {
-                console.warn('Supabase spots.get fallback:', e.message);
+
             }
             // Fallback
             const numId = typeof id === 'string' ? parseInt(id, 10) : id;
@@ -280,7 +280,7 @@ const API = {
                     return result;
                 }
             } catch (cacheErr) {
-                console.warn('⚠️ [Cache-Supabase] Lecture impossible :', cacheErr.message);
+
             }
 
             // 5. Pas en cache → appel StormGlass
@@ -315,7 +315,7 @@ const API = {
             forecastSource = 'stormglass';
             // Log supprimé en production(`🌊 [StormGlass] ${forecastData.length} points reçus → stockage en cache`);
         } catch(sgErr) {
-            console.warn('⚠️ [StormGlass] Erreur :', sgErr.message, '— fallback Open-Meteo');
+
         }
 
             // 6. Fallback Open-Meteo si StormGlass a échoué
@@ -342,7 +342,7 @@ const API = {
                 forecastSource = 'open-meteo';
                 // Log supprimé en production(`🌐 [Open-Meteo] ${forecastData.length} points reçus → stockage en cache`);
             } catch (omErr) {
-                console.warn('⚠️ [Open-Meteo] Erreur :', omErr.message);
+
             }
         }
 
@@ -362,7 +362,7 @@ const API = {
                 }, { onConflict: 'cache_key' });
                 // Log supprimé en production(`✅ [Cache-Supabase] Stocké — expire à ${expiresAt}`);
             } catch (saveErr) {
-                console.warn('⚠️ [Cache-Supabase] Écriture impossible :', saveErr.message);
+
             }
 
             const result = { data: forecastData, mock: false, source: forecastSource };
@@ -372,7 +372,7 @@ const API = {
         }
 
             // 8. Dernier recours : données mockées (aucune API disponible)
-            console.warn('🔴 [Forecast] Toutes les sources ont échoué — données mockées');
+
         return { data: _generateMock(lat, lng), mock: true, source: 'mock' };
     },
 },

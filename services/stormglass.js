@@ -39,7 +39,7 @@ function checkDailyReset() {
     if (today !== dailyResetDate) {
         dailyRequestCount = 0;
         dailyResetDate = today;
-        console.log('🔄 [StormGlass] Compteur quotidien réinitialisé');
+
     }
 }
 
@@ -130,7 +130,7 @@ async function getForecast(lat, lng) {
 
     // 3. Limite quotidienne atteinte → mock avec warning
     if (dailyRequestCount >= DAILY_LIMIT) {
-        console.warn(`⚠️ [StormGlass] Limite quotidienne atteinte (${dailyRequestCount}/${DAILY_LIMIT}), fallback mock`);
+
         const mock = { data: formatResponse(generateMock(lat, lng)), mock: true, limitReached: true };
         cache.set(key, mock);
         setTimeout(() => cache.delete(key), CACHE_TTL_MS);
@@ -140,14 +140,14 @@ async function getForecast(lat, lng) {
     // 4. Vraie API Stormglass
     try {
         dailyRequestCount++;
-        console.log(`🌊 [StormGlass] Requête API #${dailyRequestCount}/${DAILY_LIMIT} — Budget restant: ${DAILY_LIMIT - dailyRequestCount}`);
+
         const raw = await fetchFromStormglass(lat, lng);
         const result = { data: formatResponse(raw), mock: false };
         cache.set(key, result);
         setTimeout(() => cache.delete(key), CACHE_TTL_MS);
         return result;
     } catch (err) {
-        console.warn('⚠️ [Stormglass] Erreur API, fallback mock :', err.message);
+
         const mock = { data: formatResponse(generateMock(lat, lng)), mock: true };
         cache.set(key, mock);
         setTimeout(() => cache.delete(key), 5 * 60 * 1000); // cache 5min si erreur

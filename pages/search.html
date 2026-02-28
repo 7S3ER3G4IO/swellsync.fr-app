@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>SwellSync — Recherche</title>
+    <title>Recherche — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Rechercher un Spot">
     <meta property="og:description" content="Recherche parmi 60+ spots de surf en France.">
@@ -214,9 +214,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/search.html">
 </head>
 
 <body class="min-h-screen pb-28">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header Search -->
     <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#000]/92 border-b border-[#00bad6]/15 px-3 py-3">
@@ -235,33 +237,33 @@
         </div>
         <!-- Catégories -->
         <div class="flex gap-2 overflow-x-auto pb-0.5 mt-2 no-scrollbar">
-            <button class="chip active" onclick="setCategory('all',this)">🌊 Tout</button>
-            <button class="chip" onclick="setCategory('surfers',this)">🏄 Surfeurs</button>
-            <button class="chip" onclick="setCategory('spots',this)">📍 Spots</button>
-            <button class="chip" onclick="setCategory('posts',this)">💬 Posts</button>
-            <button class="chip" onclick="setCategory('sessions',this)">🎯 Sessions</button>
+            <button type="button" class="chip active" onclick="setCategory('all',this)">🌊 Tout</button>
+            <button type="button" class="chip" onclick="setCategory('surfers',this)">🏄 Surfeurs</button>
+            <button type="button" class="chip" onclick="setCategory('spots',this)">📍 Spots</button>
+            <button type="button" class="chip" onclick="setCategory('posts',this)">💬 Posts</button>
+            <button type="button" class="chip" onclick="setCategory('sessions',this)">🎯 Sessions</button>
         </div>
     </header>
 
-    <main class="px-0">
+    <main id="main-content" class="px-0">
         <!-- État initial: suggestions tendances -->
         <div id="defaultView" class="px-4 pt-4 space-y-5">
             <div>
                 <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">🔥 Tendances</p>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="fillSearch('Hossegor')"
+                    <button type="button" onclick="fillSearch('Hossegor')"
                         class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Hossegor</button>
-                    <button onclick="fillSearch('La Torche')"
+                    <button type="button" onclick="fillSearch('La Torche')"
                         class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">La
                         Torche</button>
-                    <button onclick="fillSearch('Biarritz')"
+                    <button type="button" onclick="fillSearch('Biarritz')"
                         class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Biarritz</button>
-                    <button onclick="fillSearch('Lacanau')"
+                    <button type="button" onclick="fillSearch('Lacanau')"
                         class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Lacanau</button>
-                    <button onclick="fillSearch('houle')"
+                    <button type="button" onclick="fillSearch('houle')"
                         class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">2m+
                         de houle</button>
-                    <button onclick="fillSearch('offshore')"
+                    <button type="button" onclick="fillSearch('offshore')"
                         class="text-xs bg-[#111] border border-[#00bad6]/15 px-3 py-1.5 rounded-full text-slate-300 hover:border-[#00bad6]/40">Vent
                         offshore</button>
                 </div>
@@ -378,7 +380,7 @@
             const nom = m.pseudo || m.name || 'Surfeur';
             return `<div class="result-row" onclick="goToProfile('${m.id}')">
         <div class="w-10 h-10 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black shrink-0 text-base overflow-hidden">
-            ${m.avatar_url ? `<img src="${m.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-[#00bad6]">${initiale}</span>`}
+            ${m.avatar_url ? `<img src="${m.avatar_url}" class="w-full h-full object-cover" loading="lazy" decoding="async">` : `<span class="text-[#00bad6]">${initiale}</span>`}
         </div>
         <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
@@ -414,10 +416,10 @@
             ${s.spots.map(sp => `<span class="text-[10px] bg-[#111] border border-[#00bad6]/20 px-2 py-0.5 rounded-full text-slate-300">${sp}</span>`).join('')}
         </div>
         <div class="flex items-center gap-2 px-4 pb-4">
-            <button onclick="followUser(event,'${s.id}','${s.name}')" id="follow-btn-${s.id}"
+            <button type="button" onclick="followUser(event,'${s.id}','${s.name}')" id="follow-btn-${s.id}"
                 class="px-4 py-1.5 rounded-xl text-xs font-black transition-all text-[#000]"
                 style="background:linear-gradient(135deg,#00bad6,#0077cc)">+ Suivre</button>
-            <button onclick="goToProfile('${s.id}')" class="flex-1 text-center py-1.5 rounded-xl text-xs font-bold border border-white/10 text-slate-400">Voir le profil →</button>
+            <button type="button" onclick="goToProfile('${s.id}')" class="flex-1 text-center py-1.5 rounded-xl text-xs font-bold border border-white/10 text-slate-400">Voir le profil →</button>
         </div>
     </div>`;
         }
@@ -604,6 +606,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

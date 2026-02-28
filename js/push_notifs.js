@@ -44,7 +44,7 @@
             // await fetch('/api/members/push-subscribe', ...);
             return true;
         } catch (e) {
-            console.warn('Push subscribe error:', e);
+
             return false;
         }
     }

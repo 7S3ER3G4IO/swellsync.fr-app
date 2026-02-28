@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>SwellSync — Paramètres</title>
+    <title>Paramètres — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Paramètres">
     <meta property="og:description" content="Paramètres de ton compte SwellSync.">
@@ -240,9 +240,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/settings.html">
 </head>
 
 <body class="min-h-screen pb-10">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header -->
     <header
@@ -730,11 +732,11 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 id="infoSheetTitle" class="font-black text-base"></h3>
-                <button onclick="closeSheet('infoSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('infoSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <p id="infoSheetBody" class="text-slate-400 text-sm leading-relaxed py-2 whitespace-pre-line"></p>
-            <button onclick="closeSheet('infoSheet')"
+            <button type="button" onclick="closeSheet('infoSheet')"
                 class="w-full mt-4 py-3 rounded-2xl bg-[#00bad6]/15 text-[#00bad6] font-bold text-sm active:scale-95 transition-transform">OK</button>
         </div>
     </div>
@@ -744,7 +746,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">📁 Archive</h3>
-                <button onclick="closeSheet('archiveSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('archiveSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <p class="text-slate-400 text-sm text-center py-8">Tes posts archivés apparaîtront ici.<br />Fonctionnalité
@@ -763,7 +765,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🔑 Changer le mot de passe</h3>
-                <button onclick="closeSheet('pwdSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('pwdSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <form id="pwdForm" onsubmit="event.preventDefault();submitChangePassword()" class="space-y-3">
@@ -801,7 +803,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-red-500/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🚫 Comptes bloqués</h3>
-                <button onclick="closeSheet('blockedSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('blockedSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <div id="blockedList" class="max-h-64 overflow-y-auto rounded-xl bg-[#000]"></div>
@@ -815,7 +817,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🌐 Langue / Language</h3>
-                <button onclick="closeSheet('langSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('langSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <div class="space-y-2 mb-4">
@@ -828,7 +830,7 @@
                     <span class="font-bold text-sm">🇬🇧 English</span>
                 </label>
             </div>
-            <button onclick="applyLanguage()"
+            <button type="button" onclick="applyLanguage()"
                 class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Appliquer</button>
         </div>
     </div>
@@ -838,7 +840,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">📏 Unités de mesure</h3>
-                <button onclick="closeSheet('unitsSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('unitsSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Hauteur des vagues</p>
@@ -863,7 +865,7 @@
                     <input type="radio" id="unitWindKts" name="unitWind" value="kts" class="sr-only" />⚓ Nœuds (kts)
                 </label>
             </div>
-            <button onclick="applyUnits()"
+            <button type="button" onclick="applyUnits()"
                 class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">✅
                 Appliquer</button>
         </div>
@@ -874,7 +876,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🏄 Niveau de surf</h3>
-                <button onclick="closeSheet('levelSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('levelSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <div class="space-y-2 mb-4">
@@ -888,7 +890,7 @@
                 <label class="flex items-center gap-3 p-3 rounded-xl bg-[#111] cursor-pointer"><input type="radio"
                         name="surfLevel" value="expert" class="accent-[#00bad6]" /> 🔥 Expert</label>
             </div>
-            <button onclick="applyLevel()"
+            <button type="button" onclick="applyLevel()"
                 class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">✅
                 Confirmer</button>
         </div>
@@ -900,11 +902,11 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-emerald-500/20 p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">📍 Spot par défaut</h3>
-                <button onclick="closeSheet('defaultSpotSheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('defaultSpotSheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <div id="defaultSpotList" class="max-h-64 overflow-y-auto rounded-xl bg-[#000] mb-4"></div>
-            <button onclick="applyDefaultSpot()"
+            <button type="button" onclick="applyDefaultSpot()"
                 class="w-full py-3 rounded-2xl bg-emerald-500 font-black text-sm text-white">✅ Confirmer</button>
         </div>
     </div>
@@ -914,10 +916,10 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-red-500/20 p-5 text-center">
             <h3 class="font-black text-base text-red-400 mb-2">Se déconnecter ?</h3>
             <p class="text-slate-400 text-sm mb-5">Tu devras te reconnecter avec tes identifiants SwellSync.</p>
-            <button onclick="window.location.href='home.html'"
+            <button type="button" onclick="window.location.href='home.html'"
                 class="w-full py-3 rounded-2xl font-black text-sm text-white mb-2" style="background:#ef4444">Oui, me
                 déconnecter</button>
-            <button onclick="closeSheet('logoutSheet')" class="w-full py-3 text-slate-400 text-sm">Annuler</button>
+            <button type="button" onclick="closeSheet('logoutSheet')" class="w-full py-3 text-slate-400 text-sm">Annuler</button>
         </div>
     </div>
 
@@ -927,7 +929,7 @@
             class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-amber-500/20 p-5 max-h-[85vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-black text-base">🔐 Authentification à 2 facteurs</h3>
-                <button onclick="closeSheet('twoFASheet')" class="text-slate-400"><span
+                <button type="button" onclick="closeSheet('twoFASheet')" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
@@ -999,7 +1001,7 @@
                 <div class="bg-[#111] rounded-xl p-4 border border-amber-500/10">
                     <h4 class="font-bold text-sm mb-2">📧 Vérification par Email</h4>
                     <p class="text-[11px] text-slate-400 mb-3">Un code sera envoyé à ton adresse email.</p>
-                    <button id="email_sendBtn" onclick="send2FACode()"
+                    <button type="button" id="email_sendBtn" onclick="send2FACode()"
                         class="w-full py-2.5 rounded-xl bg-amber-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Envoyer
                         le code</button>
                     <div id="email_codeInput" class="hidden mt-3">
@@ -1008,11 +1010,11 @@
                             placeholder="000000" />
                         <p id="email_debug" class="text-[10px] text-emerald-400 text-center mt-2 hidden"></p>
                         <p id="email_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
-                        <button onclick="verifyEmailCode()"
+                        <button type="button" onclick="verifyEmailCode()"
                             class="w-full py-2.5 mt-3 rounded-xl bg-amber-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Vérifier</button>
                     </div>
                 </div>
-                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+                <button type="button" onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
             </div>
 
             <!-- Panel TOTP -->
@@ -1022,7 +1024,7 @@
                     <p class="text-[11px] text-slate-400 mb-3">Scanne le QR code avec ton appli d'authentification.</p>
                     <div id="totp_qr" class="flex justify-center mb-3"></div>
                     <p id="totp_secret_display" class="text-[10px] text-center text-slate-500 font-mono mb-3"></p>
-                    <button id="totp_generateBtn" onclick="setupTOTP()"
+                    <button type="button" id="totp_generateBtn" onclick="setupTOTP()"
                         class="w-full py-2.5 rounded-xl bg-purple-500 font-black text-sm text-white active:scale-95 transition-transform">Générer
                         le QR Code</button>
                     <div id="totp_verifySection" class="hidden mt-3">
@@ -1031,12 +1033,12 @@
                             class="w-full text-center text-2xl font-black tracking-[0.5em] py-3 bg-[#000] border border-white/10 rounded-xl text-white focus:outline-none focus:border-purple-500/50"
                             placeholder="000000" />
                         <p id="totp_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
-                        <button onclick="verifyTOTP()"
+                        <button type="button" onclick="verifyTOTP()"
                             class="w-full py-2.5 mt-3 rounded-xl bg-purple-500 font-black text-sm text-white active:scale-95 transition-transform">Activer
                             TOTP</button>
                     </div>
                 </div>
-                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+                <button type="button" onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
             </div>
 
             <!-- Panel SMS -->
@@ -1048,7 +1050,7 @@
                         <input id="sms_phone" type="tel"
                             class="w-full py-3 px-4 bg-[#000] border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500/50"
                             placeholder="+33 6 12 34 56 78" />
-                        <button onclick="setupSMS()"
+                        <button type="button" onclick="setupSMS()"
                             class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Enregistrer
                             & Envoyer le code</button>
                     </div>
@@ -1059,11 +1061,11 @@
                             placeholder="000000" />
                         <p id="sms_debug" class="text-[10px] text-emerald-400 text-center mt-2 hidden"></p>
                         <p id="sms_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
-                        <button onclick="verifySMS()"
+                        <button type="button" onclick="verifySMS()"
                             class="w-full py-2.5 mt-3 rounded-xl bg-emerald-500 font-black text-sm text-[#000] active:scale-95 transition-transform">Vérifier</button>
                     </div>
                 </div>
-                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+                <button type="button" onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
             </div>
 
             <!-- Panel Passkey -->
@@ -1073,18 +1075,18 @@
                     <p class="text-[11px] text-slate-400 mb-3">Utilise Face ID, Touch ID ou Windows Hello pour te
                         connecter.</p>
                     <div id="passkey_list" class="space-y-2 mb-3"></div>
-                    <button onclick="registerPasskey()"
+                    <button type="button" onclick="registerPasskey()"
                         class="w-full py-2.5 rounded-xl bg-cyan-500 font-black text-sm text-[#000] active:scale-95 transition-transform flex items-center justify-center gap-2">
                         <span class="material-symbols-outlined text-sm">add</span> Ajouter une Passkey
                     </button>
                     <p id="passkey_error" class="text-[10px] text-red-400 text-center mt-2 hidden"></p>
                 </div>
-                <button onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
+                <button type="button" onclick="hideAllPanels()" class="w-full py-2 mt-2 text-slate-400 text-sm">← Retour</button>
             </div>
 
             <!-- Bouton désactiver (si activé) -->
             <div id="twoFA_disableSection" class="hidden mt-3">
-                <button onclick="disable2FA()"
+                <button type="button" onclick="disable2FA()"
                     class="w-full py-2.5 rounded-xl bg-red-500/15 text-red-400 font-bold text-sm border border-red-500/20 active:scale-95 transition-transform">
                     Désactiver l'A2F
                 </button>
@@ -1113,8 +1115,8 @@
                         ${'★'.repeat(5).split('').map((s, i) => `<span data-v="${i + 1}" onmouseover="rateHover(${i + 1})" onclick="rateSelect(${i + 1})" style="color:#334155;transition:color .2s">${s}</span>`).join('')}
                     </div>
                     <div class="sw-confirm-btns">
-                        <button class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Plus tard</button>
-                        <button class="sw-confirm-ok" onclick="showToast('Merci pour ton avis ! ⭐','success');this.closest('.sw-confirm-overlay').remove()">Envoyer</button>
+                        <button type="button" class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Plus tard</button>
+                        <button type="button" class="sw-confirm-ok" onclick="showToast('Merci pour ton avis ! ⭐','success');this.closest('.sw-confirm-overlay').remove()">Envoyer</button>
                     </div>
                 </div>`;
             document.body.appendChild(overlay);
@@ -1142,7 +1144,7 @@
                         <span style="font-size:11px;color:#475569">© 2026 SwellSync — Tous droits réservés</span>
                     </div>
                     <div class="sw-confirm-btns">
-                        <button class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Fermer</button>
+                        <button type="button" class="sw-confirm-cancel" onclick="this.closest('.sw-confirm-overlay').remove()">Fermer</button>
                     </div>
                 </div>`;
             document.body.appendChild(overlay);
@@ -1220,8 +1222,8 @@
                     </div>
                     <h3 class="text-lg font-black mb-2">SwellSync Badges ⭐</h3>
                     <p class="text-sm text-slate-400 mb-5">${msg}</p>
-                    <button onclick="window.location.href='abonnement.html'" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 font-black text-sm text-[#000] mb-2 active:scale-95 transition-transform">Passer à Pro</button>
-                    <button onclick="this.closest('.fixed').remove()" class="w-full py-2 text-slate-400 text-sm">Plus tard</button>
+                    <button type="button" onclick="window.location.href='abonnement.html'" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 font-black text-sm text-[#000] mb-2 active:scale-95 transition-transform">Passer à Pro</button>
+                    <button type="button" onclick="this.closest('.fixed').remove()" class="w-full py-2 text-slate-400 text-sm">Plus tard</button>
                 </div>`;
             document.body.appendChild(modal);
             modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
@@ -1365,7 +1367,7 @@
                         <div class="flex items-center gap-3 p-3 border-b border-white/5">
                             <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 text-sm">${(u.members?.name || '?')[0].toUpperCase()}</div>
                             <div class="flex-1"><p class="font-bold text-sm">${u.members?.name || u.members?.email || 'Utilisateur'}</p></div>
-                            <button onclick="unblockUser(${u.blocked_id}, this)" class="text-[11px] text-emerald-400 border border-emerald-400/30 px-3 py-1.5 rounded-xl font-bold">Débloquer</button>
+                            <button type="button" onclick="unblockUser(${u.blocked_id}, this)" class="text-[11px] text-emerald-400 border border-emerald-400/30 px-3 py-1.5 rounded-xl font-bold">Débloquer</button>
                         </div>`).join('');
                 }
             } catch { list.innerHTML = '<p class="text-slate-500 text-xs text-center py-6">✅ Aucun compte bloqué</p>'; }
@@ -1451,7 +1453,7 @@
                 <div class="w-full max-w-md bg-[#111] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-black text-base">🔤 Taille du texte</h3>
-                        <button onclick="closeSheet('textSizeSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
+                        <button type="button" onclick="closeSheet('textSizeSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
                     </div>
                     <div class="space-y-2">
                         ${['small|Petit|text-xs', 'normal|Normal|text-sm', 'large|Grand|text-base'].map(s => {
@@ -1486,7 +1488,7 @@
                 <div class="w-full max-w-md bg-[#111] rounded-t-3xl p-6 border-t border-[#00bad6]/10 pb-10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-black text-base">♿ Accessibilité</h3>
-                        <button onclick="closeSheet('accessSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
+                        <button type="button" onclick="closeSheet('accessSheet')" class="text-slate-400"><span class="material-symbols-outlined">close</span></button>
                     </div>
                     <div class="space-y-3">
                         <div class="flex items-center justify-between p-3 rounded-xl bg-[#000] border border-[#00bad6]/10">
@@ -1939,7 +1941,7 @@
                                 <p class="font-bold text-xs">${pk.device_name || 'Passkey'}</p>
                                 <p class="text-[9px] text-slate-500">${new Date(pk.created_at).toLocaleDateString('fr-FR')}</p>
                             </div>
-                            <button onclick="deletePasskey(${pk.id}, this)"
+                            <button type="button" onclick="deletePasskey(${pk.id}, this)"
                                 class="text-[10px] text-red-400 border border-red-400/20 px-2 py-1 rounded-lg font-bold hover:bg-red-400/10">
                                 Supprimer
                             </button>
@@ -2113,6 +2115,20 @@
     <script src="/js/monitoring.js"></script>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

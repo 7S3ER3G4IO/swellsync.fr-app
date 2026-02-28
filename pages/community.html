@@ -5,7 +5,7 @@
     <script src="js/app-guard.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>SwellSync — Communauté Surf</title>
+    <title>Communauté surf — SwellSync</title>
     <meta property="og:type" content="website">
     <meta property="og:title" content="SwellSync — Communauté Surf">
     <meta property="og:description" content="Communauté de surfeurs : partage tes sessions.">
@@ -293,9 +293,11 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1125x2436.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/assets/splash/splash-750x1334.png">
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
+  <link rel="canonical" href="https://swellsync.fr/pages/community.html">
 </head>
 
 <body class="min-h-screen pb-28">
+  <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0ea5e9;color:#fff;padding:8px 16px;z-index:9999;border-radius:0 0 8px 0;font-weight:600;text-decoration:none;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Aller au contenu principal</a>
 
     <!-- Header sticky -->
     <header
@@ -311,12 +313,12 @@
                 <span class="w-1 h-1 rounded-full bg-emerald-400 animate-pulse inline-block"></span> 247 en ligne
             </span>
         </div>
-        <button
+        <button type="button"
             class="w-8 h-8 rounded-full bg-[#00bad6]/10 flex items-center justify-center active:scale-95 transition-transform"
             onclick="showBadgeShop()">
             <span class="material-symbols-outlined text-[#00bad6] text-[18px]">military_tech</span>
         </button>
-        <button
+        <button type="button"
             class="w-8 h-8 rounded-full bg-[#00bad6]/10 flex items-center justify-center active:scale-95 transition-transform"
             onclick="showSearch()">
             <span class="material-symbols-outlined text-slate-400 text-[18px]">search</span>
@@ -337,7 +339,7 @@
         </div>
     </div>
 
-    <main class="px-3 space-y-3 pt-3">
+    <main id="main-content" class="px-3 space-y-3 pt-3">
 
         <!-- ═══════════════ TAB FEED ═══════════════ -->
         <section id="tab-feed" class="space-y-3">
@@ -352,19 +354,19 @@
                     <p class="text-[10px] text-slate-400 mt-0.5">Enregistre ta session pour débloquer des badges
                         automatiquement</p>
                 </div>
-                <button onclick="window.location.href='session-live.html'"
+                <button type="button" onclick="window.location.href='session-live.html'"
                     class="shrink-0 font-black text-sm px-4 py-2 rounded-xl transition-all text-black active:scale-95"
                     style="background:linear-gradient(135deg,#00bad6,#0077cc)">Démarrer</button>
             </div>
 
             <!-- Topic chips -->
             <div class="flex gap-2 overflow-x-auto pb-0.5 no-scroll">
-                <button class="chip active" onclick="setFilter('all',this)">🌊 Tous</button>
-                <button class="chip" onclick="setFilter('session',this)">🏄 Sessions</button>
-                <button class="chip" onclick="setFilter('spot',this)">📍 Spots</button>
-                <button class="chip" onclick="setFilter('houle',this)">🌊 Houle</button>
-                <button class="chip" onclick="setFilter('competition',this)">🏆 Compétition</button>
-                <button class="chip" onclick="setFilter('question',this)">❓ Questions</button>
+                <button type="button" class="chip active" onclick="setFilter('all',this)">🌊 Tous</button>
+                <button type="button" class="chip" onclick="setFilter('session',this)">🏄 Sessions</button>
+                <button type="button" class="chip" onclick="setFilter('spot',this)">📍 Spots</button>
+                <button type="button" class="chip" onclick="setFilter('houle',this)">🌊 Houle</button>
+                <button type="button" class="chip" onclick="setFilter('competition',this)">🏆 Compétition</button>
+                <button type="button" class="chip" onclick="setFilter('question',this)">❓ Questions</button>
             </div>
 
             <!-- Composer -->
@@ -380,23 +382,23 @@
                 <div id="photoPreview" class="hidden mt-2 relative inline-block">
                     <img loading="lazy" id="photoPreviewImg" src="" alt="preview"
                         class="max-h-32 rounded-xl object-cover border border-[#00bad6]/20" />
-                    <button onclick="removePhoto()"
+                    <button type="button" onclick="removePhoto()"
                         class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 flex items-center justify-center">
                         <span class="material-symbols-outlined text-white text-[11px]">close</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-2 mt-2.5 flex-wrap">
                     <div class="flex gap-1.5 flex-wrap">
-                        <button id="tag-session" onclick="toggleTag('session')"
+                        <button type="button" id="tag-session" onclick="toggleTag('session')"
                             class="post-tag text-[10px] px-2.5 py-1 rounded-full border border-white/10 text-slate-400 transition-all">🏄
                             Session</button>
-                        <button id="tag-spot" onclick="toggleTag('spot')"
+                        <button type="button" id="tag-spot" onclick="toggleTag('spot')"
                             class="post-tag text-[10px] px-2.5 py-1 rounded-full border border-white/10 text-slate-400 transition-all">📍
                             Spot</button>
-                        <button id="tag-houle" onclick="toggleTag('houle')"
+                        <button type="button" id="tag-houle" onclick="toggleTag('houle')"
                             class="post-tag text-[10px] px-2.5 py-1 rounded-full border border-white/10 text-slate-400 transition-all">🌊
                             Houle</button>
-                        <button id="tag-competition" onclick="toggleTag('competition')"
+                        <button type="button" id="tag-competition" onclick="toggleTag('competition')"
                             class="post-tag text-[10px] px-2.5 py-1 rounded-full border border-white/10 text-slate-400 transition-all">🏆
                             Compétition</button>
                         <!-- Photo upload button -->
@@ -407,7 +409,7 @@
                         <input type="file" id="postPhotoInput" accept="image/*" class="hidden"
                             onchange="previewPhoto(event)" />
                     </div>
-                    <button onclick="submitPost()"
+                    <button type="button" onclick="submitPost()"
                         class="ml-auto bg-[#00bad6] text-[#000] font-bold text-xs px-4 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition-transform">
                         <span class="material-symbols-outlined text-sm">send</span>Publier
                     </button>
@@ -520,7 +522,7 @@
         <section id="tab-sessions" class="hidden space-y-3">
             <div class="flex items-center justify-between mb-1">
                 <h2 class="font-black text-base">📓 Journal de Sessions</h2>
-                <button onclick="openLogSession()"
+                <button type="button" onclick="openLogSession()"
                     class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-sm">add</span>Loguer
                 </button>
@@ -541,7 +543,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
             <div class="flex items-center justify-between mb-1">
                 <h3 class="font-black text-base">📓 Logger une session</h3>
-                <button onclick="closeLogSession()" class="text-slate-400"><span
+                <button type="button" onclick="closeLogSession()" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
             <select id="logSpot"
@@ -581,7 +583,7 @@
             </div>
             <textarea id="logNote" rows="2" placeholder="Note de session (vent, foule, fond…)"
                 class="w-full bg-[#000] border border-[#00bad6]/20 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 resize-none"></textarea>
-            <button onclick="submitSession()"
+            <button type="button" onclick="submitSession()"
                 class="w-full bg-[#00bad6] text-[#000] font-black py-3 rounded-xl text-sm active:scale-95 transition-transform">Enregistrer
                 la
                 session</button>
@@ -598,17 +600,17 @@
                     <h3 class="font-black text-base">🏪 Boutique SwellSync</h3>
                     <p class="text-[10px] text-slate-500 mt-0.5">Personnalise ton profil et tes interactions 🤙</p>
                 </div>
-                <button onclick="closeBadgeShop()" class="text-slate-400"><span
+                <button type="button" onclick="closeBadgeShop()" class="text-slate-400"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
             <!-- Shop Tabs -->
             <div class="flex gap-1 bg-[#000] rounded-xl p-1">
-                <button onclick="shopTab('badges')" id="shopTabBadges"
+                <button type="button" onclick="shopTab('badges')" id="shopTabBadges"
                     class="flex-1 py-2 rounded-lg text-xs font-bold bg-[#00bad6] text-[#000]">🏅 Badges</button>
-                <button onclick="shopTab('stickers')" id="shopTabStickers"
+                <button type="button" onclick="shopTab('stickers')" id="shopTabStickers"
                     class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400">💬 Stickers</button>
-                <button onclick="shopTab('profil')" id="shopTabProfil"
+                <button type="button" onclick="shopTab('profil')" id="shopTabProfil"
                     class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-400">✨ Profil</button>
             </div>
 
@@ -626,7 +628,7 @@
                             <p class="text-xs font-bold">Badge Pays Basque</p>
                             <p class="text-[10px] text-slate-500">Représente la côte basque 🏄</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
@@ -640,7 +642,7 @@
                             <p class="text-xs font-bold">Badge Landes</p>
                             <p class="text-[10px] text-slate-500">Surfeur des Landes 🌲</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
@@ -654,7 +656,7 @@
                             <p class="text-xs font-bold">Badge Bretagne</p>
                             <p class="text-[10px] text-slate-500">Surfeur breton ⚓</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
@@ -668,7 +670,7 @@
                             <p class="text-xs font-bold">Badge La Réunion</p>
                             <p class="text-[10px] text-slate-500">Surfeur réunionnais 🌴</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
@@ -682,7 +684,7 @@
                             <p class="text-xs font-bold">Badge Guadeloupe</p>
                             <p class="text-[10px] text-slate-500">Surfeur caribéen 🏝️</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
@@ -699,7 +701,7 @@
                             <p class="text-xs font-bold">Badge Shortboard</p>
                             <p class="text-[10px] text-slate-500">Specialist shortboard 🏄‍♂️</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="window.location.href='badges.html'">Équiper →</button>
                     </div>
@@ -713,7 +715,7 @@
                             <p class="text-xs font-bold text-amber-300">Badge Elite</p>
                             <p class="text-[10px] text-slate-500">Exclusif — Surfeur d'élite ⚡</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-black"
                             style="background:linear-gradient(135deg,#f59e0b,#d97706)"
                             onclick="window.location.href='badges.html'">Équiper →</button>
@@ -728,7 +730,7 @@
                             <p class="text-xs font-bold text-purple-300">Badge Pro Star ⭐</p>
                             <p class="text-[10px] text-slate-500">Badge Pro officiel SwellSync</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-white"
                             style="background:linear-gradient(135deg,#7c3aed,#a855f7)"
                             onclick="window.location.href='badges.html'">Équiper →</button>
@@ -744,25 +746,25 @@
 
                 <p class="text-[9px] text-[#00bad6] font-bold uppercase mt-2">🏄 Surf</p>
                 <div class="grid grid-cols-4 gap-2">
-                    <button onclick="buySticker('🤙','Shaka')"
+                    <button type="button" onclick="buySticker('🤙','Shaka')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🤙</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Shaka</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('🏄','Surfeur')"
+                    <button type="button" onclick="buySticker('🏄','Surfeur')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🏄</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Surfeur</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('🌊','Big Wave')"
+                    <button type="button" onclick="buySticker('🌊','Big Wave')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🌊</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Big Wave</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('🔥','En Feu')"
+                    <button type="button" onclick="buySticker('🔥','En Feu')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🔥</span>
                         <span class="text-[9px] text-slate-400 block mt-1">En Feu</span>
@@ -772,25 +774,25 @@
 
                 <p class="text-[9px] text-[#00bad6] font-bold uppercase mt-2">☀️ Météo & Conditions</p>
                 <div class="grid grid-cols-4 gap-2">
-                    <button onclick="buySticker('☀️','Soleil')"
+                    <button type="button" onclick="buySticker('☀️','Soleil')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">☀️</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Soleil</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('💨','Offshore')"
+                    <button type="button" onclick="buySticker('💨','Offshore')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">💨</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Offshore</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('🌅','Sunset')"
+                    <button type="button" onclick="buySticker('🌅','Sunset')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🌅</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Sunset</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('🦈','Shark!')"
+                    <button type="button" onclick="buySticker('🦈','Shark!')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🦈</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Shark!</span>
@@ -800,25 +802,25 @@
 
                 <p class="text-[9px] text-[#00bad6] font-bold uppercase mt-2">🎉 Célébration</p>
                 <div class="grid grid-cols-4 gap-2">
-                    <button onclick="buySticker('🏆','Champ')"
+                    <button type="button" onclick="buySticker('🏆','Champ')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🏆</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Champ</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('💪','Strong')"
+                    <button type="button" onclick="buySticker('💪','Strong')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">💪</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Strong</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('😍','Love It')"
+                    <button type="button" onclick="buySticker('😍','Love It')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">😍</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Love It</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buySticker('🎯','Précis')"
+                    <button type="button" onclick="buySticker('🎯','Précis')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <span class="text-2xl block">🎯</span>
                         <span class="text-[9px] text-slate-400 block mt-1">Précis</span>
@@ -835,7 +837,7 @@
                     </div>
                     <div class="text-right">
                         <span class="text-[10px] text-slate-500 line-through">5,88€</span>
-                        <button
+                        <button type="button"
                             class="block bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform mt-0.5"
                             onclick="buySticker(arguments[0])">👍 Réagir</button>
                     </div>
@@ -848,28 +850,28 @@
                 <p class="text-[10px] text-slate-400">Un cadre autour de ton avatar dans la communauté</p>
 
                 <div class="grid grid-cols-3 gap-2">
-                    <button onclick="buyFrame('ocean')"
+                    <button type="button" onclick="buyFrame('ocean')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
                             style="border:3px solid #00bad6;background:rgba(0,186,214,.15)">S</div>
                         <span class="text-[9px] text-slate-300 font-bold block">Ocean</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buyFrame('fire')"
+                    <button type="button" onclick="buyFrame('fire')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
                             style="border:3px solid #f97316;background:rgba(249,115,22,.15)">S</div>
                         <span class="text-[9px] text-slate-300 font-bold block">Fire</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buyFrame('gold')"
+                    <button type="button" onclick="buyFrame('gold')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
                             style="border:3px solid #f59e0b;background:rgba(245,158,11,.15)">S</div>
                         <span class="text-[9px] text-slate-300 font-bold block">Gold</span>
                         <span class="text-[9px] text-amber-400 font-bold block">1,49€</span>
                     </button>
-                    <button onclick="buyFrame('rainbow')"
+                    <button type="button" onclick="buyFrame('rainbow')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
                             style="border:3px solid;border-image:linear-gradient(135deg,#f43f5e,#8b5cf6,#00bad6) 1;border-radius:50%;background:rgba(139,92,246,.1)">
@@ -877,7 +879,7 @@
                         <span class="text-[9px] text-slate-300 font-bold block">Rainbow</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buyFrame('neon')"
+                    <button type="button" onclick="buyFrame('neon')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
                             style="border:3px solid #22d3ee;box-shadow:0 0 8px rgba(34,211,238,.5);background:rgba(34,211,238,.1)">
@@ -885,7 +887,7 @@
                         <span class="text-[9px] text-slate-300 font-bold block">Neon</span>
                         <span class="text-[9px] text-emerald-400 font-bold block">Gratuit 🎨</span>
                     </button>
-                    <button onclick="buyFrame('diamond')"
+                    <button type="button" onclick="buyFrame('diamond')"
                         class="card rounded-xl p-3 text-center hover:border-[#00bad6]/40 transition-all active:scale-95">
                         <div class="w-12 h-12 rounded-full mx-auto mb-1.5 flex items-center justify-center text-lg font-black"
                             style="border:3px solid #e2e8f0;box-shadow:0 0 12px rgba(226,232,240,.4);background:rgba(226,232,240,.08)">
@@ -903,7 +905,7 @@
                         <div class="flex-1">
                             <p class="text-[10px] text-slate-500">Nom en dégradé ocean</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="bg-[#00bad6] text-[#000] font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
                             onclick="buyEffect('gradient')">Gratuit 🌈</button>
                     </div>
@@ -913,7 +915,7 @@
                         <div class="flex-1">
                             <p class="text-[10px] text-slate-500">Nom en dégradé fire</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-black"
                             style="background:linear-gradient(135deg,#f59e0b,#f97316)"
                             onclick="buyEffect('fire')">Gratuit 🔥</button>
@@ -925,7 +927,7 @@
                         <div class="flex-1">
                             <p class="text-[10px] text-slate-500">Nom arc-en-ciel + sparkle</p>
                         </div>
-                        <button
+                        <button type="button"
                             class="font-bold text-xs px-3 py-1.5 rounded-lg active:scale-95 transition-transform text-white"
                             style="background:linear-gradient(135deg,#a855f7,#ec4899)"
                             onclick="buyEffect('rainbow')">Gratuit ✨</button>
@@ -940,7 +942,7 @@
         <div class="w-full max-w-lg bg-[#111] rounded-t-3xl border-t border-[#00bad6]/20 p-5 space-y-3">
             <div class="flex items-center justify-between">
                 <h3 class="font-black text-sm">💬 Répondre</h3>
-                <button onclick="closeReplyModal()" class="text-slate-400"><span
+                <button type="button" onclick="closeReplyModal()" class="text-slate-400"><span
                         class="material-symbols-outlined text-lg">close</span></button>
             </div>
             <div id="replyContext" class="reply-box text-xs text-slate-400"></div>
@@ -951,7 +953,7 @@
                 <textarea id="replyText" rows="3" placeholder="Ta réponse…"
                     class="flex-1 bg-[#000] rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00bad6]/40 border border-[#00bad6]/10 resize-none"></textarea>
             </div>
-            <button onclick="submitReply()"
+            <button type="button" onclick="submitReply()"
                 class="w-full bg-[#00bad6] text-[#000] font-black py-3 rounded-xl text-sm active:scale-95 transition-transform">Publier
                 la
                 réponse</button>
@@ -1161,15 +1163,15 @@
         ${imgHtml}
         ${repliesHtml}
         <div class="flex items-center gap-4 pt-1 border-t border-white/5">
-            <button onclick="toggleLike(${p.id}, this)" class="like-btn flex items-center gap-1.5 text-[11px] ${p.liked ? 'text-red-400 liked' : 'text-slate-400'} hover:text-red-400 transition-colors">
+            <button type="button" onclick="toggleLike(${p.id}, this)" class="like-btn flex items-center gap-1.5 text-[11px] ${p.liked ? 'text-red-400 liked' : 'text-slate-400'} hover:text-red-400 transition-colors">
                 <span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' ${p.liked ? 1 : 0}">${p.liked ? 'favorite' : 'favorite_border'}</span>
                 <span class="like-count">${p.likes + (p.liked ? 0 : 0)}</span>
             </button>
-            <button onclick="openReplyModal(${p.id})" class="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-[#00bad6] transition-colors">
+            <button type="button" onclick="openReplyModal(${p.id})" class="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-[#00bad6] transition-colors">
                 <span class="material-symbols-outlined text-[16px]">chat_bubble_outline</span>
                 <span>${p.replies.length}</span>
             </button>
-            <button onclick="sharePost(${p.id})" class="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-[#00bad6] transition-colors ml-auto">
+            <button type="button" onclick="sharePost(${p.id})" class="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-[#00bad6] transition-colors ml-auto">
                 <span class="material-symbols-outlined text-[16px]">share</span>
                 Partager
             </button>
@@ -1316,7 +1318,7 @@
                     return `<div class="flex items-center gap-3 py-2.5 border-b border-white/5 last:border-0 cursor-pointer hover:bg-[#00bad6]/5 rounded-lg transition-colors px-1 active:scale-95" onclick="window.location.href='user-profile.html?id=${u.uid}'">
                             <span class="text-slate-400 font-black text-sm w-6 text-center shrink-0">${i + 4}</span>
                             <div class="w-8 h-8 rounded-full bg-[#00bad6]/20 flex items-center justify-center font-black text-sm shrink-0 overflow-hidden">
-                                ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover">` : `<span class="text-[#00bad6]">${initiale}</span>`}
+                                ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full object-cover" loading="lazy" decoding="async">` : `<span class="text-[#00bad6]">${initiale}</span>`}
                             </div>
                             <div class="flex-1 min-w-0">
                                 <span class="font-bold text-sm">${u.pseudo || 'Surfeur'}</span>
@@ -1409,7 +1411,7 @@
                     } </h3>
                         <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
                         <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter ce badge via Stripe.</p>
-                        <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
+                        <button type="button" onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
                     </div>`;
                         document.body.appendChild(m);
                         m.addEventListener('click', e => { if (e.target === m) m.remove(); });
@@ -1454,7 +1456,7 @@
                 <h3 class="text-xl font-black mb-2">${name}</h3>
                 <p class="text-2xl font-black text-[#00bad6] mb-2">${price.toFixed(2)}€</p>
                 <p class="text-sm text-slate-400 mb-4">Connecte-toi pour acheter cet article via Stripe.</p>
-                <button onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
+                <button type="button" onclick="this.closest('.fixed').remove()" class="w-full py-3 rounded-2xl bg-[#00bad6] font-black text-sm text-[#000] active:scale-95 transition-transform">Compris !</button>
             </div>`;
             document.body.appendChild(m);
             m.addEventListener('click', e => { if (e.target === m) m.remove(); });
@@ -1519,7 +1521,7 @@
 
     <!-- FAB Ajouter Post -->
     <div class="fixed bottom-24 right-6 z-40">
-        <button onclick="openNewPostModal()"
+        <button type="button" onclick="openNewPostModal()"
             class="w-14 h-14 bg-[#00bad6] text-[#000] rounded-full flex items-center justify-center shadow-lg shadow-[#00bad6]/30 hover:scale-105 active:scale-95 transition-transform">
             <span class="material-symbols-outlined text-[28px]">add</span>
         </button>
@@ -1529,7 +1531,7 @@
     <div id="newPostModal"
         class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm p-4">
         <div class="w-full max-w-md bg-[#111] rounded-3xl border border-[#00bad6]/20 p-5 shadow-2xl relative">
-            <button onclick="closeNewPostModal()"
+            <button type="button" onclick="closeNewPostModal()"
                 class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
                 <span class="material-symbols-outlined">close</span>
             </button>
@@ -1540,16 +1542,16 @@
 
             <div class="flex items-center justify-between">
                 <div class="flex gap-2">
-                    <button
+                    <button type="button"
                         class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[#00bad6] hover:bg-white/10 transition-colors">
                         <span class="material-symbols-outlined">add_photo_alternate</span>
                     </button>
-                    <button
+                    <button type="button"
                         class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-emerald-400 hover:bg-white/10 transition-colors">
                         <span class="material-symbols-outlined">location_on</span>
                     </button>
                 </div>
-                <button id="submitPostBtn" onclick="submitNewPost()"
+                <button type="button" id="submitPostBtn" onclick="submitNewPost()"
                     class="px-6 py-2.5 bg-[#00bad6] text-[#000] font-bold rounded-xl flex items-center gap-2 hover:opacity-90 transition-opacity active:scale-95 transition-transform">
                     <span class="material-symbols-outlined text-sm">send</span> Publier
                 </button>
@@ -1560,7 +1562,7 @@
     <div id="imageLightbox"
         class="hidden fixed inset-0 z-[500] items-center justify-center bg-black/92 backdrop-blur-md"
         onclick="if(event.target===this)closeLightbox()">
-        <button onclick="closeLightbox()"
+        <button type="button" onclick="closeLightbox()"
             class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
             <span class="material-symbols-outlined text-white">close</span>
         </button>
@@ -1599,6 +1601,20 @@
     </div>
     <script src="/pages/js/auth-state.js"></script>
     <script src="/js/offline-banner.js"></script>
+  <script src="/js/error-handler.js" defer></script>
+
+<script>
+// Auto aria-current="page" sur nav
+(function() {
+  const path = window.location.pathname.split('/').pop();
+  document.querySelectorAll('nav a, .bottom-nav a, .navbar a').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    if (href === path || href.endsWith('/' + path)) {
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+})();
+</script>
 </body>
 
 </html>

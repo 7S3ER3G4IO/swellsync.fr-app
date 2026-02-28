@@ -286,7 +286,7 @@ const legalContents = {
 };
 
 function openLegalModal(type) {
-    console.log("Opening legal modal for:", type);
+
     const backdrop = document.getElementById('legal-modal-backdrop');
     const contentDiv = document.getElementById('legal-modal-content');
     const container = document.getElementById('legal-modal-container');

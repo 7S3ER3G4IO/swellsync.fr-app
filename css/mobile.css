@@ -401,3 +401,67 @@ canvas {
         border-radius: 2px;
     }
 }
+/* SwellSync — Corrections tactiles iOS/Android */
+button, a, [role="button"], input[type="submit"], input[type="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fix iOS double-tap zoom */
+* {
+  touch-action: manipulation;
+}
+
+button, a {
+  touch-action: manipulation;
+}
+
+/* Taille minimale cible tactile 44×44px (WCAG 2.5.5) */
+button:not(.icon-only),
+.btn,
+a.cta,
+input[type="submit"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* overscroll modal */
+.modal, .drawer, .bottom-sheet {
+  overscroll-behavior: contain;
+}
+
+/* SwellSync — Skeleton Loaders */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-text { height: 16px; margin: 8px 0; }
+.skeleton-text.short { width: 60%; }
+.skeleton-title { height: 24px; width: 80%; margin: 12px 0; }
+.skeleton-avatar { width: 48px; height: 48px; border-radius: 50%; }
+.skeleton-card { height: 200px; margin: 8px 0; border-radius: 16px; }
+.skeleton-row { display: flex; gap: 12px; align-items: center; padding: 12px; }
+
+/* Empty states */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 48px 24px; text-align: center;
+  color: rgba(255,255,255,.5);
+}
+.empty-state svg, .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .4; }
+.empty-state h3 { font-size: 18px; color: rgba(255,255,255,.7); margin: 0 0 8px; }
+.empty-state p { font-size: 14px; margin: 0 0 24px; }
+
+/* Error states inline */
+.error-state {
+  background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+  border-radius: 12px; padding: 16px; text-align: center; color: #fca5a5;
+}

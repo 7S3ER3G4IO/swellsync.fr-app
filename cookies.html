@@ -147,7 +147,7 @@
         </div>
         <a href="/pages/home.html" class="nav-cta"><span class="material-symbols-outlined"
                 style="font-size:17px">download</span> Télécharger</a>
-        <button class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
+        <button type="button" class="nav-menu-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
     </nav>
 
     <section style="padding:140px 0 60px;background:var(--bg)">
@@ -211,7 +211,7 @@
                             class="slider"></span></label>
                 </div>
 
-                <button class="btn-primary" style="width:100%;justify-content:center;margin-top:28px;padding:16px"
+                <button type="button" class="btn-primary" style="width:100%;justify-content:center;margin-top:28px;padding:16px"
                     onclick="this.textContent='✅ Préférences sauvegardées';this.style.background='var(--accent2)';localStorage.setItem('cookie_pref',JSON.stringify({perf:document.getElementById('perfCookie').checked,func:document.getElementById('funcCookie').checked}))">
                     Sauvegarder mes Préférences
                 </button>

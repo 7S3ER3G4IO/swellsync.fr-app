@@ -1,14 +1,27 @@
 User-agent: *
 Allow: /
+Allow: /site/
+Allow: /index.html
 
-# Pages applicatives et API — à ne pas indexer
+# Pages app — privées, ne pas indexer
+Disallow: /pages/
+Disallow: /pages/settings.html
+Disallow: /pages/session-live.html
+Disallow: /pages/edit-profile.html
+Disallow: /pages/messages.html
+Disallow: /pages/notifications.html
 Disallow: /api/
-Disallow: /admin/
+Disallow: /.well-known/
 Disallow: /admin.html
+Disallow: /preview-*
 
-# Resources statiques OK
-Allow: /assets/
-Allow: /css/
-Allow: /js/
+# Bots crawlers légitimes seulement
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
 
 Sitemap: https://swellsync.fr/sitemap.xml

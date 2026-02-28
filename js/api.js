@@ -40,7 +40,7 @@ class ApiService {
                 // Gestion centralisée des erreurs API 
                 // Ex: Si Token expiré (401), on déconnecte automatiquement
                 if (response.status === 401 && token) {
-                    console.warn("Session expirée, déconnexion...");
+
                     this.logout();
                 }
                 throw new Error(data.error || 'Erreur inconnue lors de la requête API');

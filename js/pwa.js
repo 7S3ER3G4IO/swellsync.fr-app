@@ -7,9 +7,9 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').then((registration) => {
             // Forcer la mise à jour immédiate
             registration.update();
-            console.log('[SW] Enregistré + cache vidé.', registration.scope);
+
         }).catch((error) => {
-            console.log('[SW] Erreur:', error);
+
         });
 
         // Désinscrire TOUS les anciens service workers pour forcer le rechargement
@@ -57,3 +57,29 @@ window.installApplePWA = function () {
         Toast.show('🍏 Depuis un Mac ou iOS, utilisez Safari et le menu de partage pour installer l\'app.', 'info', 6000);
     }
 };
+
+// Détection mise à jour SW disponible
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (typeof showToast === 'function') {
+      const t = showToast('🔄 Mise à jour disponible', 'info', 8000);
+    } else {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#0ea5e9;color:white;text-align:center;padding:12px;z-index:9999;font-weight:600;cursor:pointer';
+      banner.textContent = '🔄 Nouvelle version disponible — Cliquez pour actualiser';
+      banner.onclick = () => window.location.reload();
+      document.body.prepend(banner);
+    }
+  });
+  
+  navigator.serviceWorker.ready.then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker?.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          newWorker.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
+    });
+  });
+}
