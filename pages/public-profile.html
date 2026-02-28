@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Profil surfeur | SwellSync</title>
+  <meta name="description" content="Profil surfeur SwellSync — sessions, stats et communauté surf française.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/app.js" defer></script>
+  <script src="/js/pro-features.js" defer></script>
+  <script src="/js/share-utils.js" defer></script>
+  <script src="/js/accessibility.js" defer></script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Aller au contenu</a>
+
+  <nav style="padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;background:rgba(8,15,26,.95);z-index:100;backdrop-filter:blur(12px)">
+    <a href="/pages/home.html" style="font-size:18px;font-weight:800;color:#0ea5e9;text-decoration:none">🌊 SwellSync</a>
+    <div style="display:flex;gap:8px" id="nav-actions">
+      <a href="/pages/community.html" style="color:#94a3b8;text-decoration:none;font-size:13px;padding:8px;border-radius:10px">Community</a>
+    </div>
+  </nav>
+
+  <main id="main-content" style="max-width:600px;margin:0 auto;padding:24px 16px 100px">
+
+    <!-- Skeleton pendant le chargement -->
+    <div id="profile-skeleton">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+        <div class="skeleton" style="width:80px;height:80px;border-radius:50%;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div class="skeleton skeleton-title" style="width:60%"></div>
+          <div class="skeleton skeleton-text" style="width:40%"></div>
+        </div>
+      </div>
+      <div class="skeleton skeleton-stat"></div>
+    </div>
+
+    <!-- Contenu profil public -->
+    <div id="public-profile" style="display:none">
+
+      <!-- Avatar + infos -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+        <img id="pub-avatar" src="/assets/images/default-avatar.png" width="80" height="80" alt="Avatar" style="border-radius:50%;border:3px solid rgba(14,165,233,.3);object-fit:cover">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <h1 id="pub-name" style="font-size:22px;font-weight:800;color:#f1f5f9;margin:0"></h1>
+            <div id="pub-pro-badge"></div>
+          </div>
+          <div id="pub-username" style="color:#64748b;font-size:14px;margin-top:2px"></div>
+          <div id="pub-level" style="margin-top:6px"></div>
+        </div>
+        <button type="button" id="follow-btn" onclick="toggleFollow()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);border:none;border-radius:14px;padding:10px 18px;color:white;font-weight:700;font-size:13px;cursor:pointer">Suivre</button>
+      </div>
+
+      <!-- Bio -->
+      <p id="pub-bio" style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0 0 24px"></p>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;text-align:center">
+          <div id="pub-sessions" style="font-size:24px;font-weight:800;color:#0ea5e9">—</div>
+          <div style="color:#64748b;font-size:12px;margin-top:2px">Sessions</div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;text-align:center">
+          <div id="pub-hours" style="font-size:24px;font-weight:800;color:#10b981">—</div>
+          <div style="color:#64748b;font-size:12px;margin-top:2px">Heures</div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px;text-align:center">
+          <div id="pub-waves" style="font-size:24px;font-weight:800;color:#f59e0b">—</div>
+          <div style="color:#64748b;font-size:12px;margin-top:2px">Vagues</div>
+        </div>
+      </div>
+
+      <!-- Spot favori -->
+      <div id="pub-fav-spot" style="display:none;background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.12);border-radius:16px;padding:16px;margin-bottom:20px">
+        <div style="font-size:12px;color:#0ea5e9;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">📍 Spot préféré</div>
+        <div id="pub-fav-spot-name" style="font-weight:700;color:#f1f5f9"></div>
+      </div>
+
+      <!-- Sessions récentes -->
+      <div style="margin-bottom:24px">
+        <h2 style="font-size:16px;font-weight:700;color:#f1f5f9;margin:0 0 14px">🌊 Sessions récentes</h2>
+        <div id="pub-sessions-list">
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+        </div>
+      </div>
+
+      <!-- Partager ce profil -->
+      <button type="button" onclick="ShareUtils.share({title:'Profil SwellSync',url:window.location.href})"
+        style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;color:#94a3b8;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        📤 Partager ce profil
+      </button>
+    </div>
+
+    <!-- Profil non trouvé -->
+    <div id="profile-notfound" style="display:none" class="empty-state">
+      <div>🏄</div>
+      <h3>Surfeur introuvable</h3>
+      <p>Ce profil n'existe pas ou a été supprimé.</p>
+      <a href="/pages/search.html">Chercher un surfeur</a>
+    </div>
+
+  </main>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Récupérer le username depuis l'URL (/u/username ou ?u=username)
+    const pathParts = window.location.pathname.split('/');
+    const username = pathParts[pathParts.indexOf('u') + 1] || new URLSearchParams(window.location.search).get('u');
+
+    if (!username) { showNotFound(); return; }
+
+    try {
+      const { data: member } = await supabase
+        .from('members')
+        .select('id,username,display_name,avatar_url,bio,level,is_pro,total_sessions,total_hours,total_waves,favorite_spot,is_private')
+        .eq('username', username)
+        .single();
+
+      if (!member || member.is_private) { showNotFound(); return; }
+
+      // Remplir le profil
+      document.getElementById('profile-skeleton').style.display = 'none';
+      document.getElementById('public-profile').style.display = 'block';
+      document.title = `${member.display_name || member.username} — SwellSync`;
+
+      document.getElementById('pub-avatar').src = member.avatar_url || '/assets/images/default-avatar.png';
+      document.getElementById('pub-avatar').alt = member.display_name || member.username;
+      document.getElementById('pub-name').textContent = member.display_name || member.username;
+      document.getElementById('pub-username').textContent = '@' + member.username;
+      document.getElementById('pub-bio').textContent = member.bio || '';
+
+      if (member.is_pro && typeof ProBadge !== 'undefined') {
+        document.getElementById('pub-pro-badge').innerHTML = ProBadge.render(true, 'sm');
+      }
+
+      const levelColors = { Rookie: '#64748b', Local: '#0ea5e9', Intermédiaire: '#10b981', Confirmé: '#f59e0b', Pro: '#8b5cf6', Legend: '#ef4444' };
+      if (member.level) {
+        const col = levelColors[member.level] || '#0ea5e9';
+        document.getElementById('pub-level').innerHTML = `<span style="background:${col}22;border:1px solid ${col}44;color:${col};border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700">${member.level}</span>`;
+      }
+
+      document.getElementById('pub-sessions').textContent = member.total_sessions || 0;
+      document.getElementById('pub-hours').textContent = (member.total_hours || 0) + 'h';
+      document.getElementById('pub-waves').textContent = member.total_waves || 0;
+
+      if (member.favorite_spot) {
+        document.getElementById('pub-fav-spot').style.display = 'block';
+        document.getElementById('pub-fav-spot-name').textContent = member.favorite_spot;
+      }
+
+      // Sessions récentes publiques
+      const { data: sessions } = await supabase
+        .from('surf_sessions')
+        .select('date,spot_name,score,duration_min,is_public')
+        .eq('user_id', member.id)
+        .eq('is_public', true)
+        .order('date', { ascending: false })
+        .limit(5);
+
+      const sessEl = document.getElementById('pub-sessions-list');
+      if (sessions?.length) {
+        sessEl.innerHTML = sessions.map(s => `
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:14px;margin-bottom:8px">
+            <div style="font-size:24px">🌊</div>
+            <div style="flex:1">
+              <div style="font-weight:600;color:#f1f5f9;font-size:14px">${s.spot_name || 'Spot'}</div>
+              <div style="color:#64748b;font-size:12px">${s.date?.substring(0,10) || '—'}${s.duration_min ? ' · ' + Math.round(s.duration_min/60*10)/10 + 'h' : ''}</div>
+            </div>
+            ${s.score ? `<div style="font-weight:700;color:${s.score>70?'#10b981':s.score>40?'#f59e0b':'#ef4444'};font-size:16px">${s.score}</div>` : ''}
+          </div>`).join('');
+      } else {
+        sessEl.innerHTML = '<div style="color:#64748b;font-size:14px;text-align:center;padding:20px">Aucune session publique</div>';
+      }
+
+      // Vérifier si déjà suivi
+      checkIfFollowing(member.id);
+      window._profileUserId = member.id;
+
+    } catch(e) { showNotFound(); }
+  });
+
+  function showNotFound() {
+    document.getElementById('profile-skeleton').style.display = 'none';
+    document.getElementById('profile-notfound').style.display = 'flex';
+  }
+
+  async function checkIfFollowing(profileId) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      if (user.id === profileId) { document.getElementById('follow-btn').style.display = 'none'; return; }
+      const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+      const { data: follow } = await supabase.from('follows').select('id').eq('follower_id', member.id).eq('following_id', profileId).single();
+      const btn = document.getElementById('follow-btn');
+      if (follow) { btn.textContent = '✓ Suivi'; btn.style.background = 'rgba(16,185,129,.2)'; btn.style.color = '#10b981'; }
+    } catch {}
+  }
+
+  async function toggleFollow() {
+    const profileId = window._profileUserId;
+    if (!profileId) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { window.location.href = '/index.html'; return; }
+      const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+      const { data: existing } = await supabase.from('follows').select('id').eq('follower_id', member.id).eq('following_id', profileId).single();
+      const btn = document.getElementById('follow-btn');
+      if (existing) {
+        await supabase.from('follows').delete().eq('id', existing.id);
+        btn.textContent = 'Suivre'; btn.style.background = 'linear-gradient(135deg,#0ea5e9,#0284c7)'; btn.style.color = 'white';
+      } else {
+        await supabase.from('follows').insert({ follower_id: member.id, following_id: profileId });
+        btn.textContent = '✓ Suivi'; btn.style.background = 'rgba(16,185,129,.2)'; btn.style.color = '#10b981';
+        if (typeof showToast !== 'undefined') showToast('✅ Tu suis maintenant ce surfeur !', 'success');
+      }
+    } catch {}
+  }
+  </script>
+</body>
+</html>

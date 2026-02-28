@@ -12,6 +12,14 @@
         {
             "src": "/spots/(.*)",
             "dest": "/spots/$1.html"
+        },
+        {
+            "src": "/u/(.*)",
+            "dest": "/pages/public-profile.html"
+        },
+        {
+            "src": "/blog/(.*)",
+            "dest": "/blog/$1.html"
         }
     ],
     "error": {
