@@ -1,5 +1,5 @@
 // SwellSync Service Worker — Cache-first for assets, network-first for data
-const CACHE_NAME = 'swellsync-v3';
+const CACHE_NAME = 'swellsync-v4';
 const ASSETS = [
     '/pages/home.html',
     '/pages/splash.html',

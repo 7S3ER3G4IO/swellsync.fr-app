@@ -7,7 +7,8 @@
     'use strict';
 
     // Configuration Sentry
-    const SENTRY_DSN = 'https://examplePublicKey@o0.ingest.sentry.io/0'; // TODO: Remplacer par le vrai DSN Sentry
+    // Configuration Sentry — DSN de production
+    const SENTRY_DSN = 'https://346c900327aa3faab30f9c689042add4@o4510963605897216.ingest.de.sentry.io/4510963610812496';
     const ENV = window.location.hostname === 'swellsync.fr' ? 'production' : 'development';
 
     if (ENV === 'development') return; // Pas de reporting en dev local
