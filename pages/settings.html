@@ -2130,6 +2130,77 @@
 })();
 </script>
   <script src="/js/form-validation.js" defer></script>
+
+<div id="delete-account-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#0f172a;border:1px solid rgba(239,68,68,.3);border-radius:20px;padding:32px;max-width:380px;width:100%;text-align:center">
+    <div style="font-size:48px;margin-bottom:16px">⚠️</div>
+    <h2 id="delete-modal-title" style="color:#ef4444;font-size:20px;margin:0 0 12px">Supprimer mon compte</h2>
+    <p style="color:#94a3b8;font-size:14px;margin:0 0 24px;line-height:1.6">
+      Cette action est <strong>irréversible</strong>. Toutes tes données (sessions, posts, badges) seront supprimées définitivement.
+    </p>
+    <input id="delete-confirm-input" type="text" placeholder='Tape "SUPPRIMER" pour confirmer'
+      style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px;color:white;font-size:14px;margin-bottom:16px;text-align:center"
+      autocomplete="off">
+    <div style="display:flex;gap:12px">
+      <button type="button" onclick="document.getElementById('delete-account-modal').style.display='none'"
+        style="flex:1;padding:12px;background:rgba(255,255,255,.1);border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer">
+        Annuler
+      </button>
+      <button type="button" id="confirm-delete-btn" onclick="confirmDeleteAccount()"
+        style="flex:1;padding:12px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;opacity:.5;cursor:not-allowed"
+        disabled>
+        Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+// Activer le bouton seulement si le mot clé est tapé
+document.getElementById('delete-confirm-input')?.addEventListener('input', function() {
+  const btn = document.getElementById('confirm-delete-btn');
+  if (btn) {
+    const valid = this.value.toUpperCase() === 'SUPPRIMER';
+    btn.disabled = !valid;
+    btn.style.opacity = valid ? '1' : '.5';
+    btn.style.cursor = valid ? 'pointer' : 'not-allowed';
+  }
+});
+
+function showDeleteAccountModal() {
+  const modal = document.getElementById('delete-account-modal');
+  if (modal) { modal.style.display = 'flex'; }
+}
+
+async function confirmDeleteAccount() {
+  const btn = document.getElementById('confirm-delete-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Suppression...'; }
+  
+  try {
+    // Supprimer les données utilisateur via la fonction Supabase
+    const user = (await supabase.auth.getUser()).data.user;
+    if (!user) throw new Error('Non connecté');
+    
+    // Supprimer le profil Member (cascade)
+    await supabase.from('members').delete().eq('auth_id', user.id);
+    
+    // Supprimer le compte Auth
+    const { error } = await supabase.rpc('delete_user');
+    if (error) throw error;
+    
+    await supabase.auth.signOut();
+    window.location.href = '/index.html';
+  } catch(e) {
+    if (typeof showToast === 'function') showToast('Erreur lors de la suppression. Contacte le support.', 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'Supprimer'; }
+  }
+}
+
+// Fermer la modal au clic extérieur
+document.getElementById('delete-account-modal')?.addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+</script>
 </body>
 
 </html>

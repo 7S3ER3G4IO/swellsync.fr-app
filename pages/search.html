@@ -620,6 +620,35 @@
   });
 })();
 </script>
+
+<script>
+// Debounce utilitaire (si pas déjà chargé)
+if (typeof debounce === 'undefined') {
+  function debounce(fn, delay = 300) {
+    let timer;
+    return function(...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+  window.debounce = debounce;
+}
+
+// Application du debounce sur le champ de recherche
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.querySelector('input[type="search"], input[name="search"], #search-input, .search-input');
+  if (searchInput && !searchInput.dataset.debounced) {
+    searchInput.dataset.debounced = 'true';
+    const originalOnInput = searchInput.oninput;
+    const debouncedFn = debounce((e) => {
+      if (originalOnInput) originalOnInput.call(searchInput, e);
+      // Déclencher l'événement input pour les listeners existants
+      searchInput.dispatchEvent(new Event('debouncedInput', { bubbles: true }));
+    }, 300);
+    searchInput.addEventListener('input', debouncedFn);
+  }
+});
+</script>
 </body>
 
 </html>

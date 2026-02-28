@@ -416,6 +416,58 @@
   });
 })();
 </script>
+
+<script>
+// Export CSV des sessions — Portabilité données RGPD
+async function exportSessionsCSV() {
+  try {
+    const btn = document.getElementById('export-csv-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Export...'; }
+    
+    const { data, error } = await supabase
+      .from('surf_sessions')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      if (typeof showToast === 'function') showToast('Aucune session à exporter', 'warning');
+      return;
+    }
+    
+    const headers = ['Date', 'Spot', 'Durée (min)', 'Vagues', 'Score', 'Latitude', 'Longitude'];
+    const rows = data.map(s => [
+      new Date(s.created_at).toLocaleDateString('fr-FR'),
+      s.spot_name || '',
+      Math.round((s.duration || 0) / 60),
+      s.wave_count || 0,
+      s.score || 0,
+      s.lat || '',
+      s.lng || ''
+    ]);
+    
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `swellsync-sessions-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    if (typeof showToast === 'function') showToast(`✅ ${data.length} sessions exportées`, 'success');
+  } catch(e) {
+    if (typeof showToast === 'function') showToast('Erreur lors de l\'export', 'error');
+  } finally {
+    const btn = document.getElementById('export-csv-btn');
+    if (btn) { btn.disabled = false; btn.textContent = '📊 Exporter CSV'; }
+  }
+}
+window.exportSessionsCSV = exportSessionsCSV;
+</script>
 </body>
 
 </html>
