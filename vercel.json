@@ -20,11 +20,13 @@
         {
             "src": "/blog/(.*)",
             "dest": "/blog/$1.html"
+        },
+        {
+            "handle": "error",
+            "status": 404,
+            "dest": "/404.html"
         }
     ],
-    "error": {
-        "404": "/404.html"
-    },
     "redirects": [
         {
             "source": "/:path*",
