@@ -408,3 +408,57 @@ html {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* SwellSync — Dark Mode Fixes */
+@media (prefers-color-scheme: dark) {
+  /* Éviter les images sur fond blanc */
+  img:not([src$=".svg"]):not([src$=".png"]) {
+    filter: brightness(0.9);
+  }
+  
+  /* Placeholder texte plus visible */
+  input::placeholder,
+  textarea::placeholder {
+    color: rgba(148, 163, 184, 0.7);
+  }
+  
+  /* Focus rings visibles en dark mode */
+  :focus-visible {
+    outline: 2px solid #0ea5e9;
+    outline-offset: 2px;
+  }
+  
+  /* Scrollbar dark */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
+}
+
+/* Print styles pour les pages légales */
+@media print {
+  nav, .bottom-nav, #offline-banner, #pwa-install-banner, .btn, footer {
+    display: none !important;
+  }
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 12pt;
+  }
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
+  }
+  a[href^="#"]::after,
+  a[href^="javascript"]::after {
+    content: "";
+  }
+}

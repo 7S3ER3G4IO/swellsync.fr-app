@@ -1615,6 +1615,26 @@
   });
 })();
 </script>
+
+<script>
+// IntersectionObserver pour l'infinite scroll
+(function() {
+  const endMarker = document.createElement('div');
+  endMarker.id = 'end-of-feed';
+  endMarker.style.cssText = 'height:1px;margin:16px 0';
+  endMarker.setAttribute('aria-hidden', 'true');
+  
+  const endMsg = document.createElement('div');
+  endMsg.id = 'feed-end-message';
+  endMsg.style.cssText = 'text-align:center;color:rgba(255,255,255,.3);padding:24px;font-size:13px;display:none';
+  endMsg.textContent = '🌊 Tu as tout vu pour aujourd\'hui !';
+  
+  // Fonction appelée quand tout est chargé
+  window.showFeedEnd = function() {
+    document.getElementById('feed-end-message').style.display = 'block';
+  };
+})();
+</script>
 </body>
 
 </html>

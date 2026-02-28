@@ -91,6 +91,9 @@
     <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" href="/assets/splash/splash-1080x2340.png">
   <link rel="canonical" href="https://swellsync.fr/pages/session-live.html">
   <meta name="description" content="Enregistrez votre session de surf en temps réel avec GPS. Timer, compteur de vagues et score automatique.">
+  <meta property="og:image" content="https://swellsync.fr/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 </head>
 
 <body>
@@ -440,6 +443,37 @@ document.addEventListener('visibilitychange', async () => {
   }
 });
 window.addEventListener('beforeunload', releaseWakeLock);
+</script>
+
+<script>
+// Indicateur précision GPS
+function updateGPSAccuracy(accuracy) {
+  let el = document.getElementById('gps-accuracy-indicator');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'gps-accuracy-indicator';
+    el.style.cssText = 'position:fixed;top:16px;right:16px;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;z-index:100;transition:all .3s';
+    document.body.appendChild(el);
+  }
+  if (accuracy <= 15) {
+    el.textContent = '📍 GPS précis';
+    el.style.background = 'rgba(16,185,129,.2)';
+    el.style.color = '#10b981';
+    el.style.border = '1px solid rgba(16,185,129,.3)';
+  } else if (accuracy <= 50) {
+    el.textContent = '📍 GPS correct';
+    el.style.background = 'rgba(245,158,11,.2)';
+    el.style.color = '#f59e0b';
+    el.style.border = '1px solid rgba(245,158,11,.3)';
+  } else {
+    el.textContent = '⚠️ GPS faible';
+    el.style.background = 'rgba(239,68,68,.2)';
+    el.style.color = '#ef4444';
+    el.style.border = '1px solid rgba(239,68,68,.3)';
+  }
+  el.setAttribute('aria-label', el.textContent);
+}
+window.updateGPSAccuracy = updateGPSAccuracy;
 </script>
 </body>
 
