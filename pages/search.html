@@ -649,6 +649,105 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+<script>
+// Filtres de recherche — Région + Niveau de surf
+const SearchFilters = {
+  region: null,
+  level: null,
+  
+  regions: [
+    { id: null, label: 'Toutes', emoji: '🗺️' },
+    { id: 'bretagne', label: 'Bretagne', emoji: '🦞' },
+    { id: 'normandie', label: 'Normandie', emoji: '🍎' },
+    { id: 'landes', label: 'Landes', emoji: '🌲' },
+    { id: 'pays_basque', label: 'Pays Basque', emoji: '⚫🔴🟢' },
+    { id: 'méditerranée', label: 'Méditerranée', emoji: '☀️' },
+  ],
+  
+  levels: [
+    { id: null, label: 'Tous niveaux', emoji: '🏄' },
+    { id: 'rookie', label: 'Rookie', emoji: '🤙' },
+    { id: 'debutant', label: 'Débutant', emoji: '🌊' },
+    { id: 'intermediaire', label: 'Intermédiaire', emoji: '⚡' },
+    { id: 'avance', label: 'Avancé', emoji: '🔥' },
+    { id: 'expert', label: 'Expert', emoji: '👑' },
+  ],
+  
+  createFilterBar() {
+    if (document.getElementById('search-filters-bar')) return;
+    
+    const bar = document.createElement('div');
+    bar.id = 'search-filters-bar';
+    bar.style.cssText = 'padding:8px 16px;overflow-x:auto;white-space:nowrap;display:flex;flex-direction:column;gap:8px;scrollbar-width:none';
+    
+    // Row région
+    const regionRow = document.createElement('div');
+    regionRow.style.cssText = 'display:flex;gap:6px;padding-bottom:2px';
+    this.regions.forEach(r => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.dataset.region = r.id || 'all';
+      chip.style.cssText = 'flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 12px;color:#94a3b8;font-size:12px;cursor:pointer;white-space:nowrap;transition:all .2s';
+      chip.textContent = `${r.emoji} ${r.label}`;
+      chip.onclick = () => {
+        this.region = r.id;
+        regionRow.querySelectorAll('button').forEach(b => {
+          b.style.background = 'rgba(255,255,255,.05)';
+          b.style.color = '#94a3b8';
+          b.style.borderColor = 'rgba(255,255,255,.1)';
+        });
+        chip.style.background = 'rgba(14,165,233,.2)';
+        chip.style.color = '#0ea5e9';
+        chip.style.borderColor = 'rgba(14,165,233,.3)';
+        this.apply();
+      };
+      regionRow.appendChild(chip);
+    });
+    
+    // Row niveau
+    const levelRow = document.createElement('div');
+    levelRow.style.cssText = 'display:flex;gap:6px';
+    this.levels.forEach(l => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.dataset.level = l.id || 'all';
+      chip.style.cssText = 'flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 12px;color:#94a3b8;font-size:12px;cursor:pointer;transition:all .2s';
+      chip.textContent = `${l.emoji} ${l.label}`;
+      chip.onclick = () => {
+        this.level = l.id;
+        levelRow.querySelectorAll('button').forEach(b => {
+          b.style.background = 'rgba(255,255,255,.05)';
+          b.style.color = '#94a3b8';
+          b.style.borderColor = 'rgba(255,255,255,.1)';
+        });
+        chip.style.background = 'rgba(139,92,246,.2)';
+        chip.style.color = '#8b5cf6';
+        chip.style.borderColor = 'rgba(139,92,246,.3)';
+        this.apply();
+      };
+      levelRow.appendChild(chip);
+    });
+    
+    bar.appendChild(regionRow);
+    bar.appendChild(levelRow);
+    
+    const searchBox = document.querySelector('.search-box, #search-container, .search-container');
+    if (searchBox) searchBox.after(bar);
+    else document.querySelector('main, .content')?.prepend(bar);
+  },
+  
+  apply() {
+    // Déclencher un événement que les scripts de recherche peuvent écouter
+    document.dispatchEvent(new CustomEvent('searchFilterChange', {
+      detail: { region: this.region, level: this.level }
+    }));
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => SearchFilters.createFilterBar());
+window.SearchFilters = SearchFilters;
+</script>
 </body>
 
 </html>

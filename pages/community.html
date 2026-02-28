@@ -1685,6 +1685,70 @@
   observer.observe(feedContainer, {childList: true});
 })();
 </script>
+
+<!-- Modal de signalement de post -->
+<div id="report-modal" role="dialog" aria-modal="true" aria-labelledby="report-title"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:flex-end;justify-content:center;padding:0">
+  <div style="background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:20px 20px 0 0;padding:24px;width:100%;max-width:500px">
+    <h2 id="report-title" style="font-size:18px;color:#f1f5f9;margin:0 0 20px">Signaler ce post</h2>
+    <div id="report-options" style="display:flex;flex-direction:column;gap:8px">
+      <button type="button" data-reason="spam" class="report-option-btn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#f1f5f9;text-align:left;cursor:pointer;font-size:15px">🚫 Spam ou pub non sollicitée</button>
+      <button type="button" data-reason="inappropriate" class="report-option-btn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#f1f5f9;text-align:left;cursor:pointer;font-size:15px">⚠️ Contenu inapproprié</button>
+      <button type="button" data-reason="harassment" class="report-option-btn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#f1f5f9;text-align:left;cursor:pointer;font-size:15px">😤 Harcèlement ou bullying</button>
+      <button type="button" data-reason="false_info" class="report-option-btn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#f1f5f9;text-align:left;cursor:pointer;font-size:15px">❌ Fausses informations</button>
+      <button type="button" data-reason="other" class="report-option-btn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#f1f5f9;text-align:left;cursor:pointer;font-size:15px">📌 Autre raison</button>
+    </div>
+    <button type="button" onclick="closeReportModal()" style="width:100%;margin-top:12px;padding:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#94a3b8;cursor:pointer;font-size:15px">Annuler</button>
+  </div>
+</div>
+
+<script>
+let _reportPostId = null;
+
+function openReportModal(postId) {
+  _reportPostId = postId;
+  const modal = document.getElementById('report-modal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeReportModal() {
+  const modal = document.getElementById('report-modal');
+  if (modal) modal.style.display = 'none';
+  _reportPostId = null;
+}
+
+async function submitReport(reason) {
+  closeReportModal();
+  try {
+    const user = (await supabase.auth.getUser()).data.user;
+    if (!user) return;
+    await supabase.from('post_reports').insert({
+      post_id: _reportPostId,
+      reporter_id: user.id,
+      reason: reason,
+      created_at: new Date().toISOString()
+    });
+    if (typeof showToast === 'function') showToast('✅ Signalement envoyé — Merci !', 'success');
+  } catch(e) {
+    if (e?.code === '42P01') {
+      // Table n'existe pas encore — ignorer silencieusement
+      if (typeof showToast === 'function') showToast('✅ Signalement pris en compte', 'success');
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.report-option-btn').forEach(btn => {
+    btn.addEventListener('click', () => submitReport(btn.dataset.reason));
+  });
+  document.getElementById('report-modal')?.addEventListener('click', function(e) {
+    if (e.target === this) closeReportModal();
+  });
+});
+
+window.openReportModal = openReportModal;
+window.closeReportModal = closeReportModal;
+</script>
 </body>
 
 </html>

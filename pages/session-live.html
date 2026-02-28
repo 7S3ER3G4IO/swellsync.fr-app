@@ -475,6 +475,186 @@ function updateGPSAccuracy(accuracy) {
 }
 window.updateGPSAccuracy = updateGPSAccuracy;
 </script>
+
+<script>
+// ─── Timer de session avec pause/reprendre ───
+const SessionTimer = {
+  _startTime: null,
+  _elapsed: 0,
+  _running: false,
+  _interval: null,
+  
+  start() {
+    if (this._running) return;
+    this._startTime = Date.now() - this._elapsed;
+    this._running = true;
+    this._interval = setInterval(() => this._tick(), 1000);
+    if (typeof CleanupManager !== 'undefined') CleanupManager.addTimer(this._interval);
+    this._updateUI();
+    if (typeof haptic !== 'undefined') haptic([50]);
+  },
+  
+  pause() {
+    if (!this._running) return;
+    this._elapsed = Date.now() - this._startTime;
+    clearInterval(this._interval);
+    this._running = false;
+    this._updateUI();
+    if (typeof haptic !== 'undefined') haptic([30, 50, 30]);
+  },
+  
+  toggle() { this._running ? this.pause() : this.start(); },
+  
+  _tick() {
+    this._elapsed = Date.now() - this._startTime;
+    this._updateUI();
+    // Auto-sauvegarde toutes les 30s
+    if (Math.floor(this._elapsed / 1000) % 30 === 0) SessionAutoSave.save();
+  },
+  
+  _updateUI() {
+    const el = document.getElementById('session-timer');
+    if (!el) return;
+    const s = Math.floor(this._elapsed / 1000);
+    const m = Math.floor(s / 60);
+    const h = Math.floor(m / 60);
+    el.textContent = h > 0 
+      ? `${h}:${String(m%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`
+      : `${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+    
+    const btn = document.getElementById('timer-toggle-btn');
+    if (btn) btn.textContent = this._running ? '⏸ Pause' : '▶ Reprendre';
+  },
+  
+  getSeconds() { return Math.floor(this._elapsed / 1000); },
+  isRunning() { return this._running; }
+};
+
+// ─── Compteur de vagues ───
+const WaveCounter = {
+  _count: 0,
+  _lastTap: 0,
+  
+  tap() {
+    const now = Date.now();
+    if (now - this._lastTap < 300) return; // Anti-double-tap debounce
+    this._lastTap = now;
+    this._count++;
+    this._updateUI();
+    if (typeof haptic !== 'undefined') haptic([30]);
+  },
+  
+  undo() {
+    if (this._count > 0) { this._count--; this._updateUI(); }
+  },
+  
+  _updateUI() {
+    const el = document.getElementById('wave-count-display');
+    if (el) el.textContent = this._count;
+  },
+  
+  getCount() { return this._count; }
+};
+
+// ─── Sauvegarde auto toutes les 30s ───
+const SessionAutoSave = {
+  _tempKey: 'sw_session_draft',
+  
+  save() {
+    const data = {
+      startTime: SessionTimer._startTime,
+      elapsedMs: SessionTimer._elapsed,
+      waveCount: WaveCounter.getCount(),
+      savedAt: new Date().toISOString()
+    };
+    try { localStorage.setItem(this._tempKey, JSON.stringify(data)); } catch {}
+  },
+  
+  restore() {
+    try {
+      const raw = localStorage.getItem(this._tempKey);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  },
+  
+  clear() { try { localStorage.removeItem(this._tempKey); } catch {} }
+};
+
+// ─── Mode économie batterie ───
+const BatteryManager = {
+  async init() {
+    if (!navigator.getBattery) return;
+    const bat = await navigator.getBattery();
+    bat.addEventListener('levelchange', () => this.check(bat));
+    this.check(bat);
+  },
+  
+  check(bat) {
+    const LOW = 0.20;
+    if (bat.level <= LOW && !bat.charging) {
+      const banner = document.getElementById('battery-warning');
+      if (!banner) {
+        const el = document.createElement('div');
+        el.id = 'battery-warning';
+        el.style.cssText = 'position:fixed;top:60px;left:0;right:0;background:rgba(245,158,11,.9);color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:600;z-index:999';
+        el.textContent = `⚡ Batterie faible (${Math.round(bat.level*100)}%) — GPS en mode économie`;
+        document.body.prepend(el);
+      }
+    }
+  }
+};
+
+// ─── Créer les boutons UI si absents ───
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  
+  // Bouton compteur vagues (gros, facilement tappable)
+  if (!document.getElementById('wave-counter-btn')) {
+    const btn = document.createElement('button');
+    btn.id = 'wave-counter-btn';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Compter une vague');
+    btn.style.cssText = `
+      position: fixed; bottom: 100px; right: 20px; z-index: 100;
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      border: none; color: white; font-size: 14px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(14,165,233,.5);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; touch-action: manipulation;
+    `;
+    btn.innerHTML = '<span style="font-size:24px">🌊</span><span id="wave-count-display">0</span>';
+    btn.onclick = () => WaveCounter.tap();
+    body.appendChild(btn);
+    
+    // Bouton undo (long press ou double-tap)
+    btn.addEventListener('contextmenu', (e) => { e.preventDefault(); WaveCounter.undo(); });
+  }
+  
+  // Init batterie
+  BatteryManager.init();
+  
+  // Restaurer session draft si existe
+  const draft = SessionAutoSave.restore();
+  if (draft && draft.savedAt) {
+    const mins = Math.round((Date.now() - new Date(draft.savedAt)) / 60000);
+    if (mins < 60 && confirm(`Session non terminée trouvée (il y a ${mins} min). Reprendre ?`)) {
+      WaveCounter._count = draft.waveCount || 0;
+      WaveCounter._updateUI();
+      SessionTimer._elapsed = draft.elapsedMs || 0;
+      SessionTimer._updateUI();
+      SessionTimer.start();
+    } else {
+      SessionAutoSave.clear();
+    }
+  }
+});
+
+window.SessionTimer = SessionTimer;
+window.WaveCounter = WaveCounter;
+window.SessionAutoSave = SessionAutoSave;
+</script>
 </body>
 
 </html>

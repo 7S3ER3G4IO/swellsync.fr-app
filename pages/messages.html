@@ -551,6 +551,81 @@
 })();
 </script>
   <script src="/js/form-validation.js" defer></script>
+
+<script>
+// ─── Lu ✓✓ — marquer les messages comme lus ───
+async function markMessagesRead(conversationId) {
+  if (typeof supabase === 'undefined') return;
+  try {
+    await supabase.from('private_messages')
+      .update({ is_read: true })
+      .eq('conversation_id', conversationId)
+      .neq('sender_id', (await supabase.auth.getUser()).data.user?.id);
+  } catch(e) {}
+}
+
+// ─── Typing Indicator via Supabase Presence ───
+let _typingChannel = null;
+let _typingTimer = null;
+
+function initTypingIndicator(channelName, myUserId) {
+  if (_typingChannel) _typingChannel.unsubscribe();
+  
+  _typingChannel = supabase.channel(`typing:${channelName}`, {
+    config: { presence: { key: myUserId } }
+  });
+  
+  _typingChannel
+    .on('presence', { event: 'sync' }, () => {
+      const state = _typingChannel.presenceState();
+      const others = Object.keys(state).filter(k => k !== myUserId);
+      const el = document.getElementById('typing-indicator');
+      if (el) {
+        el.style.display = others.length > 0 ? 'flex' : 'none';
+        el.textContent = others.length === 1 ? 'En train d'écrire...' : `${others.length} personnes écrivent...`;
+      }
+    })
+    .subscribe();
+  
+  return _typingChannel;
+}
+
+function sendTypingSignal(channel) {
+  if (!channel) return;
+  channel.track({ typing: true });
+  clearTimeout(_typingTimer);
+  _typingTimer = setTimeout(() => channel.untrack(), 3000);
+}
+
+// Ajouter l'indicateur dans le DOM si absent
+document.addEventListener('DOMContentLoaded', () => {
+  const msgInput = document.querySelector('.message-input, #message-input, textarea[name="message"]');
+  if (msgInput) {
+    // Créer l'indicateur
+    const indicator = document.createElement('div');
+    indicator.id = 'typing-indicator';
+    indicator.style.cssText = 'display:none;align-items:center;gap:6px;padding:4px 12px;color:#64748b;font-size:12px;font-style:italic';
+    indicator.setAttribute('aria-live', 'polite');
+    indicator.innerHTML = `<span style="display:flex;gap:3px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#64748b;animation:bounce .8s ease infinite"></span>
+      <span style="width:6px;height:6px;border-radius:50%;background:#64748b;animation:bounce .8s ease infinite .2s"></span>
+      <span style="width:6px;height:6px;border-radius:50%;background:#64748b;animation:bounce .8s ease infinite .4s"></span>
+    </span><span></span>`;
+    msgInput.parentNode.insertBefore(indicator, msgInput);
+    
+    // Style bounce
+    if (!document.getElementById('bounce-style')) {
+      const s = document.createElement('style');
+      s.id = 'bounce-style';
+      s.textContent = '@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}';
+      document.head.appendChild(s);
+    }
+  }
+});
+window.initTypingIndicator = initTypingIndicator;
+window.sendTypingSignal = sendTypingSignal;
+window.markMessagesRead = markMessagesRead;
+</script>
 </body>
 
 </html>

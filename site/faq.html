@@ -28,6 +28,47 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4490968258367543" crossorigin="anonymous"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "SwellSync est-il gratuit ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, SwellSync est gratuit dans sa version de base. Des fonctionnalités avancées sont disponibles avec l'abonnement Pro."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Comment fonctionne le tracker GPS ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le tracker GPS utilise la géolocalisation de votre téléphone pour enregistrer votre tracé pendant la session de surf. Il fonctionne hors-ligne et synchronise les données à la reconnexion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Les prévisions de houle sont-elles fiables ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SwellSync utilise l'API StormGlass qui agrège les données de plusieurs modèles météorologiques professionnels (GFS, ECMWF) pour des prévisions précises à 7 jours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "SwellSync fonctionne-t-il sur iPhone et Android ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, SwellSync est une Progressive Web App (PWA) compatible avec tous les smartphones. Elle peut être installée depuis le navigateur sans passer par un store."
+      }
+    }
+  ]
+}
+</script>
 </head>
 
 <body>
@@ -360,6 +401,31 @@
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
+
+<!-- AdSense Anchor Ad — Bannière fixe bas mobile -->
+<div id="adsense-anchor" style="position:fixed;bottom:0;left:0;right:0;z-index:400;background:rgba(8,15,26,.95);border-top:1px solid rgba(255,255,255,.06);display:none" aria-label="Publicité">
+  <div style="position:relative;max-width:728px;margin:0 auto;padding:4px">
+    <button type="button" onclick="document.getElementById('adsense-anchor').style.display='none'" aria-label="Fermer la publicité" style="position:absolute;top:2px;right:2px;background:rgba(255,255,255,.1);border:none;color:#94a3b8;width:20px;height:20px;border-radius:4px;font-size:12px;cursor:pointer;z-index:1">✕</button>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4490968258367543"
+         data-ad-slot="7483780171"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  </div>
+</div>
+<script>
+// Afficher l'anchor ad sur les pages vitrine (non-connectées)
+(function() {
+  const anchor = document.getElementById('adsense-anchor');
+  if (!anchor) return;
+  // Afficher après 3s sur les pages vitrine
+  setTimeout(() => {
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    anchor.style.display = 'block';
+  }, 3000);
+})();
+</script>
 </body>
 
 </html>

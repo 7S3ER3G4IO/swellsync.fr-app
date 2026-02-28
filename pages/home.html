@@ -1605,6 +1605,26 @@
   });
 })();
 </script>
+  <script src="/js/pull-to-refresh.js" defer></script>
+
+<script>
+// Widget marée — affichage montante/descendante
+function updateTideWidget(tidePct, direction) {
+  const tideMontante = direction === 'rising';
+  const el = document.getElementById('tide-widget');
+  if (!el) return;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:#94a3b8">
+      <span style="font-size:18px">${tideMontante ? '🌊↑' : '🌊↓'}</span>
+      <div>
+        <div style="color:#f1f5f9;font-weight:600;font-size:12px">${tideMontante ? 'Montante' : 'Descendante'}</div>
+        <div style="color:#64748b;font-size:11px">${tidePct}%</div>
+      </div>
+    </div>
+  `;
+}
+window.updateTideWidget = updateTideWidget;
+</script>
 </body>
 
 </html>

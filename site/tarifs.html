@@ -30,6 +30,51 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4490968258367543" crossorigin="anonymous"></script>
 </head>
 
+
+<!-- Switch Mensuel / Annuel (-20%) -->
+<div id="billing-toggle-container" style="display:flex;align-items:center;justify-content:center;gap:16px;margin:32px 0">
+  <span id="monthly-label" style="color:#f1f5f9;font-weight:600;font-size:15px">Mensuel</span>
+  <div id="billing-toggle" style="width:52px;height:28px;background:rgba(14,165,233,.3);border-radius:14px;position:relative;cursor:pointer;transition:background .3s" role="switch" aria-checked="false" tabindex="0" aria-label="Basculer entre mensuel et annuel">
+    <div id="toggle-thumb" style="position:absolute;top:3px;left:3px;width:22px;height:22px;background:#0ea5e9;border-radius:50%;transition:left .3s"></div>
+  </div>
+  <span id="annual-label" style="color:#64748b;font-size:15px">Annuel</span>
+  <span style="background:linear-gradient(135deg,#10b981,#059669);color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:.5px">-20%</span>
+</div>
+
+<script>
+let _isAnnual = false;
+
+function toggleBilling() {
+  _isAnnual = !_isAnnual;
+  const toggle = document.getElementById('billing-toggle');
+  const thumb = document.getElementById('toggle-thumb');
+  const monthly = document.getElementById('monthly-label');
+  const annual = document.getElementById('annual-label');
+  
+  toggle.style.background = _isAnnual ? 'rgba(14,165,233,.8)' : 'rgba(14,165,233,.3)';
+  toggle.setAttribute('aria-checked', String(_isAnnual));
+  thumb.style.left = _isAnnual ? '27px' : '3px';
+  monthly.style.color = _isAnnual ? '#64748b' : '#f1f5f9';
+  annual.style.color = _isAnnual ? '#f1f5f9' : '#64748b';
+  monthly.style.fontWeight = _isAnnual ? '400' : '600';
+  annual.style.fontWeight = _isAnnual ? '600' : '400';
+  
+  // Mettre à jour les prix affichés
+  document.querySelectorAll('[data-monthly], [data-annual]').forEach(el => {
+    el.textContent = _isAnnual ? el.dataset.annual : el.dataset.monthly;
+  });
+  
+  // Mettre à jour les CTAs
+  document.querySelectorAll('[data-monthly-href], [data-annual-href]').forEach(el => {
+    el.href = _isAnnual ? el.dataset.annualHref : el.dataset.monthlyHref;
+  });
+}
+
+document.getElementById('billing-toggle')?.addEventListener('click', toggleBilling);
+document.getElementById('billing-toggle')?.addEventListener('keydown', (e) => {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleBilling(); }
+});
+</script>
 <body>
 <!-- SwellSync Ad — Banner Top -->
 <div class="ad-container ad-banner-top" aria-label="Publicité" style="text-align:center;padding:8px 0;min-height:90px">
@@ -267,6 +312,54 @@
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
+
+<!-- Pourquoi passer Pro ? -->
+<section id="pourquoi-pro" style="padding:48px 24px;max-width:700px;margin:0 auto">
+  <h2 style="font-size:22px;font-weight:700;color:#f1f5f9;text-align:center;margin-bottom:32px">✨ Pourquoi passer Pro ?</h2>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.1);border-radius:16px;padding:20px">
+      <span style="font-size:28px">📊</span>
+      <div><div style="font-weight:600;color:#f1f5f9;margin-bottom:4px">Stats avancées illimitées</div><div style="color:#64748b;font-size:14px">Distance totale, heatmap GPS, comparaison communauté, export PDF annuel</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.1);border-radius:16px;padding:20px">
+      <span style="font-size:28px">🔔</span>
+      <div><div style="font-weight:600;color:#f1f5f9;margin-bottom:4px">Alertes illimitées + multi-spots</div><div style="color:#64748b;font-size:14px">Créez autant d'alertes que vous voulez, sur plusieurs spots simultanément</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.1);border-radius:16px;padding:20px">
+      <span style="font-size:28px">👑</span>
+      <div><div style="font-weight:600;color:#f1f5f9;margin-bottom:4px">Badge Pro + priorité dans la communauté</div><div style="color:#64748b;font-size:14px">Badge visible sur votre profil, posts mis en avant dans le feed</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:16px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.1);border-radius:16px;padding:20px">
+      <span style="font-size:28px">🚫</span>
+      <div><div style="font-weight:600;color:#f1f5f9;margin-bottom:4px">Sans publicité</div><div style="color:#64748b;font-size:14px">Profitez de SwellSync sans aucune interruption publicitaire</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AdSense Anchor Ad — Bannière fixe bas mobile -->
+<div id="adsense-anchor" style="position:fixed;bottom:0;left:0;right:0;z-index:400;background:rgba(8,15,26,.95);border-top:1px solid rgba(255,255,255,.06);display:none" aria-label="Publicité">
+  <div style="position:relative;max-width:728px;margin:0 auto;padding:4px">
+    <button type="button" onclick="document.getElementById('adsense-anchor').style.display='none'" aria-label="Fermer la publicité" style="position:absolute;top:2px;right:2px;background:rgba(255,255,255,.1);border:none;color:#94a3b8;width:20px;height:20px;border-radius:4px;font-size:12px;cursor:pointer;z-index:1">✕</button>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4490968258367543"
+         data-ad-slot="7483780171"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  </div>
+</div>
+<script>
+// Afficher l'anchor ad sur les pages vitrine (non-connectées)
+(function() {
+  const anchor = document.getElementById('adsense-anchor');
+  if (!anchor) return;
+  // Afficher après 3s sur les pages vitrine
+  setTimeout(() => {
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    anchor.style.display = 'block';
+  }, 3000);
+})();
+</script>
 </body>
 
 </html>

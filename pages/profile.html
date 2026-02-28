@@ -849,6 +849,93 @@
   });
 })();
 </script>
+
+<script>
+// ─── Calcul automatique du niveau surf ───
+function calculateSurfLevel(totalSessions, avgScore, totalHours) {
+  const levels = [
+    { min: 0,   label: 'Rookie',      icon: '🤙', color: '#64748b' },
+    { min: 5,   label: 'Débutant',    icon: '🌊', color: '#22c55e' },
+    { min: 20,  label: 'Local',       icon: '🏄', color: '#3b82f6' },
+    { min: 50,  label: 'Régulier',    icon: '⚡', color: '#8b5cf6' },
+    { min: 100, label: 'Avancé',      icon: '🔥', color: '#ef4444' },
+    { min: 200, label: 'Expert',      icon: '👑', color: '#f59e0b' },
+    { min: 365, label: 'Légende',     icon: '🌟', color: '#0ea5e9' },
+  ];
+  
+  let level = levels[0];
+  for (const l of levels) {
+    if (totalSessions >= l.min) level = l;
+  }
+  return level;
+}
+
+async function loadAndDisplayProfileStats() {
+  try {
+    const user = (await supabase.auth.getUser()).data.user;
+    if (!user) return;
+    
+    const member = await supabase.from('members').select('id, name').eq('auth_id', user.id).single();
+    if (!member.data) return;
+    
+    const sessions = await supabase.from('surf_sessions')
+      .select('duration, score, created_at')
+      .eq('member_id', member.data.id);
+    
+    if (sessions.data?.length > 0) {
+      const totalSessions = sessions.data.length;
+      const avgScore = Math.round(sessions.data.reduce((acc, s) => acc + (s.score || 0), 0) / totalSessions);
+      const totalMins = sessions.data.reduce((acc, s) => acc + (s.duration || 0), 0) / 60;
+      
+      const level = calculateSurfLevel(totalSessions, avgScore, totalMins / 60);
+      
+      // Afficher le badge de niveau
+      const badge = document.getElementById('surf-level-badge');
+      if (badge) {
+        badge.style.cssText = `background:${level.color}20;border:1px solid ${level.color}40;border-radius:20px;padding:6px 14px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:${level.color}`;
+        badge.innerHTML = `${level.icon} ${level.label}`;
+      }
+      
+      // Afficher les stats
+      if (document.getElementById('stat-sessions')) document.getElementById('stat-sessions').textContent = totalSessions;
+      if (document.getElementById('stat-score')) document.getElementById('stat-score').textContent = avgScore;
+      if (document.getElementById('stat-hours')) document.getElementById('stat-hours').textContent = Math.round(totalMins / 60);
+      
+      // Calculer la série (streak)
+      const streak = calculateStreak(sessions.data.map(s => s.created_at));
+      if (document.getElementById('stat-streak')) document.getElementById('stat-streak').textContent = `${streak}🔥`;
+    }
+  } catch(e) {}
+}
+
+function calculateStreak(dates) {
+  if (!dates.length) return 0;
+  const days = [...new Set(dates.map(d => new Date(d).toDateString()))].sort((a,b) => new Date(b)-new Date(a));
+  let streak = 1;
+  for (let i = 0; i < days.length - 1; i++) {
+    const diff = (new Date(days[i]) - new Date(days[i+1])) / 86400000;
+    if (diff <= 7) streak++; else break;
+  }
+  return streak;
+}
+
+// Créer les widgets stats si absents
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('.profile-header, .profile-info, .user-info') || document.body;
+  
+  if (!document.getElementById('surf-level-badge')) {
+    const badge = document.createElement('span');
+    badge.id = 'surf-level-badge';
+    badge.style.cssText = 'display:inline-block;margin-top:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 14px;font-size:13px;color:#94a3b8';
+    badge.textContent = 'Chargement...';
+    header.appendChild(badge);
+  }
+  
+  if (typeof supabase !== 'undefined') loadAndDisplayProfileStats();
+});
+
+window.loadAndDisplayProfileStats = loadAndDisplayProfileStats;
+</script>
 </body>
 
 </html>

@@ -410,6 +410,68 @@
 })();
 </script>
   <script src="/js/form-validation.js" defer></script>
+
+<script>
+// Mode vacances — désactiver toutes les alertes temporairement
+async function toggleVacationMode(days = 0) {
+  const isVacation = days > 0;
+  const until = isVacation ? new Date(Date.now() + days * 86400000).toISOString() : null;
+  
+  try {
+    const user = (await supabase.auth.getUser()).data.user;
+    const member = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+    
+    await supabase.from('alerts')
+      .update({ 
+        is_active: !isVacation,
+        paused_until: until
+      })
+      .eq('member_id', member.data.id);
+    
+    const badge = document.getElementById('vacation-badge');
+    if (badge) {
+      badge.style.display = isVacation ? 'flex' : 'none';
+      badge.textContent = isVacation ? `⛱️ Mode vacances — ${days}j` : '';
+    }
+    
+    if (typeof showToast === 'function') {
+      showToast(isVacation ? `⛱️ Alertes pausées ${days} jours` : '🔔 Alertes réactivées', 'success');
+    }
+  } catch(e) {
+    if (typeof showToast === 'function') showToast('Erreur lors de la mise à jour', 'error');
+  }
+}
+
+// Créer le bouton mode vacances si absent
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.querySelector('.alerts-header, .page-header, h1');
+  if (!container || document.getElementById('vacation-btn')) return;
+  
+  const btn = document.createElement('button');
+  btn.id = 'vacation-btn';
+  btn.type = 'button';
+  btn.style.cssText = 'background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 14px;color:#94a3b8;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:12px;width:100%';
+  btn.innerHTML = '⛱️ Mode vacances — Désactiver toutes les alertes';
+  
+  const badge = document.createElement('div');
+  badge.id = 'vacation-badge';
+  badge.style.cssText = 'display:none;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:6px 12px;color:#f59e0b;font-size:12px;margin-top:8px;align-items:center;gap:6px';
+  
+  btn.onclick = () => {
+    const options = ['1 jour', '3 jours', '7 jours', '14 jours', 'Réactiver'];
+    const days = [1, 3, 7, 14, 0];
+    const sel = prompt('Mode vacances — Durée:
+' + options.map((o,i) => `${i+1}. ${o}`).join('
+'));
+    const idx = parseInt(sel) - 1;
+    if (idx >= 0 && idx < days.length) toggleVacationMode(days[idx]);
+  };
+  
+  container.after(btn);
+  btn.after(badge);
+});
+window.toggleVacationMode = toggleVacationMode;
+</script>
 </body>
 
 </html>
