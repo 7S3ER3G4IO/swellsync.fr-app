@@ -1,148 +1,64 @@
 /**
- * SwellSync — Gestionnaire d'erreurs réseau global
- * Retry logic, timeout, messages user-friendly
+ * SwellSync — Global Error Handler
+ * Capture les erreurs non gérées et les affiche proprement avec showToast
  */
 
-// Retry avec exponential backoff
-async function fetchWithRetry(url, options = {}, maxRetries = 3) {
-  let lastError;
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
-      
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal
-      });
-      clearTimeout(timeout);
-      
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After') || (2 ** attempt);
-        await sleep(retryAfter * 1000);
-        continue;
-      }
-      if (response.status >= 500 && attempt < maxRetries) {
-        await sleep(2 ** attempt * 500); // 500ms, 1s, 2s...
-        continue;
-      }
-      return response;
-    } catch (err) {
-      lastError = err;
-      if (err.name === 'AbortError') {
-        throw new Error('Délai d\'attente dépassé. Vérifiez votre connexion.');
-      }
-      if (attempt < maxRetries) {
-        await sleep(2 ** attempt * 500);
-      }
-    }
+window.addEventListener('error', e => {
+  // Ignorer les erreurs cross-origin
+  if (e.message && e.message.includes('Script error')) return;
+  if (typeof showToast !== 'undefined') {
+    showToast('Une erreur inattendue est survenue. Recharge la page si le problème persiste.', 'error');
   }
-  throw lastError || new Error('Erreur réseau. Réessayez dans quelques instants.');
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Messages d'erreur selon le code HTTP
-function getErrorMessage(status) {
-  const messages = {
-    400: 'Données invalides. Vérifiez le formulaire.',
-    401: 'Session expirée. Reconnectez-vous.',
-    403: 'Accès refusé.',
-    404: 'Ressource introuvable.',
-    429: 'Trop de requêtes. Réessayez dans quelques secondes.',
-    500: 'Erreur serveur. Réessayez dans quelques instants.',
-    503: 'Service temporairement indisponible.',
-  };
-  return messages[status] || 'Une erreur est survenue. Réessayez.';
-}
-
-// Sécuriser les accès au localStorage
-const SafeStorage = {
-  get(key, fallback = null) {
-    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
-    catch { return fallback; }
-  },
-  set(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
-    catch (e) {
-      if (e.name === 'QuotaExceededError') {
-        console.warn('localStorage plein — nettoyage...');
-        // Supprimer les clés les plus anciennes
-        const keys = Object.keys(localStorage);
-        if (keys.length > 0) { localStorage.removeItem(keys[0]); }
-      }
-      return false;
-    }
-  },
-  remove(key) {
-    try { localStorage.removeItem(key); } catch {}
-  }
-};
-
-// Nettoyage mémoire — à appeler à la fermeture de page
-const CleanupManager = {
-  _timers: [],
-  _listeners: [],
-  _channels: [],
-  
-  addTimer(id) { this._timers.push(id); },
-  addListener(el, event, fn) { this._listeners.push({el, event, fn}); },
-  addChannel(ch) { this._channels.push(ch); },
-  
-  cleanup() {
-    this._timers.forEach(id => { clearInterval(id); clearTimeout(id); });
-    this._listeners.forEach(({el, event, fn}) => el?.removeEventListener(event, fn));
-    this._channels.forEach(ch => { try { ch?.unsubscribe(); } catch {} });
-    if (typeof supabase !== 'undefined') {
-      try { supabase.removeAllChannels(); } catch {}
-    }
-    this._timers = []; this._listeners = []; this._channels = [];
-  }
-};
-
-window.addEventListener('beforeunload', () => CleanupManager.cleanup());
-window.addEventListener('pagehide', () => CleanupManager.cleanup());
-
-// Wake Lock API pour la session GPS
-const WakeLockManager = {
-  _lock: null,
-  async acquire() {
-    try {
-      if ('wakeLock' in navigator) {
-        this._lock = await navigator.wakeLock.request('screen');
-      }
-    } catch {}
-  },
-  async release() {
-    try { await this._lock?.release(); this._lock = null; } catch {}
-  }
-};
-
-// Web Share API
-async function shareContent({ title, text, url }) {
-  if (navigator.share) {
-    try { await navigator.share({ title, text, url }); return true; }
-    catch (e) { if (e.name !== 'AbortError') console.warn(e); }
-  }
-  // Fallback: copy to clipboard
-  try {
-    await navigator.clipboard.writeText(url || window.location.href);
-    if (typeof showToast === 'function') showToast('Lien copié ! 🔗', 'success');
-    return true;
-  } catch { return false; }
-}
-
-// Vibration haptic feedback
-function haptic(pattern = [50]) {
-  if ('vibrate' in navigator) {
-    try { navigator.vibrate(pattern); } catch {}
-  }
-}
-
-window.SwellSync = window.SwellSync || {};
-Object.assign(window.SwellSync, {
-  fetchWithRetry, getErrorMessage, SafeStorage, 
-  CleanupManager, WakeLockManager, shareContent, haptic, sleep
+  console.error('[SwellSync Error]', e.message, e.filename, e.lineno);
 });
+
+window.addEventListener('unhandledrejection', e => {
+  const msg = e.reason?.message || 'Erreur réseau';
+  if (msg.toLowerCase().includes('network') || msg.includes('fetch')) {
+    if (typeof showToast !== 'undefined') showToast('Connexion perdue. Vérifie ta connexion internet.', 'error');
+  } else if (msg.includes('JWT') || msg.toLowerCase().includes('auth')) {
+    if (typeof showToast !== 'undefined') showToast('Session expirée. Reconnexion...', 'info');
+    setTimeout(() => { window.location.href = '/index.html'; }, 2500);
+  }
+  console.warn('[SwellSync Unhandled]', e.reason);
+  e.preventDefault();
+});
+
+/**
+ * Gestion centralisée des erreurs Supabase
+ * Usage: supabaseErrorHandler(error, 'loading sessions')
+ */
+window.supabaseErrorHandler = function (error, context) {
+  if (!error) return;
+  const code = error.code || '';
+  const msg = error.message || '';
+
+  // Résultat vide = normal
+  if (code === 'PGRST116' || msg.includes('no rows')) return;
+
+  // Erreur permission
+  if (code.startsWith('42') || msg.includes('permission')) {
+    if (typeof showToast !== 'undefined') showToast('Accès refusé. Reconnecte-toi.', 'error');
+    return;
+  }
+
+  // Erreur JWT / auth
+  if (msg.includes('JWT') || msg.includes('auth')) {
+    if (typeof showToast !== 'undefined') showToast('Session expirée. Reconnexion...', 'info');
+    setTimeout(() => { window.location.href = '/index.html'; }, 2000);
+    return;
+  }
+
+  // Erreur réseau
+  if (msg.includes('fetch') || msg.includes('network')) {
+    if (typeof showToast !== 'undefined') showToast('Connexion perdue. Réessaie dans quelques secondes.', 'error');
+    return;
+  }
+
+  // Erreur générique
+  const label = context ? context + ' : ' : '';
+  if (typeof showToast !== 'undefined') {
+    showToast('Erreur ' + label + msg.substring(0, 60), 'error');
+  }
+  console.error('[Supabase Error]', context || '', error);
+};
