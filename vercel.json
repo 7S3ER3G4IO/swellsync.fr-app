@@ -8,8 +8,15 @@
                 "content-type": "text/plain"
             },
             "continue": true
+        },
+        {
+            "src": "/spots/(.*)",
+            "dest": "/spots/$1.html"
         }
     ],
+    "error": {
+        "404": "/404.html"
+    },
     "redirects": [
         {
             "source": "/:path*",

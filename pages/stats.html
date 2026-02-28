@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mes Stats Surf — SwellSync</title>
+    <meta name="description"
+        content="Tes statistiques de surf complètes : temps en eau, vagues surfées, distance, spots favoris et progression.">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0ea5e9">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-client.js" defer></script>
+    <script src="/js/stats.js" defer></script>
+    <script src="/js/gamification.js" defer></script>
+    <script src="/js/toast.js" defer></script>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Aller au contenu</a>
+
+    <header
+        style="padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;background:rgba(8,15,26,.95);backdrop-filter:blur(16px);z-index:100">
+        <button type="button" onclick="history.back()" aria-label="Retour"
+            style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;padding:4px">←</button>
+        <h1 style="font-size:17px;font-weight:700;color:#f1f5f9;margin:0">📊 Mes Stats</h1>
+        <button type="button" id="export-pdf-btn"
+            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:6px 12px;color:#94a3b8;font-size:12px;cursor:pointer"
+            onclick="exportStatsPDF()">Export</button>
+    </header>
+
+    <main id="main-content" style="padding-bottom:80px">
+
+        <!-- Tabs -->
+        <div style="display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.06)">
+            <button type="button" class="stats-tab active-tab" data-tab="overview"
+                style="flex:1;padding:12px 8px;background:none;border:none;color:#0ea5e9;font-weight:600;font-size:13px;cursor:pointer;border-bottom:2px solid #0ea5e9">Vue
+                d'ensemble</button>
+            <button type="button" class="stats-tab" data-tab="leaderboard"
+                style="flex:1;padding:12px 8px;background:none;border:none;color:#64748b;font-size:13px;cursor:pointer;border-bottom:2px solid transparent">Classement</button>
+            <button type="button" class="stats-tab" data-tab="challenges"
+                style="flex:1;padding:12px 8px;background:none;border:none;color:#64748b;font-size:13px;cursor:pointer;border-bottom:2px solid transparent">Défis</button>
+        </div>
+
+        <!-- Overview -->
+        <section id="tab-overview" class="tab-panel" style="padding:20px">
+            <div id="stats-grid">
+                <!-- Rempli par JS -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
+                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
+                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
+                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
+                </div>
+            </div>
+
+            <!-- Ce mois / Cette année -->
+            <div id="period-stats" style="margin-top:8px"></div>
+        </section>
+
+        <!-- Leaderboard -->
+        <section id="tab-leaderboard" class="tab-panel" style="padding:20px;display:none">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                <h2 style="margin:0;font-size:18px;font-weight:700;color:#f1f5f9">🏆 Classement</h2>
+                <select id="leaderboard-region"
+                    style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#94a3b8;padding:6px 10px;font-size:12px">
+                    <option value="">France entière</option>
+                    <option value="bretagne">Bretagne</option>
+                    <option value="landes">Landes</option>
+                    <option value="pays_basque">Pays Basque</option>
+                    <option value="méditerranée">Méditerranée</option>
+                </select>
+            </div>
+            <div id="leaderboard-container">
+                <div class="skeleton" style="height:60px;border-radius:12px;margin-bottom:8px"></div>
+                <div class="skeleton" style="height:60px;border-radius:12px;margin-bottom:8px"></div>
+                <div class="skeleton" style="height:60px;border-radius:12px;margin-bottom:8px"></div>
+            </div>
+        </section>
+
+        <!-- Défis -->
+        <section id="tab-challenges" class="tab-panel" style="padding:20px;display:none">
+            <h2 style="margin:0 0 6px;font-size:18px;font-weight:700;color:#f1f5f9">⚡ Défis de la semaine</h2>
+            <div id="week-label" style="font-size:12px;color:#64748b;margin-bottom:20px">Semaine en cours</div>
+            <div id="challenges-container"></div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav aria-label="Navigation principale"
+        style="position:fixed;bottom:0;left:0;right:0;background:rgba(8,15,26,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200">
+        <a href="/pages/home.html"
+            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">🌊<span>Accueil</span></a>
+        <a href="/pages/history.html"
+            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">📋<span>Sessions</span></a>
+        <a href="/pages/stats.html"
+            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#0ea5e9;text-decoration:none;font-size:10px;padding:4px">📊<span>Stats</span></a>
+        <a href="/pages/coaching.html"
+            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">🎓<span>Coaching</span></a>
+        <a href="/pages/profile.html"
+            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">👤<span>Profil</span></a>
+    </nav>
+
+    <script>
+        // --- Tabs ---
+        document.querySelectorAll('.stats-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.stats-tab').forEach(t => { t.style.color = '#64748b'; t.style.borderBottomColor = 'transparent'; t.style.fontWeight = '400'; });
+                document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+                tab.style.color = '#0ea5e9'; tab.style.borderBottomColor = '#0ea5e9'; tab.style.fontWeight = '600';
+                const panel = document.getElementById('tab-' + tab.dataset.tab);
+                if (panel) panel.style.display = 'block';
+                if (tab.dataset.tab === 'leaderboard') loadLeaderboardUI();
+                if (tab.dataset.tab === 'challenges') loadChallengesUI();
+            });
+        });
+
+        async function init() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) { window.location.href = '/index.html'; return; }
+                const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+                if (!member) return;
+
+                const stats = typeof loadAdvancedStats !== 'undefined' ? await loadAdvancedStats(member.id) : null;
+                const grid = document.getElementById('stats-grid');
+                if (grid && stats) {
+                    typeof renderStatCard !== 'undefined' ? renderStatCard(grid, stats) : null;
+
+                    // Période stats
+                    const pd = document.getElementById('period-stats');
+                    if (pd) pd.innerHTML = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;text-align:center">
+              <div style="font-size:11px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Ce mois</div>
+              <div style="font-size:24px;font-weight:700;color:#0ea5e9">${stats.this_month_sessions}</div>
+              <div style="font-size:12px;color:#64748b">sessions</div>
+            </div>
+            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;text-align:center">
+              <div style="font-size:11px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Cette année</div>
+              <div style="font-size:24px;font-weight:700;color:#10b981">${stats.this_year_sessions}</div>
+              <div style="font-size:12px;color:#64748b">sessions</div>
+            </div>
+          </div>`;
+                }
+
+                // Stocker member.id pour les autres onglets
+                window._currentMemberId = member.id;
+            } catch (e) { }
+        }
+
+        async function loadLeaderboardUI() {
+            const container = document.getElementById('leaderboard-container');
+            if (!container || container.querySelector('[data-loaded]')) return;
+            try {
+                const region = document.getElementById('leaderboard-region')?.value || null;
+                const users = typeof loadLeaderboard !== 'undefined' ? await loadLeaderboard(region, 15) : [];
+                typeof renderLeaderboard !== 'undefined' ? renderLeaderboard(container, users) : null;
+                container.setAttribute('data-loaded', '1');
+            } catch { }
+        }
+
+        document.getElementById('leaderboard-region')?.addEventListener('change', async () => {
+            const container = document.getElementById('leaderboard-container');
+            container?.removeAttribute('data-loaded');
+            loadLeaderboardUI();
+        });
+
+        async function loadChallengesUI() {
+            const container = document.getElementById('challenges-container');
+            if (!container || container.querySelector('[data-loaded]')) return;
+            if (!window._currentMemberId) return;
+            try {
+                const challenges = typeof checkWeeklyChallenges !== 'undefined' ? await checkWeeklyChallenges(window._currentMemberId) : [];
+                container.innerHTML = challenges.map(c => `
+        <div style="background:rgba(255,255,255,.03);border:1px solid ${c.completed ? 'rgba(16,185,129,.3)' : 'rgba(255,255,255,.06)'};border-radius:16px;padding:20px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:24px">${c.icon}</span>
+              <div>
+                <div style="font-weight:600;color:#f1f5f9;font-size:14px">${c.label}</div>
+                <div style="color:#64748b;font-size:12px">${c.progress}/${c.target} ${c.unit || ''}</div>
+              </div>
+            </div>
+            <span style="font-size:20px">${c.completed ? '✅' : '⏳'}</span>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border-radius:4px;height:6px;overflow:hidden">
+            <div style="height:100%;background:${c.completed ? 'linear-gradient(90deg,#10b981,#059669)' : 'linear-gradient(90deg,#0ea5e9,#38bdf8)'};border-radius:4px;width:${Math.min((c.progress / c.target) * 100, 100)}%;transition:width 1s ease"></div>
+          </div>
+        </div>`).join('');
+                container.setAttribute('data-loaded', '1');
+            } catch { }
+        }
+
+        async function exportStatsPDF() {
+            if (typeof showToast !== 'undefined') showToast('📄 Export PDF — fonctionnalité Pro bientôt disponible !', 'info');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

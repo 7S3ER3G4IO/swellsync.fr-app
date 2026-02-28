@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode hors-ligne — SwellSync</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <meta name="theme-color" content="#0ea5e9">
+</head>
+
+<body
+    style="margin:0;background:#080f1a;color:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;box-sizing:border-box;text-align:center">
+    <div style="max-width:320px;width:100%">
+        <div style="font-size:72px;margin-bottom:20px">📡</div>
+        <h1 style="font-size:26px;font-weight:800;color:#f1f5f9;margin:0 0 12px">Tu es hors-ligne</h1>
+        <p style="color:#94a3b8;font-size:15px;line-height:1.7;margin:0 0 32px">Reconnecte-toi à Internet pour accéder
+            aux prévisions live. Certaines données sont disponibles en mode hors-ligne.</p>
+
+        <div
+            style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:24px;margin-bottom:24px;text-align:left">
+            <div style="font-weight:700;color:#f1f5f9;margin-bottom:12px;font-size:14px">✅ Disponible hors-ligne :</div>
+            <div style="display:flex;flex-direction:column;gap:8px;color:#94a3b8;font-size:14px">
+                <div>🏄 Enregistrer une session GPS</div>
+                <div>📋 Voir ton historique de sessions</div>
+                <div>👤 Ton profil</div>
+                <div>🎓 Les conseils coaching</div>
+            </div>
+        </div>
+
+        <div
+            style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.15);border-radius:20px;padding:24px;margin-bottom:24px;text-align:left">
+            <div style="font-weight:700;color:#ef4444;margin-bottom:12px;font-size:14px">❌ Nécessite une connexion :
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;color:#94a3b8;font-size:14px">
+                <div>🌊 Prévisions de houle en direct</div>
+                <div>👥 Feed communauté</div>
+                <div>💬 Messages</div>
+                <div>🔔 Alertes</div>
+            </div>
+        </div>
+
+        <button type="button" onclick="tryReconnect()"
+            style="width:100%;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:white;border:none;border-radius:16px;padding:16px;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:10px">🔄
+            Réessayer</button>
+        <a href="/pages/session-live.html"
+            style="display:block;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#94a3b8;border-radius:16px;padding:14px;text-decoration:none;font-size:14px;font-weight:600">🏄
+            Session GPS hors-ligne</a>
+    </div>
+    <script>
+        function tryReconnect() {
+            if (navigator.onLine) {
+                history.back();
+            } else {
+                const btn = document.querySelector('button');
+                if (btn) { btn.textContent = '📡 Toujours hors-ligne...'; setTimeout(() => btn.textContent = '🔄 Réessayer', 2000); }
+            }
+        }
+        window.addEventListener('online', () => history.back());
+    </script>
+</body>
+
+</html>

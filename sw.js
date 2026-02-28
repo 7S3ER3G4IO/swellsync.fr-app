@@ -1,5 +1,6 @@
 // SwellSync Service Worker — Cache-first for assets, network-first for data
-const CACHE_NAME = 'swellsync-v4';
+const CACHE_NAME = 'swellsync-v5';
+const OFFLINE_URL = '/offline.html';
 const ASSETS = [
     '/pages/home.html',
     '/pages/splash.html',
@@ -12,13 +13,18 @@ const ASSETS = [
     '/pages/messages.html',
     '/pages/settings.html',
     '/pages/coaching.html',
-    '/pages/css/transitions.css',
-    '/pages/js/theme.js',
-    '/pages/js/api.js',
-    '/pages/js/ui-components.js',
-    '/pages/js/notif-badge.js',
-    '/pages/js/adsense.js',
-    '/js/offline-banner.js',
+    '/pages/stats.html',
+    '/pages/referral.html',
+    '/pages/pro-welcome.html',
+    '/pages/session-live.html',
+    '/pages/history.html',
+    '/offline.html',
+    '/404.html',
+    '/css/styles.css',
+    '/js/toast.js',
+    '/js/gamification.js',
+    '/js/stats.js',
+    '/js/coaching.js',
     '/manifest.json'
 ];
 
@@ -40,31 +46,51 @@ self.addEventListener('activate', e => {
     );
 });
 
-// Fetch — cache-first for assets, network-first for API
+// Fetch — cache-first for assets, network-first for API, offline fallback for HTML
 self.addEventListener('fetch', e => {
     const url = new URL(e.request.url);
 
-    // Network-first for API calls
-    if (url.pathname.startsWith('/api/') || url.hostname.includes('supabase')) {
+    // Skip non-GET requests
+    if (e.request.method !== 'GET') return;
+
+    // Network-first for API / Supabase / AdSense
+    if (url.pathname.startsWith('/api/') ||
+        url.hostname.includes('supabase') ||
+        url.hostname.includes('googlesyndication')) {
         e.respondWith(
             fetch(e.request)
-                .catch(() => caches.match(e.request))
+                .catch(() => caches.match(e.request) || new Response('', { status: 503 }))
         );
         return;
     }
 
-    // Cache-first for everything else
-    e.respondWith(
-        caches.match(e.request)
-            .then(cached => cached || fetch(e.request)
+    // For HTML navigation: network-first with offline fallback
+    if (e.request.mode === 'navigate' || e.request.headers.get('accept')?.includes('text/html')) {
+        e.respondWith(
+            fetch(e.request)
                 .then(response => {
-                    if (response.ok && e.request.method === 'GET') {
-                        const clone = response.clone();
-                        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+                    if (response.ok) {
+                        caches.open(CACHE_NAME).then(c => c.put(e.request, response.clone()));
                     }
                     return response;
                 })
-            )
+                .catch(() => caches.match(e.request) || caches.match(OFFLINE_URL))
+        );
+        return;
+    }
+
+    // Cache-first for static assets (CSS, JS, images)
+    e.respondWith(
+        caches.match(e.request)
+            .then(cached => {
+                if (cached) return cached;
+                return fetch(e.request).then(response => {
+                    if (response.ok) {
+                        caches.open(CACHE_NAME).then(c => c.put(e.request, response.clone()));
+                    }
+                    return response;
+                }).catch(() => new Response('', { status: 404 }));
+            })
     );
 });
 
