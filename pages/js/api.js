@@ -11,8 +11,7 @@
 const SUPABASE_URL = 'https://bxudysseskfpmlpagoid.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_8UPKYf9eOQjX9-5bBGl1CA_XRu8ZkiU';
 
-// ── StormGlass ──────────────────────────────────────────────
-const STORMGLASS_KEY = '91e3ecb4-0596-11f1-b82f-0242ac120004-91e3ed18-0596-11f1-b82f-0242ac120004';
+// ── StormGlass (clé supprimée du frontend — données servies par forecast_cache via cron) ──
 const _sgCache = new Map(); // cache mémoire 4h
 
 // Charger le client Supabase
@@ -260,7 +259,7 @@ const API = {
 
             // 3. Cache mémoire (évite des requêtes Supabase répétées dans la même session)
             if (_sgCache.has(cacheKey)) {
-                console.log(`⚡ [Cache-RAM] Hit pour ${cacheKey}`);
+                // Log supprimé en production(`⚡ [Cache-RAM] Hit pour ${cacheKey}`);
                 return _sgCache.get(cacheKey);
             }
 
@@ -275,7 +274,7 @@ const API = {
                     .maybeSingle();
 
                 if (row && row.data && row.data.length > 0) {
-                    console.log(`🗄️ [Cache-Supabase] Hit — source: ${row.source} — expire: ${row.expires_at}`);
+                    // Log supprimé en production(`🗄️ [Cache-Supabase] Hit — source: ${row.source} — expire: ${row.expires_at}`);
                     const result = { data: row.data, mock: false, source: row.source, cached: true };
                     _sgCache.set(cacheKey, result); // mémoriser en RAM aussi
                     return result;
@@ -293,364 +292,365 @@ const API = {
             let forecastData = null;
             let forecastSource = null;
 
-            try {
-                const res = await fetch(sgUrl, { headers: { 'Authorization': STORMGLASS_KEY } });
-                if (!res.ok) throw new Error('StormGlass HTTP ' + res.status);
-                const raw = await res.json();
-                if (!raw.hours?.length) throw new Error('No hours in response');
+            // StormGlass API appelé uniquement côté serveur (cron Vercel)
+            // Le client ne fait jamais d'appel direct — données via forecast_cache
+            throw new Error('Forecast data must come from cache (server-side cron)');
+            if (!res.ok) throw new Error('StormGlass HTTP ' + res.status);
+            const raw = await res.json();
+            if (!raw.hours?.length) throw new Error('No hours in response');
 
-                forecastData = raw.hours.map(h => ({
-                    time: h.time,
-                    waveHeight: h.waveHeight?.sg ?? null,
-                    wavePeriod: h.wavePeriod?.sg ?? null,
-                    waveDirection: h.waveDirection?.sg ?? null,
-                    windSpeed: h.windSpeed?.sg ?? null,
-                    windDirection: h.windDirection?.sg ?? null,
-                    swellHeight: h.swellHeight?.sg ?? null,
-                    swellPeriod: h.swellPeriod?.sg ?? null,
-                    waterTemp: h.waterTemperature?.sg ?? null,
-                    seaLevel: h.seaLevel?.sg ?? null,
-                    _mock: false
-                }));
-                forecastSource = 'stormglass';
-                console.log(`🌊 [StormGlass] ${forecastData.length} points reçus → stockage en cache`);
-            } catch (sgErr) {
-                console.warn('⚠️ [StormGlass] Erreur :', sgErr.message, '— fallback Open-Meteo');
-            }
+            forecastData = raw.hours.map(h => ({
+                time: h.time,
+                waveHeight: h.waveHeight?.sg ?? null,
+                wavePeriod: h.wavePeriod?.sg ?? null,
+                waveDirection: h.waveDirection?.sg ?? null,
+                windSpeed: h.windSpeed?.sg ?? null,
+                windDirection: h.windDirection?.sg ?? null,
+                swellHeight: h.swellHeight?.sg ?? null,
+                swellPeriod: h.swellPeriod?.sg ?? null,
+                waterTemp: h.waterTemperature?.sg ?? null,
+                seaLevel: h.seaLevel?.sg ?? null,
+                _mock: false
+            }));
+            forecastSource = 'stormglass';
+            // Log supprimé en production(`🌊 [StormGlass] ${forecastData.length} points reçus → stockage en cache`);
+        } catch(sgErr) {
+            console.warn('⚠️ [StormGlass] Erreur :', sgErr.message, '— fallback Open-Meteo');
+        }
 
             // 6. Fallback Open-Meteo si StormGlass a échoué
-            if (!forecastData) {
-                try {
-                    const omUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_period,wave_direction,wind_wave_height,wind_wave_period&forecast_days=7&timezone=auto`;
-                    const res = await fetch(omUrl);
-                    if (!res.ok) throw new Error('Open-Meteo HTTP ' + res.status);
-                    const om = await res.json();
-                    const times = om.hourly?.time || [];
-                    forecastData = times.map((t, i) => ({
-                        time: t,
-                        waveHeight: om.hourly.wave_height?.[i] ?? null,
-                        wavePeriod: om.hourly.wave_period?.[i] ?? null,
-                        waveDirection: om.hourly.wave_direction?.[i] ?? null,
-                        windSpeed: null,
-                        windDirection: null,
-                        swellHeight: om.hourly.wind_wave_height?.[i] ?? null,
-                        swellPeriod: om.hourly.wind_wave_period?.[i] ?? null,
-                        waterTemp: null,
-                        seaLevel: null,
-                        _mock: false
-                    }));
-                    forecastSource = 'open-meteo';
-                    console.log(`🌐 [Open-Meteo] ${forecastData.length} points reçus → stockage en cache`);
-                } catch (omErr) {
-                    console.warn('⚠️ [Open-Meteo] Erreur :', omErr.message);
-                }
+            if(!forecastData) {
+            try {
+                const omUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_period,wave_direction,wind_wave_height,wind_wave_period&forecast_days=7&timezone=auto`;
+                const res = await fetch(omUrl);
+                if (!res.ok) throw new Error('Open-Meteo HTTP ' + res.status);
+                const om = await res.json();
+                const times = om.hourly?.time || [];
+                forecastData = times.map((t, i) => ({
+                    time: t,
+                    waveHeight: om.hourly.wave_height?.[i] ?? null,
+                    wavePeriod: om.hourly.wave_period?.[i] ?? null,
+                    waveDirection: om.hourly.wave_direction?.[i] ?? null,
+                    windSpeed: null,
+                    windDirection: null,
+                    swellHeight: om.hourly.wind_wave_height?.[i] ?? null,
+                    swellPeriod: om.hourly.wind_wave_period?.[i] ?? null,
+                    waterTemp: null,
+                    seaLevel: null,
+                    _mock: false
+                }));
+                forecastSource = 'open-meteo';
+                // Log supprimé en production(`🌐 [Open-Meteo] ${forecastData.length} points reçus → stockage en cache`);
+            } catch (omErr) {
+                console.warn('⚠️ [Open-Meteo] Erreur :', omErr.message);
             }
+        }
 
             // 7. Stocker en cache Supabase si on a des données réelles
-            if (forecastData) {
-                const expiresAt = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString();
-                try {
-                    const sb = await getSupabase();
-                    await sb.from('forecast_cache').upsert({
-                        cache_key: cacheKey,
-                        lat: parseFloat(lat),
-                        lng: parseFloat(lng),
-                        source: forecastSource,
-                        data: forecastData,
-                        fetched_at: new Date().toISOString(),
-                        expires_at: expiresAt
-                    }, { onConflict: 'cache_key' });
-                    console.log(`✅ [Cache-Supabase] Stocké — expire à ${expiresAt}`);
-                } catch (saveErr) {
-                    console.warn('⚠️ [Cache-Supabase] Écriture impossible :', saveErr.message);
-                }
-
-                const result = { data: forecastData, mock: false, source: forecastSource };
-                _sgCache.set(cacheKey, result);
-                setTimeout(() => _sgCache.delete(cacheKey), 4 * 60 * 60 * 1000);
-                return result;
+            if(forecastData) {
+            const expiresAt = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString();
+            try {
+                const sb = await getSupabase();
+                await sb.from('forecast_cache').upsert({
+                    cache_key: cacheKey,
+                    lat: parseFloat(lat),
+                    lng: parseFloat(lng),
+                    source: forecastSource,
+                    data: forecastData,
+                    fetched_at: new Date().toISOString(),
+                    expires_at: expiresAt
+                }, { onConflict: 'cache_key' });
+                // Log supprimé en production(`✅ [Cache-Supabase] Stocké — expire à ${expiresAt}`);
+            } catch (saveErr) {
+                console.warn('⚠️ [Cache-Supabase] Écriture impossible :', saveErr.message);
             }
+
+            const result = { data: forecastData, mock: false, source: forecastSource };
+            _sgCache.set(cacheKey, result);
+            setTimeout(() => _sgCache.delete(cacheKey), 4 * 60 * 60 * 1000);
+            return result;
+        }
 
             // 8. Dernier recours : données mockées (aucune API disponible)
             console.warn('🔴 [Forecast] Toutes les sources ont échoué — données mockées');
-            return { data: _generateMock(lat, lng), mock: true, source: 'mock' };
-        },
+        return { data: _generateMock(lat, lng), mock: true, source: 'mock' };
     },
+},
 
     // ── Favoris ───────────────────────────────────────────────
     favorites: {
         async list() {
             const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('favorites').select('*, spots(*)').eq('member_id', memberId);
-            return data || [];
+const memberId = await _getMemberId();
+if (!memberId) return [];
+const { data } = await sb.from('favorites').select('*, spots(*)').eq('member_id', memberId);
+return data || [];
         },
 
         async add(spotId) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('favorites').insert({ member_id: memberId, spot_id: spotId });
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+    const sb = await getSupabase();
+    const memberId = await _getMemberId();
+    if (!memberId) throw new Error('Non connecté');
+    const { error } = await sb.from('favorites').insert({ member_id: memberId, spot_id: spotId });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+},
 
         async remove(spotId) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('favorites').delete().eq('member_id', memberId).eq('spot_id', spotId);
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+    const sb = await getSupabase();
+    const memberId = await _getMemberId();
+    if (!memberId) throw new Error('Non connecté');
+    const { error } = await sb.from('favorites').delete().eq('member_id', memberId).eq('spot_id', spotId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+},
     },
 
-    // ── Alertes ───────────────────────────────────────────────
-    alerts: {
+// ── Alertes ───────────────────────────────────────────────
+alerts: {
         async list() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('alerts').select('*').eq('member_id', memberId);
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return [];
+        const { data } = await sb.from('alerts').select('*').eq('member_id', memberId);
+        return data || [];
+    },
 
         async add(d) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('alerts').insert({ ...d, member_id: memberId });
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) throw new Error('Non connecté');
+        const { error } = await sb.from('alerts').insert({ ...d, member_id: memberId });
+        if (error) throw new Error(error.message);
+        return { ok: true };
+    },
 
         async toggle(id, enabled) {
-            const sb = await getSupabase();
-            const { error } = await sb.from('alerts').update({ enabled }).eq('id', id);
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
-
-        async delete(id) {
-            const sb = await getSupabase();
-            const { error } = await sb.from('alerts').delete().eq('id', id);
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const { error } = await sb.from('alerts').update({ enabled }).eq('id', id);
+        if (error) throw new Error(error.message);
+        return { ok: true };
     },
 
-    // ── Journal sessions ──────────────────────────────────────
-    journal: {
+        async delete (id) {
+        const sb = await getSupabase();
+        const { error } = await sb.from('alerts').delete().eq('id', id);
+        if (error) throw new Error(error.message);
+        return { ok: true };
+    },
+},
+
+// ── Journal sessions ──────────────────────────────────────
+journal: {
         async list() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('journal')
-                .select('*')
-                .eq('member_id', memberId)
-                .order('created_at', { ascending: false });
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return [];
+        const { data } = await sb.from('journal')
+            .select('*')
+            .eq('member_id', memberId)
+            .order('created_at', { ascending: false });
+        return data || [];
+    },
 
         async add(d) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('journal').insert({ ...d, member_id: memberId });
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
-
-        async delete(id) {
-            const sb = await getSupabase();
-            const { error } = await sb.from('journal').delete().eq('id', id);
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) throw new Error('Non connecté');
+        const { error } = await sb.from('journal').insert({ ...d, member_id: memberId });
+        if (error) throw new Error(error.message);
+        return { ok: true };
     },
 
-    // ── Notifications ─────────────────────────────────────────
-    notifications: {
+        async delete (id) {
+        const sb = await getSupabase();
+        const { error } = await sb.from('journal').delete().eq('id', id);
+        if (error) throw new Error(error.message);
+        return { ok: true };
+    },
+},
+
+// ── Notifications ─────────────────────────────────────────
+notifications: {
         async list() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('notifications')
-                .select('*')
-                .eq('member_id', memberId)
-                .order('created_at', { ascending: false })
-                .limit(50);
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return [];
+        const { data } = await sb.from('notifications')
+            .select('*')
+            .eq('member_id', memberId)
+            .order('created_at', { ascending: false })
+            .limit(50);
+        return data || [];
+    },
 
         async count() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return { count: 0 };
-            const { count } = await sb.from('notifications')
-                .select('*', { count: 'exact', head: true })
-                .eq('member_id', memberId)
-                .eq('is_read', false);
-            return { count: count || 0 };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return { count: 0 };
+        const { count } = await sb.from('notifications')
+            .select('*', { count: 'exact', head: true })
+            .eq('member_id', memberId)
+            .eq('is_read', false);
+        return { count: count || 0 };
+    },
 
         async markRead() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return;
-            await sb.from('notifications').update({ is_read: true }).eq('member_id', memberId);
-            return { ok: true };
-        },
-
-        async delete(id) {
-            const sb = await getSupabase();
-            await sb.from('notifications').delete().eq('id', id);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return;
+        await sb.from('notifications').update({ is_read: true }).eq('member_id', memberId);
+        return { ok: true };
     },
 
-    // ── Stories ────────────────────────────────────────────────
-    stories: {
+        async delete (id) {
+        const sb = await getSupabase();
+        await sb.from('notifications').delete().eq('id', id);
+        return { ok: true };
+    },
+},
+
+// ── Stories ────────────────────────────────────────────────
+stories: {
         async list() {
-            const sb = await getSupabase();
-            const { data } = await sb.from('stories')
-                .select('*, members(name, avatar_url)')
-                .gt('expires_at', new Date().toISOString())
-                .order('created_at', { ascending: false });
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const { data } = await sb.from('stories')
+            .select('*, members(name, avatar_url)')
+            .gt('expires_at', new Date().toISOString())
+            .order('created_at', { ascending: false });
+        return data || [];
+    },
 
         async create(story) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('stories').insert({ ...story, member_id: memberId });
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) throw new Error('Non connecté');
+        const { error } = await sb.from('stories').insert({ ...story, member_id: memberId });
+        if (error) throw new Error(error.message);
+        return { ok: true };
+    },
 
-        async delete(id) {
-            const sb = await getSupabase();
-            await sb.from('stories').delete().eq('id', id);
-            return { ok: true };
-        },
+        async delete (id) {
+        const sb = await getSupabase();
+        await sb.from('stories').delete().eq('id', id);
+        return { ok: true };
+    },
 
         async view(storyId) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return;
-            await sb.from('story_views').upsert({ story_id: storyId, viewer_id: memberId });
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return;
+        await sb.from('story_views').upsert({ story_id: storyId, viewer_id: memberId });
+        return { ok: true };
     },
+},
 
-    // ── Community Posts ───────────────────────────────────────
-    community: {
+// ── Community Posts ───────────────────────────────────────
+community: {
         async posts(tag) {
-            const sb = await getSupabase();
-            let query = sb.from('community_posts')
-                .select('*, members(name, avatar_url)')
-                .order('created_at', { ascending: false })
-                .limit(50);
-            if (tag && tag !== 'all') query = query.eq('tag', tag);
-            const { data } = await query;
-            return data || [];
-        },
+        const sb = await getSupabase();
+        let query = sb.from('community_posts')
+            .select('*, members(name, avatar_url)')
+            .order('created_at', { ascending: false })
+            .limit(50);
+        if (tag && tag !== 'all') query = query.eq('tag', tag);
+        const { data } = await query;
+        return data || [];
+    },
 
         async createPost(content, tag, imageUrl) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('community_posts').insert({
-                member_id: memberId, content, tag, image_url: imageUrl
-            });
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) throw new Error('Non connecté');
+        const { error } = await sb.from('community_posts').insert({
+            member_id: memberId, content, tag, image_url: imageUrl
+        });
+        if (error) throw new Error(error.message);
+        return { ok: true };
+    },
 
         async like(postId) {
-            const sb = await getSupabase();
-            const { data } = await sb.from('community_posts').select('likes').eq('id', postId).single();
-            await sb.from('community_posts').update({ likes: (data?.likes || 0) + 1 }).eq('id', postId);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const { data } = await sb.from('community_posts').select('likes').eq('id', postId).single();
+        await sb.from('community_posts').update({ likes: (data?.likes || 0) + 1 }).eq('id', postId);
+        return { ok: true };
     },
+},
 
-    // ── Messages ──────────────────────────────────────────────
-    messages: {
+// ── Messages ──────────────────────────────────────────────
+messages: {
         async conversations() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('messages')
-                .select('*')
-                .or(`from_id.eq.${memberId},to_id.eq.${memberId}`)
-                .order('created_at', { ascending: false });
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return [];
+        const { data } = await sb.from('messages')
+            .select('*')
+            .or(`from_id.eq.${memberId},to_id.eq.${memberId}`)
+            .order('created_at', { ascending: false });
+        return data || [];
+    },
 
         async getThread(userId) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('messages')
-                .select('*')
-                .or(`and(from_id.eq.${memberId},to_id.eq.${userId}),and(from_id.eq.${userId},to_id.eq.${memberId})`)
-                .order('created_at');
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return [];
+        const { data } = await sb.from('messages')
+            .select('*')
+            .or(`and(from_id.eq.${memberId},to_id.eq.${userId}),and(from_id.eq.${userId},to_id.eq.${memberId})`)
+            .order('created_at');
+        return data || [];
+    },
 
         async send(userId, content) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            const { error } = await sb.from('messages').insert({
-                from_id: memberId, to_id: userId, content
-            });
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) throw new Error('Non connecté');
+        const { error } = await sb.from('messages').insert({
+            from_id: memberId, to_id: userId, content
+        });
+        if (error) throw new Error(error.message);
+        return { ok: true };
     },
+},
 
-    // ── Badges ────────────────────────────────────────────────
-    badges: {
+// ── Badges ────────────────────────────────────────────────
+badges: {
         async list() {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) return [];
-            const { data } = await sb.from('member_badges').select('*').eq('member_id', memberId);
-            return data || [];
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) return [];
+        const { data } = await sb.from('member_badges').select('*').eq('member_id', memberId);
+        return data || [];
+    },
 
         async equip(badgeId) {
-            const sb = await getSupabase();
-            const memberId = await _getMemberId();
-            if (!memberId) throw new Error('Non connecté');
-            // Déséquiper tous les autres
-            await sb.from('member_badges').update({ equipped: false }).eq('member_id', memberId);
-            // Équiper celui-ci
-            await sb.from('member_badges').update({ equipped: true }).eq('member_id', memberId).eq('badge_id', badgeId);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const memberId = await _getMemberId();
+        if (!memberId) throw new Error('Non connecté');
+        // Déséquiper tous les autres
+        await sb.from('member_badges').update({ equipped: false }).eq('member_id', memberId);
+        // Équiper celui-ci
+        await sb.from('member_badges').update({ equipped: true }).eq('member_id', memberId).eq('badge_id', badgeId);
+        return { ok: true };
     },
+},
 
-    // ── Contact ───────────────────────────────────────────────
-    contact: {
+// ── Contact ───────────────────────────────────────────────
+contact: {
         async send(data) {
-            const sb = await getSupabase();
-            const { error } = await sb.from('contact_leads').insert(data);
-            if (error) throw new Error(error.message);
-            return { ok: true };
-        },
+        const sb = await getSupabase();
+        const { error } = await sb.from('contact_leads').insert(data);
+        if (error) throw new Error(error.message);
+        return { ok: true };
     },
+},
 
-    // ── Legacy wrappers (pour les anciennes pages pas encore migrées) ──
-    get(path) { return _legacyReq('GET', path); },
-    post(path, body) { return _legacyReq('POST', path, body); },
-    put(path, body) { return _legacyReq('PUT', path, body); },
-    patch(path, body) { return _legacyReq('PATCH', path, body); },
-    del(path) { return _legacyReq('DELETE', path); },
+// ── Legacy wrappers (pour les anciennes pages pas encore migrées) ──
+get(path) { return _legacyReq('GET', path); },
+post(path, body) { return _legacyReq('POST', path, body); },
+put(path, body) { return _legacyReq('PUT', path, body); },
+patch(path, body) { return _legacyReq('PATCH', path, body); },
+del(path) { return _legacyReq('DELETE', path); },
 };
 
 // ── Données mockées de secours ────────────────────────────────

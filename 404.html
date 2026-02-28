@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page introuvable — SwellSync</title>
+    <meta name="description" content="Cette page n'existe pas sur SwellSync.">
+    <link rel="icon" href="/assets/images/swellsync_logo.png?v=3">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #000;
+            color: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+        .container {
+            max-width: 420px;
+        }
+        .wave {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #00bad6, #0077cc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code {
+            font-size: 72px;
+            font-weight: 900;
+            color: rgba(0,186,214,0.15);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #00bad6, #0077cc);
+            color: #000;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 12px 28px;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px rgba(0,186,214,0.3);
+        }
+        .links {
+            margin-top: 32px;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .links a {
+            color: #64748b;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        .links a:hover { color: #00bad6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wave">🌊</div>
+        <div class="code">404</div>
+        <h1>Page introuvable</h1>
+        <p>Cette vague n'existe pas encore.<br>Retourne sur le spot principal !</p>
+        <a href="/" class="btn">← Retour à l'accueil</a>
+        <div class="links">
+            <a href="/site/fonctionnalites.html">Fonctionnalités</a>
+            <a href="/site/faq.html">FAQ</a>
+            <a href="/site/contact.html">Contact</a>
+        </div>
+    </div>
+</body>
+</html>

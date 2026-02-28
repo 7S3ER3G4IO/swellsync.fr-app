@@ -18,6 +18,7 @@ const ASSETS = [
     '/pages/js/ui-components.js',
     '/pages/js/notif-badge.js',
     '/pages/js/adsense.js',
+    '/js/offline-banner.js',
     '/manifest.json'
 ];
 

@@ -30,7 +30,13 @@
             "src": "/assets/images/swellsync_logo.png?v=3",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/assets/images/swellsync_logo.png?v=3",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "prefer_related_applications": false,

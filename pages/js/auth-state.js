@@ -149,6 +149,27 @@
             localStorage.removeItem('sw_uid');
             applyUnauthenticatedUI();
         }
+
+        // ── Écouter les changements d'auth en temps réel ──
+        try {
+            if (!window.supabase?.createClient) return;
+            const sb = window.supabase.createClient(SB_URL, SB_KEY);
+            sb.auth.onAuthStateChange((event, newSession) => {
+                if (event === 'SIGNED_IN' && newSession) {
+                    // Recharger la page pour appliquer l'UI authentifiée
+                    window.location.reload();
+                } else if (event === 'SIGNED_OUT') {
+                    localStorage.removeItem('sw_uid');
+                    localStorage.removeItem('sw_email');
+                    // Recharger pour afficher l'UI non-auth
+                    window.location.reload();
+                } else if (event === 'TOKEN_REFRESHED' && newSession) {
+                    // Silently update stored user info
+                    localStorage.setItem('sw_uid', newSession.user?.id || '');
+                    localStorage.setItem('sw_email', newSession.user?.email || '');
+                }
+            });
+        } catch { }
     }
 
     // Lancer après le DOM

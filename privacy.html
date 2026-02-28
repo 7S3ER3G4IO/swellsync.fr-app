@@ -7,7 +7,7 @@
     <title>Politique de Confidentialité — SwellSync</title>
     <meta name="description"
         content="Comment SwellSync protège vos données personnelles. Politique RGPD, droits d'accès, sécurité des serveurs.">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://bxudysseskfpmlpagoid.supabase.co">
     <link rel="icon" type="image/png" href="/assets/images/swellsync_logo.png?v=3">
@@ -128,9 +128,33 @@
                 </ul>
 
                 <h3>3. Durée de conservation</h3>
-                <p>Vos données de compte sont gardées tant que ce dernier est actif. Après 3 ans d'inactivité totale sur
-                    SwellSync, nous vous enverrons un email. Sans réponse, toutes vos données (favoris, email) seront
-                    anonymisées ou purgées définitivement (Droit à l'oubli).</p>
+                <p>Chaque type de donnée est conservé selon une durée strictement définie :</p>
+                <ul>
+                    <li><strong>Données de compte</strong> (email, pseudo, profil) : conservées tant que le compte est
+                        actif. Supprimées définitivement dans les 30 jours suivant la suppression du compte.</li>
+                    <li><strong>Sessions GPS</strong> (parcours, durée, score) : conservées <strong>3 ans</strong>
+                        maximum après la date d'enregistrement, puis anonymisées.</li>
+                    <li><strong>Photos / Stories</strong> : conservées tant que le compte est actif. Supprimées avec le
+                        compte.</li>
+                    <li><strong>Données de géolocalisation temps réel</strong> : jamais stockées sur nos serveurs.
+                        Utilisées côté client uniquement.</li>
+                    <li><strong>Données de navigation / analytics</strong> (Plausible) : anonymisées, conservées 2 ans.
+                    </li>
+                    <li><strong>Après 3 ans d'inactivité</strong> : un email de réactivation est envoyé. Sans réponse
+                        sous 30 jours, toutes les données personnelles sont purgées définitivement (droit à l'oubli).
+                    </li>
+                </ul>
+
+                <h3>3bis. Portabilité des données</h3>
+                <p>Vous pouvez demander une copie complète de toutes vos données (profil, sessions, posts, favoris) dans
+                    un format standard (JSON ou CSV) en contactant <a href="mailto:support@swellsync.com"
+                        style="color:var(--accent);font-weight:700">support@swellsync.com</a>. La réponse intervient
+                    sous 30 jours maximum, conformément au RGPD.</p>
+
+                <h3>3ter. Mineurs</h3>
+                <p>SwellSync s'adresse aux utilisateurs de <strong>16 ans et plus</strong>. L'inscription d'un mineur de
+                    moins de 16 ans nécessite le consentement vérifiable d'un parent ou tuteur légal. En l'absence de
+                    cette vérification, le compte pourra être suspendu.</p>
 
                 <h3>4. Partage des données à des Tiers</h3>
                 <p><strong>C'est très simple : Nous ne vendons, ni ne louons vos données. Jamais.</strong> Elles ne sont
@@ -168,8 +192,8 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:14px"><img
-                            src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span style="color:#fff">Swell<span
-                                style="color:var(--accent)">Sync</span></span></a>
+                            src="/assets/images/swellsync_logo.png?v=3" alt="SwellSync"><span
+                            style="color:#fff">Swell<span style="color:var(--accent)">Sync</span></span></a>
                     <p>La prévision surf la plus précise de France.</p>
                 </div>
                 <div class="footer-col">
@@ -202,6 +226,7 @@
     <script src="/js/cookie-consent.js"></script>
     <script src="/js/monitoring.js"></script>
     <script src="/js/structured-data.js"></script>
+    <script src="/js/offline-banner.js"></script>
 </body>
 
 </html>
