@@ -1,153 +1,142 @@
+/**
+ * SwellSync — Sitemap XML statique (T196)
+ * Généré automatiquement — toutes les pages du site
+ * Last updated: 2026-03-01
+ */
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Pages principales -->
   <url>
     <loc>https://swellsync.fr/</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/pages/home.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://swellsync.fr/fonctionnalites.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/pages/map.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/tarifs.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/pages/search.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/pages/community.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/pages/alerts.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://swellsync.fr/contact.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/pages/coaching.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/pages/support.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <loc>https://swellsync.fr/map.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://swellsync.fr/legal.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://swellsync.fr/privacy.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/cgv.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/site/fonctionnalites.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.4</priority>
   </url>
+
+  <!-- Spots de surf -->
   <url>
-    <loc>https://swellsync.fr/site/tarifs.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/site/roadmap.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/spots/biarritz.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://swellsync.fr/assets/images/spots/biarritz.jpg</image:loc>
+      <image:title>Surf Biarritz — Grande Plage Pays Basque</image:title>
+    </image:image>
   </url>
   <url>
-    <loc>https://swellsync.fr/site/faq.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/site/contact.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/site/spots.html</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/spots/hossegor.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://swellsync.fr/assets/images/spots/hossegor.jpg</image:loc>
+      <image:title>Surf Hossegor — La Gravière Landes</image:title>
+    </image:image>
   </url>
   <url>
-    <loc>https://swellsync.fr/cookies.html</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.1</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/spots/biarritz</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/spots/hossegor</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/spots/la-torche</loc>
-    <lastmod>2026-02-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://swellsync.fr/blog</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/spots/la-torche.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://swellsync.fr/assets/images/spots/la-torche.jpg</image:loc>
+      <image:title>Surf La Torche — Bretagne Finistère</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swellsync.fr/spots/lacanau.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://swellsync.fr/spots/capbreton.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://swellsync.fr/spots/seignosse.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog -->
+  <url>
+    <loc>https://swellsync.fr/blog/</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://swellsync.fr/blog/comment-lire-previsions-surf.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/blog/comment-lire-previsions-surf</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/blog/meilleurs-spots-surf-france.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/blog/progression-surf-debutant</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/blog/progression-surf-debutant.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://swellsync.fr/blog/meilleurs-spots-surf-france</loc>
-    <lastmod>2026-02-28</lastmod>
+    <loc>https://swellsync.fr/blog/combinaison-surf-temperature-eau.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://swellsync.fr/blog/choisir-planche-surf-debutant.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
 </urlset>

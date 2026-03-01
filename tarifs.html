@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarifs SwellSync — Gratuit & Pro à 4,99€/mois</title>
+    <meta name="description"
+        content="SwellSync est gratuit. Passez Pro à 4,99€/mois pour les alertes conditions parfaites, l'export PDF et le coaching surf personnalisé. Essai 14 jours offert.">
+    <link rel="canonical" href="https://swellsync.fr/tarifs">
+    <link rel="icon" href="/assets/icons/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blue: #0ea5e9;
+            --blue-dark: #0284c7;
+            --green: #10b981;
+            --bg: #0a0f1e;
+            --surface: rgba(255, 255, 255, .04);
+            --border: rgba(255, 255, 255, .07);
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --sub: #94a3b8;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 15, 30, .9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+        }
+
+        .nav-logo span {
+            font-weight: 800;
+            font-size: 17px;
+            color: var(--text);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 70px 24px 50px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--blue), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            color: var(--sub);
+        }
+
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #334155;
+            border-radius: 26px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        input:checked+.toggle-slider {
+            background: var(--blue);
+        }
+
+        input:checked+.toggle-slider::before {
+            transform: translateX(22px);
+        }
+
+        .badge-save {
+            background: rgba(16, 185, 129, .15);
+            border: 1px solid rgba(16, 185, 129, .3);
+            color: var(--green);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .plan-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            position: relative;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+        }
+
+        .plan-card.featured {
+            border-color: rgba(14, 165, 233, .4);
+            background: linear-gradient(135deg, rgba(14, 165, 233, .06), rgba(16, 185, 129, .03));
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            color: white;
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .plan-name {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .plan-price {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .plan-price span {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--muted);
+        }
+
+        .plan-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 24px;
+        }
+
+        .plan-features li {
+            padding: 7px 0;
+            font-size: 14px;
+            color: var(--sub);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .plan-features li.no::before {
+            content: '—';
+            color: #475569;
+        }
+
+        .plan-cta {
+            display: block;
+            text-align: center;
+            padding: 14px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            transition: all .2s;
+        }
+
+        .cta-ghost {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .cta-ghost:hover {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            color: white;
+        }
+
+        .cta-primary:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(14, 165, 233, .35);
+        }
+
+        .guarantee {
+            text-align: center;
+            padding: 20px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .payment-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            margin: 16px 0;
+        }
+
+        .payment-logos span {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--sub);
+        }
+
+        .section {
+            padding: 60px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(22px, 4vw, 34px);
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+
+        .faq-q {
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text);
+        }
+
+        .faq-q:hover {
+            color: var(--blue);
+        }
+
+        .faq-a {
+            font-size: 14px;
+            color: var(--sub);
+            line-height: 1.7;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .3s ease, padding .3s;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 200px;
+            padding-top: 12px;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-icon {
+            font-style: normal;
+            transition: transform .3s;
+            font-size: 20px;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 0 24px;
+        }
+
+        .testimonial {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .stars {
+            color: #f59e0b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .t-text {
+            font-size: 13px;
+            color: var(--sub);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .t-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .t-level {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        footer {
+            padding: 28px 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            margin: 0 10px;
+        }
+
+        @media(max-width:600px) {
+            .plans {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="/" class="nav-logo"><img src="/assets/icons/icon-192.png" alt="SwellSync"><span>SwellSync</span></a>
+        <a href="/index.html#download"
+            style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;padding:8px 18px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px">Commencer
+            →</a>
+    </nav>
+
+    <section class="hero">
+        <div
+            style="display:inline-block;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);border-radius:20px;padding:5px 16px;font-size:13px;color:var(--blue);font-weight:600;margin-bottom:16px">
+            💳 Aucune carte requise au départ</div>
+        <h1>Des tarifs simples,<br><span>faits pour les surfeurs</span></h1>
+        <p style="font-size:16px;color:var(--sub);margin-bottom:28px">Commence gratuitement, passe Pro quand tu veux.
+        </p>
+        <!-- T121 — Switch annuel/mensuel -->
+        <div class="toggle-wrap">
+            <span class="toggle-label">Mensuel</span>
+            <label class="toggle"><input type="checkbox" id="billing-toggle"
+                    onchange="toggleBilling(this.checked)"><span class="toggle-slider"></span></label>
+            <span class="toggle-label">Annuel <span class="badge-save" id="save-badge">-20%</span></span>
+        </div>
+    </section>
+
+    <div class="plans">
+        <!-- Plan Gratuit -->
+        <div class="plan-card">
+            <div class="plan-name">🌊 Gratuit</div>
+            <div class="plan-price">0€ <span>/mois</span></div>
+            <div class="plan-sub">Pour commencer à surfer SwellSync</div>
+            <ul class="plan-features">
+                <li>Prévisions surf 7 jours</li>
+                <li>Score surf / 10 par créneau</li>
+                <li>Sessions GPS illimitées</li>
+                <li>Carte interactive 143 spots</li>
+                <li>Communauté & Leaderboard</li>
+                <li>Mode hors-ligne</li>
+                <li class="no">Alertes conditions parfaites</li>
+                <li class="no">Export PDF saison</li>
+                <li class="no">Coaching personnalisé</li>
+                <li class="no">Sans publicité</li>
+            </ul>
+            <a href="/index.html#download" class="plan-cta cta-ghost">Commencer gratuitement</a>
+        </div>
+
+        <!-- Plan Pro -->
+        <div class="plan-card featured">
+            <div class="plan-badge">⭐ LE PLUS POPULAIRE</div>
+            <div class="plan-name" style="color:var(--blue)">⚡ Pro</div>
+            <div class="plan-price"><span id="price-display">4,99€</span> <span id="price-period">/mois</span></div>
+            <div class="plan-sub" id="billed-as">Facturé 4,99€/mois</div>
+            <ul class="plan-features">
+                <li>Tout le plan Gratuit</li>
+                <li>🔔 Alertes conditions parfaites</li>
+                <li>📅 Alertes multi-spots</li>
+                <li>📄 Export PDF bilan saison</li>
+                <li>🎓 Plan coaching 30 jours</li>
+                <li>📊 Stats avancées graphiques</li>
+                <li>📅 Export .ics calendrier</li>
+                <li>🚫 Sans publicité</li>
+                <li>💬 Messagerie privée avancée</li>
+                <li>⚡ Support prioritaire 24h</li>
+            </ul>
+            <button class="plan-cta cta-primary" onclick="window.open('https://buy.stripe.com/swellsync-pro','_blank')">
+                Essai 14 jours gratuit →
+            </button>
+            <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">Annule à tout moment ·
+                Données conservées</div>
+        </div>
+
+        <!-- Plan Club -->
+        <div class="plan-card">
+            <div class="plan-name">🏄 Club</div>
+            <div class="plan-price">Sur devis</div>
+            <div class="plan-sub">Pour les clubs et écoles de surf</div>
+            <ul class="plan-features">
+                <li>Tout le plan Pro</li>
+                <li>👥 Jusqu'à 50 membres</li>
+                <li>📊 Dashboard admin club</li>
+                <li>🎯 Sessions groupées</li>
+                <li>🏆 Classements internes</li>
+                <li>🤝 Support dédié</li>
+            </ul>
+            <a href="/contact.html" class="plan-cta cta-ghost">Nous contacter</a>
+        </div>
+    </div>
+
+    <!-- T122 — Garantie -->
+    <div class="guarantee">
+        <div style="font-size:28px;margin-bottom:6px">🛡️</div>
+        <strong style="color:var(--text);font-size:15px">Satisfait ou remboursé 30 jours</strong><br>
+        Si tu n'es pas convaincu dans les 30 premiers jours, on te rembourse intégralement. Sans questions.
+    </div>
+
+    <!-- Logos paiement — T126 -->
+    <div class="payment-logos">
+        <span>💳 Visa</span><span>💳 Mastercard</span><span>💳 CB</span><span>🔒 Stripe</span>
+    </div>
+
+    <!-- Testimonials Pro — T127 -->
+    <div style="text-align:center;padding:40px 24px 20px">
+        <h2 style="font-size:26px;font-weight:800;margin-bottom:24px">Ce que disent nos Pro 🤙</h2>
+    </div>
+    <div class="testimonials">
+        <div class="testimonial">
+            <div class="stars">★★★★★</div>
+            <div class="t-text">"Les alertes conditions parfaites m'ont fait gagner tellement de sessions incroyables.
+                J'aurais raté Hossegor à 2.5m sans SwellSync Pro."</div>
+            <div class="t-name">Baptiste R.</div>
+            <div class="t-level">Surfeur confirmé · Landes</div>
+        </div>
+        <div class="testimonial">
+            <div class="stars">★★★★★</div>
+            <div class="t-text">"Le plan coaching 30 jours a transformé mon surf. Je suis passé débutant à intermédiaire
+                en 2 mois. Les stats avancées m'ont vraiment aidé."</div>
+            <div class="t-name">Léa M.</div>
+            <div class="t-level">Surfeure intermédiaire · Bretagne</div>
+        </div>
+        <div class="testimonial">
+            <div class="stars">★★★★☆</div>
+            <div class="t-text">"L'export PDF pour mon club est parfait. Tous mes élèves voient leur progression et ça
+                motive tout le monde."</div>
+            <div class="t-name">Stéphane K.</div>
+            <div class="t-level">Moniteur surf · Pays Basque</div>
+        </div>
+    </div>
+
+    <!-- T122 FAQ Abonnements -->
+    <section class="section">
+        <h2 class="section-title">Questions fréquentes 💬</h2>
+        <div id="faq-container">
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFAQ(this)"><span>Puis-je annuler à tout moment ?</span><i
+                        class="faq-icon">+</i></div>
+                <div class="faq-a">Oui, tu peux annuler ton abonnement Pro à tout moment depuis ton profil ou le portail
+                    Stripe. Tu gardes l'accès Pro jusqu'à la fin de la période déjà payée. Aucun frais d'annulation.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFAQ(this)"><span>Comment fonctionne l'essai gratuit 14 jours
+                        ?</span><i class="faq-icon">+</i></div>
+                <div class="faq-a">Tu accèdes à toutes les fonctionnalités Pro pendant 14 jours sans carte bancaire. À
+                    la fin de l'essai, tu choisis de continuer (4,99€/mois) ou de rester sur le plan gratuit.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFAQ(this)"><span>Que se passe-t-il si je passe de Pro à Gratuit
+                        ?</span><i class="faq-icon">+</i></div>
+                <div class="faq-a">Toutes tes données (sessions, profil, historique) sont conservées. Seules les
+                    fonctionnalités Pro sont désactivées. Tu peux repasser Pro à tout moment.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFAQ(this)"><span>Y a-t-il un abonnement annuel moins cher ?</span><i
+                        class="faq-icon">+</i></div>
+                <div class="faq-a">Oui ! L'abonnement annuel coûte 39,99€/an (soit 3,33€/mois), contre 4,99€/mois en
+                    mensuel. Tu économises 20% soit presque 2 mois offerts.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFAQ(this)"><span>Comment puis-je gérer ma carte bancaire ?</span><i
+                        class="faq-icon">+</i></div>
+                <div class="faq-a">Via le portail client Stripe accessible depuis ton profil → "Gérer mon abonnement".
+                    Tu peux changer de carte, télécharger tes factures et annuler en quelques secondes.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA final — T129 -->
+    <section
+        style="text-align:center;padding:60px 24px;background:linear-gradient(180deg,transparent 0%,rgba(14,165,233,.04) 100%);border-top:1px solid var(--border)">
+        <div style="font-size:12px;color:#ef4444;font-weight:700;margin-bottom:8px">⏰ OFFRE DE LANCEMENT — PRIX BLOQUÉ À
+            VIE POUR LES PREMIERS ABONNÉS</div>
+        <h2 style="font-size:32px;font-weight:900;margin-bottom:12px">Commence aujourd'hui 🌊</h2>
+        <p style="color:var(--sub);font-size:16px;margin-bottom:28px">Rejoins 1 247 surfeurs qui utilisent déjà
+            SwellSync chaque jour.</p>
+        <button onclick="window.open('https://buy.stripe.com/swellsync-pro','_blank')"
+            style="background:linear-gradient(135deg,#0ea5e9,#0284c7);border:none;border-radius:18px;padding:16px 36px;color:white;font-weight:800;font-size:18px;cursor:pointer">
+            Démarrer l'essai gratuit 14 jours →
+        </button>
+        <div style="margin-top:14px;font-size:13px;color:var(--muted)">Sans carte bancaire · Annulation immédiate</div>
+    </section>
+
+    <footer>
+        <div style="margin-bottom:12px">
+            <a href="/">Accueil</a><a href="/fonctionnalites.html">Fonctionnalités</a><a
+                href="/contact.html">Contact</a><a href="/legal.html">Mentions légales</a>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">© 2026 SwellSync — L'app des surfeurs français</div>
+    </footer>
+
+    <script>
+        function toggleBilling(annual) {
+            const priceEl = document.getElementById('price-display');
+            const periodEl = document.getElementById('price-period');
+            const billedEl = document.getElementById('billed-as');
+            if (annual) {
+                priceEl.textContent = '3,33€';
+                periodEl.textContent = '/mois';
+                billedEl.textContent = 'Facturé 39,99€/an · Économisez 20%';
+                priceEl.style.color = '#10b981';
+            } else {
+                priceEl.textContent = '4,99€';
+                periodEl.textContent = '/mois';
+                billedEl.textContent = 'Facturé 4,99€/mois';
+                priceEl.style.color = 'var(--text)';
+            }
+        }
+        function toggleFAQ(el) {
+            const item = el.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        }
+        // Schema FAQPage
+        const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [...document.querySelectorAll('.faq-item')].map(item => ({ "@type": "Question", "name": item.querySelector('.faq-q span').textContent, "acceptedAnswer": { "@type": "Answer", "text": item.querySelector('.faq-a').textContent.trim() } })) };
+        const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(faqSchema); document.head.appendChild(s);
+    </script>
+</body>
+
+</html>
