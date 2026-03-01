@@ -3,202 +3,544 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mes Stats Surf — SwellSync</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Statistiques Surf — SwellSync</title>
     <meta name="description"
-        content="Tes statistiques de surf complètes : temps en eau, vagues surfées, distance, spots favoris et progression.">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0ea5e9">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-client.js" defer></script>
-    <script src="/js/stats.js" defer></script>
-    <script src="/js/gamification.js" defer></script>
-    <script src="/js/toast.js" defer></script>
+        content="Consultez vos statistiques de surf détaillées: sessions, distance, vagues, score moyen et progression sur 30 jours.">
+    <link rel="icon" href="/assets/icons/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #0a0f1e;
+            --text: #f1f5f9;
+            --sub: #94a3b8;
+            --muted: #64748b;
+            --border: rgba(255, 255, 255, .07);
+            --blue: #0ea5e9;
+            --green: #10b981;
+            --surface: rgba(255, 255, 255, .04)
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 80px
+        }
+
+        .header {
+            padding: 20px 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 900
+        }
+
+        .period-tabs {
+            display: flex;
+            gap: 0;
+            background: rgba(255, 255, 255, .04);
+            border-radius: 12px;
+            padding: 2px;
+            margin: 0 20px 20px
+        }
+
+        .period-tab {
+            flex: 1;
+            padding: 7px;
+            border: none;
+            border-radius: 10px;
+            background: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .period-tab.active {
+            background: rgba(14, 165, 233, .15);
+            color: var(--blue)
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 20px
+        }
+
+        @media(min-width:640px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr)
+            }
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 6px
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--text);
+            line-height: 1
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        .stat-trend {
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: 600
+        }
+
+        .trend-up {
+            color: var(--green)
+        }
+
+        .trend-down {
+            color: #ef4444
+        }
+
+        .section {
+            padding: 0 20px;
+            margin-bottom: 24px
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .chart-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px;
+            height: 200px
+        }
+
+        .session-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .session-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .session-score {
+            font-size: 24px;
+            font-weight: 900
+        }
+
+        .session-info {
+            flex: 1
+        }
+
+        .session-name {
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .session-meta {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .export-btn {
+            margin: 0 20px;
+            width: calc(100% - 40px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 13px;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px
+        }
+
+        .export-btn:hover {
+            border-color: rgba(14, 165, 233, .3);
+            background: rgba(14, 165, 233, .05)
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(26, 1fr);
+            gap: 2px;
+            margin-top: 10px
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 2px;
+            min-width: 8px
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 15, 30, .95);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 16px
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 600
+        }
+
+        .nav-item.active {
+            color: var(--blue)
+        }
+
+        .nav-icon {
+            font-size: 22px
+        }
+    </style>
 </head>
 
 <body>
-    <a href="#main-content" class="skip-link">Aller au contenu</a>
-
-    <header
-        style="padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;background:rgba(8,15,26,.95);backdrop-filter:blur(16px);z-index:100">
-        <button type="button" onclick="history.back()" aria-label="Retour"
-            style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;padding:4px">←</button>
-        <h1 style="font-size:17px;font-weight:700;color:#f1f5f9;margin:0">📊 Mes Stats</h1>
-        <button type="button" id="export-pdf-btn"
-            style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:6px 12px;color:#94a3b8;font-size:12px;cursor:pointer"
-            onclick="exportStatsPDF()">Export</button>
-    </header>
-
-    <main id="main-content" style="padding-bottom:80px">
-
-        <!-- Tabs -->
-        <div style="display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.06)">
-            <button type="button" class="stats-tab active-tab" data-tab="overview"
-                style="flex:1;padding:12px 8px;background:none;border:none;color:#0ea5e9;font-weight:600;font-size:13px;cursor:pointer;border-bottom:2px solid #0ea5e9">Vue
-                d'ensemble</button>
-            <button type="button" class="stats-tab" data-tab="leaderboard"
-                style="flex:1;padding:12px 8px;background:none;border:none;color:#64748b;font-size:13px;cursor:pointer;border-bottom:2px solid transparent">Classement</button>
-            <button type="button" class="stats-tab" data-tab="challenges"
-                style="flex:1;padding:12px 8px;background:none;border:none;color:#64748b;font-size:13px;cursor:pointer;border-bottom:2px solid transparent">Défis</button>
+    <div id="app">
+        <div class="header">
+            <div>
+                <h1>📊 Mes Stats</h1>
+                <div id="stats-subtitle" style="font-size:13px;color:var(--muted)">Chargement...</div>
+            </div>
+            <div id="level-mini" style="font-size:24px">🏄</div>
         </div>
 
-        <!-- Overview -->
-        <section id="tab-overview" class="tab-panel" style="padding:20px">
-            <div id="stats-grid">
-                <!-- Rempli par JS -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
-                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
-                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
-                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
-                    <div class="skeleton" style="height:100px;border-radius:16px"></div>
+        <!-- Onglets période -->
+        <div class="period-tabs">
+            <button class="period-tab active" onclick="loadStats('month',this)">Ce mois</button>
+            <button class="period-tab" onclick="loadStats('quarter',this)">3 mois</button>
+            <button class="period-tab" onclick="loadStats('year',this)">Cette année</button>
+            <button class="period-tab" onclick="loadStats('all',this)">Tout</button>
+        </div>
+
+        <!-- KPI Cards (T81-84) -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🏄</div>
+                <div class="stat-value" id="stat-sessions">—</div>
+                <div class="stat-label">Sessions</div>
+                <div class="stat-trend" id="trend-sessions"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌊</div>
+                <div class="stat-value" id="stat-waves">—</div>
+                <div class="stat-label">Vagues</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📏</div>
+                <div class="stat-value" id="stat-distance">—</div>
+                <div class="stat-label">Km parcourus</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value" id="stat-score">—</div>
+                <div class="stat-label">Score moyen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="stat-hours">—</div>
+                <div class="stat-label">Heures en eau</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-value" id="stat-streak">—</div>
+                <div class="stat-label">Sem. consécutives</div>
+            </div>
+            <div class="stat-card" style="grid-column:span 2">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="stat-best-spot" style="font-size:16px">—</div>
+                <div class="stat-label">Spot préféré</div>
+            </div>
+        </div>
+
+        <!-- Graphique score T22 -->
+        <div class="section">
+            <div class="section-title">📈 Évolution score moyen</div>
+            <div class="chart-container"><canvas id="score-chart"></canvas></div>
+        </div>
+
+        <!-- Carte thermique des jours (T86) -->
+        <div class="section">
+            <div class="section-title">🗓️ Activité (52 semaines)</div>
+            <div class="chart-container" style="height:auto;padding:12px">
+                <div style="font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;gap:20px">
+                    <span>Jan</span><span>Mar</span><span>Mai</span><span>Juil</span><span>Sep</span><span>Nov</span>
+                </div>
+                <div id="heatmap" class="heatmap"></div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;color:var(--muted)">
+                    Moins <div style="display:flex;gap:2px">
+                        ${['rgba(255,255,255,.04)','rgba(14,165,233,.15)','rgba(14,165,233,.3)','rgba(14,165,233,.6)','#0ea5e9'].map(c=>`
+                        <div style="width:10px;height:10px;border-radius:2px;background:${c}"></div>`).join('')}</div>
+                    Plus
                 </div>
             </div>
+        </div>
 
-            <!-- Ce mois / Cette année -->
-            <div id="period-stats" style="margin-top:8px"></div>
-        </section>
-
-        <!-- Leaderboard -->
-        <section id="tab-leaderboard" class="tab-panel" style="padding:20px;display:none">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-                <h2 style="margin:0;font-size:18px;font-weight:700;color:#f1f5f9">🏆 Classement</h2>
-                <select id="leaderboard-region"
-                    style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#94a3b8;padding:6px 10px;font-size:12px">
-                    <option value="">France entière</option>
-                    <option value="bretagne">Bretagne</option>
-                    <option value="landes">Landes</option>
-                    <option value="pays_basque">Pays Basque</option>
-                    <option value="méditerranée">Méditerranée</option>
-                </select>
+        <!-- Sessions récentes (T85) -->
+        <div class="section">
+            <div class="section-title">🕐 Sessions récentes</div>
+            <div class="session-list" id="sessions-list">
+                <div style="text-align:center;padding:20px;color:var(--muted)">⏳ Chargement...</div>
             </div>
-            <div id="leaderboard-container">
-                <div class="skeleton" style="height:60px;border-radius:12px;margin-bottom:8px"></div>
-                <div class="skeleton" style="height:60px;border-radius:12px;margin-bottom:8px"></div>
-                <div class="skeleton" style="height:60px;border-radius:12px;margin-bottom:8px"></div>
+        </div>
+
+        <!-- Export PDF T88 -->
+        <button class="export-btn" id="export-btn" onclick="exportStats()">
+            📄 Exporter le bilan de saison (PDF)
+            <span id="export-pro-badge"
+                style="display:none;background:rgba(245,158,11,.15);color:#f59e0b;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700">Pro</span>
+        </button>
+
+        <!-- Comparaison communauté T87 -->
+        <div class="section" style="margin-top:20px">
+            <div class="section-title">👥 Toi vs. la communauté</div>
+            <div id="community-compare"
+                style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px">
+                <div style="text-align:center;padding:20px;color:var(--muted)">⏳ Chargement...</div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- Défis -->
-        <section id="tab-challenges" class="tab-panel" style="padding:20px;display:none">
-            <h2 style="margin:0 0 6px;font-size:18px;font-weight:700;color:#f1f5f9">⚡ Défis de la semaine</h2>
-            <div id="week-label" style="font-size:12px;color:#64748b;margin-bottom:20px">Semaine en cours</div>
-            <div id="challenges-container"></div>
-        </section>
-
-    </main>
-
-    <!-- Bottom Nav -->
-    <nav aria-label="Navigation principale"
-        style="position:fixed;bottom:0;left:0;right:0;background:rgba(8,15,26,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200">
-        <a href="/pages/home.html"
-            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">🌊<span>Accueil</span></a>
-        <a href="/pages/history.html"
-            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">📋<span>Sessions</span></a>
-        <a href="/pages/stats.html"
-            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#0ea5e9;text-decoration:none;font-size:10px;padding:4px">📊<span>Stats</span></a>
-        <a href="/pages/coaching.html"
-            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">🎓<span>Coaching</span></a>
-        <a href="/pages/profile.html"
-            style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">👤<span>Profil</span></a>
+    <!-- Bottom nav -->
+    <nav class="bottom-nav">
+        <a href="/index.html" class="nav-item"><span class="nav-icon">🏠</span>Accueil</a>
+        <a href="/pages/session-live.html" class="nav-item"><span class="nav-icon">🏄</span>Session</a>
+        <a href="/pages/community.html" class="nav-item"><span class="nav-icon">👥</span>Communauté</a>
+        <a href="/pages/stats.html" class="nav-item active"><span class="nav-icon">📊</span>Stats</a>
+        <a href="/pages/profile.html" class="nav-item"><span class="nav-icon">👤</span>Profil</a>
     </nav>
 
+    <script src="/js/supabase-client.js"></script>
+    <script src="/js/profile-advanced.js"></script>
     <script>
-        // --- Tabs ---
-        document.querySelectorAll('.stats-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.stats-tab').forEach(t => { t.style.color = '#64748b'; t.style.borderBottomColor = 'transparent'; t.style.fontWeight = '400'; });
-                document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-                tab.style.color = '#0ea5e9'; tab.style.borderBottomColor = '#0ea5e9'; tab.style.fontWeight = '600';
-                const panel = document.getElementById('tab-' + tab.dataset.tab);
-                if (panel) panel.style.display = 'block';
-                if (tab.dataset.tab === 'leaderboard') loadLeaderboardUI();
-                if (tab.dataset.tab === 'challenges') loadChallengesUI();
-            });
-        });
+        const SUPABASE_URL = 'https://bsxpwsmxwpqkbzlauigy.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzeHB3c214d3Bxa2J6bGF1aWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2Nzg5MzUsImV4cCI6MjA1NjI1NDkzNX0.Cx24BjKjBF_6-nLRTY5iy6DflHQ7Y00fGGxnJbEiN3A';
+        const supabase = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-        async function init() {
+        let currentPeriod = 'month';
+        let allSessions = [];
+
+        async function loadStats(period = 'month', btn) {
+            currentPeriod = period;
+            document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            if (!supabase) { renderMockData(); return; }
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                if (!user) { window.location.href = '/index.html'; return; }
-                const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
-                if (!member) return;
+                if (!user) { renderMockData(); return; }
+                const { data: member } = await supabase.from('members').select('id, level, is_pro').eq('auth_id', user.id).single();
+                const since = getSinceDate(period);
+                const { data: sessions } = await supabase.from('surf_sessions').select('*').eq('user_id', member.id).gte('started_at', since.toISOString()).order('started_at', { ascending: false });
+                allSessions = sessions || [];
+                renderStats(allSessions, member);
+            } catch { renderMockData(); }
+        }
 
-                const stats = typeof loadAdvancedStats !== 'undefined' ? await loadAdvancedStats(member.id) : null;
-                const grid = document.getElementById('stats-grid');
-                if (grid && stats) {
-                    typeof renderStatCard !== 'undefined' ? renderStatCard(grid, stats) : null;
+        function getSinceDate(period) {
+            const d = new Date();
+            if (period === 'month') d.setMonth(d.getMonth() - 1);
+            else if (period === 'quarter') d.setMonth(d.getMonth() - 3);
+            else if (period === 'year') d.setFullYear(d.getFullYear() - 1);
+            else d.setFullYear(2020);
+            return d;
+        }
 
-                    // Période stats
-                    const pd = document.getElementById('period-stats');
-                    if (pd) pd.innerHTML = `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;text-align:center">
-              <div style="font-size:11px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Ce mois</div>
-              <div style="font-size:24px;font-weight:700;color:#0ea5e9">${stats.this_month_sessions}</div>
-              <div style="font-size:12px;color:#64748b">sessions</div>
-            </div>
-            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;text-align:center">
-              <div style="font-size:11px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Cette année</div>
-              <div style="font-size:24px;font-weight:700;color:#10b981">${stats.this_year_sessions}</div>
-              <div style="font-size:12px;color:#64748b">sessions</div>
-            </div>
-          </div>`;
+        function renderStats(sessions, member) {
+            const totalSessions = sessions.length;
+            const totalWaves = sessions.reduce((s, x) => s + (x.wave_count || 0), 0);
+            const totalDist = sessions.reduce((s, x) => s + (x.distance_km || 0), 0);
+            const totalHours = sessions.reduce((s, x) => s + (x.duration_minutes || 0), 0) / 60;
+            const avgScore = sessions.length ? (sessions.reduce((s, x) => s + (x.score || 0), 0) / sessions.length).toFixed(1) : '—';
+            const spotCounts = {};
+            sessions.forEach(s => { if (s.spot_name) spotCounts[s.spot_name] = (spotCounts[s.spot_name] || 0) + 1; });
+            const bestSpot = Object.entries(spotCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '—';
+
+            document.getElementById('stat-sessions').textContent = totalSessions;
+            document.getElementById('stat-waves').textContent = totalWaves;
+            document.getElementById('stat-distance').textContent = totalDist.toFixed(1);
+            document.getElementById('stat-hours').textContent = totalHours.toFixed(1);
+            document.getElementById('stat-score').textContent = avgScore;
+            document.getElementById('stat-best-spot').textContent = bestSpot;
+            document.getElementById('stats-subtitle').textContent = `${totalSessions} sessions · ${totalWaves} vagues`;
+
+            const streak = ProfileAdvanced.calculateStreak(sessions);
+            document.getElementById('stat-streak').textContent = streak;
+
+            const level = ProfileAdvanced.calculateLevel({ sessions_count: totalSessions, avg_score: parseFloat(avgScore) || 0, total_distance_km: totalDist, streak_weeks: streak });
+            document.getElementById('level-mini').textContent = level.emoji;
+
+            renderScoreChart(sessions);
+            renderHeatmap(sessions);
+            renderSessionList(sessions.slice(0, 5));
+            renderCommunityCompare(totalSessions, avgScore, totalDist);
+
+            if (member?.is_pro) document.getElementById('export-pro-badge').style.display = 'none';
+            else document.getElementById('export-pro-badge').style.display = 'inline-block';
+        }
+
+        function renderMockData() {
+            // Données démo si pas connecté
+            document.getElementById('stat-sessions').textContent = '47';
+            document.getElementById('stat-waves').textContent = '312';
+            document.getElementById('stat-distance').textContent = '89.4';
+            document.getElementById('stat-hours').textContent = '38.5';
+            document.getElementById('stat-score').textContent = '6.8';
+            document.getElementById('stat-streak').textContent = '4';
+            document.getElementById('stat-best-spot').textContent = 'Hossegor';
+            document.getElementById('stats-subtitle').textContent = '47 sessions · 312 vagues · Données démo';
+            renderScoreChart([]);
+            renderHeatmap([]);
+            renderSessionList([]);
+            renderCommunityCompare(47, 6.8, 89.4);
+        }
+
+        function renderScoreChart(sessions) {
+            const existing = Chart.getChart('score-chart');
+            if (existing) existing.destroy();
+            const last30 = [];
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const ds = sessions.filter(s => s.started_at?.slice(0, 10) === d.toISOString().slice(0, 10));
+                last30.push({ label: d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }), score: ds.length ? ds.reduce((s, x) => s + (x.score || 0), 0) / ds.length : null });
+            }
+            new Chart(document.getElementById('score-chart'), {
+                type: 'line',
+                data: { labels: last30.map(d => d.label), datasets: [{ data: last30.map(d => d.score || null), borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,.08)', borderWidth: 2, pointRadius: 3, fill: true, tension: 0.4, spanGaps: true }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#64748b', font: { size: 10 }, maxTicksLimit: 7 }, grid: { display: false } }, y: { min: 0, max: 10, ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,.04)' } } } }
+            });
+        }
+
+        function renderHeatmap(sessions) {
+            const el = document.getElementById('heatmap');
+            if (!el) return;
+            const sessionDates = new Set(sessions.map(s => s.started_at?.slice(0, 10)));
+            const cells = [];
+            const d = new Date(); d.setDate(d.getDate() - 182);
+            for (let i = 0; i < 182; i++) {
+                const date = new Date(d); date.setDate(d.getDate() + i);
+                const ds = date.toISOString().slice(0, 10);
+                const has = sessionDates.has(ds);
+                const sessionsOnDay = sessions.filter(s => s.started_at?.slice(0, 10) === ds).length;
+                const intensity = sessionsOnDay === 0 ? 'rgba(255,255,255,.04)' : sessionsOnDay === 1 ? 'rgba(14,165,233,.25)' : sessionsOnDay === 2 ? 'rgba(14,165,233,.5)' : '#0ea5e9';
+                cells.push(`<div class="heatmap-cell" style="background:${intensity}" title="${ds}${sessionsOnDay ? ': ' + sessionsOnDay + ' session(s)' : ''}"></div>`);
+            }
+            el.innerHTML = cells.join('');
+        }
+
+        function renderSessionList(sessions) {
+            const el = document.getElementById('sessions-list');
+            if (!el) return;
+            if (!sessions.length) { el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">🌊 Aucune session — commence à surfer !</div>'; return; }
+            el.innerHTML = sessions.map(s => {
+                const scoreColor = s.score >= 8 ? '#10b981' : s.score >= 5 ? '#f59e0b' : '#ef4444';
+                return `<div class="session-item">
+      <div class="session-score" style="color:${scoreColor}">${s.score || '?'}</div>
+      <div class="session-info">
+        <div class="session-name">${s.spot_name || 'Spot inconnu'}</div>
+        <div class="session-meta">${new Date(s.started_at).toLocaleDateString('fr-FR')} · ${s.duration_minutes || 0} min · ${s.wave_count || 0} vagues</div>
+      </div>
+    </div>`;
+            }).join('');
+        }
+
+        function renderCommunityCompare(sessions, avgScore, dist) {
+            const el = document.getElementById('community-compare');
+            if (!el) return;
+            const avgCommunity = { sessions: 32, score: 6.2, dist: 62 };
+            const rows = [
+                ['🏄 Sessions', sessions, avgCommunity.sessions],
+                ['⭐ Score moyen', parseFloat(avgScore) || 0, avgCommunity.score],
+                ['📏 Distance (km)', parseFloat(dist) || 0, avgCommunity.dist]
+            ];
+            el.innerHTML = rows.map(([label, me, avg]) => {
+                const better = me >= avg;
+                return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <div style="width:80px;font-size:12px;color:var(--sub)">${label}</div>
+      <div style="flex:1;font-size:15px;font-weight:800;color:${better ? '#10b981' : 'var(--text)'}">
+        ${typeof me === 'number' ? me.toFixed(me % 1 === 0 ? 0 : 1) : me}
+        ${better ? '↑' : '↓'}
+      </div>
+      <div style="font-size:12px;color:var(--muted)">Moy: ${avg}</div>
+    </div>`;
+            }).join('');
+        }
+
+        async function exportStats() {
+            try {
+                const { data: { user } } = await supabase?.auth.getUser() || {};
+                const { data: member } = user ? await supabase.from('members').select('is_pro').eq('auth_id', user.id).single() : {};
+                if (!member?.is_pro) {
+                    if (confirm('Export PDF est une fonctionnalité Pro. Passer à Pro pour 4,99€/mois ?')) window.location.href = '/tarifs.html';
+                    return;
                 }
-
-                // Stocker member.id pour les autres onglets
-                window._currentMemberId = member.id;
-            } catch (e) { }
+                // Générer un PDF simple via l'API print du navigateur
+                window.print();
+            } catch { window.print(); }
         }
 
-        async function loadLeaderboardUI() {
-            const container = document.getElementById('leaderboard-container');
-            if (!container || container.querySelector('[data-loaded]')) return;
-            try {
-                const region = document.getElementById('leaderboard-region')?.value || null;
-                const users = typeof loadLeaderboard !== 'undefined' ? await loadLeaderboard(region, 15) : [];
-                typeof renderLeaderboard !== 'undefined' ? renderLeaderboard(container, users) : null;
-                container.setAttribute('data-loaded', '1');
-            } catch { }
-        }
-
-        document.getElementById('leaderboard-region')?.addEventListener('change', async () => {
-            const container = document.getElementById('leaderboard-container');
-            container?.removeAttribute('data-loaded');
-            loadLeaderboardUI();
-        });
-
-        async function loadChallengesUI() {
-            const container = document.getElementById('challenges-container');
-            if (!container || container.querySelector('[data-loaded]')) return;
-            if (!window._currentMemberId) return;
-            try {
-                const challenges = typeof checkWeeklyChallenges !== 'undefined' ? await checkWeeklyChallenges(window._currentMemberId) : [];
-                container.innerHTML = challenges.map(c => `
-        <div style="background:rgba(255,255,255,.03);border:1px solid ${c.completed ? 'rgba(16,185,129,.3)' : 'rgba(255,255,255,.06)'};border-radius:16px;padding:20px;margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div style="display:flex;align-items:center;gap:10px">
-              <span style="font-size:24px">${c.icon}</span>
-              <div>
-                <div style="font-weight:600;color:#f1f5f9;font-size:14px">${c.label}</div>
-                <div style="color:#64748b;font-size:12px">${c.progress}/${c.target} ${c.unit || ''}</div>
-              </div>
-            </div>
-            <span style="font-size:20px">${c.completed ? '✅' : '⏳'}</span>
-          </div>
-          <div style="background:rgba(255,255,255,.05);border-radius:4px;height:6px;overflow:hidden">
-            <div style="height:100%;background:${c.completed ? 'linear-gradient(90deg,#10b981,#059669)' : 'linear-gradient(90deg,#0ea5e9,#38bdf8)'};border-radius:4px;width:${Math.min((c.progress / c.target) * 100, 100)}%;transition:width 1s ease"></div>
-          </div>
-        </div>`).join('');
-                container.setAttribute('data-loaded', '1');
-            } catch { }
-        }
-
-        async function exportStatsPDF() {
-            if (typeof showToast !== 'undefined') showToast('📄 Export PDF — fonctionnalité Pro bientôt disponible !', 'info');
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
+        // Initialiser
+        document.addEventListener('DOMContentLoaded', () => loadStats('month'));
     </script>
 </body>
 

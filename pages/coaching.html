@@ -1,177 +1,567 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Coaching Surf — SwellSync</title>
-  <meta name="description" content="Conseils personnalisés par niveau, programmes d'entraînement et analyse de tes sessions surf.">
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0ea5e9">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/js/supabase-client.js" defer></script>
-  <script src="/js/coaching.js" defer></script>
-  <script src="/js/stats.js" defer></script>
-  <script src="/js/toast.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coaching Surf Personnalisé — SwellSync</title>
+  <meta name="description"
+    content="Coaching surf personnalisé: vidéos techniques par niveau, programme 30 jours, dictionnaire surf illustré et quiz. Progressez avec SwellSync.">
+  <link rel="icon" href="/assets/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #0a0f1e;
+      --text: #f1f5f9;
+      --sub: #94a3b8;
+      --muted: #64748b;
+      --border: rgba(255, 255, 255, .07);
+      --blue: #0ea5e9;
+      --green: #10b981;
+      --surface: rgba(255, 255, 255, .04)
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 80px
+    }
+
+    .header {
+      padding: 20px 20px 0;
+      margin-bottom: 16px
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 4px
+    }
+
+    .section-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px 16px;
+      overflow-x: auto;
+      scrollbar-width: none
+    }
+
+    .section-tab {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: none;
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s
+    }
+
+    .section-tab.active {
+      background: rgba(14, 165, 233, .12);
+      border-color: rgba(14, 165, 233, .3);
+      color: var(--blue)
+    }
+
+    .section {
+      display: none;
+      padding: 0 20px
+    }
+
+    .section.active {
+      display: block
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px
+    }
+
+    .video-card {
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border)
+    }
+
+    .video-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: #0f172a;
+      cursor: pointer;
+      overflow: hidden
+    }
+
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .8
+    }
+
+    .play-btn {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, .5)
+    }
+
+    .video-info {
+      padding: 12px
+    }
+
+    .video-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px
+    }
+
+    .level-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 6px
+    }
+
+    .badge-beginner {
+      background: rgba(16, 185, 129, .15);
+      color: var(--green)
+    }
+
+    .badge-intermediate {
+      background: rgba(245, 158, 11, .15);
+      color: #f59e0b
+    }
+
+    .badge-advanced {
+      background: rgba(239, 68, 68, .15);
+      color: #ef4444
+    }
+
+    .program-day {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .05)
+    }
+
+    .day-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(14, 165, 233, .12);
+      border: 1px solid rgba(14, 165, 233, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--blue);
+      flex-shrink: 0
+    }
+
+    .day-done {
+      background: rgba(16, 185, 129, .12);
+      border-color: rgba(16, 185, 129, .3);
+      color: var(--green)
+    }
+
+    .dict-item {
+      border-bottom: 1px solid rgba(255, 255, 255, .05);
+      padding: 12px 0
+    }
+
+    .dict-term {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--blue);
+      cursor: pointer
+    }
+
+    .dict-def {
+      font-size: 13px;
+      color: var(--sub);
+      margin-top: 4px;
+      display: none;
+      line-height: 1.6
+    }
+
+    .dict-item.open .dict-def {
+      display: block
+    }
+
+    .quiz-option {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--sub);
+      transition: all .2s
+    }
+
+    .quiz-option:hover {
+      border-color: rgba(14, 165, 233, .3);
+      color: var(--text)
+    }
+
+    .quiz-option.correct {
+      border-color: var(--green);
+      background: rgba(16, 185, 129, .08);
+      color: var(--green)
+    }
+
+    .quiz-option.wrong {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, .08);
+      color: #ef4444
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 15, 30, .95);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 16px
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600
+    }
+
+    .nav-item.active {
+      color: var(--blue)
+    }
+  </style>
 </head>
+
 <body>
-  <a href="#main-content" class="skip-link">Aller au contenu</a>
+  <div class="header">
+    <h1>🎯 Coaching Surf</h1>
+    <div style="font-size:13px;color:var(--muted)" id="coaching-level">Niveau détecté: Intermédiaire</div>
+  </div>
 
-  <!-- Header -->
-  <header style="padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;background:rgba(8,15,26,.95);backdrop-filter:blur(16px);z-index:100">
-    <button type="button" onclick="history.back()" aria-label="Retour" style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;padding:4px">←</button>
-    <h1 style="font-size:17px;font-weight:700;color:#f1f5f9;margin:0">🎓 Coaching Surf</h1>
-    <div style="width:32px"></div>
-  </header>
+  <!-- T91 — Tabs coaching -->
+  <div class="section-tabs">
+    <button class="section-tab active" onclick="showSection('videos',this)">🎬 Vidéos</button>
+    <button class="section-tab" onclick="showSection('program',this)">📅 Programme 30j</button>
+    <button class="section-tab" onclick="showSection('dictionary',this)">📚 Dictionnaire</button>
+    <button class="section-tab" onclick="showSection('quiz',this)">🎯 Quiz</button>
+    <button class="section-tab" onclick="showSection('checklist',this)">✅ Équipement</button>
+  </div>
 
-  <main id="main-content">
-
-    <!-- Niveau actuel -->
-    <section style="padding:24px 20px 0">
-      <div id="level-banner" style="background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.1));border:1px solid rgba(14,165,233,.2);border-radius:20px;padding:20px;text-align:center">
-        <div id="level-icon" style="font-size:48px;margin-bottom:8px">🤙</div>
-        <div id="level-title" style="font-size:22px;font-weight:800;color:#f1f5f9;margin-bottom:4px">Rookie</div>
-        <div id="level-sub" style="font-size:13px;color:#64748b;margin-bottom:16px">0 sessions enregistrées</div>
-        <!-- Progress bar vers le niveau suivant -->
-        <div style="background:rgba(255,255,255,.08);border-radius:4px;height:6px;overflow:hidden">
-          <div id="level-progress" style="height:100%;background:linear-gradient(90deg,#0ea5e9,#38bdf8);border-radius:4px;width:0%;transition:width 1s ease"></div>
-        </div>
-        <div id="level-next" style="font-size:11px;color:#64748b;margin-top:6px">Prochain niveau : Débutant (5 sessions)</div>
-      </div>
-    </section>
-
-    <!-- Tabs coaching -->
-    <div style="display:flex;gap:0;padding:20px 20px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-      <button type="button" class="coaching-tab active-tab" data-tab="tips" style="flex:1;padding:10px;background:none;border:none;color:#0ea5e9;font-weight:600;font-size:14px;cursor:pointer;border-bottom:2px solid #0ea5e9">💡 Conseils</button>
-      <button type="button" class="coaching-tab" data-tab="program" style="flex:1;padding:10px;background:none;border:none;color:#64748b;font-size:14px;cursor:pointer;border-bottom:2px solid transparent">📋 Programme</button>
-      <button type="button" class="coaching-tab" data-tab="analysis" style="flex:1;padding:10px;background:none;border:none;color:#64748b;font-size:14px;cursor:pointer;border-bottom:2px solid transparent">📊 Analyse</button>
+  <!-- T92 — Vidéos techniques -->
+  <div id="sec-videos" class="section active">
+    <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none">
+      <button class="section-tab active" onclick="filterLevel('all',this)"
+        style="padding:6px 12px;font-size:12px">Tous</button>
+      <button class="section-tab" onclick="filterLevel('beginner',this)" style="padding:6px 12px;font-size:12px">🌱
+        Débutant</button>
+      <button class="section-tab" onclick="filterLevel('intermediate',this)" style="padding:6px 12px;font-size:12px">⚡
+        Intermédiaire</button>
+      <button class="section-tab" onclick="filterLevel('advanced',this)" style="padding:6px 12px;font-size:12px">🔥
+        Avancé</button>
     </div>
+    <div id="videos-grid"></div>
+  </div>
 
-    <!-- Panel Conseils -->
-    <section id="tab-tips" class="tab-panel" style="padding:20px">
-      <div id="tips-container">
-        <div class="skeleton" style="height:120px;border-radius:16px;margin-bottom:12px"></div>
-        <div class="skeleton" style="height:120px;border-radius:16px;margin-bottom:12px"></div>
-        <div class="skeleton" style="height:120px;border-radius:16px"></div>
-      </div>
-    </section>
-
-    <!-- Panel Programme -->
-    <section id="tab-program" class="tab-panel" style="padding:20px;display:none">
-      <h2 style="font-size:18px;font-weight:700;color:#f1f5f9;margin:0 0 16px">📋 Programmes d'entraînement</h2>
-      <div id="programs-container"></div>
-    </section>
-
-    <!-- Panel Analyse -->
-    <section id="tab-analysis" class="tab-panel" style="padding:20px;display:none">
-      <h2 style="font-size:18px;font-weight:700;color:#f1f5f9;margin:0 0 16px">📊 Analyse de tes sessions</h2>
-      <div id="analysis-container">
-        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;text-align:center;color:#64748b">
-          <div style="font-size:40px;margin-bottom:12px">🔍</div>
-          <p>Charge tes sessions pour voir l'analyse.</p>
+  <!-- T95 — Programme 30 jours -->
+  <div id="sec-program" class="section">
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-size:12px;color:var(--blue);font-weight:700;margin-bottom:6px">📅 PROGRAMME 30 JOURS —
+        INTERMÉDIAIRE</div>
+      <div style="font-size:13px;color:var(--sub)">Objectif: Bottom turn propre + cutback contrôlé. 20-30 min/jour sur
+        30 jours.</div>
+      <div style="background:rgba(255,255,255,.05);border-radius:8px;height:6px;overflow:hidden;margin-top:10px">
+        <div id="prog-bar"
+          style="height:100%;background:linear-gradient(90deg,#0ea5e9,#10b981);border-radius:8px;width:0%;transition:width 1s">
         </div>
       </div>
-    </section>
-  </main>
+      <div id="prog-text" style="font-size:11px;color:var(--muted);margin-top:4px">0/30 jours complétés</div>
+    </div>
+    <div id="program-list"></div>
+  </div>
 
-  <!-- Bottom Nav -->
-  <nav aria-label="Navigation principale" style="position:fixed;bottom:0;left:0;right:0;background:rgba(8,15,26,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:200">
-    <a href="/pages/home.html" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">🌊<span>Accueil</span></a>
-    <a href="/pages/forecast.html" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">📡<span>Prévisions</span></a>
-    <a href="/pages/community.html" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">👥<span>Communauté</span></a>
-    <a href="/pages/coaching.html" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#0ea5e9;text-decoration:none;font-size:10px;padding:4px">🎓<span>Coaching</span></a>
-    <a href="/pages/profile.html" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;padding:4px">👤<span>Profil</span></a>
+  <!-- T97 — Dictionnaire surf -->
+  <div id="sec-dictionary" class="section">
+    <div
+      style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <span style="color:var(--muted)">🔍</span>
+      <input id="dict-search" type="text" placeholder="Chercher un terme..." oninput="filterDict(this.value)"
+        style="background:none;border:none;outline:none;color:var(--text);font-size:14px;flex:1">
+    </div>
+    <div id="dict-list"></div>
+  </div>
+
+  <!-- T99 — Quiz -->
+  <div id="sec-quiz" class="section">
+    <div class="card">
+      <div id="quiz-content"></div>
+      <div id="quiz-score" style="text-align:center;font-size:24px;font-weight:900;margin-top:10px;display:none"></div>
+      <button id="quiz-next" onclick="nextQuestion()"
+        style="display:none;width:100%;background:linear-gradient(135deg,#0ea5e9,#0284c7);border:none;border-radius:14px;padding:12px;color:white;font-weight:700;font-size:15px;cursor:pointer;margin-top:12px">Question
+        suivante →</button>
+    </div>
+  </div>
+
+  <!-- T96 — Checklist équipement -->
+  <div id="sec-checklist" class="section">
+    <div class="card">
+      <div style="font-size:16px;font-weight:800;margin-bottom:14px">✅ Checklist avant session</div>
+      <div id="checklist-items"></div>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="bottom-nav">
+    <a href="/index.html" class="nav-item"><span style="font-size:22px">🏠</span>Accueil</a>
+    <a href="/pages/session-live.html" class="nav-item"><span style="font-size:22px">🏄</span>Session</a>
+    <a href="/pages/community.html" class="nav-item"><span style="font-size:22px">👥</span>Communauté</a>
+    <a href="/pages/stats.html" class="nav-item"><span style="font-size:22px">📊</span>Stats</a>
+    <a href="/pages/coaching.html" class="nav-item active"><span style="font-size:22px">🎯</span>Coaching</a>
   </nav>
-  <div style="height:80px"></div>
 
   <script>
-  // --- Tabs ---
-  document.querySelectorAll('.coaching-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.coaching-tab').forEach(t => {
-        t.style.color = '#64748b'; t.style.borderBottomColor = 'transparent'; t.style.fontWeight = '400';
-      });
-      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-      tab.style.color = '#0ea5e9'; tab.style.borderBottomColor = '#0ea5e9'; tab.style.fontWeight = '600';
-      document.getElementById('tab-' + tab.dataset.tab).style.display = 'block';
+    const videos = [
+      { id: 'dQw4w9WgXcQ', title: 'Le take-off parfait', level: 'beginner', cat: 'technique', emoji: '🏄', desc: 'Apprenez les bases du take-off: position des mains, dos plat, regard vers le bas.' },
+      { id: 'dQw4w9WgXcQ', title: 'Duck dive maîtrisé', level: 'intermediate', cat: 'technique', emoji: '🌊', desc: 'Passer sous les vagues proprement sans perdre d\'énergie.' },
+      { id: 'dQw4w9WgXcQ', title: 'Bottom turn puissant', level: 'intermediate', cat: 'manœuvre', emoji: '⚡', desc: 'Générer de la vitesse en bas de la vague pour préparer vos manœuvres.' },
+      { id: 'dQw4w9WgXcQ', title: 'Cutback classique', level: 'advanced', cat: 'manœuvre', emoji: '🔥', desc: 'Revenir vers le curl proprement pour connecter les sections.' },
+      { id: 'dQw4w9WgXcQ', title: 'Lire une vague', level: 'beginner', cat: 'stratégie', emoji: '🗺️', desc: 'Anticiper les sections, trouver le pic, choisir ses vagues.' },
+      { id: 'dQw4w9WgXcQ', title: 'Top turn (snap)', level: 'advanced', cat: 'manœuvre', emoji: '💥', desc: 'Changement de direction au sommet de la vague avec spray.' },
+    ];
+
+    const dictionary = [
+      { term: 'Houle', def: 'Ensemble de vagues générées par le vent au large qui se propagent jusqu\'aux côtes. Caractérisée par sa hauteur, sa période et sa direction.' },
+      { term: 'Take-off', def: 'Phase de départ sur la vague: pousser sur les bras, placer les pieds et se lever debout sur la planche en un mouvement fluide.' },
+      { term: 'Duck dive', def: 'Technique qui consiste à plonger sous une vague qui arrive pour ne pas être repoussé. Indispensable sur les shortboards.' },
+      { term: 'Bottom turn', def: 'Virage au bas de la vague qui génère de la vitesse et de l\'élan pour la manœuvre suivante. Fondation de tout le surf.' },
+      { term: 'Cutback', def: 'Manœuvre qui ramène le surfeur vers la mousse de la vague pour rester dans la partie puissante (le curl).' },
+      { term: 'Tube / Barrel', def: 'Creux formé par la vague qui se referme sur elle-même. Surfer dans un tube est considéré comme la manœuvre ultime.' },
+      { term: 'Période de houle', def: 'Temps en secondes entre deux vagues consécutives. Plus la période est longue (10s+), plus la houle est puissante et organisée.' },
+      { term: 'Set', def: 'Groupe de vagues plus grandes qui arrive après une accalmie. Les surfers expérimentés attendent les sets pour avoir les meilleures vagues.' },
+      { term: 'Cleanup set', def: 'Série de vagues exceptionnellement grandes qui balaie tout le monde à l\'eau, même ceux assis au peak.' },
+      { term: 'Closeout', def: 'Vague qui se ferme d\'un seul coup sur toute sa longueur, sans section surfable. Conditions difficiles pour le surf.' },
+      { term: 'Offshore', def: 'Vent soufflant de la terre vers la mer. Idéal pour le surf: tient les lèvres des vagues, crée des conditions "glass".' },
+      { term: 'Onshore', def: 'Vent soufflant de la mer vers la terre. Dégrade la qualité des vagues, les rend creuses et désorganisées.' },
+    ];
+
+    const quizQuestions = [
+      { q: 'Qu\'est-ce qu\'un vent offshore ?', opts: ['Vent de mer → terre', 'Vent de terre → mer', 'Vent parallèle à la côte', 'Absence totale de vent'], correct: 1, exp: 'Un vent offshore souffle de la terre vers la mer, idéal pour maintenir les vagues et créer des conditions parfaites.' },
+      { q: 'Quelle période de houle est la plus favorable pour le surf ?', opts: ['4-6 secondes', '6-8 secondes', '10-14 secondes', '20+ secondes'], correct: 2, exp: 'Une période de 10-14 secondes indique une houle organisée du large, avec de l\'énergie et de la puissance.' },
+      { q: 'Qu\'est-ce qu\'un duck dive ?', opts: ['Sauter par-dessus une vague', 'Plonger sous une vague', 'Tourner brusquement', 'Sortir de l\'eau vite'], correct: 1, exp: 'Le duck dive consiste à plonger sous la vague pour la traverser sans être repoussé.' },
+      { q: 'Qu\'est-ce que le bottom turn ?', opts: ['Un virage en haut de vague', 'Un virage en bas de vague', 'Tomber à l\'eau', 'Se lever sur la planche'], correct: 1, exp: 'Le bottom turn est le virage effectué au bas de la vague, qui génère de la vitesse pour les manœuvres suivantes.' },
+      { q: 'À quoi sert une laisse (leash) ?', opts: ['Décorer la planche', 'Rester attaché à la planche', 'Se tenir debout', 'Mesurer la houle'], correct: 1, exp: 'La laisse relie le surfeur à sa planche pour ne pas la perdre et éviter qu\'elle ne blesse d\'autres personnes.' },
+    ];
+
+    const checklist = [
+      { cat: '🏄 Planche', items: ['Planche adaptée au niveau et aux conditions', 'Aileron(s) bien vissé(s)', 'Pad (grip) propre et non décollé', 'Leash fonctionnel + swivel'] },
+      { cat: '🧜 Combinaison', items: ['Combi adaptée à la température de l\'eau', 'Chaussures/gants si eau froide (<15°C)', 'Crème anti-frottement aux genoux/cou', 'Capuche si eau <12°C'] },
+      { cat: '☀️ Protection', items: ['Crème solaire SPF50+ waterproof', 'T-shirt/combi anti-UV si UV élevé', 'Lunettes polarisées pour la route', 'Eau et collation pour après'] },
+      { cat: '📱 Pratique', items: ['Vérifier les conditions sur SwellSync', 'Informer quelqu\'un de ton départ', 'Respecter la priorité et l\'étiquette surf'] },
+    ];
+
+    let currentQuestion = 0, score = 0;
+    let done = JSON.parse(localStorage.getItem('sw_coaching_done') || '{}');
+    let levelFilter = 'all';
+
+    function showSection(id, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('sec-' + id)?.classList.add('active');
+      document.querySelectorAll('.section-tabs .section-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      if (id === 'quiz') initQuiz();
+    }
+
+    function filterLevel(level, btn) {
+      levelFilter = level;
+      document.querySelectorAll('#sec-videos .section-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderVideos();
+    }
+
+    function renderVideos() {
+      const grid = document.getElementById('videos-grid');
+      if (!grid) return;
+      const watched = JSON.parse(localStorage.getItem('sw_watched_videos') || '[]');
+      const filtered = levelFilter === 'all' ? videos : videos.filter(v => v.level === levelFilter);
+      grid.innerHTML = filtered.map((v, i) => {
+        const levelClass = { beginner: 'badge-beginner', intermediate: 'badge-intermediate', advanced: 'badge-advanced' }[v.level];
+        const isWatched = watched.includes(v.id + i);
+        return `<div class="video-card">
+      <div class="video-thumb" onclick="openVideo('${v.id}','${v.title}',${i})">
+        <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="${v.title}" loading="lazy">
+        <div class="play-btn">${isWatched ? '✅' : '▶️'}</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${v.emoji} ${v.title}</div>
+        <div style="margin-top:4px"><span class="level-badge ${levelClass}">${{ beginner: 'Débutant', intermediate: 'Intermédiaire', advanced: 'Avancé' }[v.level]}</span><span style="font-size:11px;color:var(--muted)">${v.cat}</span></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">${v.desc}</div>
+      </div>
+    </div>`;
+      }).join('');
+    }
+
+    function openVideo(id, title, idx) {
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px';
+      modal.innerHTML = `<button onclick="this.parentElement.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:36px;height:36px;color:white;font-size:20px;cursor:pointer">✕</button>
+    <div style="font-weight:700;color:white;margin-bottom:14px;font-size:16px">${title}</div>
+    <div style="width:100%;max-width:560px;aspect-ratio:16/9"><iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="width:100%;height:100%;border:none;border-radius:12px" allow="autoplay" allowfullscreen></iframe></div>`;
+      document.body.appendChild(modal);
+      const watched = JSON.parse(localStorage.getItem('sw_watched_videos') || '[]');
+      if (!watched.includes(id + idx)) { watched.push(id + idx); localStorage.setItem('sw_watched_videos', JSON.stringify(watched)); renderVideos(); }
+    }
+
+    function renderProgram() {
+      const el = document.getElementById('program-list');
+      if (!el) return;
+      const tasks = [
+        'Regarder vidéo: le take-off parfait + pratiquer 15 min à sec',
+        'Session courte (1h max) focus uniquement sur le paddle et le positionnement',
+        'Exercice: 50 take-offs à sec + 1h eau calme ou piscine',
+        'Session: appliquer le take-off — compter les réussites',
+        'Repos — étirements surf + yoga 20 min',
+        'Regarder vidéo: lire une vague — théorie 30 min',
+        'Session: observer 30 min avant d\'entrer à l\'eau',
+        'Introduction au bottom turn: dessiner la courbe sur sable',
+        'Session focus bottom turn — vitesse secondaire',
+        'Regarder vidéo: duck dive complet',
+        'Exercice piscine ou eau calme: 30 duck dives',
+        'Session houle + entraîner duck dive sur chaque vague',
+        // ... etc
+      ].concat(Array.from({ length: 18 }, (_, i) => `Jour ${i + 14}: Programme avancé — voir coaching.html`));
+      const completedCount = Object.keys(done).filter(k => done[k]).length;
+      const pct = Math.round(completedCount / 30 * 100);
+      document.getElementById('prog-bar').style.width = pct + '%';
+      document.getElementById('prog-text').textContent = `${completedCount}/30 jours complétés (${pct}%)`;
+      el.innerHTML = tasks.slice(0, 30).map((task, i) => {
+        const dayDone = done['day' + i];
+        return `<div class="program-day">
+      <div class="day-num ${dayDone ? 'day-done' : ''}" onclick="toggleDay(${i},this)" title="Marquer complété">${i + 1}</div>
+      <div style="flex:1"><div style="font-size:13px;color:${dayDone ? '#64748b' : 'var(--sub)'}${dayDone ? ';text-decoration:line-through' : ''}">${task}</div></div>
+      ${dayDone ? '<span style="color:#10b981">✓</span>' : ''}
+    </div>`;
+      }).join('');
+    }
+
+    function toggleDay(i, el) {
+      done['day' + i] = !done['day' + i];
+      localStorage.setItem('sw_coaching_done', JSON.stringify(done));
+      renderProgram();
+    }
+
+    function renderDict() {
+      document.getElementById('dict-list').innerHTML = dictionary.map(d => `
+    <div class="dict-item" onclick="this.classList.toggle('open')">
+      <div class="dict-term">${d.term}</div>
+      <div class="dict-def">${d.def}</div>
+    </div>`).join('');
+    }
+
+    function filterDict(q) {
+      const filtered = dictionary.filter(d => d.term.toLowerCase().includes(q.toLowerCase()) || d.def.toLowerCase().includes(q.toLowerCase()));
+      document.getElementById('dict-list').innerHTML = filtered.map(d => `<div class="dict-item" onclick="this.classList.toggle('open')"><div class="dict-term">${d.term}</div><div class="dict-def">${d.def}</div></div>`).join('');
+    }
+
+    function initQuiz() { currentQuestion = 0; score = 0; renderQuestion(); }
+    function renderQuestion() {
+      const el = document.getElementById('quiz-content');
+      const scoreEl = document.getElementById('quiz-score');
+      const nextBtn = document.getElementById('quiz-next');
+      if (currentQuestion >= quizQuestions.length) {
+        el.innerHTML = '';
+        scoreEl.style.display = 'block';
+        scoreEl.innerHTML = `${score >= 4 ? '🏆' : score >= 2 ? '👍' : '💪'}<br><span style="font-size:16px;font-weight:400;color:var(--sub)">${score}/${quizQuestions.length} bonnes réponses</span>`;
+        nextBtn.style.display = 'none';
+        document.getElementById('quiz-next').outerHTML = `<button onclick="initQuiz()" style="width:100%;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;padding:12px;color:white;font-weight:700;font-size:15px;cursor:pointer;margin-top:12px">Recommencer 🔄</button>`;
+        return;
+      }
+      const q = quizQuestions[currentQuestion];
+      el.innerHTML = `<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Question ${currentQuestion + 1}/${quizQuestions.length}</div>
+    <div style="font-weight:800;font-size:15px;color:var(--text);margin-bottom:14px">${q.q}</div>
+    ${q.opts.map((o, i) => `<div class="quiz-option" onclick="answerQuestion(${i},this)">${o}</div>`).join('')}`;
+      nextBtn.style.display = 'none';
+      scoreEl.style.display = 'none';
+    }
+    function answerQuestion(idx, el) {
+      const q = quizQuestions[currentQuestion];
+      document.querySelectorAll('.quiz-option').forEach(o => o.style.pointerEvents = 'none');
+      el.classList.add(idx === q.correct ? 'correct' : 'wrong');
+      if (idx === q.correct) { score++; }
+      else { document.querySelectorAll('.quiz-option')[q.correct].classList.add('correct'); }
+      const exp = document.createElement('div');
+      exp.style.cssText = 'font-size:12px;color:var(--sub);margin-top:10px;padding:10px;background:rgba(255,255,255,.03);border-radius:10px;line-height:1.5';
+      exp.textContent = '💡 ' + q.exp;
+      el.parentElement.appendChild(exp);
+      document.getElementById('quiz-next').style.display = 'block';
+    }
+    function nextQuestion() { currentQuestion++; renderQuestion(); }
+
+    function renderChecklist() {
+      const el = document.getElementById('checklist-items');
+      if (!el) return;
+      const saved = JSON.parse(localStorage.getItem('sw_checklist') || '{}');
+      el.innerHTML = checklist.map(cat => `
+    <div style="margin-bottom:16px">
+      <div style="font-weight:800;font-size:14px;margin-bottom:8px">${cat.cat}</div>
+      ${cat.items.map((item, i) => {
+        const key = cat.cat + i;
+        return `<label style="display:flex;gap:10px;align-items:center;padding:8px 0;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04)">
+          <input type="checkbox" ${saved[key] ? 'checked' : ''} onchange="saveChecklist('${key}',this.checked)" style="accent-color:#0ea5e9;width:16px;height:16px">
+          <span style="font-size:13px;color:var(--sub)">${item}</span>
+        </label>`;
+      }).join('')}
+    </div>`).join('');
+    }
+
+    function saveChecklist(key, val) {
+      const saved = JSON.parse(localStorage.getItem('sw_checklist') || '{}');
+      saved[key] = val; localStorage.setItem('sw_checklist', JSON.stringify(saved));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const level = localStorage.getItem('sw_user_level') || 'Intermédiaire';
+      document.getElementById('coaching-level').textContent = `Niveau détecté: ${level}`;
+      renderVideos();
+      renderProgram();
+      renderDict();
+      renderChecklist();
     });
-  });
-
-  // --- Charger niveau et conseils ---
-  async function init() {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
-      if (!member) return;
-
-      const { data: sessions } = await supabase.from('surf_sessions').select('id,score,duration,wave_count,created_at').eq('member_id', member.id);
-      const totalSessions = sessions?.length || 0;
-
-      // Mise à jour du banner niveau
-      const titleData = typeof getSurfTitle !== 'undefined' ? getSurfTitle(totalSessions) : { title: 'Rookie', icon: '🤙', progress: 0, nextAt: 5, nextTitle: 'Débutant' };
-      document.getElementById('level-icon').textContent = titleData.icon;
-      document.getElementById('level-title').textContent = titleData.title;
-      document.getElementById('level-sub').textContent = `${totalSessions} session${totalSessions > 1 ? 's' : ''} enregistrée${totalSessions > 1 ? 's' : ''}`;
-      document.getElementById('level-progress').style.width = Math.min(titleData.progress, 100) + '%';
-      if (titleData.nextTitle) {
-        document.getElementById('level-next').textContent = `Prochain niveau : ${titleData.nextTitle} (${titleData.nextAt} sessions)`;
-      } else {
-        document.getElementById('level-next').textContent = 'Niveau maximum atteint ! 🌟';
-      }
-
-      // Déterminer le niveau pour les conseils
-      const level = totalSessions < 5 ? 'rookie' : totalSessions < 20 ? 'debutant' : 'intermediaire';
-      const tips = typeof getCoachingTips !== 'undefined' ? getCoachingTips(level) : [];
-
-      // Afficher les conseils
-      const container = document.getElementById('tips-container');
-      if (container && tips.length) {
-        container.innerHTML = tips.map(tip => `
-          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px;margin-bottom:12px">
-            <div style="font-size:32px;margin-bottom:10px">${tip.icon}</div>
-            <h3 style="font-size:16px;font-weight:700;color:#f1f5f9;margin:0 0 8px">${tip.title}</h3>
-            <p style="color:#94a3b8;font-size:14px;line-height:1.7;margin:0">${tip.text}</p>
-          </div>`).join('');
-      }
-
-      // Afficher les programmes
-      const progContainer = document.getElementById('programs-container');
-      if (progContainer && typeof TRAINING_PROGRAMS !== 'undefined') {
-        progContainer.innerHTML = TRAINING_PROGRAMS.map(p => `
-          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px;margin-bottom:16px">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-              <span style="font-size:32px">${p.icon}</span>
-              <div>
-                <div style="font-weight:700;color:#f1f5f9;font-size:16px">${p.title}</div>
-                <div style="color:#64748b;font-size:12px">${p.days.length} étapes · Niveau ${p.level}</div>
-              </div>
-            </div>
-            ${p.days.map(d => `
-              <div style="display:flex;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.05)">
-                <div style="background:rgba(14,165,233,.15);color:#0ea5e9;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;flex-shrink:0">J${d.day}</div>
-                <div style="color:#94a3b8;font-size:14px;line-height:1.5">${d.task}</div>
-              </div>`).join('')}
-          </div>`).join('');
-      }
-
-      // Analyse de la dernière session
-      if (sessions?.length > 0) {
-        const last = sessions[0];
-        const analysisContainer = document.getElementById('analysis-container');
-        const analysis = typeof analyzeSession !== 'undefined' ? analyzeSession(last) : [];
-        if (analysisContainer && analysis.length) {
-          analysisContainer.innerHTML = `
-            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px">
-              <div style="font-size:13px;color:#64748b;margin-bottom:16px">Analyse de ta dernière session (${new Date(last.created_at).toLocaleDateString('fr-FR')})</div>
-              ${analysis.map(a => `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.05);color:#cbd5e1;font-size:14px;line-height:1.6">${a}</div>`).join('')}
-            </div>`;
-        }
-      }
-    } catch(e) {}
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
+
 </html>
