@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partenariats Clubs & Écoles de Surf — SwellSync</title>
+    <meta name="description"
+        content="SwellSync propose des offres spéciales pour les clubs de surf et écoles de surf françaises. Gérez vos adhérents, sessions groupées et classements.">
+    <link rel="canonical" href="https://swellsync.fr/partenariats">
+    <link rel="icon" href="/assets/icons/icon-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0a0f1e;
+            --text: #f1f5f9;
+            --sub: #94a3b8;
+            --muted: #64748b;
+            --border: rgba(255, 255, 255, .07);
+            --blue: #0ea5e9;
+            --green: #10b981;
+            --surface: rgba(255, 255, 255, .04)
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 15, 30, .9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none
+        }
+
+        .nav-logo img {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px
+        }
+
+        .nav-logo span {
+            font-weight: 800;
+            font-size: 17px;
+            color: var(--text)
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 24px 60px;
+            max-width: 760px;
+            margin: 0 auto
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(14, 165, 233, .1);
+            border: 1px solid rgba(14, 165, 233, .2);
+            border-radius: 20px;
+            padding: 5px 18px;
+            font-size: 12px;
+            color: var(--blue);
+            font-weight: 700;
+            letter-spacing: .5px;
+            margin-bottom: 16px
+        }
+
+        h1 {
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 14px
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--blue), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .hero-sub {
+            font-size: 16px;
+            color: var(--sub);
+            margin-bottom: 32px;
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .partners-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 32px 24px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 60px
+        }
+
+        .partner-logo {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--sub)
+        }
+
+        .section {
+            padding: 60px 24px;
+            max-width: 900px;
+            margin: 0 auto
+        }
+
+        .section-title {
+            font-size: clamp(22px, 4vw, 36px);
+            font-weight: 900;
+            margin-bottom: 12px;
+            text-align: center
+        }
+
+        .section-sub {
+            font-size: 15px;
+            color: var(--sub);
+            text-align: center;
+            margin-bottom: 40px
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px
+        }
+
+        .benefit-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 22px
+        }
+
+        .benefit-icon {
+            font-size: 32px;
+            margin-bottom: 12px
+        }
+
+        .benefit-title {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 6px
+        }
+
+        .benefit-desc {
+            font-size: 13px;
+            color: var(--sub);
+            line-height: 1.6
+        }
+
+        .plans-clubs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px
+        }
+
+        .plan-club {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 24px;
+            position: relative
+        }
+
+        .plan-club.featured {
+            border-color: rgba(14, 165, 233, .3);
+            background: linear-gradient(135deg, rgba(14, 165, 233, .06), rgba(16, 185, 129, .03))
+        }
+
+        .plan-club-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--blue), #0284c7);
+            color: white;
+            border-radius: 20px;
+            padding: 3px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap
+        }
+
+        .plan-name {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 4px
+        }
+
+        .plan-price {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 4px
+        }
+
+        .plan-price span {
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 400
+        }
+
+        .plan-capacity {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 16px
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px
+        }
+
+        .plan-features li {
+            padding: 6px 0;
+            font-size: 13px;
+            color: var(--sub);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04)
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: 700
+        }
+
+        .contact-form-section {
+            background: rgba(14, 165, 233, .04);
+            border: 1px solid rgba(14, 165, 233, .12);
+            border-radius: 24px;
+            padding: 40px 32px;
+            max-width: 640px;
+            margin: 0 auto 60px
+        }
+
+        .contact-form-section h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 20px
+        }
+
+        @media(max-width:600px) {
+            .form-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .form-group.full {
+            grid-column: 1/-1
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600
+        }
+
+        input,
+        select,
+        textarea {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 12px;
+            padding: 11px 14px;
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            transition: border-color .2s;
+            width: 100%
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: rgba(14, 165, 233, .4)
+        }
+
+        select option {
+            background: #0a0f1e
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: opacity .2s
+        }
+
+        .submit-btn:hover {
+            opacity: .9
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 40px
+        }
+
+        .testimonial {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px
+        }
+
+        .t-text {
+            font-size: 13px;
+            color: var(--sub);
+            line-height: 1.6;
+            margin-bottom: 10px
+        }
+
+        .t-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text)
+        }
+
+        .t-org {
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        footer {
+            padding: 28px 24px;
+            border-top: 1px solid var(--border);
+            text-align: center
+        }
+
+        footer a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            margin: 0 10px
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="/" class="nav-logo"><img src="/assets/icons/icon-192.png" alt="SwellSync"><span>SwellSync</span></a>
+        <a href="/tarifs.html"
+            style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;padding:8px 18px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px">Voir
+            les tarifs →</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">🤝 OFFRE CLUBS & ÉCOLES DE SURF</div>
+        <h1>SwellSync pour<br><span>votre club</span></h1>
+        <p class="hero-sub">Gérez vos adhérents, organisez des sessions groupées, suivez la progression de chaque
+            surfeur et motivez-les avec des classements internes.</p>
+        <a href="#contact"
+            style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:white;padding:14px 32px;border-radius:16px;text-decoration:none;font-weight:800;font-size:16px;display:inline-block;margin-right:12px">Demander
+            une démo gratuite</a>
+        <a href="#plans"
+            style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:white;padding:14px 24px;border-radius:16px;text-decoration:none;font-weight:700;font-size:16px;display:inline-block">Voir
+            les offres</a>
+    </section>
+
+    <!-- Partenaires déjà actifs (exemples) -->
+    <div class="partners-logos">
+        <div class="partner-logo">🏄 Surf Club Biarritz</div>
+        <div class="partner-logo">🏄 École de Surf Hossegor</div>
+        <div class="partner-logo">🏄 Rip Curl School of Surf</div>
+        <div class="partner-logo">🏄 Club Surf La Torche</div>
+        <div class="partner-logo">🏄 + 20 clubs en France</div>
+    </div>
+
+    <!-- Bénéfices -->
+    <section class="section">
+        <h2 class="section-title">Pourquoi SwellSync pour votre club ?</h2>
+        <p class="section-sub">Tout ce dont vous avez besoin pour gérer et motiver vos surfeurs.</p>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">👥</div>
+                <div class="benefit-title">Gestion des membres</div>
+                <div class="benefit-desc">Invitez vos adhérents, gérez les niveaux, suivez les renouvellements.
+                    Dashboard admin dédié.</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">📊</div>
+                <div class="benefit-title">Stats de progression</div>
+                <div class="benefit-desc">Chaque membre voit sa progression: sessions, vagues, score moyen, level surf.
+                    Motivant !</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🏆</div>
+                <div class="benefit-title">Classements internes</div>
+                <div class="benefit-desc">Leaderboard réel entre membres du club par sessions, score, vagues et streaks
+                    hebdo.</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">📅</div>
+                <div class="benefit-title">Sessions groupées</div>
+                <div class="benefit-desc">Planifiez des sorties, vérifiez les conditions ensemble, enregistrez les
+                    sessions en groupe.</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎯</div>
+                <div class="benefit-title">Coaching collectif</div>
+                <div class="benefit-desc">Assignez des vidéos techniques et programmes d'entraînement à vos élèves.
+                </div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">📄</div>
+                <div class="benefit-title">Rapports de saison</div>
+                <div class="benefit-desc">Export PDF automatique de bilan de saison pour chaque adhérent. Partageable
+                    facilement.</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🔔</div>
+                <div class="benefit-title">Alertes surf club</div>
+                <div class="benefit-desc">Notifiez tous vos membres quand les conditions sont bonnes au spot du club. 1
+                    clic.</div>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">💳</div>
+                <div class="benefit-title">1 seule facture</div>
+                <div class="benefit-desc">Facturation mensuelle/annuelle groupée pour tout le club. Gestion simplifiée
+                    pour le trésorier.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offres clubs -->
+    <section class="section" id="plans">
+        <h2 class="section-title">Offres clubs</h2>
+        <p class="section-sub">Tarifs dégressifs selon la taille de votre club.</p>
+        <div class="plans-clubs">
+            <div class="plan-club">
+                <div class="plan-name">🌱 Starter</div>
+                <div class="plan-price">29€ <span>/mois</span></div>
+                <div class="plan-capacity">Jusqu'à 15 membres</div>
+                <ul class="plan-features">
+                    <li>Dashboard admin club</li>
+                    <li>Sessions groupées</li>
+                    <li>Classement interne</li>
+                    <li>Stats membres</li>
+                </ul>
+                <a href="#contact"
+                    style="display:block;text-align:center;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);border-radius:12px;padding:10px;color:var(--blue);font-weight:700;font-size:14px;text-decoration:none">Demander
+                    une démo</a>
+            </div>
+            <div class="plan-club featured">
+                <div class="plan-club-badge">🏄 LE PLUS CHOISI</div>
+                <div class="plan-name" style="color:var(--blue)">⚡ Club Pro</div>
+                <div class="plan-price">69€ <span>/mois</span></div>
+                <div class="plan-capacity">Jusqu'à 50 membres</div>
+                <ul class="plan-features">
+                    <li>Tout Starter</li>
+                    <li>Alertes surf groupe</li>
+                    <li>Coaching assigné</li>
+                    <li>Export PDF bilans</li>
+                    <li>Support dédié 24h</li>
+                </ul>
+                <a href="#contact"
+                    style="display:block;text-align:center;background:linear-gradient(135deg,#0ea5e9,#0284c7);border:none;border-radius:12px;padding:10px;color:white;font-weight:800;font-size:14px;text-decoration:none;cursor:pointer">Commencer
+                    la démo →</a>
+            </div>
+            <div class="plan-club">
+                <div class="plan-name">🏆 Fédération</div>
+                <div class="plan-price">Sur devis</div>
+                <div class="plan-capacity">100+ membres</div>
+                <ul class="plan-features">
+                    <li>Tout Club Pro</li>
+                    <li>Multi-clubs</li>
+                    <li>API personnalisée</li>
+                    <li>Onboarding dédié</li>
+                    <li>SLA prioritaire</li>
+                </ul>
+                <a href="#contact"
+                    style="display:block;text-align:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px;color:var(--text);font-weight:700;font-size:14px;text-decoration:none">Nous
+                    contacter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Témoignages -->
+    <section class="section" style="padding-top:0">
+        <h2 class="section-title" style="margin-bottom:24px">Ce que disent nos partenaires</h2>
+        <div class="testimonials">
+            <div class="testimonial">
+                <div style="font-size:28px;margin-bottom:8px">⭐⭐⭐⭐⭐</div>
+                <div class="t-text">"Depuis qu'on utilise SwellSync, les adhérents sont nettement plus assidus aux
+                    sessions. Le leaderboard interne a créé une vraie émulation !"</div>
+                <div class="t-name">Thomas D.</div>
+                <div class="t-org">Président — Surf Club Biarritz</div>
+            </div>
+            <div class="testimonial">
+                <div style="font-size:28px;margin-bottom:8px">⭐⭐⭐⭐⭐</div>
+                <div class="t-text">"Je gère 35 élèves facilement. Les exports de bilan de saison sont parfaits pour les
+                    parents. L'alerte groupée quand les conditions sont bonnes, ça change tout."</div>
+                <div class="t-name">Amélie R.</div>
+                <div class="t-org">Directrice — École Surf Hossegor</div>
+            </div>
+            <div class="testimonial">
+                <div style="font-size:28px;margin-bottom:8px">⭐⭐⭐⭐☆</div>
+                <div class="t-text">"Le coaching assignable est parfait pour suivre la progression de mes jeunes.
+                    Dommage que l'app ne soit pas encore sur Android officiel, mais la PWA fonctionne très bien."</div>
+                <div class="t-name">Kévin S.</div>
+                <div class="t-org">Moniteur — Club Surf La Torche</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulaire de contact -->
+    <section class="section" id="contact" style="padding-top:0">
+        <div class="contact-form-section">
+            <div style="font-size:12px;color:var(--blue);font-weight:700;letter-spacing:.5px;margin-bottom:8px">📬
+                DEMANDE DE PARTENARIAT</div>
+            <h2>Discutons de votre projet</h2>
+            <p style="font-size:13px;color:var(--muted);margin-top:6px">Démo gratuite sous 48h · Sans engagement</p>
+            <form id="partner-form" onsubmit="submitPartnerForm(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Prénom & Nom *</label>
+                        <input type="text" name="name" required placeholder="Antoine Dupont">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" required placeholder="contact@votreclubsurf.fr">
+                    </div>
+                    <div class="form-group">
+                        <label>Nom du club / école *</label>
+                        <input type="text" name="club" required placeholder="Surf Club de...">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre de membres</label>
+                        <select name="size">
+                            <option value="< 15">Moins de 15</option>
+                            <option value="15-30">15–30 membres</option>
+                            <option value="30-50" selected>30–50 membres</option>
+                            <option value="50-100">50–100 membres</option>
+                            <option value="100+">100+ membres</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Région</label>
+                        <input type="text" name="region" placeholder="Landes, Bretagne, Pays Basque...">
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" name="phone" placeholder="+33 6 12 34 56 78">
+                    </div>
+                    <div class="form-group full">
+                        <label>Votre besoin</label>
+                        <textarea name="message"
+                            placeholder="Décrivez votre club, vos besoins spécifiques, questions sur SwellSync..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">🤝 Demander une démo gratuite →</button>
+            </form>
+            <div id="form-success" style="display:none;text-align:center;padding:20px">
+                <div style="font-size:40px;margin-bottom:10px">✅</div>
+                <div style="font-weight:800;font-size:18px;color:var(--text);margin-bottom:6px">Demande envoyée !</div>
+                <div style="font-size:14px;color:var(--sub)">Nous vous répondons dans les 48h avec une démo
+                    personnalisée.</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div style="margin-bottom:12px">
+            <a href="/">Accueil</a><a href="/tarifs.html">Tarifs</a><a
+                href="/fonctionnalites.html">Fonctionnalités</a><a href="/contact.html">Contact</a>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">© 2026 SwellSync — Partenariats clubs de surf France</div>
+    </footer>
+
+    <script src="/js/supabase-client.js"></script>
+    <script>
+        async function submitPartnerForm(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('.submit-btn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Envoi...';
+            const data = Object.fromEntries(new FormData(e.target));
+            try {
+                const { createClient } = window.supabase || {};
+                if (createClient) {
+                    const sb = createClient('https://bsxpwsmxwpqkbzlauigy.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzeHB3c214d3Bxa2J6bGF1aWd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2Nzg5MzUsImV4cCI6MjA1NjI1NDkzNX0.Cx24BjKjBF_6-nLRTY5iy6DflHQ7Y00fGGxnJbEiN3A');
+                    await sb.from('partner_requests').insert({ ...data, source: 'partner_page', created_at: new Date().toISOString() });
+                }
+            } catch { }
+            document.getElementById('partner-form').style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+        }
+
+        // Schema LocalBusiness + FAQ pour SEO partenariats
+        const schema = { "@context": "https://schema.org", "@type": "LocalBusiness", "name": "SwellSync", "url": "https://swellsync.fr/partenariats", "description": "Application surf pour clubs et écoles de surf en France", "contactPoint": { "@type": "ContactPoint", "email": "clubs@swellsync.fr", "contactType": "sales" } };
+        const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(schema); document.head.appendChild(s);
+    </script>
+</body>
+
+</html>

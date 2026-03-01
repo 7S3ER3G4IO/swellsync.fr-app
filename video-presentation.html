@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwellSync — Présentation 60s</title>
+    <meta name="description"
+        content="Découvrez SwellSync en 60 secondes: l'application de surf française avec prévisions, sessions GPS et communauté.">
+    <link rel="canonical" href="https://swellsync.fr/video">
+    <link rel="icon" href="/assets/icons/icon-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Conteneur vidéo 16:9 */
+        .video-wrap {
+            position: relative;
+            width: 100vw;
+            height: 56.25vw;
+            /* 16:9 */
+            max-height: 100vh;
+            max-width: calc(177.78vh);
+            margin: auto;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Slides */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: none;
+        }
+
+        .slide.active img {
+            animation: kenburns 12s ease-in-out forwards;
+        }
+
+        @keyframes kenburns {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+
+            100% {
+                transform: scale(1.08) translate(-1%, -1%);
+            }
+        }
+
+        @keyframes kenburnsr {
+            0% {
+                transform: scale(1.08) translate(0, 0);
+            }
+
+            100% {
+                transform: scale(1) translate(2%, 1%);
+            }
+        }
+
+        .slide:nth-child(even).active img {
+            animation: kenburnsr 12s ease-in-out forwards;
+        }
+
+        /* Overlay sombre */
+        .slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+        }
+
+        /* Texte overlay */
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 40px;
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(14, 165, 233, .2);
+            border: 1px solid rgba(14, 165, 233, .4);
+            color: #0ea5e9;
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-size: clamp(10px, 1.5vw, 14px);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.3s;
+        }
+
+        .slide.active .badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-title {
+            font-size: clamp(22px, 5vw, 64px);
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, .5);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s ease 0.5s;
+        }
+
+        .slide.active .slide-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-sub {
+            font-size: clamp(12px, 2vw, 22px);
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.8s;
+        }
+
+        .slide.active .slide-sub {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stat pills */
+        .stats-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 1s;
+        }
+
+        .slide.active .stats-row {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-pill {
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: clamp(11px, 1.5vw, 16px);
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Logo slide BG overlay dark gradient */
+        .slide-bg-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0f1f33 50%, #0a0f1e 100%);
+        }
+
+        /* Logo animé */
+        .logo-anim {
+            font-size: clamp(40px, 8vw, 96px);
+            font-weight: 900;
+            color: white;
+            letter-spacing: -2px;
+        }
+
+        .logo-anim span {
+            color: #0ea5e9;
+        }
+
+        .wave-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 20px;
+            height: 40px;
+        }
+
+        .wave-bar {
+            width: 6px;
+            background: #0ea5e9;
+            border-radius: 3px;
+            animation: waveBar 1.2s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) {
+            animation-delay: 0s;
+            height: 20px;
+        }
+
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+            height: 34px;
+        }
+
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+            height: 26px;
+        }
+
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+            height: 40px;
+        }
+
+        .wave-bar:nth-child(5) {
+            animation-delay: 0.4s;
+            height: 30px;
+        }
+
+        .wave-bar:nth-child(6) {
+            animation-delay: 0.5s;
+            height: 22px;
+        }
+
+        .wave-bar:nth-child(7) {
+            animation-delay: 0.6s;
+            height: 36px;
+        }
+
+        @keyframes waveBar {
+
+            0%,
+            100% {
+                transform: scaleY(.4)
+            }
+
+            50% {
+                transform: scaleY(1)
+            }
+        }
+
+        /* Barre de progression */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #0ea5e9;
+            z-index: 10;
+            transition: none;
+        }
+
+        /* Dots de navigation */
+        .dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .3);
+            cursor: pointer;
+            transition: all .3s;
+        }
+
+        .dot.active {
+            background: #0ea5e9;
+            transform: scale(1.3);
+        }
+
+        /* Contrôles */
+        .controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .ctrl-btn {
+            pointer-events: all;
+            background: rgba(255, 255, 255, .1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            transition: background .2s;
+        }
+
+        .ctrl-btn:hover {
+            background: rgba(255, 255, 255, .2);
+        }
+
+        /* Bouton play/pause */
+        .play-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 10px;
+            padding: 6px 12px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* CTA final overlay */
+        .cta-overlay {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease 1.2s;
+        }
+
+        .slide.active .cta-overlay {
+            opacity: 1;
+        }
+
+        .cta-btn {
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: clamp(12px, 1.8vw, 16px);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+        }
+
+        .cta-ghost {
+            background: rgba(255, 255, 255, .12);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, .3);
+        }
+
+        /* Compteur de temps */
+        .timer {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+            font-size: 12px;
+            color: rgba(255, 255, 255, .6);
+            font-weight: 600;
+            background: rgba(0, 0, 0, .3);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-wrap" id="vw">
+
+        <!-- Barre de progression -->
+        <div class="progress-bar" id="progress"></div>
+
+        <!-- Slides -->
+        <!-- 0: Slide titre (10s) -->
+        <div class="slide active" id="slide-0" data-duration="10000">
+            <div class="slide-bg-gradient"></div>
+            <div class="slide-content">
+                <div class="badge">🌊 NOUVELLE APP SURF 2026</div>
+                <div class="logo-anim">Swell<span>Sync</span></div>
+                <div class="wave-bars">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <div class="slide-sub" style="margin-top:16px;font-size:clamp(14px,2vw,20px)">L'application de surf
+                    française</div>
+            </div>
+        </div>
+
+        <!-- 1: Slide hero (prévisions) -->
+        <div class="slide" id="slide-1" data-duration="10000">
+            <img src="/assets/video/hero-frame.jpg" alt="SwellSync prévisions" loading="eager">
+            <div class="slide-content">
+                <div class="badge">🎯 PRÉVISIONS SURF</div>
+                <h2 class="slide-title">Tes conditions surf,<br>au bon moment</h2>
+                <div class="slide-sub">Score /10 · Houle · Vent · Marées<br>pour 143 spots en France</div>
+            </div>
+        </div>
+
+        <!-- 2: Slide sessions GPS (12s) -->
+        <div class="slide" id="slide-2" data-duration="12000">
+            <img src="/assets/video/community-frame.jpg" alt="Sessions GPS" loading="eager">
+            <div class="slide-content">
+                <div class="badge">📍 SESSIONS GPS</div>
+                <h2 class="slide-title">Enregistre chaque<br>session</h2>
+                <div class="slide-sub">Tracé GPS · Compteur de vagues · Timer</div>
+                <div class="stats-row">
+                    <div class="stat-pill">🌊 23 vagues</div>
+                    <div class="stat-pill">⏱️ 1h 24min</div>
+                    <div class="stat-pill">📏 2.1 km</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3: Slide communauté -->
+        <div class="slide" id="slide-3" data-duration="10000">
+            <img src="/assets/video/community-frame.jpg" alt="Communauté SwellSync" loading="eager">
+            <div class="slide-content">
+                <div class="badge">👥 COMMUNAUTÉ</div>
+                <h2 class="slide-title">Rejoins 1 247<br>surfeurs</h2>
+                <div class="slide-sub">Défis · Leaderboard · Spots partagés<br>Spots comparés · Sessions entre amis
+                </div>
+            </div>
+        </div>
+
+        <!-- 4: Slide alertes Pro -->
+        <div class="slide" id="slide-4" data-duration="8000">
+            <div class="slide-bg-gradient"></div>
+            <div class="slide-content">
+                <div class="badge">⚡ FONCTIONNALITÉS PRO</div>
+                <h2 class="slide-title">Alertes conditions<br><span style="color:#0ea5e9">parfaites</span></h2>
+                <div class="slide-sub">Reçois une notification quand ton spot<br>atteint les conditions que tu attends
+                </div>
+                <div class="stats-row" style="margin-top:16px">
+                    <div class="stat-pill">🔔 Alertes multi-spots</div>
+                    <div class="stat-pill">📊 Stats avancées</div>
+                    <div class="stat-pill">🎓 Coaching surf</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5: Slide CTA final -->
+        <div class="slide" id="slide-5" data-duration="10000">
+            <img src="/assets/video/cta-frame.jpg" alt="Télécharge SwellSync" loading="eager">
+            <div class="slide-content">
+                <div class="badge">🆓 GRATUIT</div>
+                <h2 class="slide-title">Commence<br>maintenant</h2>
+                <div class="slide-sub">Sans inscription requise<br>swellsync.fr</div>
+            </div>
+            <div class="cta-overlay">
+                <a href="https://swellsync.fr" class="cta-btn cta-primary">Ouvrir SwellSync.fr →</a>
+                <a href="/tarifs.html" class="cta-btn cta-ghost">Voir les tarifs</a>
+            </div>
+        </div>
+
+        <!-- Contrôles -->
+        <div class="controls">
+            <button class="ctrl-btn" onclick="prevSlide()">‹</button>
+            <button class="ctrl-btn" onclick="nextSlide()">›</button>
+        </div>
+
+        <!-- Dots -->
+        <div class="dots" id="dots"></div>
+
+        <!-- Timer + Play/Pause -->
+        <div class="timer" id="timer">0s / 60s</div>
+        <button class="play-btn" id="play-btn" onclick="togglePlay()">⏸️ Pause</button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const dotsEl = document.getElementById('dots');
+        const progressEl = document.getElementById('progress');
+        const timerEl = document.getElementById('timer');
+        let currentSlide = 0;
+        let isPlaying = true;
+        let elapsed = 0;
+        let slideTimer = null;
+        let progressTimer = null;
+        const totalDuration = [...slides].reduce((s, sl) => s + parseInt(sl.dataset.duration || 8000), 0);
+
+        // Créer les dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotsEl.appendChild(dot);
+        });
+
+        // Copier les images générées dans les bons emplacements
+        // (fallback: si pas d'image, utiliser un gradient)
+        slides.forEach(slide => {
+            const img = slide.querySelector('img');
+            if (!img) return;
+            img.onerror = () => {
+                img.style.display = 'none';
+                const bg = document.createElement('div');
+                bg.style.cssText = `position:absolute;inset:0;background:linear-gradient(135deg,#0a0f1e,#0f2a40)`;
+                slide.insertBefore(bg, slide.firstChild);
+            };
+        });
+
+        function goToSlide(idx) {
+            clearTimeout(slideTimer);
+            slides[currentSlide].classList.remove('active');
+            dotsEl.children[currentSlide].classList.remove('active');
+            currentSlide = idx;
+            slides[currentSlide].classList.add('active');
+            dotsEl.children[currentSlide].classList.add('active');
+            if (isPlaying) scheduleNext();
+        }
+
+        function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
+        function prevSlide() { goToSlide((currentSlide - 1 + slides.length) % slides.length); }
+
+        function scheduleNext() {
+            const dur = parseInt(slides[currentSlide].dataset.duration || 8000);
+            slideTimer = setTimeout(nextSlide, dur);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.getElementById('play-btn').textContent = isPlaying ? '⏸️ Pause' : '▶️ Play';
+            if (isPlaying) scheduleNext();
+            else clearTimeout(slideTimer);
+        }
+
+        // Barre de progression globale
+        let startTime = Date.now();
+        setInterval(() => {
+            if (!isPlaying) return;
+            const t = (Date.now() - startTime) / 1000;
+            const pct = Math.min(100, (t / (totalDuration / 1000)) * 100);
+            progressEl.style.width = pct + '%';
+            timerEl.textContent = `${Math.floor(t)}s / ${Math.floor(totalDuration / 1000)}s`;
+        }, 200);
+
+        // Démarrer
+        scheduleNext();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+        });
+    </script>
+</body>
+
+</html>
