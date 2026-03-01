@@ -1,144 +1,206 @@
 /**
- * SwellSync — Alertes avancées (T31-T39)
- * T31: Alerte par plage horaire
- * T32: Alerte multi-spots
- * T33: Alerte groupe d'amis
- * T37: Alertes conditions parfaites (3+ critères)
- * T38: Export .ics calendrier
- * T39: Alerte session amis
+ * SwellSync — Alertes surf avancées (T31-T40)
+ * T31: Alerte par plage horaire (ex: alerter entre 6h-12h seulement)
+ * T32: Alerte multi-spots (alerter si Lacanau OU Hossegor est bon)
+ * T33: Alerte "surf de groupe" — notifier des amis en même temps
+ * T34: Test push notification depuis l'écran alertes
+ * T35: Historique des alertes déclenchées (conditions exactes)
+ * T36: Snooze d'alerte 24h/48h
+ * T37: Alertes "conditions parfaites" (3+ critères simultanément)
+ * T38: Export alertes en .ics (calendrier)
+ * T39: Alerte "Session amis" — notifié quand un ami enregistre une session
+ * T40: Désactiver toutes les alertes (mode vacances)
  */
 
 const AlertsAdvanced = {
 
-    // T31 — Créer alerte avec plage horaire
-    async createTimedAlert({ spotId, spotName, minScore = 60, timeFrom = '06:00', timeTo = '12:00', days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] }) {
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
-            const { error } = await supabase.from('surf_alerts').insert({
-                user_id: member.id,
-                spot_id: spotId,
-                spot_name: spotName,
-                min_score: minScore,
-                time_from: timeFrom,
-                time_to: timeTo,
-                active_days: days,
-                active: true,
-                created_at: new Date().toISOString()
-            });
-            if (!error && typeof showToast !== 'undefined') showToast(`🔔 Alerte créée pour ${spotName} (${timeFrom}–${timeTo})`, 'success');
-            return !error;
-        } catch { return false; }
+    // Structure d'une alerte avancée
+    createAlert(config = {}) {
+        return {
+            id: `alert_${Date.now()}`,
+            name: config.name || 'Mon alerte',
+            spots: config.spots || [], // T32: multi-spots
+            min_height: config.min_height || 1.0,
+            max_wind: config.max_wind || 25,
+            min_period: config.min_period || 7,
+            time_from: config.time_from || '06:00', // T31: plage horaire
+            time_to: config.time_to || '12:00',
+            friends: config.friends || [], // T33: amis à notifier
+            perfect_mode: config.perfect_mode || false, // T37: 3+ critères
+            enabled: true,
+            snoozed_until: null, // T36: snooze
+            created_at: new Date().toISOString()
+        };
     },
 
-    // T32 — Alerte multi-spots (OR logic)
-    async createMultiSpotAlert(spots, minScore = 65) {
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
-            const spotsLabel = spots.map(s => s.name).join(' ou ');
-            const { error } = await supabase.from('surf_alerts').insert({
-                user_id: member.id,
-                multi_spots: spots.map(s => s.id),
-                spot_name: spotsLabel,
-                min_score: minScore,
-                active: true,
-                alert_type: 'multi'
-            });
-            if (!error && typeof showToast !== 'undefined') showToast(`🔔 Alerte multi-spots créée : ${spotsLabel}`, 'success');
-            return !error;
-        } catch { return false; }
+    // T37 — Vérifier si les conditions sont "parfaites" (3+ critères)
+    checkPerfectConditions(forecast, alert) {
+        const criteria = [
+            forecast.wave_height >= alert.min_height,
+            forecast.wind_speed <= alert.max_wind,
+            forecast.wave_period >= alert.min_period,
+            forecast.swell_direction_ok !== false,
+            (forecast.score || 0) >= 7
+        ];
+        return criteria.filter(Boolean).length >= 3;
     },
 
-    // T33 — Alerte groupe : notifier des amis en même temps
-    async createGroupAlert(alertId, friendIds) {
-        try {
-            const inserts = friendIds.map(fid => ({ original_alert_id: alertId, recipient_user_id: fid }));
-            await supabase.from('alert_group_recipients').insert(inserts);
-            if (typeof showToast !== 'undefined') showToast(`👥 ${friendIds.length} ami(s) seront notifiés avec toi !`, 'success');
-        } catch { }
+    // T31 — Vérifier si dans la plage horaire
+    isInTimeRange(alert) {
+        const now = new Date();
+        const [fromH, fromM] = (alert.time_from || '00:00').split(':').map(Number);
+        const [toH, toM] = (alert.time_to || '23:59').split(':').map(Number);
+        const nowMins = now.getHours() * 60 + now.getMinutes();
+        return nowMins >= fromH * 60 + fromM && nowMins <= toH * 60 + toM;
     },
 
-    // T37 — Alerte conditions parfaites (3+ critères simultanément)
-    buildPerfectConditionsAlert({ minScore = 75, minHoule = 1.0, maxVent = 15, minPeriod = 10 }) {
-        return { conditions_type: 'perfect', min_score: minScore, min_houle: minHoule, max_vent_kmh: maxVent, min_period: minPeriod };
+    // T36 — Snooze d'alerte
+    async snooze(alertId, hours = 24) {
+        const snoozeUntil = new Date(Date.now() + hours * 3600000).toISOString();
+        await supabase.from('alerts').update({ snoozed_until: snoozeUntil }).eq('id', alertId);
+        if (typeof showToast !== 'undefined') showToast(`😴 Alerte en pause ${hours}h`, 'info');
     },
 
-    // T38 — Export alerte en .ics (abonnement calendrier)
-    exportToICS(alert) {
-        const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-        const ics = [
-            'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SwellSync//FR',
-            'BEGIN:VEVENT',
-            `UID:swellsync-${alert.id || Date.now()}@swellsync.fr`,
-            `DTSTAMP:${now}`,
-            `DTSTART:${now}`,
-            `SUMMARY:🌊 Alerte surf — ${alert.spot_name || 'Mon spot'}`,
-            `DESCRIPTION:Score minimum: ${alert.min_score}/100. ${alert.time_from ? 'Horaire: ' + alert.time_from + '-' + alert.time_to : ''}`,
-            `URL:https://swellsync.fr/pages/alerts.html`,
-            'END:VEVENT', 'END:VCALENDAR'
-        ].join('\r\n');
-
-        const blob = new Blob([ics], { type: 'text/calendar' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `alerte-surf-${(alert.spot_name || 'spot').toLowerCase().replace(/\s+/g, '-')}.ics`;
-        a.click();
-        if (typeof showToast !== 'undefined') showToast('📅 Alerte exportée vers ton calendrier !', 'success');
+    isSnoozeActive(alert) {
+        return alert.snoozed_until && new Date(alert.snoozed_until) > new Date();
     },
 
-    // T39 — Être notifié quand un ami enregistre une session
-    async subscribeFriendSession(friendId, friendName) {
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
-            await supabase.from('friend_session_alerts').upsert({ watcher_id: member.id, friend_id: friendId });
-            if (typeof showToast !== 'undefined') showToast(`🏄 Tu seras notifié quand ${friendName} enregistre une session !`, 'success');
-        } catch { }
-    },
-
-    // Rendu HTML pour le formulaire de création d'alerte avancée
-    renderAdvancedForm(containerId, spotId, spotName) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        container.innerHTML = `
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px">
-        <h3 style="font-size:16px;font-weight:700;color:#f1f5f9;margin:0 0 20px">🔔 Alerte avancée — ${spotName}</h3>
-        <div style="margin-bottom:16px">
-          <label style="display:block;font-size:13px;color:#94a3b8;margin-bottom:6px">Score minimum</label>
-          <div style="display:flex;align-items:center;gap:10px">
-            <input type="range" id="alert-score" min="40" max="90" value="65" style="flex:1;accent-color:#0ea5e9">
-            <span id="alert-score-val" style="color:#0ea5e9;font-weight:700;width:40px">65</span>
-          </div>
-        </div>
-        <div style="margin-bottom:16px">
-          <label style="display:block;font-size:13px;color:#94a3b8;margin-bottom:6px">Plage horaire (T31)</label>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input type="time" id="alert-from" value="06:00" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;color:#f1f5f9">
-            <span style="color:#64748b">→</span>
-            <input type="time" id="alert-to" value="12:00" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;color:#f1f5f9">
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px" id="alert-days">
-          ${['L', 'M', 'Me', 'J', 'V', 'S', 'D'].map((d, i) => `<label style="cursor:pointer"><input type="checkbox" value="${['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][i]}" checked style="display:none" class="day-cb"><div style="width:36px;height:36px;border-radius:50%;background:rgba(14,165,233,.2);border:1px solid rgba(14,165,233,.4);display:flex;align-items:center;justify-content:center;color:#0ea5e9;font-size:13px;font-weight:700">${d}</div></label>`).join('')}
-        </div>
-        <button type="button" onclick="AlertsAdvanced._submitForm('${spotId}', '${spotName}')" style="width:100%;background:linear-gradient(135deg,#0ea5e9,#0284c7);border:none;border-radius:14px;padding:14px;color:white;font-weight:700;font-size:15px;cursor:pointer">
-          🔔 Créer l'alerte
-        </button>
-      </div>`;
-
-        // Sync slider display
-        document.getElementById('alert-score').addEventListener('input', e => {
-            document.getElementById('alert-score-val').textContent = e.target.value;
+    // T34 — Test push notification
+    async testPush(alertName) {
+        if (!('Notification' in window)) { if (typeof showToast !== 'undefined') showToast('Notifications non supportées', 'error'); return; }
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') { if (typeof showToast !== 'undefined') showToast('Autorisation refusée', 'error'); return; }
+        new Notification('🌊 SwellSync — Test Alerte', {
+            body: `Conditions parfaites pour "${alertName}" ! Houle 1.8m, vent 12 km/h, score 8/10`,
+            icon: '/assets/icons/icon-192.png',
+            badge: '/assets/icons/icon-72.png',
+            tag: 'sw-test'
         });
+        if (typeof showToast !== 'undefined') showToast('📲 Notification test envoyée !', 'success');
     },
 
-    _submitForm(spotId, spotName) {
-        const score = parseInt(document.getElementById('alert-score')?.value || '65');
-        const from = document.getElementById('alert-from')?.value || '06:00';
-        const to = document.getElementById('alert-to')?.value || '12:00';
-        const days = [...document.querySelectorAll('.day-cb:checked')].map(c => c.value);
-        this.createTimedAlert({ spotId, spotName, minScore: score, timeFrom: from, timeTo: to, days });
+    // T35 — Historique des alertes déclenchées
+    async loadHistory(containerId = 'alerts-history') {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+            const { data } = await supabase.from('alert_triggers').select('id, alert_name, spot_name, conditions, triggered_at').eq('user_id', member.id).order('triggered_at', { ascending: false }).limit(20);
+            if (!data?.length) { el.innerHTML = '<div class="empty-state"><div>🔔</div><h3>Aucune alerte déclenchée</h3><p>Tes alertes s\'afficheront ici quand les conditions sont bonnes</p></div>'; return; }
+            el.innerHTML = data.map(t => {
+                const cond = t.conditions || {};
+                return `<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <div style="font-weight:700;color:#f1f5f9">${t.alert_name}</div>
+            <div style="font-size:11px;color:#64748b">${new Date(t.triggered_at).toLocaleDateString('fr-FR')}</div>
+          </div>
+          <div style="font-size:13px;color:#0ea5e9;font-weight:600;margin-bottom:4px">📍 ${t.spot_name}</div>
+          <div style="font-size:12px;color:#94a3b8">🌊 ${cond.wave_height || '?'}m · 💨 ${cond.wind_speed || '?'} km/h · ⏱️ ${cond.wave_period || '?'}s · ⭐ ${cond.score || '?'}/10</div>
+        </div>`;
+            }).join('');
+        } catch { el.innerHTML = '<div class="empty-state"><div>⚠️</div><h3>Erreur chargement</h3></div>'; }
+    },
+
+    // T38 — Export en .ics (calendrier)
+    async exportToICS(alerts) {
+        const lines = [
+            'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SwellSync//FR',
+            'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'
+        ];
+        alerts.forEach(alert => {
+            if (!alert.enabled) return;
+            const uid = `${alert.id}@swellsync.fr`;
+            const dtstart = alert.time_from?.replace(':', '') || '060000';
+            const summary = `🌊 ${alert.name} — ${alert.spots.join(', ')}`;
+            const desc = `Alerte SwellSync\\nSpots: ${alert.spots.join(', ')}\\nHoule min: ${alert.min_height}m · Vent max: ${alert.max_wind} km/h · Période min: ${alert.min_period}s`;
+            // Événement récurrent tous les jours dans la plage horaire
+            lines.push(
+                'BEGIN:VEVENT',
+                `UID:${uid}`,
+                `DTSTART;TZID=Europe/Paris:${new Date().toISOString().slice(0, 10).replace(/-/g, '')}T${dtstart}`,
+                `RRULE:FREQ=DAILY`,
+                `SUMMARY:${summary}`,
+                `DESCRIPTION:${desc}`,
+                'STATUS:TENTATIVE',
+                'END:VEVENT'
+            );
+        });
+        lines.push('END:VCALENDAR');
+        const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'alertes-surf.ics';
+        a.click(); URL.revokeObjectURL(url);
+        if (typeof showToast !== 'undefined') showToast('📅 Calendrier exporté !', 'success');
+    },
+
+    // T39 — Alerte "Session amis"
+    async setupFriendSessionAlert(enable = true) {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+            await supabase.from('alert_preferences').upsert({ user_id: member.id, friend_session_notif: enable }, { onConflict: 'user_id' });
+            if (typeof showToast !== 'undefined') showToast(enable ? '🤙 Alertes sessions amis activées !' : 'Alertes sessions amis désactivées', enable ? 'success' : 'info');
+        } catch { }
+    },
+
+    // T40 — Mode vacances (désactiver tout)
+    async toggleVacationMode(enable = true) {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            const { data: member } = await supabase.from('members').select('id').eq('auth_id', user.id).single();
+            await supabase.from('members').update({ vacation_mode: enable }).eq('id', member.id);
+            if (enable) {
+                await supabase.from('alerts').update({ enabled: false }).eq('user_id', member.id);
+            }
+            if (typeof showToast !== 'undefined') showToast(enable ? '🏖️ Mode vacances activé — Toutes les alertes coupées' : '🔔 Alertes réactivées !', enable ? 'info' : 'success');
+        } catch { }
+    },
+
+    // T33 — Notifier des amis en même temps
+    async notifyFriends(alertId, friendIds, conditions, spotName) {
+        if (!friendIds?.length) return;
+        const messages = friendIds.map(friendId => ({
+            user_id: friendId, type: 'friend_alert',
+            message: `🌊 Conditions parfaites à ${spotName} ! Houle ${conditions.wave_height}m · Score ${conditions.score}/10. Ton ami te le signale 🤙`,
+            created_at: new Date().toISOString()
+        }));
+        await supabase.from('notifications').insert(messages);
+    },
+
+    // Widget alerte avancée (modal)
+    renderAlertForm(config = {}) {
+        const spots = ['Biarritz', 'Hossegor', 'La Torche', 'Lacanau', 'Capbreton', 'Seignosse'];
+        return `
+      <div class="alert-form">
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:6px">📍 SPOTS (T32 — Multi-spots)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${spots.map(s => `<label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" name="spots" value="${s}" style="accent-color:#0ea5e9"> <span style="font-size:13px;color:#94a3b8">${s}</span></label>`).join('')}
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <div>
+            <label style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px">⏰ Heure début (T31)</label>
+            <input type="time" value="06:00" name="time_from" style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;color:#f1f5f9;font-size:14px">
+          </div>
+          <div>
+            <label style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px">⏰ Heure fin</label>
+            <input type="time" value="12:00" name="time_to" style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;color:#f1f5f9;font-size:14px">
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" name="perfect_mode" style="accent-color:#0ea5e9;width:16px;height:16px">
+            <div>
+              <div style="font-size:14px;color:#f1f5f9;font-weight:600">🔥 Mode conditions parfaites (T37)</div>
+              <div style="font-size:12px;color:#64748b">Alerter seulement si 3+ critères remplis simultanément</div>
+            </div>
+          </label>
+        </div>
+        <button onclick="AlertsAdvanced.testPush('Mon alerte')" style="width:100%;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2);border-radius:12px;padding:10px;color:#0ea5e9;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">📲 Test push (T34)</button>
+      </div>`;
     }
 };
 
